@@ -1,0 +1,1757 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Playing With Photo — AI Vintage Photobooth by Jeff</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,800;0,9..144,900;1,9..144,400;1,9..144,700&family=Caveat:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<script>
+  // Tweakable defaults, persisted on disk by the host
+  window.TWEAKS = /*EDITMODE-BEGIN*/{
+    "palette": "rose",
+    "heroLayout": "editorial",
+    "filter": "kodachrome",
+    "grain": false
+  }/*EDITMODE-END*/;
+</script>
+
+<style>
+  :root {
+    /* Sepia & cream — 70s Kodak / old Polaroid */
+    --cream: #f4ead5;
+    --cream-2: #efe3c7;
+    --paper: #ebdcb7;
+    --tan: #d9b681;
+    --rust: #b25f2e;
+    --rust-2: #8a4620;
+    --ink: #2a1a0c;
+    --ink-2: #4a2f1a;
+    --sepia-1: #c38a52;
+    --sepia-2: #7a4620;
+    --highlight: #ffd88a;
+    --shadow: rgba(62, 34, 12, 0.25);
+
+    --ff-display: "Fraunces", "Cormorant Garamond", Georgia, serif;
+    --ff-body: "DM Sans", system-ui, sans-serif;
+    --ff-script: "Caveat", "Brush Script MT", cursive;
+    --ff-mono: "JetBrains Mono", ui-monospace, monospace;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: var(--ff-body);
+    font-size: 17px;
+    line-height: 1.55;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Paper grain overlay */
+  body::before {
+    content: "";
+    position: fixed; inset: 0;
+    pointer-events: none;
+    z-index: 1000;
+    opacity: .22;
+    mix-blend-mode: multiply;
+    background-image:
+      radial-gradient(rgba(80,40,10,.25) 1px, transparent 1px),
+      radial-gradient(rgba(80,40,10,.15) 1px, transparent 1px);
+    background-size: 3px 3px, 7px 7px;
+    background-position: 0 0, 1px 2px;
+  }
+  body[data-grain="false"]::before { display:none; }
+
+  /* Vignette */
+  body::after {
+    content: "";
+    position: fixed; inset: 0;
+    pointer-events: none;
+    z-index: 999;
+    background: radial-gradient(ellipse at center, transparent 55%, rgba(42,26,12,.28) 100%);
+  }
+
+  a { color: inherit; }
+
+  /* ======= NAV ======= */
+  nav.topnav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 36px;
+    font-family: var(--ff-body);
+    font-size: 13px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--ink);
+    mix-blend-mode: multiply;
+    transition: background .3s, backdrop-filter .3s;
+  }
+  nav.topnav.scrolled {
+    background: rgba(244,234,213,.85);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    mix-blend-mode: normal;
+    border-bottom: 1px solid rgba(42,26,12,.1);
+  }
+  .logo {
+    display:flex; align-items: baseline; gap: 10px;
+    font-family: var(--ff-display);
+    font-size: 22px;
+    font-weight: 600;
+    font-style: italic;
+    letter-spacing: .01em;
+    text-transform: none;
+  }
+  .logo .dot { font-size: 10px; }
+  .logo small {
+    font-family: var(--ff-script);
+    font-size: 18px;
+    color: var(--rust);
+    font-style: normal;
+  }
+  .navlinks { display: flex; gap: 32px; }
+  .navlinks a { text-decoration: none; opacity: .7; transition: opacity .2s; }
+  .navlinks a:hover { opacity: 1; }
+  .nav-cta {
+    padding: 9px 18px;
+    border: 1px solid var(--ink);
+    border-radius: 999px;
+    text-decoration: none;
+    font-weight: 500;
+    background: var(--ink);
+    color: var(--cream);
+    transition: transform .2s;
+  }
+  .nav-cta:hover { transform: translateY(-1px); }
+
+  /* ======= Utility ======= */
+  .wrap { max-width: 1280px; margin: 0 auto; padding: 0 36px; }
+  .eyebrow {
+    font-family: var(--ff-mono);
+    font-size: 12px;
+    letter-spacing: .24em;
+    text-transform: uppercase;
+    color: var(--rust-2);
+    display: inline-flex; align-items: center; gap: 10px;
+  }
+  .eyebrow::before {
+    content:""; width: 24px; height: 1px; background: currentColor; display:inline-block;
+  }
+  .script { font-family: var(--ff-script); font-weight: 600; color: var(--rust); }
+  h1,h2,h3,h4 { font-family: var(--ff-display); font-weight: 500; letter-spacing: -0.01em; margin: 0; }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 14px 26px;
+    border-radius: 999px;
+    background: var(--ink);
+    color: var(--cream);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 15px;
+    border: 1px solid var(--ink);
+    cursor: pointer;
+    transition: transform .15s, box-shadow .15s;
+    box-shadow: 0 4px 0 var(--ink-2);
+  }
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 0 var(--ink-2); }
+  .btn:active { transform: translateY(1px); box-shadow: 0 1px 0 var(--ink-2); }
+  .btn.ghost {
+    background: transparent; color: var(--ink); box-shadow: none;
+  }
+  .btn.ghost:hover { background: rgba(42,26,12,.06); box-shadow: none; transform: none; }
+  .btn svg { width: 16px; height: 16px; }
+
+  /* ======= HERO ======= */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    padding: 140px 36px 80px;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+  }
+  .hero-grid {
+    width: 100%; max-width: 1320px;
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 60px;
+    align-items: center;
+  }
+  .hero-copy { position: relative; z-index: 2; }
+  .hero h1 {
+    font-size: clamp(52px, 7.2vw, 112px);
+    line-height: .95;
+    font-weight: 400;
+    letter-spacing: -0.025em;
+    color: var(--ink);
+  }
+  .hero h1 .italic { font-style: italic; font-weight: 300; }
+  .hero h1 .amp { font-family: var(--ff-script); color: var(--rust); font-style: normal; font-size: .85em; display: inline-block; transform: translateY(.08em); }
+  .hero h1 .dash { color: var(--rust); }
+  .hero-sub {
+    margin-top: 28px;
+    max-width: 480px;
+    font-size: 18px;
+    line-height: 1.55;
+    color: var(--ink-2);
+  }
+  .hero-cta-row { margin-top: 36px; display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+  .hero-meta {
+    margin-top: 48px;
+    display: flex; gap: 28px; align-items: center;
+    font-family: var(--ff-mono);
+    font-size: 12px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    opacity: .75;
+  }
+  .hero-meta .dot { width:6px;height:6px;background:var(--rust);border-radius:50%;}
+  .stars { color: var(--rust); letter-spacing: 2px; }
+
+  /* Hero Booth illustration */
+  .hero-booth {
+    position: relative;
+    aspect-ratio: 1 / 1.15;
+    max-width: 520px;
+    justify-self: center;
+  }
+
+  /* Floating film strips background pieces */
+  .floating-strip {
+    position: absolute;
+    background: var(--ink);
+    padding: 8px 6px;
+    box-shadow: 0 12px 30px var(--shadow);
+    transform: rotate(var(--r, -6deg));
+    z-index: 1;
+  }
+  .floating-strip .frame {
+    width: 100%; aspect-ratio: 1/1;
+    background: var(--paper);
+    overflow: hidden;
+    position: relative;
+  }
+  .floating-strip .holes {
+    display: flex; justify-content: space-between; padding: 3px 2px;
+  }
+  .floating-strip .holes span {
+    width: 7px; height: 5px; background: var(--cream); border-radius: 1px;
+  }
+
+  /* ======= SCROLL TICKER ======= */
+  .ticker {
+    border-top: 1px solid rgba(42,26,12,.25);
+    border-bottom: 1px solid rgba(42,26,12,.25);
+    padding: 18px 0;
+    overflow: hidden;
+    background: var(--cream-2);
+    position: relative;
+  }
+  .ticker-track {
+    display: flex; gap: 56px;
+    animation: tick 40s linear infinite;
+    white-space: nowrap;
+    font-family: var(--ff-display);
+    font-style: italic;
+    font-size: 28px;
+    color: var(--ink);
+  }
+  .ticker-track span { display:inline-flex; align-items:center; gap: 56px; }
+  .ticker-track .sep {
+    color: var(--rust);
+    font-family: var(--ff-script);
+    font-size: 34px;
+    font-style: normal;
+  }
+  @keyframes tick { to { transform: translateX(-50%); } }
+
+  /* ======= Section base ======= */
+  section.chapter {
+    padding: 140px 0;
+    position: relative;
+  }
+  .section-head {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 60px;
+    align-items: end;
+    margin-bottom: 80px;
+  }
+  .section-head h2 {
+    font-size: clamp(44px, 5.2vw, 78px);
+    line-height: 1;
+    font-weight: 400;
+  }
+  .section-head h2 .italic { font-style: italic; }
+  .section-head h2 em { font-family: var(--ff-script); font-style: normal; color: var(--rust); font-weight: 600; font-size: .95em; }
+  .section-head p { color: var(--ink-2); max-width: 48ch; font-size: 17px; }
+
+  /* ======= THE BOOTH ======= */
+  .booth-chapter { background: var(--paper); }
+  .booth-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .booth-stage {
+    position: relative;
+    aspect-ratio: 4/5;
+    display: grid; place-items: center;
+  }
+  .booth-labels {
+    position: absolute; inset: 0;
+    pointer-events: none;
+  }
+  .booth-label {
+    position: absolute;
+    font-family: var(--ff-mono);
+    font-size: 11px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--rust-2);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .booth-label .line { width: 60px; height: 1px; background: currentColor; }
+  .booth-label b { font-family: var(--ff-display); font-style: italic; font-weight: 500; text-transform: none; letter-spacing: 0; color: var(--ink); font-size: 15px; }
+
+  .booth-feat {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px 40px;
+    margin-top: 40px;
+  }
+  .booth-feat .f {
+    border-top: 1px solid rgba(42,26,12,.25);
+    padding-top: 18px;
+  }
+  .booth-feat .f h4 {
+    font-size: 20px;
+    font-style: italic;
+    font-weight: 500;
+    margin-bottom: 6px;
+  }
+  .booth-feat .f p { font-size: 14px; color: var(--ink-2); margin: 0; }
+
+  /* ======= HOW IT WORKS ======= */
+  .howit-steps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    margin-top: 60px;
+  }
+  .step {
+    background: var(--cream-2);
+    border: 1px solid rgba(42,26,12,.12);
+    border-radius: 4px;
+    padding: 28px 24px 32px;
+    position: relative;
+    transition: transform .3s;
+  }
+  .step:hover { transform: translateY(-6px); }
+  .step .num {
+    font-family: var(--ff-display);
+    font-style: italic;
+    font-size: 68px;
+    font-weight: 300;
+    color: var(--rust);
+    line-height: .9;
+    margin-bottom: 20px;
+    display:block;
+  }
+  .step h4 { font-size: 22px; font-weight: 500; margin-bottom: 6px; }
+  .step p { font-size: 14px; color: var(--ink-2); margin:0; }
+  .step .stamp {
+    position: absolute;
+    top: 14px; right: 14px;
+    font-family: var(--ff-mono);
+    font-size: 10px;
+    letter-spacing: .16em;
+    color: var(--rust);
+    border: 1px solid currentColor;
+    padding: 3px 7px;
+    border-radius: 2px;
+    text-transform: uppercase;
+    transform: rotate(6deg);
+    opacity: .7;
+  }
+
+  /* ======= STYLE GALLERY ======= */
+  .gallery-chapter { background: var(--ink); color: var(--cream); padding: 160px 0; }
+  .gallery-chapter .section-head h2 { color: var(--cream); }
+  .gallery-chapter .section-head p { color: rgba(244,234,213,.7); }
+  .gallery-chapter .eyebrow { color: var(--highlight); }
+  .filmstrip-wrap {
+    overflow: hidden;
+    padding: 20px 0;
+  }
+  .filmstrip {
+    display: flex;
+    gap: 22px;
+    animation: scrollFilm 50s linear infinite;
+    padding: 0 22px;
+  }
+  .filmstrip:hover { animation-play-state: paused; }
+  @keyframes scrollFilm { to { transform: translateX(-50%); } }
+
+  .polaroid {
+    flex: 0 0 auto;
+    width: 280px;
+    background: var(--cream);
+    padding: 14px 14px 60px;
+    box-shadow: 0 20px 40px rgba(0,0,0,.4);
+    color: var(--ink);
+    transform: rotate(var(--r, -2deg));
+    position: relative;
+  }
+  .polaroid .img {
+    width: 100%;
+    aspect-ratio: 1/1.05;
+    background: #3a2614;
+    overflow: hidden;
+    position: relative;
+  }
+  .polaroid .img svg { width: 100%; height: 100%; display:block; }
+  .polaroid .caption {
+    position: absolute;
+    bottom: 14px; left: 0; right: 0;
+    text-align: center;
+    font-family: var(--ff-script);
+    font-size: 22px;
+    color: var(--rust-2);
+  }
+  .polaroid .tag {
+    position: absolute;
+    top: 22px; left: 22px;
+    font-family: var(--ff-mono);
+    font-size: 9px;
+    letter-spacing: .18em;
+    background: var(--rust);
+    color: var(--cream);
+    padding: 3px 6px;
+    text-transform: uppercase;
+  }
+
+  .style-chips {
+    display: flex; gap: 10px; flex-wrap: wrap;
+    margin-top: 40px;
+  }
+  .style-chips button {
+    background: transparent;
+    border: 1px solid rgba(244,234,213,.3);
+    color: var(--cream);
+    padding: 10px 18px;
+    border-radius: 999px;
+    font-family: var(--ff-mono);
+    font-size: 12px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .style-chips button:hover, .style-chips button.active {
+    background: var(--highlight);
+    color: var(--ink);
+    border-color: var(--highlight);
+  }
+
+  /* ======= USE CASES ======= */
+  .usecases-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 16px;
+    height: 640px;
+  }
+  .uc {
+    background: var(--paper);
+    border-radius: 4px;
+    padding: 30px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: transform .3s, background .3s;
+    border: 1px solid rgba(42,26,12,.1);
+  }
+  .uc:hover { transform: translateY(-4px); background: var(--cream-2); }
+  .uc.big { grid-row: span 2; }
+  .uc-num { font-family: var(--ff-mono); font-size: 12px; color: var(--rust); letter-spacing: .2em; }
+  .uc h3 { font-size: 36px; font-weight: 400; font-style: italic; }
+  .uc.big h3 { font-size: 58px; line-height: 1; }
+  .uc p { font-size: 14px; color: var(--ink-2); margin: 10px 0 0; max-width: 38ch; }
+  .uc-illus { position: absolute; right: -20px; bottom: -20px; opacity: .8; width: 60%; pointer-events:none; }
+  .uc.big .uc-illus { width: 45%; right: 30px; bottom: 30px; opacity: .95;}
+
+  /* ======= TESTIMONIALS ======= */
+  .testis-chapter { background: var(--cream-2); }
+  .testis {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+    margin-top: 60px;
+  }
+  .testi {
+    background: var(--cream);
+    padding: 36px 32px;
+    border-radius: 4px;
+    position: relative;
+    box-shadow: 0 2px 0 rgba(42,26,12,.08);
+    transform: rotate(var(--r, 0deg));
+  }
+  .testi::before {
+    content: "\201C";
+    position: absolute;
+    top: -30px; left: 20px;
+    font-family: var(--ff-display);
+    font-style: italic;
+    font-size: 120px;
+    color: var(--rust);
+    line-height: 1;
+  }
+  .testi p {
+    font-family: var(--ff-display);
+    font-size: 20px;
+    font-style: italic;
+    font-weight: 300;
+    line-height: 1.4;
+    color: var(--ink);
+    margin: 0 0 24px;
+  }
+  .testi .who {
+    display: flex; align-items: center; gap: 12px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(42,26,12,.15);
+  }
+  .testi .ava {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: var(--tan);
+    display: grid; place-items: center;
+    font-family: var(--ff-display); font-style: italic; color: var(--ink);
+  }
+  .testi .who b { display: block; font-weight: 500; font-size: 14px; }
+  .testi .who span { font-size: 12px; color: var(--ink-2); font-family: var(--ff-mono); letter-spacing: .08em; }
+
+  /* ======= PRICING ======= */
+  .pricing { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 60px; }
+  .price {
+    background: var(--paper);
+    padding: 40px 32px 36px;
+    border-radius: 4px;
+    position: relative;
+    display: flex; flex-direction: column;
+    border: 1px solid rgba(42,26,12,.12);
+  }
+  .price.feat {
+    background: var(--ink);
+    color: var(--cream);
+    transform: scale(1.04);
+    box-shadow: 0 20px 50px rgba(42,26,12,.3);
+  }
+  .price.feat .muted { color: rgba(244,234,213,.65); }
+  .price .tier {
+    font-family: var(--ff-mono);
+    font-size: 11px;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--rust);
+  }
+  .price.feat .tier { color: var(--highlight); }
+  .price h3 {
+    font-size: 34px;
+    font-weight: 400;
+    font-style: italic;
+    margin: 8px 0 18px;
+  }
+  .price .amt {
+    font-family: var(--ff-display);
+    font-size: 52px;
+    font-weight: 400;
+    line-height: 1;
+    display: flex; align-items: baseline; gap: 8px;
+  }
+  .price .amt small {
+    font-size: 14px;
+    font-family: var(--ff-mono);
+    color: var(--ink-2);
+    letter-spacing: .1em;
+  }
+  .price.feat .amt small { color: rgba(244,234,213,.6); }
+  .price ul { list-style: none; padding: 0; margin: 28px 0; display: flex; flex-direction: column; gap: 12px; font-size: 14px; flex: 1; }
+  .price li { display: flex; gap: 10px; align-items: flex-start; }
+  .price li::before {
+    content: ""; width: 14px; height: 14px; margin-top: 3px;
+    background: var(--rust);
+    mask: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M5 12l5 5L20 7' stroke='black' fill='none' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/></svg>") center/contain no-repeat;
+    -webkit-mask: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M5 12l5 5L20 7' stroke='black' fill='none' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/></svg>") center/contain no-repeat;
+    flex-shrink: 0;
+  }
+  .price.feat li::before { background: var(--highlight); }
+  .price .btn { justify-content: center; }
+  .price.feat .btn { background: var(--highlight); color: var(--ink); border-color: var(--highlight); box-shadow: 0 4px 0 var(--rust); }
+  .price .badge {
+    position: absolute; top: -12px; right: 24px;
+    background: var(--rust);
+    color: var(--cream);
+    font-family: var(--ff-script);
+    font-size: 20px;
+    padding: 6px 16px 4px;
+    transform: rotate(4deg);
+  }
+
+  /* ======= ABOUT JEFF ======= */
+  .about-chapter { background: var(--paper); }
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.3fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .about-portrait {
+    position: relative;
+    aspect-ratio: 3/4;
+    background: var(--cream);
+    padding: 18px 18px 70px;
+    box-shadow: 0 20px 50px var(--shadow);
+    transform: rotate(-2deg);
+  }
+  .about-portrait .img { width: 100%; height: 100%; background: var(--tan); overflow: hidden; position: relative; }
+  .about-portrait .img svg { width: 100%; height: 100%; }
+  .about-portrait .label {
+    position: absolute; bottom: 22px; left: 0; right: 0;
+    text-align: center;
+    font-family: var(--ff-script);
+    font-size: 26px;
+    color: var(--rust);
+  }
+  .about-portrait .stamp {
+    position: absolute;
+    top: 30px; right: -20px;
+    background: var(--rust);
+    color: var(--cream);
+    padding: 6px 14px;
+    font-family: var(--ff-mono);
+    font-size: 10px;
+    letter-spacing: .2em;
+    transform: rotate(8deg);
+    box-shadow: 0 4px 10px rgba(0,0,0,.15);
+  }
+  .about-copy h2 { font-size: clamp(40px, 5vw, 68px); line-height: 1; }
+  .about-copy h2 em { font-family: var(--ff-script); font-style: normal; color: var(--rust); font-size: .95em; }
+  .about-copy .lede { font-family: var(--ff-display); font-style: italic; font-size: 22px; line-height: 1.4; margin: 30px 0 20px; color: var(--ink); }
+  .about-copy p { color: var(--ink-2); max-width: 56ch; }
+  .signature { margin-top: 28px; }
+  .signature svg { height: 60px; }
+
+  /* ======= BOOKING CTA ======= */
+  .book-chapter {
+    background: var(--rust);
+    color: var(--cream);
+    padding: 120px 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .book-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 60px; align-items: center;}
+  .book-chapter h2 {
+    font-size: clamp(56px, 7vw, 120px);
+    line-height: .9;
+    font-weight: 400;
+    color: var(--cream);
+  }
+  .book-chapter h2 em { font-family: var(--ff-script); font-style: normal; color: var(--highlight); font-weight: 600; }
+  .book-chapter p.lede { color: rgba(244,234,213,.85); max-width: 44ch; font-size: 18px; margin-top: 24px; }
+  .book-form {
+    background: var(--cream);
+    color: var(--ink);
+    padding: 40px;
+    border-radius: 4px;
+    box-shadow: 0 30px 70px rgba(0,0,0,.3);
+    transform: rotate(1deg);
+  }
+  .book-form h3 { font-size: 28px; font-weight: 500; margin-bottom: 6px; }
+  .book-form small { font-family: var(--ff-mono); font-size: 11px; letter-spacing: .18em; color: var(--rust); text-transform: uppercase; }
+  .book-form .row { display: flex; gap: 12px; margin-top: 18px; }
+  .book-form label {
+    display: block;
+    font-family: var(--ff-mono);
+    font-size: 10px;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    margin-bottom: 4px;
+  }
+  .book-form input, .book-form select {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid rgba(42,26,12,.3);
+    background: transparent;
+    font-family: var(--ff-body);
+    font-size: 15px;
+    border-radius: 3px;
+    color: var(--ink);
+  }
+  .book-form input:focus, .book-form select:focus { outline: 2px solid var(--rust); outline-offset: -1px; }
+  .book-form .field { flex: 1; }
+  .book-form .btn { width: 100%; justify-content: center; margin-top: 24px; }
+
+  /* ======= FOOTER ======= */
+  footer {
+    padding: 60px 0 40px;
+    background: var(--ink);
+    color: var(--cream);
+  }
+  footer .wrap { display: flex; justify-content: space-between; align-items: flex-end; gap: 40px; flex-wrap: wrap; }
+  footer .colophon { font-family: var(--ff-mono); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; opacity: .6; }
+  footer .biglogo {
+    font-family: var(--ff-display);
+    font-style: italic;
+    font-size: clamp(60px, 12vw, 160px);
+    font-weight: 300;
+    line-height: .9;
+    letter-spacing: -.02em;
+  }
+  footer .biglogo em { font-family: var(--ff-script); font-style: normal; color: var(--highlight); }
+
+  /* ======= Webcam demo ======= */
+  .demo {
+    position: relative;
+    background: var(--ink);
+    border-radius: 6px;
+    overflow: hidden;
+    aspect-ratio: 1/1;
+    box-shadow: 0 30px 60px rgba(42,26,12,.4);
+    border: 12px solid #5c3620;
+    background-clip: padding-box;
+    max-width: 520px;
+    width: 100%;
+  }
+  .demo::before {
+    /* wood grain bezel */
+    content: "";
+    position: absolute; inset: -12px;
+    border: 12px solid transparent;
+    background:
+      repeating-linear-gradient(135deg, rgba(0,0,0,.15) 0 2px, transparent 2px 8px),
+      linear-gradient(180deg, #6b3f25, #4a2814);
+    background-clip: border-box;
+    -webkit-background-clip: border-box;
+    z-index: -1;
+  }
+  .demo video, .demo canvas, .demo .frame-overlay, .demo .status, .demo .countdown, .demo .flash, .demo .shutter-ring {
+    position: absolute;
+    inset: 0;
+    width: 100%; height: 100%;
+  }
+  .demo video {
+    object-fit: cover;
+    transform: scaleX(-1);
+  }
+  .demo canvas.filter-canvas { z-index: 2; transform: none; }
+  .demo .frame-overlay { pointer-events: none; z-index: 3; }
+  .demo .flash {
+    background: white;
+    opacity: 0;
+    z-index: 10;
+    pointer-events: none;
+  }
+  .demo .flash.fire { animation: flash 600ms ease-out; }
+  @keyframes flash { 0% { opacity: 0; } 8% { opacity: 1; } 100% { opacity: 0; } }
+
+  .demo .countdown {
+    display: grid; place-items: center;
+    font-family: var(--ff-display);
+    font-size: 220px;
+    font-weight: 300;
+    font-style: italic;
+    color: white;
+    z-index: 8;
+    pointer-events: none;
+    text-shadow: 0 4px 20px rgba(0,0,0,.5);
+    opacity: 0;
+  }
+  .demo .countdown.show { animation: ct 1s ease-out; }
+  @keyframes ct {
+    0% { opacity: 0; transform: scale(1.5); }
+    20% { opacity: 1; transform: scale(1); }
+    80% { opacity: 1; }
+    100% { opacity: 0; transform: scale(.7); }
+  }
+
+  .demo .status {
+    display: grid; place-items: center;
+    background: var(--ink);
+    color: var(--cream);
+    z-index: 5;
+    text-align: center;
+    padding: 30px;
+    transition: opacity .4s;
+  }
+  .demo .status.hide { opacity: 0; pointer-events: none; }
+  .demo .status h4 { font-family: var(--ff-display); font-style: italic; font-size: 32px; font-weight: 400; margin-bottom: 12px; color: var(--cream);}
+  .demo .status p { color: rgba(244,234,213,.7); font-size: 14px; margin: 0 0 24px; max-width: 300px;}
+  .demo .status .btn { background: var(--highlight); color: var(--ink); border-color: var(--highlight); box-shadow: 0 4px 0 var(--rust); }
+
+  .demo-ui {
+    display: flex; flex-direction: column; gap: 18px;
+  }
+  .demo-controls {
+    display: flex; gap: 10px; align-items: center; justify-content: space-between;
+    padding: 14px 18px;
+    background: var(--cream-2);
+    border-radius: 999px;
+    border: 1px solid rgba(42,26,12,.15);
+    flex-wrap: wrap;
+  }
+  .filter-options { display: flex; gap: 6px; flex-wrap: wrap; }
+  .filter-options button {
+    background: transparent;
+    border: 1px solid rgba(42,26,12,.25);
+    padding: 7px 12px;
+    border-radius: 999px;
+    font-family: var(--ff-mono);
+    font-size: 11px;
+    letter-spacing: .08em;
+    color: var(--ink-2);
+    cursor: pointer;
+    transition: all .15s;
+  }
+  .filter-options button.active {
+    background: var(--ink);
+    color: var(--cream);
+    border-color: var(--ink);
+  }
+  .shutter-btn {
+    background: var(--rust);
+    color: var(--cream);
+    border: none;
+    width: 54px; height: 54px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: grid; place-items: center;
+    box-shadow: 0 0 0 4px var(--cream), 0 0 0 6px var(--rust);
+    transition: transform .15s;
+  }
+  .shutter-btn:hover { transform: scale(1.05); }
+  .shutter-btn:active { transform: scale(.94); }
+  .shutter-btn svg { width: 24px; height: 24px; fill: currentColor; }
+  .shutter-btn[disabled] { opacity: .4; cursor: not-allowed; }
+
+  /* Result film strip */
+  .result-strip {
+    display: none;
+    background: #1a1008;
+    padding: 14px 12px;
+    box-shadow: 0 20px 50px rgba(0,0,0,.4);
+    position: relative;
+    max-width: 520px;
+    transform: rotate(-1deg);
+  }
+  .result-strip.show { display: block; animation: popin .5s; }
+  @keyframes popin { from { opacity: 0; transform: scale(.8) rotate(-5deg); } to { opacity: 1; transform: scale(1) rotate(-1deg); } }
+  .result-strip .holes-row {
+    display: flex; justify-content: space-around; padding: 4px 0;
+  }
+  .result-strip .holes-row span { width: 10px; height: 7px; background: var(--cream); border-radius: 1px; }
+  .result-strip .photos {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+  }
+  .result-strip .photo {
+    aspect-ratio: 1/1;
+    background: var(--ink);
+    overflow: hidden;
+    position: relative;
+  }
+  .result-strip .photo img { width: 100%; height: 100%; object-fit: cover; }
+  .result-strip .footer-strip {
+    padding: 18px 8px 4px;
+    color: var(--cream);
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-family: var(--ff-display);
+    font-style: italic;
+  }
+  .result-strip .footer-strip .brand {
+    font-family: var(--ff-script);
+    color: var(--highlight);
+    font-size: 22px;
+  }
+  .result-strip .footer-strip small {
+    font-family: var(--ff-mono);
+    font-size: 10px;
+    letter-spacing: .2em;
+    opacity: .6;
+    text-transform: uppercase;
+  }
+  .result-actions { display: flex; gap: 10px; margin-top: 14px; justify-content: center; }
+
+  /* Hero badge */
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 16px;
+    background: rgba(178,95,46,.12);
+    border: 1px solid rgba(178,95,46,.35);
+    border-radius: 999px;
+    font-family: var(--ff-mono);
+    font-size: 11px;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--rust-2);
+    margin-bottom: 24px;
+  }
+  .hero-badge .live {
+    width: 8px; height: 8px;
+    background: var(--rust);
+    border-radius: 50%;
+    animation: pulse 1.6s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.4); opacity: .5; }
+  }
+
+  /* Tweaks panel */
+  .tweaks-panel {
+    position: fixed;
+    bottom: 24px; right: 24px;
+    background: var(--ink);
+    color: var(--cream);
+    padding: 22px;
+    border-radius: 10px;
+    box-shadow: 0 20px 60px rgba(0,0,0,.4);
+    z-index: 200;
+    width: 280px;
+    display: none;
+    font-size: 13px;
+  }
+  .tweaks-panel.show { display: block; }
+  .tweaks-panel h4 {
+    font-family: var(--ff-display);
+    font-style: italic;
+    font-size: 20px;
+    margin-bottom: 16px;
+    color: var(--highlight);
+  }
+  .tweaks-panel .tw-row { margin-bottom: 14px; }
+  .tweaks-panel .tw-row label {
+    display: block;
+    font-family: var(--ff-mono);
+    font-size: 10px;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    opacity: .6;
+    margin-bottom: 6px;
+  }
+  .tweaks-panel .tw-row .opts { display: flex; gap: 4px; flex-wrap: wrap; }
+  .tweaks-panel .tw-row .opts button {
+    background: rgba(244,234,213,.08);
+    color: var(--cream);
+    border: 1px solid rgba(244,234,213,.15);
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-family: var(--ff-mono);
+    font-size: 11px;
+    cursor: pointer;
+  }
+  .tweaks-panel .tw-row .opts button.active {
+    background: var(--highlight);
+    color: var(--ink);
+    border-color: var(--highlight);
+  }
+
+  /* Palettes */
+  body[data-palette="mono"] {
+    --cream: #efeae2;
+    --cream-2: #e5dfd4;
+    --paper: #dcd5c6;
+    --tan: #b8b0a0;
+    --rust: #2a2a28;
+    --rust-2: #111;
+    --ink: #0f0f0e;
+    --ink-2: #2f2f2c;
+    --highlight: #e8e3d8;
+    --shadow: rgba(0,0,0,.3);
+  }
+  body[data-palette="rose"] {
+    --cream: #f6e8de;
+    --cream-2: #eed7c6;
+    --paper: #e5c4af;
+    --tan: #d19a7a;
+    --rust: #a33d3d;
+    --rust-2: #762828;
+    --ink: #30150f;
+    --ink-2: #5a2818;
+    --highlight: #f2c48c;
+  }
+
+  /* Reveal animations */
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity .9s cubic-bezier(.2,.7,.2,1), transform .9s cubic-bezier(.2,.7,.2,1); }
+  .reveal.in { opacity: 1; transform: none; }
+
+  /* Section dividers */
+  .deco-divider {
+    display: flex; align-items: center; justify-content: center;
+    padding: 24px 0;
+    color: var(--rust);
+    gap: 20px;
+  }
+  .deco-divider .line { flex: 1; max-width: 200px; height: 1px; background: currentColor; opacity: .4; }
+  .deco-divider svg { width: 40px; height: 40px; }
+
+  /* Small breakpoints */
+  @media (max-width: 960px) {
+    .hero-grid, .booth-grid, .about-grid, .book-grid { grid-template-columns: 1fr; }
+    .section-head { grid-template-columns: 1fr; gap: 20px; }
+    .howit-steps { grid-template-columns: repeat(2, 1fr); }
+    .usecases-grid { grid-template-columns: 1fr; grid-template-rows: none; height: auto; }
+    .uc.big { grid-row: auto; }
+    .testis, .pricing { grid-template-columns: 1fr; }
+    .navlinks { display: none; }
+    .hero h1 { font-size: 56px; }
+  }
+</style>
+</head>
+<body data-palette="sepia" data-grain="true">
+
+<!-- NAV -->
+<nav class="topnav" id="topnav">
+  <div class="logo">
+    <span>Playing With <em>Photo</em></span>
+  </div>
+  <div class="navlinks">
+    <a href="#booth">The Booth</a>
+    <a href="#how">How it works</a>
+    <a href="#styles">Styles</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#about">About Jeff</a>
+  </div>
+  <a href="#book" class="nav-cta">Book the booth</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero" data-screen-label="01 Hero">
+  <div class="hero-grid">
+    <div class="hero-copy">
+      <span class="hero-badge"><span class="live"></span> Live webcam demo — strike a pose</span>
+      <h1>
+        Your face,<br/>
+        <span class="italic">reimagined</span> in <span class="amp">&</span><br/>
+        vintage film <span class="dash">—</span>
+      </h1>
+      <p class="hero-sub">
+        An AI-powered photobooth by Singapore sketch artist <b>Jeff</b> (Playing With Pencil).
+        Step up, strike a pose, and walk away with photos that look pulled from a 1970s
+        Kodak strip — live at your wedding, party, or brand activation.
+      </p>
+      <div class="hero-cta-row">
+        <a href="#demo" class="btn">Try it now
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </a>
+        <a href="#book" class="btn ghost">Book for your event</a>
+      </div>
+      <div class="hero-meta">
+        <span class="stars">★★★★★</span>
+        <span>200+ events · Singapore based</span>
+        <span class="dot"></span>
+        <span>By Jeff · Playing With Pencil</span>
+      </div>
+    </div>
+
+    <div class="hero-booth">
+      <!-- Floating photo strips -->
+      <div class="floating-strip" style="--r:-8deg; width: 140px; top: 5%; left: -5%;">
+        <div class="holes"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        <div class="frame" data-portrait="1"></div>
+        <div class="holes"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+      </div>
+      <div class="floating-strip" style="--r:6deg; width: 130px; top: 8%; right: -10%; z-index: 3;">
+        <div class="holes"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        <div class="frame" data-portrait="2"></div>
+        <div class="holes"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+      </div>
+      <div class="floating-strip" style="--r:4deg; width: 150px; bottom: 8%; right: -4%;">
+        <div class="holes"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        <div class="frame" data-portrait="3"></div>
+        <div class="holes"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+      </div>
+      <div class="floating-strip" style="--r:-5deg; width: 130px; bottom: 12%; left: -8%; z-index: 3;">
+        <div class="holes"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        <div class="frame" data-portrait="4"></div>
+        <div class="holes"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+      </div>
+
+      <!-- The booth illustration -->
+      <svg viewBox="0 0 400 460" style="width: 72%; position: relative; z-index: 2; filter: drop-shadow(0 30px 40px var(--shadow));">
+        <!-- Ring light -->
+        <circle cx="200" cy="70" r="52" fill="#fff" stroke="var(--ink)" stroke-width="3"/>
+        <circle cx="200" cy="70" r="40" fill="var(--cream)" stroke="var(--rust)" stroke-width="2"/>
+        <circle cx="200" cy="70" r="28" fill="var(--highlight)" opacity=".9"/>
+        <circle cx="200" cy="70" r="14" fill="#fff"/>
+        <!-- Arm to booth -->
+        <rect x="196" y="118" width="8" height="24" fill="var(--ink-2)"/>
+        <!-- Booth body -->
+        <rect x="120" y="140" width="160" height="150" rx="6" fill="#6b3f25" stroke="var(--ink)" stroke-width="3"/>
+        <rect x="128" y="148" width="144" height="134" rx="3" fill="#4a2814"/>
+        <!-- Screen/lens -->
+        <circle cx="200" cy="195" r="34" fill="var(--ink)" stroke="var(--tan)" stroke-width="3"/>
+        <circle cx="200" cy="195" r="24" fill="#1a0f07"/>
+        <circle cx="200" cy="195" r="16" fill="#0a0604"/>
+        <circle cx="193" cy="188" r="5" fill="var(--highlight)" opacity=".6"/>
+        <!-- Screen below -->
+        <rect x="145" y="240" width="110" height="32" rx="3" fill="var(--cream)"/>
+        <text x="200" y="261" text-anchor="middle" font-family="Caveat, cursive" font-size="18" fill="var(--rust)" font-weight="600">smile ✿</text>
+        <!-- Tripod legs -->
+        <line x1="200" y1="290" x2="120" y2="440" stroke="#6b3f25" stroke-width="8" stroke-linecap="round"/>
+        <line x1="200" y1="290" x2="280" y2="440" stroke="#6b3f25" stroke-width="8" stroke-linecap="round"/>
+        <line x1="200" y1="290" x2="200" y2="440" stroke="#8a5030" stroke-width="6" stroke-linecap="round" opacity=".6"/>
+        <circle cx="200" cy="290" r="10" fill="var(--ink)"/>
+        <!-- Printer base -->
+        <rect x="270" y="370" width="90" height="55" rx="4" fill="#6b3f25" stroke="var(--ink)" stroke-width="2.5"/>
+        <rect x="278" y="385" width="74" height="8" fill="var(--cream)"/>
+        <rect x="285" y="395" width="60" height="4" fill="var(--ink)" opacity=".3"/>
+        <!-- Photo coming out -->
+        <rect x="285" y="355" width="34" height="22" fill="#fff" stroke="var(--ink)" stroke-width="1" transform="rotate(-8 302 366)"/>
+      </svg>
+
+      <!-- Scribbled annotation -->
+      <div style="position:absolute; top: 38%; right: -5%; transform: rotate(8deg); font-family: var(--ff-script); color: var(--rust); font-size: 22px; font-weight: 600;">
+        ← handmade<br/>by Jeff
+        <svg style="position:absolute; top: 20px; left: -30px; width:60px; transform: rotate(60deg);" viewBox="0 0 60 60">
+          <path d="M5 5 Q30 50 55 15" stroke="var(--rust)" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <path d="M55 15 L48 18 M55 15 L52 22" stroke="var(--rust)" stroke-width="2" fill="none" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track">
+    <span>
+      Strike a pose <span class="sep">✦</span>
+      Vintage vibes <span class="sep">✦</span>
+      AI-powered <span class="sep">✦</span>
+      Hand-built in Singapore <span class="sep">✦</span>
+      70s Kodak <span class="sep">✦</span>
+      Polaroid moments <span class="sep">✦</span>
+      Weddings · Parties · Brands <span class="sep">✦</span>
+      Strike a pose <span class="sep">✦</span>
+      Vintage vibes <span class="sep">✦</span>
+      AI-powered <span class="sep">✦</span>
+      Hand-built in Singapore <span class="sep">✦</span>
+      70s Kodak <span class="sep">✦</span>
+      Polaroid moments <span class="sep">✦</span>
+      Weddings · Parties · Brands <span class="sep">✦</span>
+    </span>
+  </div>
+</div>
+
+<!-- LIVE DEMO -->
+<section class="chapter" id="demo" data-screen-label="02 Live Demo" style="padding: 120px 0;">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <span class="eyebrow">Live demo · 001</span>
+        <h2>Try it right <em>now</em>.</h2>
+      </div>
+      <p>
+        Your webcam, a pinch of AI, and thirty years of film nostalgia. Click the shutter,
+        strike four poses — we'll develop a vintage strip you can save and share.
+        <b>Nothing is uploaded.</b> All processing happens in your browser.
+      </p>
+    </div>
+
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start;" id="demoGrid">
+      <div class="demo-ui reveal">
+        <div class="demo" id="demoBox">
+          <div class="status" id="demoStatus">
+            <div>
+              <h4>Turn on your camera</h4>
+              <p>We'll only use it for this demo — nothing leaves your browser.</p>
+              <button class="btn" id="startCam">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="13" r="4"/><path d="M3 7h4l2-2h6l2 2h4v12H3z"/></svg>
+                Turn on camera
+              </button>
+            </div>
+          </div>
+          <video id="video" autoplay playsinline muted></video>
+          <canvas class="filter-canvas" id="filterCanvas"></canvas>
+          <svg class="frame-overlay" viewBox="0 0 100 100" preserveAspectRatio="none">
+            <!-- Corner registration marks -->
+            <g fill="none" stroke="rgba(255,235,200,.5)" stroke-width=".4">
+              <path d="M3 3 L3 9 M3 3 L9 3"/>
+              <path d="M97 3 L97 9 M97 3 L91 3"/>
+              <path d="M3 97 L3 91 M3 97 L9 97"/>
+              <path d="M97 97 L97 91 M97 97 L91 97"/>
+            </g>
+          </svg>
+          <div class="countdown" id="countdown">3</div>
+          <div class="flash" id="flash"></div>
+        </div>
+
+        <div class="demo-controls">
+          <div class="filter-options" id="filterOptions">
+            <button data-f="sepia" class="active">Sepia 70s</button>
+            <button data-f="bw">B&W Classic</button>
+            <button data-f="polaroid">Polaroid</button>
+            <button data-f="kodachrome">Kodachrome</button>
+          </div>
+          <button class="shutter-btn" id="shutterBtn" disabled title="Snap a strip">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="reveal">
+        <div class="result-strip" id="resultStrip">
+          <div class="holes-row">
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+          </div>
+          <div class="photos" id="photos">
+            <div class="photo"></div>
+            <div class="photo"></div>
+            <div class="photo"></div>
+            <div class="photo"></div>
+          </div>
+          <div class="holes-row">
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+          </div>
+          <div class="footer-strip">
+            <span class="brand">Playing With Photo</span>
+            <small id="resultDate">— · — · —</small>
+          </div>
+        </div>
+        <div class="result-actions" id="resultActions" style="display:none;">
+          <button class="btn ghost" id="retakeBtn">Retake</button>
+          <button class="btn" id="downloadBtn">Download strip
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 4v12m0 0l-5-5m5 5l5-5M4 20h16"/></svg>
+          </button>
+        </div>
+
+        <div id="demoPlaceholder" style="padding: 40px 20px; text-align:center; color: var(--ink-2);">
+          <div style="font-family:var(--ff-display); font-style:italic; font-size: 28px; color:var(--ink); margin-bottom: 8px;">Your film strip<br/>will develop here</div>
+          <p style="font-size:14px; max-width: 320px; margin: 0 auto;">Pick a style, aim your shot, and tap the shutter. We'll take four frames in sequence — just like the real booth.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- THE BOOTH -->
+<section class="chapter booth-chapter" id="booth" data-screen-label="03 The Booth">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <span class="eyebrow">The hardware · 002</span>
+        <h2>Hand-built.<br/><span class="italic">Unapologetically</span> <em>analog</em>.</h2>
+      </div>
+      <p>
+        Every booth is assembled in Jeff's Singapore studio. A real hardwood tripod, a
+        vintage-cased camera head, and a thermal printer that whirs like a polaroid —
+        but inside, modern AI does the magic of turning strangers into film stars.
+      </p>
+    </div>
+
+    <div class="booth-grid reveal">
+      <div class="booth-stage">
+        <svg viewBox="0 0 400 480" style="width: 90%; filter: drop-shadow(0 30px 40px var(--shadow));">
+          <!-- Ring light -->
+          <circle cx="200" cy="70" r="56" fill="#fff" stroke="var(--ink)" stroke-width="3"/>
+          <circle cx="200" cy="70" r="44" fill="var(--cream)" stroke="var(--rust)" stroke-width="2"/>
+          <circle cx="200" cy="70" r="30" fill="var(--highlight)"/>
+          <circle cx="200" cy="70" r="14" fill="#fff"/>
+          <rect x="194" y="120" width="12" height="28" fill="var(--ink-2)"/>
+          <!-- Booth body -->
+          <rect x="115" y="145" width="170" height="160" rx="8" fill="#6b3f25" stroke="var(--ink)" stroke-width="3"/>
+          <rect x="123" y="153" width="154" height="144" rx="4" fill="#4a2814"/>
+          <!-- Screws -->
+          <circle cx="125" cy="155" r="3" fill="#2a1a0c"/>
+          <circle cx="275" cy="155" r="3" fill="#2a1a0c"/>
+          <circle cx="125" cy="295" r="3" fill="#2a1a0c"/>
+          <circle cx="275" cy="295" r="3" fill="#2a1a0c"/>
+          <!-- Lens -->
+          <circle cx="200" cy="200" r="40" fill="var(--ink)" stroke="var(--tan)" stroke-width="3"/>
+          <circle cx="200" cy="200" r="30" fill="#1a0f07"/>
+          <circle cx="200" cy="200" r="20" fill="#0a0604"/>
+          <circle cx="190" cy="190" r="6" fill="var(--highlight)" opacity=".7"/>
+          <!-- Screen -->
+          <rect x="140" y="255" width="120" height="36" rx="3" fill="var(--cream)"/>
+          <text x="200" y="278" text-anchor="middle" font-family="Caveat, cursive" font-size="20" fill="var(--rust)" font-weight="600">ready when you are</text>
+          <!-- Legs -->
+          <line x1="200" y1="305" x2="110" y2="465" stroke="#6b3f25" stroke-width="10" stroke-linecap="round"/>
+          <line x1="200" y1="305" x2="290" y2="465" stroke="#6b3f25" stroke-width="10" stroke-linecap="round"/>
+          <line x1="200" y1="305" x2="200" y2="465" stroke="#8a5030" stroke-width="7" stroke-linecap="round" opacity=".6"/>
+          <circle cx="200" cy="305" r="12" fill="var(--ink)"/>
+          <!-- Wood grain -->
+          <path d="M195 330 L113 460 M200 360 L122 465" stroke="#4a2814" stroke-width="1" opacity=".3"/>
+        </svg>
+
+        <div class="booth-labels">
+          <div class="booth-label" style="top: 6%; right: -5%;"><b>Ring light</b><span class="line"></span>01</div>
+          <div class="booth-label" style="top: 38%; right: -8%;"><b>AI lens</b><span class="line"></span>02</div>
+          <div class="booth-label" style="top: 58%; left: -10%;">03<span class="line"></span><b>Live preview</b></div>
+          <div class="booth-label" style="bottom: 8%; left: -6%;">04<span class="line"></span><b>Hardwood tripod</b></div>
+        </div>
+      </div>
+
+      <div>
+        <span class="eyebrow">Specs & craft</span>
+        <h3 style="font-family:var(--ff-display); font-size: 44px; font-weight: 400; font-style: italic; margin: 14px 0 20px;">
+          Built like a camera from your grandpa's attic.
+        </h3>
+        <p style="color:var(--ink-2); max-width: 52ch; margin:0;">
+          Teak legs. Brass fittings. A shutter that clicks when you press it. The booth
+          earns its place in the room — guests gather around it because it <i>looks</i>
+          like something worth gathering around.
+        </p>
+
+        <div class="booth-feat">
+          <div class="f">
+            <h4>Hardwood tripod</h4>
+            <p>Teak, hand-finished. Each one has its own grain — no two are identical.</p>
+          </div>
+          <div class="f">
+            <h4>Live AI filter</h4>
+            <p>See your vintage self in real-time before you ever hit the shutter.</p>
+          </div>
+          <div class="f">
+            <h4>Thermal printer</h4>
+            <p>Prints a film strip in 12 seconds. Guests walk away with a keepsake.</p>
+          </div>
+          <div class="f">
+            <h4>Event-ready</h4>
+            <p>Folds down to a suitcase. Power is a single wall socket. Done.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="chapter" id="how" data-screen-label="04 How It Works">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <span class="eyebrow">The process · 003</span>
+        <h2>Pose. Click.<br/><em>Develop.</em> Done.</h2>
+      </div>
+      <p>Four steps, forty seconds. The AI does the heavy lifting — your guests just show up and smile.</p>
+    </div>
+
+    <div class="howit-steps reveal">
+      <div class="step">
+        <span class="num">01</span>
+        <span class="stamp">Step one</span>
+        <h4>Step in</h4>
+        <p>Guest walks up to the booth. Ring light warms up. No app, no signup.</p>
+      </div>
+      <div class="step">
+        <span class="num">02</span>
+        <span class="stamp">Step two</span>
+        <h4>Strike a pose</h4>
+        <p>Countdown on the screen. Four poses in eight seconds, like the classic strip.</p>
+      </div>
+      <div class="step">
+        <span class="num">03</span>
+        <span class="stamp">Step three</span>
+        <h4>AI develops</h4>
+        <p>Model re-styles each frame in the chosen era — 70s Kodak, Polaroid, B&W.</p>
+      </div>
+      <div class="step">
+        <span class="num">04</span>
+        <span class="stamp">Step four</span>
+        <h4>Take it home</h4>
+        <p>Printed strip in hand. Digital copy texted. A tiny gallery at your event.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STYLE GALLERY -->
+<section class="chapter gallery-chapter" id="styles" data-screen-label="05 Styles">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <span class="eyebrow">The looks · 004</span>
+        <h2 style="color:var(--cream);">Five films,<br/><em style="color:var(--highlight)!important;">one roll.</em></h2>
+      </div>
+      <p>Each style is tuned for a different mood. Switch mid-event, or commit to one look for a uniform gallery. Hover the strip to pause.</p>
+    </div>
+
+    <div class="style-chips reveal">
+      <button class="active">70s Kodak</button>
+      <button>Silver Gelatin B&W</button>
+      <button>Polaroid 600</button>
+      <button>Kodachrome Slide</button>
+      <button>Studio Sepia</button>
+    </div>
+  </div>
+
+  <div class="filmstrip-wrap reveal" style="margin-top: 60px;">
+    <div class="filmstrip" id="styleFilmstrip">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- USE CASES -->
+<section class="chapter" id="usecases" data-screen-label="06 Use Cases">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <span class="eyebrow">Where it lives · 005</span>
+        <h2>The booth <em>you'll</em><br/>want to book.</h2>
+      </div>
+      <p>Weddings, brand launches, festivals, birthdays. The booth fits any venue that has a wall socket and room for four people.</p>
+    </div>
+
+    <div class="usecases-grid reveal">
+      <div class="uc big" style="background: linear-gradient(135deg, var(--paper), var(--tan));">
+        <div>
+          <span class="uc-num">// 01</span>
+          <h3>Weddings<br/>& Receptions</h3>
+          <p>The most-talked-about corner of the night. Your guests leave with a keepsake that doesn't end up in a junk drawer.</p>
+        </div>
+        <svg class="uc-illus" viewBox="0 0 200 200">
+          <rect x="20" y="40" width="160" height="130" fill="var(--cream)" stroke="var(--ink)" stroke-width="2"/>
+          <rect x="30" y="55" width="140" height="90" fill="var(--tan)"/>
+          <circle cx="80" cy="95" r="18" fill="var(--cream)"/>
+          <circle cx="120" cy="95" r="18" fill="var(--cream)"/>
+          <path d="M70 125 Q100 140 130 125" stroke="var(--rust)" stroke-width="3" fill="none"/>
+          <text x="100" y="162" text-anchor="middle" font-family="Caveat, cursive" font-size="16" fill="var(--rust)">Mr & Mrs</text>
+        </svg>
+      </div>
+      <div class="uc">
+        <div>
+          <span class="uc-num">// 02</span>
+          <h3>Corporate</h3>
+          <p>Branded strips, custom filters, your logo on the film border.</p>
+        </div>
+      </div>
+      <div class="uc">
+        <div>
+          <span class="uc-num">// 03</span>
+          <h3>Festivals</h3>
+          <p>High-volume mode: 4 strips/minute, queue-friendly.</p>
+        </div>
+      </div>
+      <div class="uc">
+        <div>
+          <span class="uc-num">// 04</span>
+          <h3>Birthdays</h3>
+          <p>For milestone years. Grandma looks incredible in Kodachrome.</p>
+        </div>
+      </div>
+      <div class="uc">
+        <div>
+          <span class="uc-num">// 05</span>
+          <h3>Pop-ups</h3>
+          <p>Retail activations, openings, launches. Draws a crowd.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="chapter testis-chapter" id="testimonials" data-screen-label="07 Testimonials">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <span class="eyebrow">Kind words · 006</span>
+        <h2>The <em>queue</em><br/>never stopped.</h2>
+      </div>
+      <p>Real feedback from weddings, brand launches, and one very memorable 60th birthday.</p>
+    </div>
+
+    <div class="testis reveal">
+      <div class="testi" style="--r:-1deg;">
+        <p>"Three hours in and the line was still around the bar. We had guests print four strips each. It stole the show — in the best possible way."</p>
+        <div class="who">
+          <div class="ava" style="background: #e8b98a;">P</div>
+          <div>
+            <b>Priya & Aaron</b>
+            <span>Wedding · Cliveden House</span>
+          </div>
+        </div>
+      </div>
+      <div class="testi" style="--r:1deg;">
+        <p>"Our brand activation needed a 'moment'. Jeff's booth <i>was</i> the moment. We posted the filmstrips for weeks afterwards."</p>
+        <div class="who">
+          <div class="ava" style="background: #c89a6a;">M</div>
+          <div>
+            <b>Marcus L.</b>
+            <span>Head of Brand · Aesop SG</span>
+          </div>
+        </div>
+      </div>
+      <div class="testi" style="--r:-0.5deg;">
+        <p>"My dad is 60 and hates being photographed. He took eleven strips. I've never seen him grin that hard at a camera."</p>
+        <div class="who">
+          <div class="ava" style="background: #d6a87a;">L</div>
+          <div>
+            <b>Lee Wei Ling</b>
+            <span>Birthday · Tanjong Pagar</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="chapter" id="pricing" data-screen-label="08 Pricing">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <span class="eyebrow">Packages · 007</span>
+        <h2>Three ways<br/>to <em>play</em>.</h2>
+      </div>
+      <p>All packages include setup, teardown, an on-site attendant, unlimited prints, and every digital file.</p>
+    </div>
+
+    <div class="pricing reveal">
+      <div class="price">
+        <span class="tier">The Keepsake</span>
+        <h3>Half-day</h3>
+        <div class="amt">$880 <small>SGD · 3 hrs</small></div>
+        <ul>
+          <li>3 hours of shooting</li>
+          <li>Unlimited printed strips</li>
+          <li>All digital files delivered</li>
+          <li>3 AI film styles</li>
+          <li>On-site attendant</li>
+        </ul>
+        <a href="#book" class="btn ghost">Enquire</a>
+      </div>
+      <div class="price feat">
+        <span class="badge">most booked</span>
+        <span class="tier">The Showpiece</span>
+        <h3>Full evening</h3>
+        <div class="amt">$1,380 <small class="muted">SGD · 5 hrs</small></div>
+        <ul>
+          <li>5 hours of shooting</li>
+          <li>Unlimited printed strips</li>
+          <li>All digital files + gallery link</li>
+          <li>All 5 AI film styles</li>
+          <li>Custom branded footer</li>
+          <li>On-site attendant</li>
+        </ul>
+        <a href="#book" class="btn">Book it</a>
+      </div>
+      <div class="price">
+        <span class="tier">The Activation</span>
+        <h3>Brands & festivals</h3>
+        <div class="amt">Custom <small>SGD · full day+</small></div>
+        <ul>
+          <li>Full-day or multi-day</li>
+          <li>Custom-branded booth wrap</li>
+          <li>Bespoke AI style training</li>
+          <li>Live gallery feed</li>
+          <li>Multi-operator team</li>
+        </ul>
+        <a href="#book" class="btn ghost">Get a quote</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT JEFF -->
+<section class="chapter about-chapter" id="about" data-screen-label="09 About Jeff">
+  <div class="wrap">
+    <div class="about-grid reveal">
+      <div class="about-portrait">
+        <div class="img">
+          <svg viewBox="0 0 300 400" style="width:100%;height:100%;">
+            <rect width="300" height="400" fill="#c89a6a"/>
+            <!-- Simple stylized Jeff portrait -->
+            <circle cx="150" cy="150" r="70" fill="#d9b681"/>
+            <!-- Hair -->
+            <path d="M85 130 Q90 70 150 68 Q210 70 215 130 Q215 100 195 88 Q175 78 150 80 Q125 78 105 88 Q85 100 85 130Z" fill="#3a2614"/>
+            <!-- Eyes -->
+            <circle cx="128" cy="150" r="3.5" fill="#2a1a0c"/>
+            <circle cx="172" cy="150" r="3.5" fill="#2a1a0c"/>
+            <!-- Glasses -->
+            <circle cx="128" cy="150" r="14" fill="none" stroke="#2a1a0c" stroke-width="2.5"/>
+            <circle cx="172" cy="150" r="14" fill="none" stroke="#2a1a0c" stroke-width="2.5"/>
+            <line x1="142" y1="150" x2="158" y2="150" stroke="#2a1a0c" stroke-width="2"/>
+            <!-- Nose -->
+            <path d="M150 158 Q146 172 150 180 Q154 180 155 175" stroke="#8a4620" stroke-width="2" fill="none"/>
+            <!-- Smile -->
+            <path d="M135 193 Q150 203 165 193" stroke="#8a4620" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <!-- Beard scruff -->
+            <path d="M135 198 Q150 215 165 198" stroke="#3a2614" stroke-width="1" fill="none" opacity=".3"/>
+            <!-- Body/shirt -->
+            <path d="M80 400 L80 260 Q150 240 220 260 L220 400 Z" fill="#8a4620"/>
+            <path d="M120 260 Q150 250 180 260 L175 310 Q150 315 125 310 Z" fill="#c89a6a"/>
+            <!-- Pencil in pocket -->
+            <rect x="165" y="285" width="4" height="25" fill="#f2c48c" transform="rotate(8 167 297)"/>
+            <circle cx="167" cy="283" r="2" fill="#2a1a0c"/>
+          </svg>
+        </div>
+        <div class="label">— Jeff, 2026</div>
+        <div class="stamp">Singapore · est. 2018</div>
+      </div>
+
+      <div class="about-copy">
+        <span class="eyebrow">The maker · 008</span>
+        <h2>Hi, I'm <em>Jeff.</em></h2>
+        <p class="lede">
+          I've been drawing portraits of strangers at Singapore markets for eight years
+          under the name <i>Playing With Pencil</i>. This is what happened when I taught
+          my pencil to use a camera.
+        </p>
+        <p>
+          Every sketch I do is two things at once: a likeness, and a <i>memory</i>. I
+          wanted a photobooth that did both — something that catches you faithfully
+          <i>and</i> wraps you in a little bit of nostalgia. So I built one. Hardwood
+          tripod, brass fittings, and an AI model I fine-tuned on forty years of film
+          photographs. Six months of tinkering later, Playing With Photo was born.
+        </p>
+        <p>
+          I still show up to every event myself. If you book the booth, you're booking
+          <i>me</i> too — complete with terrible jokes and pencil smudges on my fingers.
+        </p>
+
+        <div class="signature">
+          <svg viewBox="0 0 260 80" style="height: 62px;">
+            <path d="M 10 50 Q 25 20 45 45 Q 55 60 70 35 Q 85 15 95 45 L 100 50 Q 110 30 125 50 Q 140 70 155 35 Q 170 10 185 45 Q 200 70 220 30 Q 240 10 250 30"
+                  stroke="var(--rust-2)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+            <path d="M 90 55 L 200 58" stroke="var(--rust-2)" stroke-width="1" fill="none" opacity=".5"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BOOKING -->
+<section class="chapter book-chapter" id="book" data-screen-label="10 Booking">
+  <div class="wrap">
+    <div class="book-grid">
+      <div class="reveal">
+        <span class="eyebrow" style="color: var(--highlight);">Let's make a memory · 009</span>
+        <h2>Book the<br/>booth. <em>Today.</em></h2>
+        <p class="lede">
+          Reply within 24 hours. Setup is included. We travel across Singapore and to
+          regional events in Malaysia, Indonesia, and Thailand.
+        </p>
+        <div style="margin-top: 48px; display: flex; gap: 36px; flex-wrap: wrap;">
+          <div>
+            <div style="font-family:var(--ff-mono); font-size: 11px; letter-spacing: .2em; opacity:.7; text-transform:uppercase;">Email</div>
+            <div style="font-family:var(--ff-display); font-style: italic; font-size: 24px; margin-top: 4px;"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="8de7e8ebebcdfde1ecf4e4e3eafae4f9e5a3fde5e2f9e2">[email&#160;protected]</a></div>
+          </div>
+          <div>
+            <div style="font-family:var(--ff-mono); font-size: 11px; letter-spacing: .2em; opacity:.7; text-transform:uppercase;">WhatsApp</div>
+            <div style="font-family:var(--ff-display); font-style: italic; font-size: 24px; margin-top: 4px;">+65 8123 4567</div>
+          </div>
+        </div>
+      </div>
+
+      <form class="book-form reveal" onsubmit="event.preventDefault(); this.querySelector('.btn').innerHTML='Thanks — I\\'ll reply soon ✓'; this.querySelector('.btn').style.background='var(--rust)'; this.querySelector('.btn').style.color='var(--cream)'; this.querySelector('.btn').style.borderColor='var(--rust)';">
+        <small>/ Enquiry form</small>
+        <h3>Tell me about your event</h3>
+        <div class="row">
+          <div class="field">
+            <label>Your name</label>
+            <input type="text" placeholder="Jeff A." required />
+          </div>
+          <div class="field">
+            <label>Email</label>
+            <input type="email" placeholder="you@example.com" required />
+          </div>
+        </div>
+        <div class="row">
+          <div class="field">
+            <label>Event type</label>
+            <select>
+              <option>Wedding</option>
+              <option>Corporate / brand</option>
+              <option>Birthday</option>
+              <option>Festival / public</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Event date</label>
+            <input type="date" />
+          </div>
+        </div>
+        <div class="row">
+          <div class="field">
+            <label>Venue / city</label>
+            <input type="text" placeholder="Cliveden House, Singapore" />
+          </div>
+        </div>
+        <button type="submit" class="btn">Send enquiry
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div>
+      <div class="biglogo">Playing<br/>With <em>Photo.</em></div>
+      <div class="colophon" style="margin-top: 24px;">Est. 2026 · Singapore · By Jeff / Playing With Pencil</div>
+    </div>
+    <div class="colophon" style="text-align:right;">
+      © 2026 Playing With Photo<br/>
+      Hand-coded with love · Not AI-generated
+    </div>
+  </div>
+</footer>
+
+<!-- Tweaks panel -->
+<div class="tweaks-panel" id="tweaksPanel">
+  <h4>Tweaks</h4>
+  <div class="tw-row">
+    <label>Palette</label>
+    <div class="opts" data-tweak="palette">
+      <button data-v="sepia">Sepia</button>
+      <button data-v="mono">Mono</button>
+      <button data-v="rose">Rose</button>
+    </div>
+  </div>
+  <div class="tw-row">
+    <label>Default filter</label>
+    <div class="opts" data-tweak="filter">
+      <button data-v="sepia">Sepia 70s</button>
+      <button data-v="bw">B&W</button>
+      <button data-v="polaroid">Polaroid</button>
+      <button data-v="kodachrome">Kodachrome</button>
+    </div>
+  </div>
+  <div class="tw-row">
+    <label>Paper grain</label>
+    <div class="opts" data-tweak="grain">
+      <button data-v="true">On</button>
+      <button data-v="false">Off</button>
+    </div>
+  </div>
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="app.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,3410 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Playing With Photo — AI Vintage Photobooth by Jeff</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="creation.css">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,800;0,9..144,900;1,9..144,400;1,9..144,700&family=Caveat:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<script>
+  // Tweakable defaults, persisted on disk by the host
+  window.TWEAKS = /*EDITMODE-BEGIN*/{
+    "palette": "rose",
+    "heroLayout": "editorial",
+    "filter": "sepia",
+    "grain": true
+  }/*EDITMODE-END*/;
+</script>
+
+<style>
+  :root {
+    /* Sepia & cream — 70s Kodak / old Polaroid */
+    --cream: #f4ead5;
+    --cream-2: #efe3c7;
+    --paper: #ebdcb7;
+    --tan: #d9b681;
+    --rust: #b25f2e;
+    --rust-2: #8a4620;
+    --ink: #2a1a0c;
+    --ink-2: #4a2f1a;
+    --sepia-1: #c38a52;
+    --sepia-2: #7a4620;
+    --highlight: #ffd88a;
+    --shadow: rgba(62, 34, 12, 0.25);
+
+    --ff-display: "Fraunces", "Cormorant Garamond", Georgia, serif;
+    --ff-body: "DM Sans", system-ui, sans-serif;
+    --ff-script: "Caveat", "Brush Script MT", cursive;
+    --ff-mono: "JetBrains Mono", ui-monospace, monospace;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: var(--ff-body);
+    font-size: 17px;
+    line-height: 1.55;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Paper grain overlay */
+  body::before {
+    content: "";
+    position: fixed; inset: 0;
+    pointer-events: none;
+    z-index: 1000;
+    opacity: .22;
+    mix-blend-mode: multiply;
+    background-image:
+      radial-gradient(rgba(80,40,10,.25) 1px, transparent 1px),
+      radial-gradient(rgba(80,40,10,.15) 1px, transparent 1px);
+    background-size: 3px 3px, 7px 7px;
+    background-position: 0 0, 1px 2px;
+  }
+  body[data-grain="false"]::before { display:none; }
+
+  /* Vignette */
+  body::after {
+    content: "";
+    position: fixed; inset: 0;
+    pointer-events: none;
+    z-index: 999;
+    background: radial-gradient(ellipse at center, transparent 55%, rgba(42,26,12,.28) 100%);
+  }
+
+  a { color: inherit; }
+
+  /* ======= NAV ======= */
+  nav.topnav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 36px;
+    font-family: var(--ff-body);
+    font-size: 13px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--ink);
+    mix-blend-mode: multiply;
+    transition: background .3s, backdrop-filter .3s;
+  }
+  nav.topnav.scrolled {
+    background: rgba(244,234,213,.85);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    mix-blend-mode: normal;
+    border-bottom: 1px solid rgba(42,26,12,.1);
+  }
+  .logo {
+    display:flex; align-items: baseline; gap: 10px;
+    font-family: var(--ff-display);
+    font-size: 22px;
+    font-weight: 600;
+    font-style: italic;
+    letter-spacing: .01em;
+    text-transform: none;
+  }
+  .logo .dot { font-size: 10px; }
+  .logo small {
+    font-family: var(--ff-script);
+    font-size: 18px;
+    color: var(--rust);
+    font-style: normal;
+  }
+  .navlinks { display: flex; gap: 32px; }
+  .navlinks a { text-decoration: none; opacity: .7; transition: opacity .2s; }
+  .navlinks a:hover { opacity: 1; }
+  .nav-cta {
+    padding: 9px 18px;
+    border: 1px solid var(--ink);
+    border-radius: 999px;
+    text-decoration: none;
+    font-weight: 500;
+    background: var(--ink);
+    color: var(--cream);
+    transition: transform .2s;
+  }
+  .nav-cta:hover { transform: translateY(-1px); }
+
+  /* ======= Utility ======= */
+  .wrap { max-width: 1280px; margin: 0 auto; padding: 0 36px; }
+  .eyebrow {
+    font-family: var(--ff-mono);
+    font-size: 12px;
+    letter-spacing: .24em;
+    text-transform: uppercase;
+    color: var(--rust-2);
+    display: inline-flex; align-items: center; gap: 10px;
+  }
+  .eyebrow::before {
+    content:""; width: 24px; height: 1px; background: currentColor; display:inline-block;
+  }
+  .script { font-family: var(--ff-script); font-weight: 600; color: var(--rust); }
+  h1,h2,h3,h4 { font-family: var(--ff-display); font-weight: 500; letter-spacing: -0.01em; margin: 0; }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 14px 26px;
+    border-radius: 999px;
+    background: var(--ink);
+    color: var(--cream);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 15px;
+    border: 1px solid var(--ink);
+    cursor: pointer;
+    transition: transform .15s, box-shadow .15s;
+    box-shadow: 0 4px 0 var(--ink-2);
+  }
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 0 var(--ink-2); }
+  .btn:active { transform: translateY(1px); box-shadow: 0 1px 0 var(--ink-2); }
+  .btn.ghost {
+    background: transparent; color: var(--ink); box-shadow: none;
+  }
+  .btn.ghost:hover { background: rgba(42,26,12,.06); box-shadow: none; transform: none; }
+  .btn svg { width: 16px; height: 16px; }
+
+  /* ======= HERO ======= */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    padding: 140px 36px 80px;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+  }
+  .hero-grid {
+    width: 100%; max-width: 1320px;
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 60px;
+    align-items: center;
+  }
+  .hero-copy { position: relative; z-index: 2; }
+  .hero h1 {
+    font-size: clamp(52px, 7.2vw, 112px);
+    line-height: .95;
+    font-weight: 400;
+    letter-spacing: -0.025em;
+    color: var(--ink);
+  }
+  .hero h1 .italic { font-style: italic; font-weight: 300; }
+  .hero h1 .amp { font-family: var(--ff-script); color: var(--rust); font-style: normal; font-size: .85em; display: inline-block; transform: translateY(.08em); }
+  .hero h1 .dash { color: var(--rust); }
+  .hero-sub {
+    margin-top: 28px;
+    max-width: 480px;
+    font-size: 18px;
+    line-height: 1.55;
+    color: var(--ink-2);
+  }
+  .hero-cta-row { margin-top: 36px; display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+  .hero-meta {
+    margin-top: 48px;
+    display: flex; gap: 28px; align-items: center;
+    font-family: var(--ff-mono);
+    font-size: 12px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    opacity: .75;
+  }
+  .hero-meta .dot { width:6px;height:6px;background:var(--rust);border-radius:50%;}
+  .stars { color: var(--rust); letter-spacing: 2px; }
+
+  /* Hero Booth illustration */
+  .hero-booth {
+    position: relative;
+    aspect-ratio: 1 / 1.15;
+    max-width: 520px;
+    justify-self: center;
+    width: 100%;
+  }
+  .hero-booth-illus {
+    position: relative;
+    width: 72%;
+    margin: 0 auto;
+    z-index: 2;
+  }
+  /* Live webcam in booth lens */
+  .hero-lens {
+    position: absolute;
+    /* The lens circle is at cx=200 cy=195 r=38 in 400×460 viewBox */
+    left: 40.5%; top: 34.3%;
+    width: 19%; aspect-ratio: 1/1;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #0a0604;
+    box-shadow: inset 0 0 0 3px var(--tan), inset 0 0 30px rgba(0,0,0,.9), 0 0 20px rgba(255,216,138,.4);
+    z-index: 3;
+    cursor: pointer;
+  }
+  .hero-lens.live { box-shadow: inset 0 0 0 3px var(--highlight), inset 0 0 20px rgba(0,0,0,.6), 0 0 30px rgba(255,216,138,.7); }
+  .hero-lens-inner {
+    position: absolute; inset: 0;
+    border-radius: 50%;
+    overflow: hidden;
+  }
+  .hero-lens video, .hero-lens canvas {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+  }
+  .hero-lens video { transform: scaleX(-1); opacity: 0; }
+  .hero-lens canvas { z-index: 2; opacity: 0; transition: opacity .6s; }
+  .hero-lens.live canvas { opacity: 1; }
+  .hero-lens-off {
+    position: absolute; inset: 0;
+    display: grid; place-items: center;
+    color: var(--highlight);
+    z-index: 4;
+    gap: 6px;
+    transition: opacity .4s;
+  }
+  .hero-lens.live .hero-lens-off { opacity: 0; pointer-events: none; }
+  .hero-lens-off svg { width: 24%; opacity: .9; }
+  .hero-lens-off span {
+    font-family: var(--ff-mono);
+    font-size: 9px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    opacity: .75;
+    margin-top: 4px;
+  }
+  .hero-lens-glow {
+    position: absolute; inset: -30%;
+    background: radial-gradient(circle, rgba(255,216,138,.3), transparent 60%);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity .6s;
+    z-index: -1;
+  }
+  .hero-lens.live + .hero-lens-glow, .hero-lens.live .hero-lens-glow { opacity: 1; animation: lens-pulse 3s ease-in-out infinite; }
+  @keyframes lens-pulse {
+    0%, 100% { opacity: .7; }
+    50% { opacity: 1; }
+  }
+
+  /* Floating film strips background pieces */
+  .floating-strip {
+    position: absolute;
+    background: var(--ink);
+    padding: 8px 6px;
+    box-shadow: 0 12px 30px var(--shadow);
+    transform: rotate(var(--r, -6deg));
+    z-index: 1;
+  }
+  .floating-strip .frame {
+    width: 100%; aspect-ratio: 1/1;
+    background: var(--paper);
+    overflow: hidden;
+    position: relative;
+  }
+  .floating-strip .holes {
+    display: flex; justify-content: space-between; padding: 3px 2px;
+  }
+  .floating-strip .holes span {
+    width: 7px; height: 5px; background: var(--cream); border-radius: 1px;
+  }
+
+  /* ======= SCROLL TICKER ======= */
+  .ticker {
+    border-top: 1px solid rgba(42,26,12,.25);
+    border-bottom: 1px solid rgba(42,26,12,.25);
+    padding: 18px 0;
+    overflow: hidden;
+    background: var(--cream-2);
+    position: relative;
+  }
+  .ticker-track {
+    display: flex; gap: 56px;
+    animation: tick 40s linear infinite;
+    white-space: nowrap;
+    font-family: var(--ff-display);
+    font-style: italic;
+    font-size: 28px;
+    color: var(--ink);
+  }
+  .ticker-track span { display:inline-flex; align-items:center; gap: 56px; }
+  .ticker-track .sep {
+    color: var(--rust);
+    font-family: var(--ff-script);
+    font-size: 34px;
+    font-style: normal;
+  }
+  @keyframes tick { to { transform: translateX(-50%); } }
+
+  /* ======= Section base ======= */
+  section.chapter {
+    padding: 140px 0;
+    position: relative;
+  }
+  .section-head {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 60px;
+    align-items: end;
+    margin-bottom: 80px;
+  }
+  .section-head h2 {
+    font-size: clamp(44px, 5.2vw, 78px);
+    line-height: 1;
+    font-weight: 400;
+  }
+  .section-head h2 .italic { font-style: italic; }
+  .section-head h2 em { font-family: var(--ff-script); font-style: normal; color: var(--rust); font-weight: 600; font-size: .95em; }
+  .section-head p { color: var(--ink-2); max-width: 48ch; font-size: 17px; }
+
+  /* ======= THE BOOTH ======= */
+  .booth-chapter { background: var(--paper); }
+  .booth-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .booth-stage {
+    position: relative;
+    aspect-ratio: 4/5;
+    display: grid; place-items: center;
+  }
+  .booth-labels {
+    position: absolute; inset: 0;
+    pointer-events: none;
+  }
+  .booth-label {
+    position: absolute;
+    font-family: var(--ff-mono);
+    font-size: 11px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--rust-2);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .booth-label .line { width: 60px; height: 1px; background: currentColor; }
+  .booth-label b { font-family: var(--ff-display); font-style: italic; font-weight: 500; text-transform: none; letter-spacing: 0; color: var(--ink); font-size: 15px; }
+
+  .booth-feat {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px 40px;
+    margin-top: 40px;
+  }
+  .booth-feat .f {
+    border-top: 1px solid rgba(42,26,12,.25);
+    padding-top: 18px;
+  }
+  .booth-feat .f h4 {
+    font-size: 20px;
+    font-style: italic;
+    font-weight: 500;
+    margin-bottom: 6px;
+  }
+  .booth-feat .f p { font-size: 14px; color: var(--ink-2); margin: 0; }
+
+  /* ======= HOW IT WORKS ======= */
+  .howit-steps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    margin-top: 60px;
+  }
+  .step {
+    background: var(--cream-2);
+    border: 1px solid rgba(42,26,12,.12);
+    border-radius: 4px;
+    padding: 28px 24px 32px;
+    position: relative;
+    transition: transform .3s;
+  }
+  .step:hover { transform: translateY(-6px); }
+  .step .num {
+    font-family: var(--ff-display);
+    font-style: italic;
+    font-size: 68px;
+    font-weight: 300;
+    color: var(--rust);
+    line-height: .9;
+    margin-bottom: 20px;
+    display:block;
+  }
+  .step h4 { font-size: 22px; font-weight: 500; margin-bottom: 6px; }
+  .step p { font-size: 14px; color: var(--ink-2); margin:0; }
+  .step .stamp {
+    position: absolute;
+    top: 14px; right: 14px;
+    font-family: var(--ff-mono);
+    font-size: 10px;
+    letter-spacing: .16em;
+    color: var(--rust);
+    border: 1px solid currentColor;
+    padding: 3px 7px;
+    border-radius: 2px;
+    text-transform: uppercase;
+    transform: rotate(6deg);
+    opacity: .7;
+  }
+
+  /* ======= STYLE GALLERY ======= */
+  .gallery-chapter { background: var(--ink); color: var(--cream); padding: 160px 0; }
+  .gallery-chapter .section-head h2 { color: var(--cream); }
+  .gallery-chapter .section-head p { color: rgba(244,234,213,.7); }
+  .gallery-chapter .eyebrow { color: var(--highlight); }
+  .filmstrip-wrap {
+    overflow: hidden;
+    padding: 20px 0;
+  }
+  .filmstrip {
+    display: flex;
+    gap: 22px;
+    animation: scrollFilm 50s linear infinite;
+    padding: 0 22px;
+  }
+  .filmstrip:hover { animation-play-state: paused; }
+  @keyframes scrollFilm { to { transform: translateX(-50%); } }
+
+  .polaroid {
+    flex: 0 0 auto;
+    width: 280px;
+    background: var(--cream);
+    padding: 14px 14px 60px;
+    box-shadow: 0 20px 40px rgba(0,0,0,.4);
+    color: var(--ink);
+    transform: rotate(var(--r, -2deg));
+    position: relative;
+  }
+  .polaroid .img {
+    width: 100%;
+    aspect-ratio: 1/1.05;
+    background: #3a2614;
+    overflow: hidden;
+    position: relative;
+  }
+  .polaroid .img svg { width: 100%; height: 100%; display:block; }
+  .polaroid .caption {
+    position: absolute;
+    bottom: 14px; left: 0; right: 0;
+    text-align: center;
+    font-family: var(--ff-script);
+    font-size: 22px;
+    color: var(--rust-2);
+  }
+  .polaroid .tag {
+    position: absolute;
+    top: 22px; left: 22px;
+    font-family: var(--ff-mono);
+    font-size: 9px;
+    letter-spacing: .18em;
+    background: var(--rust);
+    color: var(--cream);
+    padding: 3px 6px;
+    text-transform: uppercase;
+  }
+
+  .style-chips {
+    display: flex; gap: 10px; flex-wrap: wrap;
+    margin-top: 40px;
+  }
+  .style-chips button {
+    background: transparent;
+    border: 1px solid rgba(244,234,213,.3);
+    color: var(--cream);
+    padding: 10px 18px;
+    border-radius: 999px;
+    font-family: var(--ff-mono);
+    font-size: 12px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .style-chips button:hover, .style-chips button.active {
+    background: var(--highlight);
+    color: var(--ink);
+    border-color: var(--highlight);
+  }
+
+  /* ======= USE CASES ======= */
+  .usecases-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 16px;
+    height: 640px;
+  }
+  .uc {
+    background: var(--paper);
+    border-radius: 4px;
+    padding: 30px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: transform .3s, background .3s;
+    border: 1px solid rgba(42,26,12,.1);
+  }
+  .uc:hover { transform: translateY(-4px); background: var(--cream-2); }
+  .uc.big { grid-row: span 2; }
+  .uc-num { font-family: var(--ff-mono); font-size: 12px; color: var(--rust); letter-spacing: .2em; }
+  .uc h3 { font-size: 36px; font-weight: 400; font-style: italic; }
+  .uc.big h3 { font-size: 58px; line-height: 1; }
+  .uc p { font-size: 14px; color: var(--ink-2); margin: 10px 0 0; max-width: 38ch; }
+  .uc-illus { position: absolute; right: -20px; bottom: -20px; opacity: .8; width: 60%; pointer-events:none; }
+  .uc.big .uc-illus { width: 45%; right: 30px; bottom: 30px; opacity: .95;}
+
+  /* ======= TESTIMONIALS ======= */
+  .testis-chapter { background: var(--cream-2); }
+  .testis {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+    margin-top: 60px;
+  }
+  .testi {
+    background: var(--cream);
+    padding: 36px 32px;
+    border-radius: 4px;
+    position: relative;
+    box-shadow: 0 2px 0 rgba(42,26,12,.08);
+    transform: rotate(var(--r, 0deg));
+  }
+  .testi::before {
+    content: "\201C";
+    position: absolute;
+    top: -30px; left: 20px;
+    font-family: var(--ff-display);
+    font-style: italic;
+    font-size: 120px;
+    color: var(--rust);
+    line-height: 1;
+  }
+  .testi p {
+    font-family: var(--ff-display);
+    font-size: 20px;
+    font-style: italic;
+    font-weight: 300;
+    line-height: 1.4;
+    color: var(--ink);
+    margin: 0 0 24px;
+  }
+  .testi .who {
+    display: flex; align-items: center; gap: 12px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(42,26,12,.15);
+  }
+  .testi .ava {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: var(--tan);
+    display: grid; place-items: center;
+    font-family: var(--ff-display); font-style: italic; color: var(--ink);
+  }
+  .testi .who b { display: block; font-weight: 500; font-size: 14px; }
+  .testi .who span { font-size: 12px; color: var(--ink-2); font-family: var(--ff-mono); letter-spacing: .08em; }
+
+  /* ======= PRICING ======= */
+  .pricing { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 60px; }
+  .price {
+    background: var(--paper);
+    padding: 40px 32px 36px;
+    border-radius: 4px;
+    position: relative;
+    display: flex; flex-direction: column;
+    border: 1px solid rgba(42,26,12,.12);
+  }
+  .price.feat {
+    background: var(--ink);
+    color: var(--cream);
+    transform: scale(1.04);
+    box-shadow: 0 20px 50px rgba(42,26,12,.3);
+  }
+  .price.feat .muted { color: rgba(244,234,213,.65); }
+  .price .tier {
+    font-family: var(--ff-mono);
+    font-size: 11px;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--rust);
+  }
+  .price.feat .tier { color: var(--highlight); }
+  .price h3 {
+    font-size: 34px;
+    font-weight: 400;
+    font-style: italic;
+    margin: 8px 0 18px;
+  }
+  .price .amt {
+    font-family: var(--ff-display);
+    font-size: 52px;
+    font-weight: 400;
+    line-height: 1;
+    display: flex; align-items: baseline; gap: 8px;
+  }
+  .price .amt small {
+    font-size: 14px;
+    font-family: var(--ff-mono);
+    color: var(--ink-2);
+    letter-spacing: .1em;
+  }
+  .price.feat .amt small { color: rgba(244,234,213,.6); }
+  .price ul { list-style: none; padding: 0; margin: 28px 0; display: flex; flex-direction: column; gap: 12px; font-size: 14px; flex: 1; }
+  .price li { display: flex; gap: 10px; align-items: flex-start; }
+  .price li::before {
+    content: ""; width: 14px; height: 14px; margin-top: 3px;
+    background: var(--rust);
+    mask: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M5 12l5 5L20 7' stroke='black' fill='none' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/></svg>") center/contain no-repeat;
+    -webkit-mask: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M5 12l5 5L20 7' stroke='black' fill='none' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/></svg>") center/contain no-repeat;
+    flex-shrink: 0;
+  }
+  .price.feat li::before { background: var(--highlight); }
+  .price .btn { justify-content: center; }
+  .price.feat .btn { background: var(--highlight); color: var(--ink); border-color: var(--highlight); box-shadow: 0 4px 0 var(--rust); }
+  .price .badge {
+    position: absolute; top: -12px; right: 24px;
+    background: var(--rust);
+    color: var(--cream);
+    font-family: var(--ff-script);
+    font-size: 20px;
+    padding: 6px 16px 4px;
+    transform: rotate(4deg);
+  }
+
+  /* ======= ABOUT JEFF ======= */
+  .about-chapter { background: var(--paper); }
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.3fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .about-portrait {
+    position: relative;
+    aspect-ratio: 3/4;
+    background: var(--cream);
+    padding: 18px 18px 70px;
+    box-shadow: 0 20px 50px var(--shadow);
+    transform: rotate(-2deg);
+  }
+  .about-portrait .img { width: 100%; height: 100%; background: var(--tan); overflow: hidden; position: relative; }
+  .about-portrait .img svg { width: 100%; height: 100%; }
+  .about-portrait .label {
+    position: absolute; bottom: 22px; left: 0; right: 0;
+    text-align: center;
+    font-family: var(--ff-script);
+    font-size: 26px;
+    color: var(--rust);
+  }
+  .about-portrait .stamp {
+    position: absolute;
+    top: 30px; right: -20px;
+    background: var(--rust);
+    color: var(--cream);
+    padding: 6px 14px;
+    font-family: var(--ff-mono);
+    font-size: 10px;
+    letter-spacing: .2em;
+    transform: rotate(8deg);
+    box-shadow: 0 4px 10px rgba(0,0,0,.15);
+  }
+  .about-copy h2 { font-size: clamp(40px, 5vw, 68px); line-height: 1; }
+  .about-copy h2 em { font-family: var(--ff-script); font-style: normal; color: var(--rust); font-size: .95em; }
+  .about-copy .lede { font-family: var(--ff-display); font-style: italic; font-size: 22px; line-height: 1.4; margin: 30px 0 20px; color: var(--ink); }
+  .about-copy p { color: var(--ink-2); max-width: 56ch; }
+  .signature { margin-top: 28px; }
+  .signature svg { height: 60px; }
+
+  /* ======= BOOKING CTA ======= */
+  .book-chapter {
+    background: var(--rust);
+    color: var(--cream);
+    padding: 120px 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .book-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 60px; align-items: center;}
+  .book-chapter h2 {
+    font-size: clamp(56px, 7vw, 120px);
+    line-height: .9;
+    font-weight: 400;
+    color: var(--cream);
+  }
+  .book-chapter h2 em { font-family: var(--ff-script); font-style: normal; color: var(--highlight); font-weight: 600; }
+  .book-chapter p.lede { color: rgba(244,234,213,.85); max-width: 44ch; font-size: 18px; margin-top: 24px; }
+  .book-form {
+    background: var(--cream);
+    color: var(--ink);
+    padding: 40px;
+    border-radius: 4px;
+    box-shadow: 0 30px 70px rgba(0,0,0,.3);
+    transform: rotate(1deg);
+  }
+  .book-form h3 { font-size: 28px; font-weight: 500; margin-bottom: 6px; }
+  .book-form small { font-family: var(--ff-mono); font-size: 11px; letter-spacing: .18em; color: var(--rust); text-transform: uppercase; }
+  .book-form .row { display: flex; gap: 12px; margin-top: 18px; }
+  .book-form label {
+    display: block;
+    font-family: var(--ff-mono);
+    font-size: 10px;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    margin-bottom: 4px;
+  }
+  .book-form input, .book-form select {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid rgba(42,26,12,.3);
+    background: transparent;
+    font-family: var(--ff-body);
+    font-size: 15px;
+    border-radius: 3px;
+    color: var(--ink);
+  }
+  .book-form input:focus, .book-form select:focus { outline: 2px solid var(--rust); outline-offset: -1px; }
+  .book-form .field { flex: 1; }
+  .book-form .btn { width: 100%; justify-content: center; margin-top: 24px; }
+
+  /* ======= FOOTER ======= */
+  footer {
+    padding: 60px 0 40px;
+    background: var(--ink);
+    color: var(--cream);
+  }
+  footer .wrap { display: flex; justify-content: space-between; align-items: flex-end; gap: 40px; flex-wrap: wrap; }
+  footer .colophon { font-family: var(--ff-mono); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; opacity: .6; }
+  footer .biglogo {
+    font-family: var(--ff-display);
+    font-style: italic;
+    font-size: clamp(60px, 12vw, 160px);
+    font-weight: 300;
+    line-height: .9;
+    letter-spacing: -.02em;
+  }
+  footer .biglogo em { font-family: var(--ff-script); font-style: normal; color: var(--highlight); }
+
+  /* ======= Webcam demo ======= */
+  .demo {
+    position: relative;
+    background: var(--ink);
+    border-radius: 6px;
+    overflow: hidden;
+    aspect-ratio: 1/1;
+    box-shadow: 0 30px 60px rgba(42,26,12,.4);
+    border: 12px solid #5c3620;
+    background-clip: padding-box;
+    max-width: 520px;
+    width: 100%;
+  }
+  .demo::before {
+    /* wood grain bezel */
+    content: "";
+    position: absolute; inset: -12px;
+    border: 12px solid transparent;
+    background:
+      repeating-linear-gradient(135deg, rgba(0,0,0,.15) 0 2px, transparent 2px 8px),
+      linear-gradient(180deg, #6b3f25, #4a2814);
+    background-clip: border-box;
+    -webkit-background-clip: border-box;
+    z-index: -1;
+  }
+  .demo video, .demo canvas, .demo .frame-overlay, .demo .status, .demo .countdown, .demo .flash, .demo .shutter-ring {
+    position: absolute;
+    inset: 0;
+    width: 100%; height: 100%;
+  }
+  .demo video {
+    object-fit: cover;
+    transform: scaleX(-1);
+  }
+  .demo canvas.filter-canvas { z-index: 2; transform: none; }
+  .demo .frame-overlay { pointer-events: none; z-index: 3; }
+  .demo .flash {
+    background: white;
+    opacity: 0;
+    z-index: 10;
+    pointer-events: none;
+  }
+  .demo .flash.fire { animation: flash 600ms ease-out; }
+  @keyframes flash { 0% { opacity: 0; } 8% { opacity: 1; } 100% { opacity: 0; } }
+
+  .demo .countdown {
+    display: grid; place-items: center;
+    font-family: var(--ff-display);
+    font-size: 220px;
+    font-weight: 300;
+    font-style: italic;
+    color: white;
+    z-index: 8;
+    pointer-events: none;
+    text-shadow: 0 4px 20px rgba(0,0,0,.5);
+    opacity: 0;
+  }
+  .demo .countdown.show { animation: ct 1s ease-out; }
+  @keyframes ct {
+    0% { opacity: 0; transform: scale(1.5); }
+    20% { opacity: 1; transform: scale(1); }
+    80% { opacity: 1; }
+    100% { opacity: 0; transform: scale(.7); }
+  }
+
+  .demo .status {
+    display: grid; place-items: center;
+    background: var(--ink);
+    color: var(--cream);
+    z-index: 5;
+    text-align: center;
+    padding: 30px;
+    transition: opacity .4s;
+  }
+  .demo .status.hide { opacity: 0; pointer-events: none; }
+  .demo .status h4 { font-family: var(--ff-display); font-style: italic; font-size: 32px; font-weight: 400; margin-bottom: 12px; color: var(--cream);}
+  .demo .status p { color: rgba(244,234,213,.7); font-size: 14px; margin: 0 0 24px; max-width: 300px;}
+  .demo .status .btn { background: var(--highlight); color: var(--ink); border-color: var(--highlight); box-shadow: 0 4px 0 var(--rust); }
+
+  .demo-ui {
+    display: flex; flex-direction: column; gap: 18px;
+  }
+  .demo-controls {
+    display: flex; gap: 10px; align-items: center; justify-content: space-between;
+    padding: 14px 18px;
+    background: var(--cream-2);
+    border-radius: 999px;
+    border: 1px solid rgba(42,26,12,.15);
+    flex-wrap: wrap;
+  }
+  .filter-options { display: flex; gap: 6px; flex-wrap: wrap; }
+  .filter-options button {
+    background: transparent;
+    border: 1px solid rgba(42,26,12,.25);
+    padding: 7px 12px;
+    border-radius: 999px;
+    font-family: var(--ff-mono);
+    font-size: 11px;
+    letter-spacing: .08em;
+    color: var(--ink-2);
+    cursor: pointer;
+    transition: all .15s;
+  }
+  .filter-options button.active {
+    background: var(--ink);
+    color: var(--cream);
+    border-color: var(--ink);
+  }
+  .shutter-btn {
+    background: var(--rust);
+    color: var(--cream);
+    border: none;
+    width: 54px; height: 54px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: grid; place-items: center;
+    box-shadow: 0 0 0 4px var(--cream), 0 0 0 6px var(--rust);
+    transition: transform .15s;
+  }
+  .shutter-btn:hover { transform: scale(1.05); }
+  .shutter-btn:active { transform: scale(.94); }
+  .shutter-btn svg { width: 24px; height: 24px; fill: currentColor; }
+  .shutter-btn[disabled] { opacity: .4; cursor: not-allowed; }
+
+  /* Result film strip */
+  .result-strip {
+    display: none;
+    background: #1a1008;
+    padding: 14px 12px;
+    box-shadow: 0 20px 50px rgba(0,0,0,.4);
+    position: relative;
+    max-width: 520px;
+    transform: rotate(-1deg);
+  }
+  .result-strip.show { display: block; animation: popin .5s; }
+  @keyframes popin { from { opacity: 0; transform: scale(.8) rotate(-5deg); } to { opacity: 1; transform: scale(1) rotate(-1deg); } }
+  .result-strip .holes-row {
+    display: flex; justify-content: space-around; padding: 4px 0;
+  }
+  .result-strip .holes-row span { width: 10px; height: 7px; background: var(--cream); border-radius: 1px; }
+  .result-strip .photos {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+  }
+  .result-strip .photo {
+    aspect-ratio: 1/1;
+    background: var(--ink);
+    overflow: hidden;
+    position: relative;
+  }
+  .result-strip .photo img { width: 100%; height: 100%; object-fit: cover; }
+  .result-strip .footer-strip {
+    padding: 18px 8px 4px;
+    color: var(--cream);
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-family: var(--ff-display);
+    font-style: italic;
+  }
+  .result-strip .footer-strip .brand {
+    font-family: var(--ff-script);
+    color: var(--highlight);
+    font-size: 22px;
+  }
+  .result-strip .footer-strip small {
+    font-family: var(--ff-mono);
+    font-size: 10px;
+    letter-spacing: .2em;
+    opacity: .6;
+    text-transform: uppercase;
+  }
+  .result-actions { display: flex; gap: 10px; margin-top: 14px; justify-content: center; }
+
+  /* Hero badge */
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 16px;
+    background: rgba(178,95,46,.12);
+    border: 1px solid rgba(178,95,46,.35);
+    border-radius: 999px;
+    font-family: var(--ff-mono);
+    font-size: 11px;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--rust-2);
+    margin-bottom: 24px;
+  }
+  .hero-badge .live {
+    width: 8px; height: 8px;
+    background: var(--rust);
+    border-radius: 50%;
+    animation: pulse 1.6s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.4); opacity: .5; }
+  }
+
+  /* Tweaks panel */
+  .tweaks-panel {
+    position: fixed;
+    bottom: 24px; right: 24px;
+    background: var(--ink);
+    color: var(--cream);
+    padding: 22px;
+    border-radius: 10px;
+    box-shadow: 0 20px 60px rgba(0,0,0,.4);
+    z-index: 200;
+    width: 280px;
+    display: none;
+    font-size: 13px;
+  }
+  .tweaks-panel.show { display: block; }
+  .tweaks-panel h4 {
+    font-family: var(--ff-display);
+    font-style: italic;
+    font-size: 20px;
+    margin-bottom: 16px;
+    color: var(--highlight);
+  }
+  .tweaks-panel .tw-row { margin-bottom: 14px; }
+  .tweaks-panel .tw-row label {
+    display: block;
+    font-family: var(--ff-mono);
+    font-size: 10px;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    opacity: .6;
+    margin-bottom: 6px;
+  }
+  .tweaks-panel .tw-row .opts { display: flex; gap: 4px; flex-wrap: wrap; }
+  .tweaks-panel .tw-row .opts button {
+    background: rgba(244,234,213,.08);
+    color: var(--cream);
+    border: 1px solid rgba(244,234,213,.15);
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-family: var(--ff-mono);
+    font-size: 11px;
+    cursor: pointer;
+  }
+  .tweaks-panel .tw-row .opts button.active {
+    background: var(--highlight);
+    color: var(--ink);
+    border-color: var(--highlight);
+  }
+
+  /* Palettes */
+  body[data-palette="mono"] {
+    --cream: #efeae2;
+    --cream-2: #e5dfd4;
+    --paper: #dcd5c6;
+    --tan: #b8b0a0;
+    --rust: #2a2a28;
+    --rust-2: #111;
+    --ink: #0f0f0e;
+    --ink-2: #2f2f2c;
+    --highlight: #e8e3d8;
+    --shadow: rgba(0,0,0,.3);
+  }
+  body[data-palette="rose"] {
+    --cream: #f6e8de;
+    --cream-2: #eed7c6;
+    --paper: #e5c4af;
+    --tan: #d19a7a;
+    --rust: #a33d3d;
+    --rust-2: #762828;
+    --ink: #30150f;
+    --ink-2: #5a2818;
+    --highlight: #f2c48c;
+  }
+
+  /* Reveal animations */
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity .9s cubic-bezier(.2,.7,.2,1), transform .9s cubic-bezier(.2,.7,.2,1); }
+  .reveal.in { opacity: 1; transform: none; }
+
+  /* Section dividers */
+  .deco-divider {
+    display: flex; align-items: center; justify-content: center;
+    padding: 24px 0;
+    color: var(--rust);
+    gap: 20px;
+  }
+  .deco-divider .line { flex: 1; max-width: 200px; height: 1px; background: currentColor; opacity: .4; }
+  .deco-divider svg { width: 40px; height: 40px; }
+
+  /* ======= SCROLL NARRATIVE (REEL) ======= */
+  .reel-chapter {
+    position: relative;
+    background: linear-gradient(180deg, var(--ink) 0%, #1a0f07 100%);
+    color: var(--cream);
+  }
+  .reel-sticky {
+    position: sticky; top: 0;
+    height: 100vh;
+    overflow: hidden;
+    display: grid;
+    place-items: center;
+    padding: 80px 36px 40px;
+  }
+  .reel-spacer { height: 320vh; }
+  .reel-progress {
+    position: absolute; top: 80px; left: 50%; transform: translateX(-50%);
+    width: min(60%, 640px); height: 2px;
+    background: rgba(244,234,213,.15);
+    border-radius: 2px; overflow: hidden;
+    z-index: 5;
+  }
+  .reel-progress-fill {
+    height: 100%; width: 0%;
+    background: var(--highlight);
+    transition: width .1s linear;
+  }
+  .reel-stage {
+    position: relative;
+    width: 100%; max-width: 1200px;
+    display: grid;
+    grid-template-rows: auto auto auto;
+    gap: 40px;
+    align-items: center;
+  }
+  .reel-head { text-align: center; }
+  .reel-head .eyebrow { justify-content: center; color: var(--highlight) !important; }
+  .reel-title {
+    font-size: clamp(42px, 5vw, 72px);
+    line-height: 1;
+    font-weight: 400;
+    color: var(--cream);
+    margin-top: 12px;
+    transition: opacity .4s;
+  }
+  .reel-title em { font-family: var(--ff-script); font-style: normal; color: var(--highlight); }
+  .reel-sub { max-width: 50ch; margin: 18px auto 0; color: rgba(244,234,213,.7); transition: opacity .4s; }
+
+  .reel-strip {
+    background: #0a0604;
+    padding: 18px 16px;
+    box-shadow: 0 40px 80px rgba(0,0,0,.5);
+    max-width: 960px;
+    margin: 0 auto;
+    width: 100%;
+  }
+  .reel-holes {
+    display: flex; justify-content: space-between; padding: 4px 0;
+  }
+  .reel-holes span { width: 14px; height: 10px; background: var(--cream); border-radius: 1px; opacity: .9; }
+  .reel-frames {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; padding: 10px 0;
+  }
+  .reel-frame {
+    position: relative;
+    aspect-ratio: 1/1;
+    background: #1a0f07;
+    overflow: hidden;
+  }
+  .reel-frame-inner {
+    position: absolute; inset: 0;
+    background-size: cover;
+    background-position: center;
+    filter: sepia(.8) saturate(1.2) contrast(1.1) brightness(.9);
+    transform: scale(1.04);
+    opacity: 0;
+    transition: opacity .6s;
+  }
+  .reel-frame.dev .reel-frame-inner { opacity: 1; animation: reveal-photo 1.2s; }
+  @keyframes reveal-photo {
+    0% { opacity: 0; filter: sepia(1) brightness(.3) contrast(2) blur(6px); }
+    50% { opacity: .7; filter: sepia(.95) brightness(.6) contrast(1.3) blur(2px); }
+    100% { opacity: 1; filter: sepia(.8) saturate(1.2) contrast(1.1) brightness(.9); }
+  }
+  .reel-devstage {
+    position: absolute; inset: 0;
+    background: radial-gradient(circle at center, rgba(100,20,0,0) 0%, rgba(40,10,0,.95) 70%);
+    transition: opacity .6s;
+    pointer-events: none;
+  }
+  .reel-frame.dev .reel-devstage { opacity: 0; }
+  .reel-label {
+    position: absolute; bottom: 8px; left: 10px;
+    font-family: var(--ff-mono);
+    font-size: 9px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: rgba(255,216,138,.75);
+    z-index: 2;
+    background: rgba(0,0,0,.5);
+    padding: 3px 7px;
+    border-radius: 2px;
+  }
+
+  .reel-captions { position: relative; height: 80px; text-align: center; }
+  .reel-caption {
+    position: absolute; inset: 0;
+    opacity: 0;
+    transition: opacity .5s, transform .5s;
+    transform: translateY(10px);
+  }
+  .reel-caption.active { opacity: 1; transform: none; }
+  .reel-caption .script {
+    font-family: var(--ff-script);
+    font-size: 38px;
+    color: var(--highlight);
+    font-weight: 600;
+    display: block;
+    line-height: 1;
+  }
+  .reel-caption p { margin: 6px 0 0; color: rgba(244,234,213,.75); max-width: 44ch; margin-inline: auto; }
+
+  /* ======= METAMORPHOSIS ======= */
+  .meta-chapter {
+    position: relative;
+    padding: 160px 0;
+    overflow: hidden;
+    background: #1a0f2a;
+    color: #fff;
+  }
+  .meta-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(1200px 600px at 20% 20%, rgba(255,110,163,.35), transparent 60%),
+      radial-gradient(900px 500px at 80% 30%, rgba(74,163,255,.3), transparent 60%),
+      radial-gradient(700px 700px at 60% 90%, rgba(201,160,255,.35), transparent 60%),
+      linear-gradient(180deg, #2a1840 0%, #1a0f2a 100%);
+    z-index: 1;
+  }
+  .meta-bg::before {
+    content: "";
+    position: absolute; inset: 0;
+    background-image:
+      radial-gradient(rgba(255,255,255,.8) 1px, transparent 1px);
+    background-size: 80px 80px;
+    background-position: 0 0;
+    opacity: .15;
+    animation: starfield 60s linear infinite;
+  }
+  @keyframes starfield {
+    to { background-position: 80px 80px; }
+  }
+  .meta-chapter .eyebrow { color: #ffd88a !important; }
+  .meta-chapter .eyebrow::before { background: currentColor; }
+
+  .meta-picker {
+    display: flex; gap: 10px; flex-wrap: wrap;
+    margin-top: 20px;
+  }
+  .meta-picker button {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 12px 20px;
+    border-radius: 999px;
+    background: rgba(255,255,255,.05);
+    border: 1px solid rgba(255,255,255,.15);
+    color: #fff;
+    font-family: var(--ff-mono);
+    font-size: 12px;
+    letter-spacing: .08em;
+    cursor: pointer;
+    transition: all .3s;
+    backdrop-filter: blur(8px);
+  }
+  .meta-picker button:hover { background: rgba(255,255,255,.1); transform: translateY(-2px); }
+  .meta-picker button.active {
+    background: rgba(255,216,138,.15);
+    border-color: #ffd88a;
+    color: #ffd88a;
+    transform: translateY(-2px);
+  }
+  .meta-picker button small { opacity: .6; font-family: var(--ff-display); font-style: italic; font-size: 11px; letter-spacing: 0; }
+  .meta-picker .dot { width: 10px; height: 10px; border-radius: 50%; display:inline-block; }
+
+  .meta-stage {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 40px;
+    align-items: center;
+    margin-top: 60px;
+  }
+  .meta-before, .meta-after { display: flex; flex-direction: column; gap: 16px; }
+  .meta-label {
+    font-family: var(--ff-mono);
+    font-size: 11px;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.6);
+    text-align: center;
+  }
+  .meta-after .meta-label { color: #ffd88a; }
+  .meta-card {
+    background: #0a0410;
+    padding: 14px 12px 18px;
+    box-shadow: 0 30px 80px rgba(0,0,0,.5);
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    transform: rotate(-1deg);
+  }
+  .meta-after .meta-card { transform: rotate(1.5deg); box-shadow: 0 30px 80px rgba(201,160,255,.25), 0 0 40px rgba(255,110,163,.15); }
+  .meta-photo {
+    position: relative;
+    aspect-ratio: 1/1;
+    background: #1a0f07;
+    overflow: hidden;
+  }
+  .meta-img {
+    position: absolute; inset: 0;
+    background-size: cover;
+    background-position: center;
+    transition: filter .8s, transform .8s;
+  }
+  .meta-before .meta-img { filter: sepia(.8) saturate(1.3) contrast(1.1) brightness(.92) hue-rotate(-8deg); }
+  .meta-after-img { transition: filter .8s ease-out, transform .8s ease-out; }
+
+  .meta-shine {
+    position: absolute; inset: 0;
+    pointer-events: none;
+    background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,.7) 50%, transparent 70%);
+    background-size: 300% 100%;
+    background-position: 200% 0;
+    opacity: 0;
+  }
+  .meta-shine.shine {
+    animation: shine 1.2s ease-out;
+  }
+  @keyframes shine {
+    0% { background-position: 200% 0; opacity: 0; }
+    30% { opacity: 1; }
+    100% { background-position: -100% 0; opacity: 0; }
+  }
+  .meta-strip-brand {
+    grid-column: 1 / -1;
+    font-family: var(--ff-script);
+    font-size: 18px;
+    color: #ffd88a;
+    text-align: center;
+    padding-top: 4px;
+    transition: color .4s;
+  }
+  .meta-before .meta-strip-brand { color: var(--highlight); opacity: .8; }
+
+  .meta-arrow {
+    display: flex; flex-direction: column; align-items: center; gap: 14px;
+  }
+  .meta-arrow-label {
+    font-family: var(--ff-script);
+    color: #ffd88a;
+    font-size: 24px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .meta-cta {
+    margin-top: 70px;
+    display: flex; justify-content: space-between; align-items: center; gap: 30px; flex-wrap: wrap;
+    padding-top: 40px;
+    border-top: 1px solid rgba(255,255,255,.12);
+  }
+
+  /* Meta variants (applied to .meta-after-img via body[data-meta=X]) — FAMOUS PAINTERS */
+  body[data-meta="vintage"] .meta-after-img { filter: sepia(.8) saturate(1.3) contrast(1.1) brightness(.92) hue-rotate(-8deg); }
+
+  /* Van Gogh — Starry Night: cobalt + gold, high saturation, impasto feel */
+  body[data-meta="vangogh"] .meta-after-img {
+    filter: saturate(2.4) contrast(1.25) brightness(1.05) hue-rotate(-12deg);
+    transform: scale(1.02);
+  }
+  /* Monet — Water Lilies: soft impressionist blur, lavender/pink haze */
+  body[data-meta="monet"] .meta-after-img {
+    filter: blur(.6px) saturate(1.4) brightness(1.12) contrast(.92) hue-rotate(15deg);
+  }
+  /* Picasso — Cubist: flattened, high contrast, ochre shift */
+  body[data-meta="picasso"] .meta-after-img {
+    filter: saturate(1.2) contrast(1.55) brightness(1.02) hue-rotate(-20deg) grayscale(.15);
+  }
+  /* Warhol — Pop screenprint: flattened posterize look, hot pink/orange shift */
+  body[data-meta="warhol"] .meta-after-img {
+    filter: saturate(3) contrast(1.6) brightness(1.1) hue-rotate(-40deg);
+  }
+  /* Hokusai — Ukiyo-e: indigo + cream, reduced saturation, crisp */
+  body[data-meta="hokusai"] .meta-after-img {
+    filter: saturate(.75) contrast(1.3) brightness(1.02) hue-rotate(190deg) sepia(.2);
+  }
+
+  .meta-after .meta-photo { position: relative; }
+  /* Overlay layer on after frames for the art style */
+  .meta-after .meta-photo::after {
+    content: "";
+    position: absolute; inset: 0;
+    pointer-events: none;
+    mix-blend-mode: overlay;
+    opacity: 0;
+    transition: opacity .8s;
+  }
+  /* Van Gogh — thick swirling brushstrokes suggested by layered conic + noise gradients */
+  body[data-meta="vangogh"] .meta-after .meta-photo::after {
+    background:
+      repeating-conic-gradient(from 0deg at 30% 30%, rgba(30,60,160,.25) 0deg 12deg, rgba(244,183,49,.25) 12deg 24deg, transparent 24deg 36deg),
+      repeating-conic-gradient(from 45deg at 70% 70%, rgba(244,183,49,.22) 0deg 15deg, rgba(30,60,160,.2) 15deg 30deg, transparent 30deg 45deg),
+      linear-gradient(160deg, rgba(20,40,120,.3), rgba(244,183,49,.25));
+    opacity: .8;
+    mix-blend-mode: overlay;
+  }
+  /* Monet — soft radial blooms in lavender/pink/blue (water lilies) */
+  body[data-meta="monet"] .meta-after .meta-photo::after {
+    background:
+      radial-gradient(ellipse at 25% 30%, rgba(255,200,230,.55), transparent 50%),
+      radial-gradient(ellipse at 75% 70%, rgba(167,200,232,.55), transparent 55%),
+      radial-gradient(ellipse at 50% 50%, rgba(200,180,220,.3), transparent 60%),
+      linear-gradient(180deg, rgba(255,240,250,.25), rgba(180,200,240,.3));
+    opacity: .75;
+    mix-blend-mode: screen;
+  }
+  /* Picasso — angular fragmentation, bold diagonal bands, ochre + muted blues */
+  body[data-meta="picasso"] .meta-after .meta-photo::after {
+    background:
+      linear-gradient(30deg, rgba(216,122,60,.35) 0 40%, transparent 40% 60%, rgba(60,60,80,.35) 60%),
+      linear-gradient(-20deg, transparent 0 35%, rgba(220,200,160,.3) 35% 65%, transparent 65%),
+      linear-gradient(90deg, rgba(30,20,10,.25), transparent 50%, rgba(30,20,10,.25));
+    opacity: .85;
+    mix-blend-mode: multiply;
+  }
+  /* Warhol — four-color silkscreen quadrants, hot pink / cyan / yellow / black */
+  body[data-meta="warhol"] .meta-after .meta-photo::after {
+    background:
+      linear-gradient(135deg, rgba(255,45,136,.5) 0 50%, transparent 50%),
+      linear-gradient(-135deg, rgba(0,200,220,.45) 0 50%, transparent 50%),
+      linear-gradient(45deg, transparent 0 50%, rgba(255,220,0,.5) 50%);
+    opacity: .7;
+    mix-blend-mode: hard-light;
+  }
+  /* Hokusai — indigo wave linework + cream paper grain */
+  body[data-meta="hokusai"] .meta-after .meta-photo::after {
+    background:
+      repeating-linear-gradient(100deg, rgba(30,90,168,.18) 0 2px, transparent 2px 8px),
+      repeating-linear-gradient(10deg, rgba(30,90,168,.12) 0 1px, transparent 1px 5px),
+      linear-gradient(180deg, rgba(240,230,200,.35), rgba(30,90,168,.25));
+    opacity: .8;
+    mix-blend-mode: multiply;
+  }
+
+  @media (max-width: 960px) {
+    .meta-stage { grid-template-columns: 1fr; }
+    .meta-arrow { transform: rotate(90deg); }
+    .reel-frames { grid-template-columns: repeat(2, 1fr); }
+    .reel-spacer { height: 200vh; }
+    .hero-grid, .booth-grid, .about-grid, .book-grid { grid-template-columns: 1fr; }
+    .section-head { grid-template-columns: 1fr; gap: 20px; }
+    .howit-steps { grid-template-columns: repeat(2, 1fr); }
+    .usecases-grid { grid-template-columns: 1fr; grid-template-rows: none; height: auto; }
+    .uc.big { grid-row: auto; }
+    .testis, .pricing { grid-template-columns: 1fr; }
+    .navlinks { display: none; }
+    .hero h1 { font-size: 56px; }
+  }
+
+  /* ================================================================
+     EDITORIAL LAYER — "The ʀᴇɴᴀɪssᴀɴᴄᴇ-style Edition" chrome.
+     Sidebar chapter index, torn-paper dividers, illuminated drop-caps,
+     and giant Roman numerals bleeding off section edges.
+     Sits ON TOP of the existing design — does not rearrange DOM.
+     ================================================================ */
+
+  /* Fixed left sidebar — chapter index + edition title */
+  .edition-rail {
+    position: fixed;
+    left: 0; top: 0;
+    height: 100vh;
+    width: 220px;
+    z-index: 90;
+    padding: 32px 20px 28px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    pointer-events: none;
+    background: linear-gradient(90deg, rgba(244,234,213,.92) 0%, rgba(244,234,213,.85) 70%, rgba(244,234,213,0) 100%);
+    backdrop-filter: blur(2px);
+    border-right: 1px solid rgba(42,26,12,.08);
+  }
+  .edition-rail > * { pointer-events: auto; }
+
+  .edition-mark {
+    font-family: var(--ff-display);
+    font-weight: 400;
+    font-size: 11px;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--ink);
+    line-height: 1.7;
+    padding: 10px 0 12px;
+    border-top: 1px solid rgba(42,26,12,.45);
+    border-bottom: 1px solid rgba(42,26,12,.45);
+  }
+  .edition-mark em {
+    display: block;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 14px;
+    letter-spacing: .05em;
+    margin-top: 2px;
+  }
+  .edition-mark .variant {
+    font-variant-caps: small-caps;
+    letter-spacing: .14em;
+  }
+
+  .rail-chapters {
+    list-style: none;
+    margin: 0; padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .rail-chapters li {
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    gap: 8px;
+    align-items: baseline;
+    padding: 5px 0;
+    font-family: var(--ff-display);
+    font-size: 12px;
+    line-height: 1.3;
+    letter-spacing: .03em;
+    color: rgba(42,26,12,.7);
+    transition: color .25s ease;
+    border-bottom: 1px dotted rgba(42,26,12,.2);
+  }
+  .rail-chapters a {
+    color: inherit;
+    text-decoration: none;
+    font-variant-caps: small-caps;
+    letter-spacing: .14em;
+    font-weight: 500;
+  }
+  .rail-chapters .num {
+    font-family: var(--ff-display);
+    font-style: italic;
+    font-size: 11px;
+    font-variant-numeric: oldstyle-nums;
+    letter-spacing: .05em;
+    text-align: right;
+    padding-right: 4px;
+    color: rgba(42,26,12,.55);
+  }
+  .rail-chapters li:hover,
+  .rail-chapters li.is-active {
+    color: var(--ink);
+  }
+  .rail-chapters li.is-active .num,
+  .rail-chapters li:hover .num {
+    color: var(--rust-2);
+    font-style: italic;
+    font-weight: 600;
+  }
+  .rail-chapters li.is-active::before,
+  .rail-chapters li:hover::before {
+    content: "";
+    position: absolute;
+    /* subtle marker handled via color only for now */
+  }
+
+  .edition-footnote {
+    margin-top: auto;
+    font-family: var(--ff-display);
+    font-style: italic;
+    font-size: 10.5px;
+    letter-spacing: .04em;
+    line-height: 1.45;
+    color: rgba(42,26,12,.55);
+    border-top: 1px solid rgba(42,26,12,.25);
+    padding-top: 10px;
+  }
+  .edition-footnote .seal {
+    display: inline-block;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    border: 1px solid rgba(42,26,12,.5);
+    margin-right: 6px;
+    vertical-align: middle;
+    background: radial-gradient(circle, var(--rust) 20%, transparent 70%);
+    opacity: .65;
+  }
+
+  /* Hide the legacy topnav entirely when rail is active */
+  body.has-rail .topnav { display: none; }
+
+  /* ===== Three.js dissolve background ===== */
+  #bg-canvas-host {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  #bg-canvas-host canvas {
+    width: 100% !important;
+    height: 100% !important;
+    display: block;
+  }
+  /* Make sections sit ABOVE the bg canvas. All transparent — bg canvas drives everything. */
+  body.has-bg-canvas > section,
+  body.has-bg-canvas > .torn-edge {
+    position: relative;
+    z-index: 2;
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+  }
+  /* Kill torn-paper dividers — bg canvas handles transitions with burn-edge */
+  body.has-bg-canvas .torn-edge { display: none !important; }
+
+  /* Text readability over dynamic bg — soft drop shadow keeps things legible */
+  body.has-bg-canvas h1,
+  body.has-bg-canvas h2,
+  body.has-bg-canvas h3,
+  body.has-bg-canvas p,
+  body.has-bg-canvas li,
+  body.has-bg-canvas .eyebrow,
+  body.has-bg-canvas .chapter-numeral {
+    text-shadow: 0 1px 2px rgba(28, 14, 8, 0.25), 0 0 14px rgba(244, 234, 213, 0.35);
+  }
+  /* Dark text on bright bgs needs different shadow */
+  body.has-bg-canvas .testis-chapter h2,
+  body.has-bg-canvas .testis-chapter p,
+  body.has-bg-canvas #about h2,
+  body.has-bg-canvas #about p {
+    text-shadow: 0 1px 2px rgba(244, 234, 213, 0.55);
+  }
+
+  body.has-bg-canvas .edition-rail {
+    z-index: 90;
+  }
+
+  /* Body gets extra padding-left to make room for the rail */
+  body.has-rail { padding-left: 0; }
+  body.has-rail > section,
+  body.has-rail > .torn-edge { margin-left: 220px; }
+  body.has-rail .topnav { left: 220px; width: calc(100% - 220px); }
+
+  /* Edition mark (top of rail) */
+  .edition-rail .edition-mark {
+    flex: 0 0 auto;
+    font-size: 10px;
+    letter-spacing: .24em;
+    padding: 0 0 10px;
+    border-top: none;
+    border-bottom: 1px solid rgba(42,26,12,.25);
+  }
+  /* Rail chapters scrollable center */
+  .edition-rail .rail-chapters {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    padding-right: 4px;
+  }
+  .edition-rail .rail-chapters::-webkit-scrollbar { width: 0; }
+
+  .edition-rail .edition-footnote {
+    flex: 0 0 auto;
+  }
+
+  @media (max-width: 900px) {
+    .edition-rail { display: none; }
+    body.has-rail > section, body.has-rail > .torn-edge { margin-left: 0; }
+    body.has-rail .topnav { display: flex; left: 0; width: 100%; }
+  }
+
+  /* ======= TORN-PAPER EDGES between sections ======= */
+  .torn-edge {
+    position: relative;
+    height: 0;
+    margin: 0;
+    z-index: 5;
+  }
+  .torn-edge::before {
+    content: "";
+    position: absolute;
+    left: -4vw; right: -4vw;
+    top: -40px;
+    height: 80px;
+    background: inherit; /* filled by chapter-specific rules */
+    -webkit-mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 80' preserveAspectRatio='none'><path d='M0,32 C40,28 80,40 120,32 C160,22 200,44 240,30 C280,18 320,44 360,30 C400,20 440,44 480,34 C520,22 560,46 600,30 C640,16 680,42 720,32 C760,22 800,46 840,34 C880,24 920,48 960,32 C1000,18 1040,44 1080,28 C1120,16 1160,40 1200,30 L1200,80 L0,80 Z' fill='black'/></svg>");
+    mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 80' preserveAspectRatio='none'><path d='M0,32 C40,28 80,40 120,32 C160,22 200,44 240,30 C280,18 320,44 360,30 C400,20 440,44 480,34 C520,22 560,46 600,30 C640,16 680,42 720,32 C760,22 800,46 840,34 C880,24 920,48 960,32 C1000,18 1040,44 1080,28 C1120,16 1160,40 1200,30 L1200,80 L0,80 Z' fill='black'/></svg>");
+    -webkit-mask-size: 100% 100%;
+    mask-size: 100% 100%;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    filter: drop-shadow(0 4px 12px rgba(42,26,12,.25));
+  }
+  /* Variant: torn edge uses color of NEXT section (default = cream) */
+  .torn-edge.to-cream::before { background: var(--cream); }
+  .torn-edge.to-dark::before { background: #1a1410; }
+  .torn-edge.to-rust::before { background: var(--rust-2); }
+  .torn-edge.to-paper::before { background: var(--paper); }
+
+  /* thin scribbled decorative band just under the torn edge */
+  .torn-edge::after {
+    content: "";
+    position: absolute;
+    left: 10%; right: 10%;
+    top: 42px;
+    height: 1px;
+    background: repeating-linear-gradient(
+      90deg,
+      rgba(42,26,12,.35) 0 8px,
+      transparent 8px 14px
+    );
+    opacity: .5;
+  }
+
+  /* ======= ILLUMINATED DROP-CAP on lead paragraphs ======= */
+  .lead-drop { position: relative; }
+  .lead-drop::first-letter {
+    font-family: var(--ff-display);
+    font-weight: 600;
+    font-style: italic;
+    font-size: 6.2em;
+    line-height: .85;
+    float: left;
+    padding: 6px 14px 0 0;
+    margin-top: 6px;
+    color: var(--rust-2);
+    text-shadow: 1px 2px 0 rgba(180,120,60,.15);
+  }
+  /* variant for dark sections */
+  .lead-drop-dark::first-letter {
+    color: var(--highlight);
+    text-shadow: 1px 2px 0 rgba(255,215,120,.12);
+  }
+
+  /* ======= GIANT ROMAN NUMERAL marker per chapter ======= */
+  .chapter-numeral {
+    position: absolute;
+    pointer-events: none;
+    font-family: var(--ff-display);
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(180px, 28vw, 420px);
+    line-height: .8;
+    letter-spacing: -.02em;
+    color: rgba(42,26,12,.06);
+    z-index: 0;
+    user-select: none;
+    white-space: nowrap;
+  }
+  .chapter-numeral.tl { top: 30px; left: 40px; }
+  .chapter-numeral.tr { top: 30px; right: 40px; }
+  .chapter-numeral.br { bottom: -40px; right: 20px; }
+  .chapter-numeral.bl { bottom: -40px; left: 20px; }
+  .chapter-numeral.light { color: rgba(244,234,213,.09); }
+
+  /* smaller "chapter card" label inside sections */
+  .chapter-card {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 14px;
+    border: 1px solid rgba(42,26,12,.35);
+    border-radius: 999px;
+    background: rgba(244,234,213,.6);
+    backdrop-filter: blur(4px);
+    font-family: var(--ff-display);
+    font-size: 11px;
+    font-variant-caps: small-caps;
+    letter-spacing: .2em;
+    color: var(--ink-2);
+  }
+  .chapter-card .roman {
+    font-style: italic;
+    font-variant-numeric: oldstyle-nums;
+    color: var(--rust-2);
+    font-size: 12px;
+  }
+  .chapter-card .dot {
+    width: 4px; height: 4px; border-radius: 50%; background: var(--rust);
+  }
+  .chapter-card.light {
+    border-color: rgba(244,234,213,.4);
+    background: rgba(26,20,16,.35);
+    color: var(--cream);
+  }
+  .chapter-card.light .roman { color: var(--highlight); }
+
+  /* ======= HERO — thin outline "Edition" title card ======= */
+  .edition-title {
+    position: absolute;
+    left: 50%; top: 50%;
+    transform: translate(-50%, -54%);
+    z-index: 6;
+    padding: 28px 44px 34px;
+    border: 1px solid rgba(42,26,12,.55);
+    background: rgba(244,234,213,.22);
+    backdrop-filter: blur(2px);
+    text-align: center;
+    min-width: 360px;
+    max-width: 540px;
+  }
+  .edition-title::before,
+  .edition-title::after {
+    content: "";
+    position: absolute;
+    left: 6px; right: 6px;
+    height: 1px;
+    background: rgba(42,26,12,.3);
+  }
+  .edition-title::before { top: 6px; }
+  .edition-title::after { bottom: 6px; }
+  .edition-title .kicker {
+    font-family: var(--ff-display);
+    font-size: 11px;
+    letter-spacing: .32em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    opacity: .8;
+    margin-bottom: 8px;
+  }
+  .edition-title .big {
+    font-family: var(--ff-display);
+    font-weight: 400;
+    font-size: clamp(36px, 5.5vw, 72px);
+    line-height: .95;
+    letter-spacing: -.015em;
+    color: var(--ink);
+    margin: 6px 0;
+  }
+  .edition-title .big em {
+    font-style: italic;
+    font-variant-caps: small-caps;
+    letter-spacing: .02em;
+    color: var(--rust-2);
+  }
+  .edition-title .edition-sub {
+    font-family: var(--ff-body);
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--ink-2);
+    margin: 12px auto 14px;
+    max-width: 420px;
+  }
+  .edition-title .ornament {
+    width: 120px; height: 10px; margin: 10px auto;
+    opacity: .55;
+  }
+  .edition-title .meta-line {
+    display: flex; justify-content: center; gap: 18px;
+    font-family: var(--ff-display);
+    font-variant-caps: small-caps;
+    letter-spacing: .18em;
+    font-size: 10.5px;
+    color: var(--ink-2);
+    opacity: .75;
+  }
+  .edition-title .meta-line span { display: inline-flex; gap: 6px; align-items: baseline; }
+  .edition-title .meta-line em {
+    font-style: italic;
+    font-variant-numeric: oldstyle-nums;
+    color: var(--rust-2);
+  }
+
+  /* Hide old hero copy when edition-title is shown, but keep CTAs */
+  .hero-creation.has-edition .hero-title-creation,
+  .hero-creation.has-edition .hero-sub-creation,
+  .hero-creation.has-edition .eyebrow-creation,
+  .hero-creation.has-edition .hero-cta-creation { display: none; }
+  /* Collapse the copy container so nothing takes layout space */
+  .hero-creation.has-edition .hero-copy-creation {
+    position: static;
+    width: 0; height: 0;
+    padding: 0; margin: 0;
+  }
+  .hero-creation.has-edition .hero-scroll-hint {
+    position: absolute;
+    left: 50%; bottom: 18px;
+    transform: translateX(-50%);
+    z-index: 6;
+    font-size: 10px;
+    opacity: .5;
+  }
+
+  /* Edition card CTAs — sit as final row inside the title card */
+  .edition-ctas {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 20px;
+    flex-wrap: nowrap;
+  }
+  .btn-edition {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 16px;
+    font-family: var(--ff-display);
+    font-size: 12.5px;
+    font-variant-caps: small-caps;
+    letter-spacing: .14em;
+    text-decoration: none;
+    border: 1px solid rgba(42,26,12,.55);
+    color: var(--ink);
+    background: transparent;
+    border-radius: 2px;
+    transition: background .2s, color .2s, border-color .2s;
+    white-space: nowrap;
+  }
+  .btn-edition:hover {
+    background: var(--ink);
+    color: var(--cream);
+    border-color: var(--ink);
+  }
+  .btn-edition.primary {
+    background: var(--ink);
+    color: var(--cream);
+    border-color: var(--ink);
+  }
+  .btn-edition.primary:hover {
+    background: var(--rust-2);
+    border-color: var(--rust-2);
+    color: var(--cream);
+  }
+  .btn-edition svg { transition: transform .2s; }
+  .btn-edition:hover svg { transform: translateX(3px); }
+
+  @media (max-width: 520px) {
+    .edition-ctas { flex-wrap: wrap; }
+  }
+
+  @media (max-width: 900px) {
+    .edition-title { min-width: 0; width: 86%; padding: 20px 22px 22px; }
+    .edition-title .big { font-size: 40px; }
+    .torn-edge::before { height: 46px; top: -23px; }
+    .chapter-numeral { font-size: 120px; opacity: .6; }
+  }
+
+  /* Hide original topnav links on desktop since rail handles nav */
+  /* ===== Cork-board testimonials ===== */
+  .corkboard {
+    position: relative;
+    margin: 40px -24px 0;
+    padding: 48px 0 56px;
+    overflow-x: auto;
+    overflow-y: visible;
+    cursor: grab;
+    scrollbar-width: none;
+    background:
+      radial-gradient(ellipse at center, rgba(0,0,0,0.12), transparent 70%),
+      repeating-radial-gradient(circle at 30% 40%, rgba(80,50,30,0.08) 0 2px, transparent 2px 8px),
+      linear-gradient(180deg, #c9a47a 0%, #a87a52 100%);
+    border-top: 1px solid rgba(0,0,0,0.15);
+    border-bottom: 1px solid rgba(0,0,0,0.15);
+    box-shadow: inset 0 20px 40px rgba(0,0,0,0.18), inset 0 -20px 40px rgba(0,0,0,0.18);
+  }
+  .corkboard::-webkit-scrollbar { display: none; }
+  .corkboard.grabbing { cursor: grabbing; }
+  .corkboard-rail {
+    display: flex;
+    gap: 68px;
+    padding: 32px 120px;
+    align-items: center;
+    min-width: max-content;
+  }
+  .strip-card {
+    position: relative;
+    flex: 0 0 auto;
+    width: 320px;
+    transform: rotate(var(--r, 0deg));
+    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+    filter: drop-shadow(0 12px 20px rgba(0,0,0,0.35));
+  }
+  .strip-card:hover {
+    transform: rotate(calc(var(--r, 0deg) * 0.3)) translateY(-8px) scale(1.03);
+    z-index: 5;
+  }
+  .strip-frames {
+    background: #f8f0dc;
+    padding: 14px 14px 36px;
+    border-radius: 2px;
+    position: relative;
+  }
+  .strip-frame {
+    aspect-ratio: 1/1;
+    margin-bottom: 8px;
+    border-radius: 1px;
+    position: relative;
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1);
+  }
+  .strip-frame:last-child { margin-bottom: 0; }
+  .strip-label {
+    position: absolute;
+    top: 8px; left: 8px;
+    font-family: 'Courier Prime', monospace;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #fff8e0;
+    background: rgba(0,0,0,0.35);
+    padding: 2px 6px;
+    border-radius: 1px;
+  }
+  .tape {
+    position: absolute;
+    width: 74px; height: 22px;
+    background: rgba(250, 240, 210, 0.7);
+    border-left: 1px dashed rgba(150, 110, 70, 0.3);
+    border-right: 1px dashed rgba(150, 110, 70, 0.3);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+    mix-blend-mode: multiply;
+  }
+  .tape-tl { top: -8px; left: 12px; transform: rotate(-12deg); }
+  .tape-tr { top: -8px; right: 12px; transform: rotate(10deg); }
+  .tape-br { bottom: -8px; right: 20px; transform: rotate(15deg); }
+  .sticky-note {
+    position: absolute;
+    bottom: -40px; right: -90px;
+    width: 200px;
+    padding: 16px 18px 20px;
+    background: #f5e8c4;
+    color: #3a2818;
+    font-family: 'Caveat', 'Dancing Script', cursive;
+    font-size: 17px;
+    line-height: 1.35;
+    box-shadow: 0 8px 18px rgba(0,0,0,0.25), inset 0 -3px 8px rgba(180,140,80,0.2);
+    transform: rotate(var(--r, 0deg));
+    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .sticky-note.yellow { background: #fbeea3; }
+  .sticky-note.pink { background: #f6cfc0; }
+  .sticky-note p { margin: 0 0 10px; }
+  .sticky-note .note-sig {
+    font-size: 14px;
+    color: #6a4828;
+    border-top: 1px dashed rgba(100,60,30,0.3);
+    padding-top: 6px;
+  }
+  .sticky-note .note-sig em { font-style: italic; opacity: 0.75; }
+  .strip-card:hover .sticky-note { transform: rotate(calc(var(--r, 0deg) * 0.2)); }
+  .pushpin {
+    position: absolute;
+    top: 6px; left: 50%;
+    width: 18px; height: 18px;
+    transform: translateX(-50%);
+    background: radial-gradient(circle at 35% 30%, #ffb080, #8b2a10 65%, #4a1008);
+    border-radius: 50%;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.4), inset -2px -2px 4px rgba(0,0,0,0.3), inset 2px 2px 3px rgba(255,255,255,0.4);
+    z-index: 3;
+  }
+  .pushpin.red { background: radial-gradient(circle at 35% 30%, #ffd88c, #c8901c 65%, #6a4a10); }
+  .board-hint {
+    position: absolute;
+    bottom: 8px; left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Courier Prime', monospace;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(255, 245, 220, 0.65);
+    pointer-events: none;
+  }
+  @media (max-width: 700px) {
+    .corkboard-rail { padding: 28px 48px; gap: 48px; }
+    .strip-card { width: 260px; }
+    .sticky-note { right: -40px; bottom: -30px; width: 170px; font-size: 15px; }
+  }
+
+  /* ===== Ticket-booklet pricing ===== */
+  .ticket-booklet {
+    display: grid;
+    grid-template-columns: 1fr 1.1fr 1fr;
+    gap: 0;
+    margin-top: 56px;
+    perspective: 1400px;
+    align-items: center;
+  }
+  .ticket {
+    position: relative;
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    background: #f3e3c1;
+    color: #2a1a10;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.35), inset 0 0 0 1px rgba(80,50,20,0.15);
+    font-family: 'Cormorant Garamond', serif;
+    transform: rotate(-2deg) translateZ(0);
+    transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.5s;
+    background-image:
+      repeating-linear-gradient(45deg, transparent 0 4px, rgba(120,80,40,0.03) 4px 8px),
+      radial-gradient(ellipse at 20% 20%, rgba(255,240,200,0.5), transparent 60%);
+  }
+  .ticket::before, .ticket::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 8px;
+    left: 0;
+    background-image: radial-gradient(circle at 4px 4px, transparent 2.5px, #f3e3c1 2.8px);
+    background-size: 10px 8px;
+    background-repeat: repeat-x;
+  }
+  .ticket::before { top: -4px; }
+  .ticket::after { bottom: -4px; transform: rotate(180deg); }
+  .ticket.t-showpiece {
+    background: #1a0e08;
+    color: #f5e8c4;
+    transform: rotate(0deg) translateY(-24px) scale(1.08);
+    z-index: 3;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(200,160,100,0.25);
+    background-image:
+      repeating-linear-gradient(45deg, transparent 0 4px, rgba(200,160,100,0.04) 4px 8px),
+      radial-gradient(ellipse at 20% 20%, rgba(200,160,100,0.15), transparent 60%);
+  }
+  .ticket.t-showpiece::before, .ticket.t-showpiece::after {
+    background-image: radial-gradient(circle at 4px 4px, transparent 2.5px, #1a0e08 2.8px);
+  }
+  .ticket.t-activation { transform: rotate(2deg); }
+  .ticket:hover { transform: rotate(0) translateY(-6px) scale(1.02); z-index: 4; }
+  .ticket.t-showpiece:hover { transform: rotate(0) translateY(-30px) scale(1.1); }
+  .ticket-stub {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 10px;
+    border-right: 2px dashed rgba(80,50,20,0.35);
+    background: rgba(200, 160, 100, 0.08);
+  }
+  .ticket-stub.dark { border-right-color: rgba(200,160,100,0.3); background: rgba(200,160,100,0.06); }
+  .stub-label {
+    font-family: 'Abril Fatface', 'Playfair Display', serif;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.35em;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+  }
+  .stub-num {
+    font-family: 'Courier Prime', monospace;
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    opacity: 0.7;
+    border: 1px solid currentColor;
+    padding: 4px 6px;
+  }
+  .stub-foot {
+    font-family: 'Caveat', cursive;
+    font-size: 17px;
+    opacity: 0.85;
+  }
+  .ticket-body {
+    padding: 26px 26px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .ticket-hd {
+    border-bottom: 1px dashed rgba(80,50,20,0.3);
+    padding-bottom: 14px;
+  }
+  .ticket.t-showpiece .ticket-hd { border-bottom-color: rgba(200,160,100,0.3); }
+  .ticket-kicker {
+    font-family: 'Courier Prime', monospace;
+    font-size: 10px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    opacity: 0.65;
+    display: block;
+    margin-bottom: 6px;
+  }
+  .ticket-price {
+    font-family: 'Abril Fatface', 'Playfair Display', serif;
+    font-size: 44px;
+    line-height: 1;
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+  }
+  .ticket-price .cur {
+    font-size: 18px;
+    font-family: 'Cormorant Garamond', serif;
+    opacity: 0.65;
+  }
+  .ticket-price small {
+    font-size: 11px;
+    font-family: 'Courier Prime', monospace;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    opacity: 0.6;
+    margin-left: 6px;
+  }
+  .ticket-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 15px;
+    line-height: 1.4;
+  }
+  .ticket-list li {
+    padding-left: 18px;
+    position: relative;
+    font-family: 'Cormorant Garamond', serif;
+  }
+  .ticket-list li::before {
+    content: "✦";
+    position: absolute;
+    left: 0; top: 0;
+    opacity: 0.55;
+    font-size: 11px;
+  }
+  .ticket-ft {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 4px;
+  }
+  .ticket-stamp {
+    font-family: 'Abril Fatface', serif;
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    border: 2px solid currentColor;
+    padding: 6px 10px;
+    border-radius: 2px;
+    transform: rotate(-5deg);
+    opacity: 0.7;
+  }
+  .ticket-stamp.red {
+    color: #b63a2a;
+    border-color: #b63a2a;
+    opacity: 0.9;
+  }
+  .ticket-ribbon {
+    position: absolute;
+    top: -14px; right: 20px;
+    background: #b63a2a;
+    color: #fff5e0;
+    font-family: 'Courier Prime', monospace;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.35);
+    z-index: 5;
+  }
+  @media (max-width: 900px) {
+    .ticket-booklet { grid-template-columns: 1fr; gap: 24px; }
+    .ticket, .ticket.t-showpiece { transform: rotate(0) !important; }
+  }
+</style>
+</head>
+<body data-palette="sepia" data-grain="true" class="has-rail has-bg-canvas">
+
+<!-- Three.js dissolve background -->
+<div id="bg-canvas-host" aria-hidden="true"></div>
+
+<!-- EDITORIAL RAIL — fixed left sidebar, chapter index like an illuminated manuscript -->
+<aside class="edition-rail" aria-label="Chapter index">
+  <div class="edition-mark">
+    Playing With Photo
+    <em>The <span class="variant">Photobooth</span> Edition</em>
+  </div>
+  <ol class="rail-chapters">
+    <li data-target="#hero"><span class="num">ɪ</span><a href="#hero">Genesis</a></li>
+    <li data-target="#spark"><span class="num">ɪɪ</span><a href="#spark">The Spark</a></li>
+    <li data-target="#reel"><span class="num">ɪɪɪ</span><a href="#reel">The Reel</a></li>
+    <li data-target="#demo"><span class="num">ɪᴠ</span><a href="#demo">Live Booth</a></li>
+    <li data-target="#booth"><span class="num">ᴠ</span><a href="#booth">Cabinet</a></li>
+    <li data-target="#how"><span class="num">ᴠɪ</span><a href="#how">Ritual</a></li>
+    <li data-target="#styles"><span class="num">ᴠɪɪ</span><a href="#styles">The Masters</a></li>
+    <li data-target="#usecases"><span class="num">ᴠɪɪɪ</span><a href="#usecases">Occasions</a></li>
+    <li data-target="#testimonials"><span class="num">ɪx</span><a href="#testimonials">Voices</a></li>
+    <li data-target="#pricing"><span class="num">x</span><a href="#pricing">Tariff</a></li>
+    <li data-target="#about"><span class="num">xɪ</span><a href="#about">Jeff</a></li>
+  </ol>
+  <div class="edition-footnote">
+    <span class="seal" aria-hidden="true"></span>
+    Printed in Singapore,<br/>
+    MMXXVI.<br/>
+    <em>20+ painter styles.</em>
+  </div>
+</aside>
+
+<!-- NAV -->
+<nav class="topnav" id="topnav">
+  <div class="logo">
+    <span>Playing With <em>Photo</em></span>
+  </div>
+  <div class="navlinks">
+    <a href="#booth">The Booth</a>
+    <a href="#how">How it works</a>
+    <a href="#styles">Styles</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#about">About Jeff</a>
+  </div>
+  <a href="#book" class="nav-cta">Book the booth</a>
+</nav>
+
+<!-- HERO — The Creation of Art -->
+<section class="hero hero-creation has-edition" id="hero" data-screen-label="01 Hero">
+
+  <!-- EDITORIAL EDITION TITLE CARD — centered thin-outline frame -->
+  <div class="edition-title">
+    <div class="kicker">· Volume Ⅰ · 2026 ·</div>
+    <div class="big">The <em>ᴘʜᴏᴛᴏʙᴏᴏᴛʜ</em><br/>Edition</div>
+    <svg class="ornament" viewBox="0 0 120 10" aria-hidden="true">
+      <path d="M0 5 L45 5 M75 5 L120 5" stroke="currentColor" stroke-width="0.8" opacity=".5"/>
+      <circle cx="60" cy="5" r="2.2" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".6"/>
+      <circle cx="60" cy="5" r=".8" fill="currentColor" opacity=".7"/>
+    </svg>
+    <div class="edition-sub">
+      A new world of photography.<br/>
+      <em style="font-family:var(--ff-display);font-style:italic;">20+ painter styles</em> · the hand of Van&nbsp;Gogh, Monet,<br/>Hokusai &amp; more, in sixty&nbsp;seconds.
+    </div>
+    <div class="meta-line">
+      <span>xi <em>Chapters</em></span>
+      <span>·</span>
+      <span>By <em>Jeff</em></span>
+      <span>·</span>
+      <span>Singapore</span>
+    </div>
+    <div class="edition-ctas">
+      <a href="#spark" class="btn-edition primary">Receive the spark
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+      </a>
+      <a href="#book" class="btn-edition">Book the booth</a>
+    </div>
+  </div>
+  <!-- Fresco-plaster background with crack network -->
+  <div class="hero-plaster" aria-hidden="true">
+    <svg class="hero-cracks" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <filter id="rough"><feTurbulence baseFrequency=".9" numOctaves="2" seed="4"/><feDisplacementMap in="SourceGraphic" scale="2"/></filter>
+        <filter id="paperGrain"><feTurbulence baseFrequency=".8" numOctaves="2" seed="7"/><feColorMatrix values="0 0 0 0 .15 0 0 0 0 .1 0 0 0 0 .05 0 0 0 .35 0"/></filter>
+      </defs>
+      <rect width="1600" height="900" fill="url(#paperGrain)" opacity=".35"/>
+      <g stroke="rgba(74,43,24,.28)" stroke-width=".8" fill="none" filter="url(#rough)">
+        <path d="M 0 280 L 240 300 L 380 230 L 560 310 L 720 250 L 900 330 L 1100 270 L 1300 320 L 1600 290"/>
+        <path d="M 0 620 L 200 580 L 420 650 L 600 590 L 820 640 L 1020 600 L 1240 660 L 1450 610 L 1600 640"/>
+        <path d="M 400 0 L 430 150 L 395 340 L 450 520 L 410 700 L 460 900"/>
+        <path d="M 1160 0 L 1130 180 L 1175 360 L 1130 560 L 1180 740 L 1150 900"/>
+        <path d="M 120 100 L 250 220 M 980 50 L 1050 180 M 1420 180 L 1500 340 M 240 700 L 400 800 M 780 780 L 920 870 M 1260 820 L 1380 900"/>
+      </g>
+    </svg>
+    <div class="hero-clouds"></div>
+  </div>
+
+  <!-- Two hands reaching -->
+  <div class="hero-hands" aria-hidden="true">
+    <!-- LEFT HAND — human / the photographer -->
+    <svg class="hand hand-human" viewBox="0 0 420 520">
+      <defs>
+        <linearGradient id="humanSkin" x1="0" x2="1" y1="0" y2="1">
+          <stop offset="0" stop-color="#e8c8a0"/>
+          <stop offset=".5" stop-color="#d9a87c"/>
+          <stop offset="1" stop-color="#a26e48"/>
+        </linearGradient>
+        <filter id="humanShade"><feGaussianBlur stdDeviation=".5"/></filter>
+      </defs>
+      <!-- Forearm + wrist emerging from left edge -->
+      <path d="M 0 310 Q 30 298 70 292 Q 120 285 180 280 Q 230 275 270 280 L 305 290 Q 310 310 300 330 L 260 340 Q 210 338 160 342 Q 110 348 60 354 Q 30 356 0 352 Z" fill="url(#humanSkin)" stroke="#5a3018" stroke-width="2"/>
+      <!-- Palm -->
+      <path d="M 260 260 Q 295 255 320 265 Q 345 275 355 295 Q 362 315 355 335 Q 345 350 325 355 Q 295 360 265 355 L 260 340 Q 252 320 255 295 Z" fill="url(#humanSkin)" stroke="#5a3018" stroke-width="2"/>
+      <!-- Index finger extended toward right (the iconic point) -->
+      <path d="M 350 295 Q 378 290 398 288 Q 410 287 412 298 Q 412 308 400 312 Q 378 315 352 318 Z" fill="url(#humanSkin)" stroke="#5a3018" stroke-width="2"/>
+      <!-- Tiny highlight on fingertip -->
+      <ellipse cx="406" cy="296" rx="5" ry="3" fill="#fff4e2" opacity=".7"/>
+      <!-- Other curled fingers (suggestion) -->
+      <path d="M 335 320 Q 355 328 365 340 Q 360 348 348 348 Q 335 346 328 338 Z" fill="url(#humanSkin)" stroke="#5a3018" stroke-width="1.5"/>
+      <path d="M 320 335 Q 340 344 350 355 Q 344 362 332 361 Q 320 358 315 350 Z" fill="url(#humanSkin)" stroke="#5a3018" stroke-width="1.5"/>
+      <path d="M 305 345 Q 325 354 335 362 Q 330 370 318 368 Q 306 365 300 358 Z" fill="url(#humanSkin)" stroke="#5a3018" stroke-width="1.5"/>
+      <!-- Sleeve / robe suggestion -->
+      <path d="M 0 355 Q 40 360 90 362 Q 140 363 180 362 L 200 390 Q 150 395 100 395 Q 50 395 0 390 Z" fill="#8a4620" opacity=".85"/>
+      <path d="M 0 390 L 200 390 L 210 420 Q 150 425 100 425 Q 50 425 0 420 Z" fill="#6b3618" opacity=".75"/>
+    </svg>
+
+    <!-- RIGHT HAND — AI / the divine (painted, glowing, trailing divine cloth) -->
+    <svg class="hand hand-ai" viewBox="0 0 420 520">
+      <defs>
+        <linearGradient id="aiSkin" x1="1" x2="0" y1="0" y2="1">
+          <stop offset="0" stop-color="#f6e5c6"/>
+          <stop offset=".5" stop-color="#e0c498"/>
+          <stop offset="1" stop-color="#a87a4a"/>
+        </linearGradient>
+        <radialGradient id="divineRobe" cx="70%" cy="50%" r="70%">
+          <stop offset="0" stop-color="#c9524a"/>
+          <stop offset=".6" stop-color="#8a2e28"/>
+          <stop offset="1" stop-color="#4a1612"/>
+        </radialGradient>
+        <filter id="aura"><feGaussianBlur stdDeviation="8"/></filter>
+      </defs>
+      <!-- Divine robe mass behind -->
+      <ellipse cx="290" cy="290" rx="160" ry="180" fill="url(#divineRobe)" opacity=".55" filter="url(#aura)"/>
+      <path d="M 420 150 Q 360 180 310 210 Q 260 240 230 280 Q 210 320 220 360 Q 240 420 300 450 L 420 470 Z" fill="url(#divineRobe)"/>
+      <!-- Forearm emerging from right edge -->
+      <path d="M 420 295 Q 380 288 330 285 Q 270 282 210 290 Q 170 295 130 305 L 100 310 Q 95 330 110 340 L 150 344 Q 210 344 270 340 Q 330 336 380 332 Q 410 330 420 335 Z" fill="url(#aiSkin)" stroke="#4a2a14" stroke-width="2"/>
+      <!-- Palm (limp / relaxed — iconic Adam pose) -->
+      <path d="M 160 275 Q 130 272 110 282 Q 90 295 82 315 Q 78 335 88 350 Q 100 360 118 362 Q 140 362 158 355 L 170 340 Q 174 320 170 300 Z" fill="url(#aiSkin)" stroke="#4a2a14" stroke-width="2"/>
+      <!-- Index finger reaching LEFT toward human hand -->
+      <path d="M 80 315 Q 48 313 24 315 Q 10 317 8 327 Q 8 338 22 340 Q 48 344 82 342 Z" fill="url(#aiSkin)" stroke="#4a2a14" stroke-width="2"/>
+      <!-- Fingertip halo -->
+      <circle cx="14" cy="328" r="4" fill="#fff8dc"/>
+      <!-- Other curled fingers -->
+      <path d="M 100 345 Q 78 352 66 362 Q 70 372 82 372 Q 98 370 108 362 Z" fill="url(#aiSkin)" stroke="#4a2a14" stroke-width="1.5"/>
+      <path d="M 118 358 Q 96 366 84 376 Q 90 384 102 383 Q 118 381 128 374 Z" fill="url(#aiSkin)" stroke="#4a2a14" stroke-width="1.5"/>
+      <path d="M 135 368 Q 115 376 103 386 Q 110 394 120 392 Q 135 389 145 384 Z" fill="url(#aiSkin)" stroke="#4a2a14" stroke-width="1.5"/>
+      <!-- Glow aura -->
+      <circle class="hand-aura" cx="30" cy="328" r="40" fill="#ffe9a3" opacity=".35"/>
+    </svg>
+
+    <!-- THE SPARK — sits between fingertips, pulses -->
+    <div class="spark">
+      <div class="spark-core"></div>
+      <div class="spark-rays"></div>
+      <div class="spark-glow"></div>
+    </div>
+  </div>
+
+  <!-- Overlaid copy -->
+  <div class="hero-copy-creation">
+    <div class="eyebrow-creation">
+      <span class="dot-pulse"></span> Playing With Photo · By Jeff
+    </div>
+    <h1 class="hero-title-creation">
+      The <em>Creation</em><br/>
+      of Art.
+    </h1>
+    <p class="hero-sub-creation">
+      Snap any photo. Watch it reborn in the hand of Van&nbsp;Gogh, Monet, Picasso, Warhol, Hokusai.
+      <br/><span class="muted">An AI photobooth by Singapore sketch artist Jeff.</span>
+    </p>
+    <div class="hero-cta-creation">
+      <a href="#spark" class="btn-creation">Receive the spark
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+      </a>
+      <a href="#book" class="btn-creation ghost">Book the booth</a>
+    </div>
+    <div class="hero-scroll-hint">
+      <span>scroll</span>
+      <svg viewBox="0 0 24 40"><path d="M12 4v32M6 30l6 6 6-6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+  </div>
+</section>
+
+<!-- torn paper transitioning into dark Spark chapter -->
+<div class="torn-edge to-dark" aria-hidden="true"></div>
+
+<!-- THE SPARK — rotating before/after gallery with cinematic flash transitions -->
+<section class="spark-chapter" id="spark" data-screen-label="02 The Spark" style="position:relative;">
+  <span class="chapter-numeral tr light" aria-hidden="true">ɪɪ</span>
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <span class="eyebrow">The spark · 001</span>
+        <h2>One touch. <em>A thousand</em> brushes.</h2>
+      </div>
+      <p class="lede">
+        The AI receives the spark and repaints your photograph in the style of a master.
+        Watch the transformation — or tap the lens to see your own face reborn.
+      </p>
+    </div>
+
+    <div class="spark-stage reveal">
+      <!-- Left: before (photo) -->
+      <figure class="spark-slot spark-before">
+        <figcaption>Before · <span id="sparkBeforeName">A candid snap</span></figcaption>
+        <div class="spark-frame">
+          <div class="spark-img" id="sparkBeforeImg"></div>
+          <!-- Webcam lens overlays when activated -->
+          <div class="spark-lens" id="sparkLens">
+            <video id="sparkVideo" autoplay playsinline muted></video>
+            <canvas id="sparkCanvas"></canvas>
+            <div class="spark-lens-off" id="sparkLensOff">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="12" cy="13" r="4"/><path d="M3 7h4l2-2h6l2 2h4v12H3z"/>
+              </svg>
+              <span>Tap lens to use your face</span>
+            </div>
+          </div>
+        </div>
+      </figure>
+
+      <!-- Arrow with spark icon between -->
+      <div class="spark-arrow">
+        <div class="spark-arrow-line"></div>
+        <div class="spark-arrow-icon">✦</div>
+        <div class="spark-arrow-label" id="sparkArrowLabel">repainted by Claude</div>
+      </div>
+
+      <!-- Right: after (painting) -->
+      <figure class="spark-slot spark-after">
+        <figcaption>After · <span id="sparkAfterName">Van Gogh</span></figcaption>
+        <div class="spark-frame">
+          <div class="spark-img spark-painting" id="sparkAfterImg"></div>
+          <div class="spark-signature" id="sparkSignature">— V. van Gogh</div>
+        </div>
+      </figure>
+    </div>
+
+    <!-- Painter picker — drives BOTH this gallery and the metamorphosis section -->
+    <div class="spark-picker reveal">
+      <button data-painter="vangogh" class="active"><span class="swatch" style="background:#f4b731"></span>Van Gogh</button>
+      <button data-painter="monet"><span class="swatch" style="background:#a7c8e8"></span>Monet</button>
+      <button data-painter="picasso"><span class="swatch" style="background:#d87a3c"></span>Picasso</button>
+      <button data-painter="warhol"><span class="swatch" style="background:#ff2d88"></span>Warhol</button>
+      <button data-painter="hokusai"><span class="swatch" style="background:#1e5aa8"></span>Hokusai</button>
+    </div>
+
+    <div class="spark-foot reveal">
+      <span class="mono">Auto-rotating every 6s · tap a painter to lock</span>
+    </div>
+  </div>
+
+  <!-- Fullscreen flash overlay (used for every painter swap + hero→spark entry) -->
+  <div class="flash-overlay" id="flashOverlay" aria-hidden="true">
+    <div class="flash-bloom"></div>
+    <div class="flash-rays">
+      <!-- 16 rays via CSS -->
+      <span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span>
+    </div>
+    <div class="flash-aberration"></div>
+  </div>
+</section>
+
+<!-- =============================
+     SCROLL-NARRATIVE: "The Reel"
+     A pinned chapter where a film strip slides and 4 frames develop one by one.
+     ============================= -->
+<section class="reel-chapter" id="reel" data-screen-label="02 The Reel">
+  <div class="reel-sticky">
+    <div class="reel-progress"><div class="reel-progress-fill" id="reelFill"></div></div>
+    <div class="reel-stage">
+      <div class="reel-head">
+        <span class="eyebrow" style="color:var(--highlight);">The reel · 002</span>
+        <h2 class="reel-title" id="reelTitle">Scroll to <em>develop</em> the strip</h2>
+        <p class="reel-sub" id="reelSub">Four poses. Four frames. Each one unfolds as you scroll down.</p>
+      </div>
+
+      <div class="reel-strip" id="reelStrip">
+        <div class="reel-holes">
+          <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+        </div>
+        <div class="reel-frames">
+          <div class="reel-frame" data-reel="0">
+            <div class="reel-frame-inner" style="background-image: var(--reel-img-0);"></div>
+            <div class="reel-devstage"></div>
+            <div class="reel-label">01 · The Pose</div>
+          </div>
+          <div class="reel-frame" data-reel="1">
+            <div class="reel-frame-inner" style="background-image: var(--reel-img-1);"></div>
+            <div class="reel-devstage"></div>
+            <div class="reel-label">02 · The Snap</div>
+          </div>
+          <div class="reel-frame" data-reel="2">
+            <div class="reel-frame-inner" style="background-image: var(--reel-img-2);"></div>
+            <div class="reel-devstage"></div>
+            <div class="reel-label">03 · The Develop</div>
+          </div>
+          <div class="reel-frame" data-reel="3">
+            <div class="reel-frame-inner" style="background-image: var(--reel-img-3);"></div>
+            <div class="reel-devstage"></div>
+            <div class="reel-label">04 · The Keepsake</div>
+          </div>
+        </div>
+        <div class="reel-holes">
+          <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+        </div>
+      </div>
+
+      <div class="reel-captions">
+        <div class="reel-caption" data-cap="0">
+          <span class="script">Step in.</span>
+          <p>The ring light warms, the booth hums. No app, no signup — just you and the lens.</p>
+        </div>
+        <div class="reel-caption" data-cap="1">
+          <span class="script">Strike a pose.</span>
+          <p>Countdown hits zero. Shutter clicks. Flash fires. Four times, eight seconds apart.</p>
+        </div>
+        <div class="reel-caption" data-cap="2">
+          <span class="script">Let it develop.</span>
+          <p>AI restyles each frame to your chosen era — 70s Kodak, Polaroid, Kodachrome, B&amp;W.</p>
+        </div>
+        <div class="reel-caption" data-cap="3">
+          <span class="script">Take it home.</span>
+          <p>Printed in 12 seconds. Digital copy texted. A tiny gallery you'll keep for decades.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Scroll length drives pin timeline -->
+  <div class="reel-spacer"></div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track">
+    <span>
+      Strike a pose <span class="sep">✦</span>
+      Vintage vibes <span class="sep">✦</span>
+      AI-powered <span class="sep">✦</span>
+      Hand-built in Singapore <span class="sep">✦</span>
+      70s Kodak <span class="sep">✦</span>
+      Polaroid moments <span class="sep">✦</span>
+      Weddings · Parties · Brands <span class="sep">✦</span>
+      Strike a pose <span class="sep">✦</span>
+      Vintage vibes <span class="sep">✦</span>
+      AI-powered <span class="sep">✦</span>
+      Hand-built in Singapore <span class="sep">✦</span>
+      70s Kodak <span class="sep">✦</span>
+      Polaroid moments <span class="sep">✦</span>
+      Weddings · Parties · Brands <span class="sep">✦</span>
+    </span>
+  </div>
+</div>
+
+<!-- LIVE DEMO -->
+<section class="chapter" id="demo" data-screen-label="02 Live Demo" style="padding: 120px 0;">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <span class="eyebrow">Live demo · 001</span>
+        <h2>Try it right <em>now</em>.</h2>
+      </div>
+      <p>
+        Your webcam, a pinch of AI, and thirty years of film nostalgia. Click the shutter,
+        strike four poses — we'll develop a vintage strip you can save and share.
+        <b>Nothing is uploaded.</b> All processing happens in your browser.
+      </p>
+    </div>
+
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start;" id="demoGrid">
+      <div class="demo-ui reveal">
+        <div class="demo" id="demoBox">
+          <div class="status" id="demoStatus">
+            <div>
+              <h4>Turn on your camera</h4>
+              <p>We'll only use it for this demo — nothing leaves your browser.</p>
+              <button class="btn" id="startCam">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="13" r="4"/><path d="M3 7h4l2-2h6l2 2h4v12H3z"/></svg>
+                Turn on camera
+              </button>
+            </div>
+          </div>
+          <video id="video" autoplay playsinline muted></video>
+          <canvas class="filter-canvas" id="filterCanvas"></canvas>
+          <svg class="frame-overlay" viewBox="0 0 100 100" preserveAspectRatio="none">
+            <!-- Corner registration marks -->
+            <g fill="none" stroke="rgba(255,235,200,.5)" stroke-width=".4">
+              <path d="M3 3 L3 9 M3 3 L9 3"/>
+              <path d="M97 3 L97 9 M97 3 L91 3"/>
+              <path d="M3 97 L3 91 M3 97 L9 97"/>
+              <path d="M97 97 L97 91 M97 97 L91 97"/>
+            </g>
+          </svg>
+          <div class="countdown" id="countdown">3</div>
+          <div class="flash" id="flash"></div>
+        </div>
+
+        <div class="demo-controls">
+          <div class="filter-options" id="filterOptions">
+            <button data-f="sepia" class="active">Sepia 70s</button>
+            <button data-f="bw">B&W Classic</button>
+            <button data-f="polaroid">Polaroid</button>
+            <button data-f="kodachrome">Kodachrome</button>
+          </div>
+          <button class="shutter-btn" id="shutterBtn" disabled title="Snap a strip">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="reveal">
+        <div class="result-strip" id="resultStrip">
+          <div class="holes-row">
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+          </div>
+          <div class="photos" id="photos">
+            <div class="photo"></div>
+            <div class="photo"></div>
+            <div class="photo"></div>
+            <div class="photo"></div>
+          </div>
+          <div class="holes-row">
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+          </div>
+          <div class="footer-strip">
+            <span class="brand">Playing With Photo</span>
+            <small id="resultDate">— · — · —</small>
+          </div>
+        </div>
+        <div class="result-actions" id="resultActions" style="display:none;">
+          <button class="btn ghost" id="retakeBtn">Retake</button>
+          <button class="btn" id="downloadBtn">Download strip
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 4v12m0 0l-5-5m5 5l5-5M4 20h16"/></svg>
+          </button>
+        </div>
+
+        <div id="demoPlaceholder" style="padding: 40px 20px; text-align:center; color: var(--ink-2);">
+          <div style="font-family:var(--ff-display); font-style:italic; font-size: 28px; color:var(--ink); margin-bottom: 8px;">Your film strip<br/>will develop here</div>
+          <p style="font-size:14px; max-width: 320px; margin: 0 auto;">Pick a style, aim your shot, and tap the shutter. We'll take four frames in sequence — just like the real booth.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- THE BOOTH -->
+<section class="chapter booth-chapter" id="booth" data-screen-label="03 The Booth" style="position:relative;">
+  <span class="chapter-numeral tl" aria-hidden="true">ᴠ</span>
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <span class="eyebrow">The hardware · 002</span>
+        <h2>Hand-built.<br/><span class="italic">Unapologetically</span> <em>analog</em>.</h2>
+      </div>
+      <p>
+        Every booth is assembled in Jeff's Singapore studio. A real hardwood tripod, a
+        vintage-cased camera head, and a thermal printer that whirs like a polaroid —
+        but inside, modern AI does the magic of turning strangers into film stars.
+      </p>
+    </div>
+
+    <div class="booth-grid reveal">
+      <div class="booth-stage">
+        <svg viewBox="0 0 400 480" style="width: 90%; filter: drop-shadow(0 30px 40px var(--shadow));">
+          <!-- Ring light -->
+          <circle cx="200" cy="70" r="56" fill="#fff" stroke="var(--ink)" stroke-width="3"/>
+          <circle cx="200" cy="70" r="44" fill="var(--cream)" stroke="var(--rust)" stroke-width="2"/>
+          <circle cx="200" cy="70" r="30" fill="var(--highlight)"/>
+          <circle cx="200" cy="70" r="14" fill="#fff"/>
+          <rect x="194" y="120" width="12" height="28" fill="var(--ink-2)"/>
+          <!-- Booth body -->
+          <rect x="115" y="145" width="170" height="160" rx="8" fill="#6b3f25" stroke="var(--ink)" stroke-width="3"/>
+          <rect x="123" y="153" width="154" height="144" rx="4" fill="#4a2814"/>
+          <!-- Screws -->
+          <circle cx="125" cy="155" r="3" fill="#2a1a0c"/>
+          <circle cx="275" cy="155" r="3" fill="#2a1a0c"/>
+          <circle cx="125" cy="295" r="3" fill="#2a1a0c"/>
+          <circle cx="275" cy="295" r="3" fill="#2a1a0c"/>
+          <!-- Lens -->
+          <circle cx="200" cy="200" r="40" fill="var(--ink)" stroke="var(--tan)" stroke-width="3"/>
+          <circle cx="200" cy="200" r="30" fill="#1a0f07"/>
+          <circle cx="200" cy="200" r="20" fill="#0a0604"/>
+          <circle cx="190" cy="190" r="6" fill="var(--highlight)" opacity=".7"/>
+          <!-- Screen -->
+          <rect x="140" y="255" width="120" height="36" rx="3" fill="var(--cream)"/>
+          <text x="200" y="278" text-anchor="middle" font-family="Caveat, cursive" font-size="20" fill="var(--rust)" font-weight="600">ready when you are</text>
+          <!-- Legs -->
+          <line x1="200" y1="305" x2="110" y2="465" stroke="#6b3f25" stroke-width="10" stroke-linecap="round"/>
+          <line x1="200" y1="305" x2="290" y2="465" stroke="#6b3f25" stroke-width="10" stroke-linecap="round"/>
+          <line x1="200" y1="305" x2="200" y2="465" stroke="#8a5030" stroke-width="7" stroke-linecap="round" opacity=".6"/>
+          <circle cx="200" cy="305" r="12" fill="var(--ink)"/>
+          <!-- Wood grain -->
+          <path d="M195 330 L113 460 M200 360 L122 465" stroke="#4a2814" stroke-width="1" opacity=".3"/>
+        </svg>
+
+        <div class="booth-labels">
+          <div class="booth-label" style="top: 6%; right: -5%;"><b>Ring light</b><span class="line"></span>01</div>
+          <div class="booth-label" style="top: 38%; right: -8%;"><b>AI lens</b><span class="line"></span>02</div>
+          <div class="booth-label" style="top: 58%; left: -10%;">03<span class="line"></span><b>Live preview</b></div>
+          <div class="booth-label" style="bottom: 8%; left: -6%;">04<span class="line"></span><b>Hardwood tripod</b></div>
+        </div>
+      </div>
+
+      <div>
+        <span class="eyebrow">Specs & craft</span>
+        <h3 style="font-family:var(--ff-display); font-size: 44px; font-weight: 400; font-style: italic; margin: 14px 0 20px;">
+          Built like a camera from your grandpa's attic.
+        </h3>
+        <p style="color:var(--ink-2); max-width: 52ch; margin:0;">
+          Teak legs. Brass fittings. A shutter that clicks when you press it. The booth
+          earns its place in the room — guests gather around it because it <i>looks</i>
+          like something worth gathering around.
+        </p>
+
+        <div class="booth-feat">
+          <div class="f">
+            <h4>Hardwood tripod</h4>
+            <p>Teak, hand-finished. Each one has its own grain — no two are identical.</p>
+          </div>
+          <div class="f">
+            <h4>Live AI filter</h4>
+            <p>See your vintage self in real-time before you ever hit the shutter.</p>
+          </div>
+          <div class="f">
+            <h4>Thermal printer</h4>
+            <p>Prints a film strip in 12 seconds. Guests walk away with a keepsake.</p>
+          </div>
+          <div class="f">
+            <h4>Event-ready</h4>
+            <p>Folds down to a suitcase. Power is a single wall socket. Done.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="chapter" id="how" data-screen-label="04 How It Works">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <span class="eyebrow">The process · 003</span>
+        <h2>Pose. Click.<br/><em>Develop.</em> Done.</h2>
+      </div>
+      <p>Four steps, forty seconds. The AI does the heavy lifting — your guests just show up and smile.</p>
+    </div>
+
+    <div class="howit-steps reveal">
+      <div class="step">
+        <span class="num">01</span>
+        <span class="stamp">Step one</span>
+        <h4>Step in</h4>
+        <p>Guest walks up to the booth. Ring light warms up. No app, no signup.</p>
+      </div>
+      <div class="step">
+        <span class="num">02</span>
+        <span class="stamp">Step two</span>
+        <h4>Strike a pose</h4>
+        <p>Countdown on the screen. Four poses in eight seconds, like the classic strip.</p>
+      </div>
+      <div class="step">
+        <span class="num">03</span>
+        <span class="stamp">Step three</span>
+        <h4>AI develops</h4>
+        <p>Model re-styles each frame in the chosen era — 70s Kodak, Polaroid, B&W.</p>
+      </div>
+      <div class="step">
+        <span class="num">04</span>
+        <span class="stamp">Step four</span>
+        <h4>Take it home</h4>
+        <p>Printed strip in hand. Digital copy texted. A tiny gallery at your event.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STYLE GALLERY -->
+<section class="chapter gallery-chapter" id="styles" data-screen-label="05 Styles" style="position:relative;">
+  <span class="chapter-numeral tr light" aria-hidden="true">ᴠɪɪ</span>
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <span class="eyebrow">The looks · 004</span>
+        <h2 style="color:var(--cream);">Five films,<br/><em style="color:var(--highlight)!important;">one roll.</em></h2>
+      </div>
+      <p>Each style is tuned for a different mood. Switch mid-event, or commit to one look for a uniform gallery. Hover the strip to pause.</p>
+    </div>
+
+    <div class="style-chips reveal">
+      <button class="active">70s Kodak</button>
+      <button>Silver Gelatin B&W</button>
+      <button>Polaroid 600</button>
+      <button>Kodachrome Slide</button>
+      <button>Studio Sepia</button>
+    </div>
+  </div>
+
+  <div class="filmstrip-wrap reveal" style="margin-top: 60px;">
+    <div class="filmstrip" id="styleFilmstrip">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- USE CASES -->
+<div class="torn-edge to-cream" aria-hidden="true"></div>
+<section class="chapter" id="usecases" data-screen-label="06 Use Cases" style="position:relative;">
+  <span class="chapter-numeral tl" aria-hidden="true">ᴠɪɪɪ</span>
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <span class="eyebrow">Where it lives · 005</span>
+        <h2>The booth <em>you'll</em><br/>want to book.</h2>
+      </div>
+      <p>Weddings, brand launches, festivals, birthdays. The booth fits any venue that has a wall socket and room for four people.</p>
+    </div>
+
+    <div class="usecases-grid reveal">
+      <div class="uc big" style="background: linear-gradient(135deg, var(--paper), var(--tan));">
+        <div>
+          <span class="uc-num">// 01</span>
+          <h3>Weddings<br/>& Receptions</h3>
+          <p>The most-talked-about corner of the night. Your guests leave with a keepsake that doesn't end up in a junk drawer.</p>
+        </div>
+        <svg class="uc-illus" viewBox="0 0 200 200">
+          <rect x="20" y="40" width="160" height="130" fill="var(--cream)" stroke="var(--ink)" stroke-width="2"/>
+          <rect x="30" y="55" width="140" height="90" fill="var(--tan)"/>
+          <circle cx="80" cy="95" r="18" fill="var(--cream)"/>
+          <circle cx="120" cy="95" r="18" fill="var(--cream)"/>
+          <path d="M70 125 Q100 140 130 125" stroke="var(--rust)" stroke-width="3" fill="none"/>
+          <text x="100" y="162" text-anchor="middle" font-family="Caveat, cursive" font-size="16" fill="var(--rust)">Mr & Mrs</text>
+        </svg>
+      </div>
+      <div class="uc">
+        <div>
+          <span class="uc-num">// 02</span>
+          <h3>Corporate</h3>
+          <p>Branded strips, custom filters, your logo on the film border.</p>
+        </div>
+      </div>
+      <div class="uc">
+        <div>
+          <span class="uc-num">// 03</span>
+          <h3>Festivals</h3>
+          <p>High-volume mode: 4 strips/minute, queue-friendly.</p>
+        </div>
+      </div>
+      <div class="uc">
+        <div>
+          <span class="uc-num">// 04</span>
+          <h3>Birthdays</h3>
+          <p>For milestone years. Grandma looks incredible in Kodachrome.</p>
+        </div>
+      </div>
+      <div class="uc">
+        <div>
+          <span class="uc-num">// 05</span>
+          <h3>Pop-ups</h3>
+          <p>Retail activations, openings, launches. Draws a crowd.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<div class="torn-edge to-paper" aria-hidden="true"></div>
+<section class="chapter testis-chapter" id="testimonials" data-screen-label="07 Testimonials" style="position:relative;">
+  <span class="chapter-numeral tr" aria-hidden="true">ɪx</span>
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <span class="eyebrow">Kind words · 006</span>
+        <h2>The <em>queue</em><br/>never stopped.</h2>
+      </div>
+      <p>Real feedback from weddings, brand launches, and one very memorable 60th birthday.</p>
+    </div>
+
+    <!-- Cork board of pinned photo strips with handwritten notes taped on -->
+    <div class="corkboard reveal" id="testiBoard">
+      <div class="corkboard-rail">
+        <div class="strip-card" style="--r:-4deg; --x:0;">
+          <div class="strip-frames">
+            <div class="strip-frame" style="background: linear-gradient(135deg,#d9a87a,#8a5a3a);"><span class="strip-label">wedding</span></div>
+            <div class="strip-frame" style="background: linear-gradient(135deg,#e8b98a,#b48a5a);"></div>
+            <div class="strip-frame" style="background: linear-gradient(135deg,#a87a5a,#5a3a2a);"></div>
+            <div class="strip-frame" style="background: linear-gradient(135deg,#c89a6a,#7a4a2a);"></div>
+          </div>
+          <div class="tape tape-tl"></div>
+          <div class="tape tape-br"></div>
+          <div class="sticky-note" style="--r:3deg;">
+            <p>"Three hours in and the line was <u>still</u> around the bar. Guests printed <b>four strips each.</b> It stole the show."</p>
+            <div class="note-sig">— Priya &amp; Aaron<br/><em>Cliveden House</em></div>
+          </div>
+          <div class="pushpin"></div>
+        </div>
+
+        <div class="strip-card" style="--r:3deg;">
+          <div class="strip-frames">
+            <div class="strip-frame" style="background: linear-gradient(135deg,#2a1a10,#5a3a24);"><span class="strip-label">brand</span></div>
+            <div class="strip-frame" style="background: linear-gradient(135deg,#4a2a1a,#8a5a3a);"></div>
+            <div class="strip-frame" style="background: linear-gradient(135deg,#6a4a2a,#ba8a5a);"></div>
+            <div class="strip-frame" style="background: linear-gradient(135deg,#3a2a1a,#7a4a2a);"></div>
+          </div>
+          <div class="tape tape-tr"></div>
+          <div class="sticky-note yellow" style="--r:-4deg;">
+            <p>"Our activation needed a <i>moment</i>. Jeff's booth <u>was</u> the moment. We posted the filmstrips for weeks."</p>
+            <div class="note-sig">— Marcus L.<br/><em>Head of Brand · Aesop SG</em></div>
+          </div>
+          <div class="pushpin red"></div>
+        </div>
+
+        <div class="strip-card" style="--r:-2deg;">
+          <div class="strip-frames">
+            <div class="strip-frame" style="background: linear-gradient(135deg,#e8c89a,#ba8a5a);"><span class="strip-label">60th</span></div>
+            <div class="strip-frame" style="background: linear-gradient(135deg,#d6a87a,#8a5a3a);"></div>
+            <div class="strip-frame" style="background: linear-gradient(135deg,#b88a5a,#5a3a1a);"></div>
+            <div class="strip-frame" style="background: linear-gradient(135deg,#a87a4a,#7a4a2a);"></div>
+          </div>
+          <div class="tape tape-tl"></div>
+          <div class="sticky-note pink" style="--r:5deg;">
+            <p>"My dad is 60 and <u>hates</u> being photographed. He took <b>eleven strips.</b> I've never seen him grin that hard."</p>
+            <div class="note-sig">— Lee Wei Ling<br/><em>Tanjong Pagar</em></div>
+          </div>
+          <div class="pushpin"></div>
+        </div>
+
+        <div class="strip-card" style="--r:4deg;">
+          <div class="strip-frames">
+            <div class="strip-frame" style="background: linear-gradient(135deg,#3a4a6a,#1a2a4a);"><span class="strip-label">gala</span></div>
+            <div class="strip-frame" style="background: linear-gradient(135deg,#5a6a8a,#2a3a5a);"></div>
+            <div class="strip-frame" style="background: linear-gradient(135deg,#4a5a7a,#1a2a3a);"></div>
+            <div class="strip-frame" style="background: linear-gradient(135deg,#6a7a9a,#3a4a6a);"></div>
+          </div>
+          <div class="tape tape-br"></div>
+          <div class="sticky-note" style="--r:-3deg;">
+            <p>"I've hired photo-booths for <u>six</u> galas. This was the first one guests actually queued for. <b>Everyone</b> left with a strip."</p>
+            <div class="note-sig">— Sophie K.<br/><em>Events Director · NGS</em></div>
+          </div>
+          <div class="pushpin red"></div>
+        </div>
+
+        <div class="strip-card" style="--r:-3deg;">
+          <div class="strip-frames">
+            <div class="strip-frame" style="background: linear-gradient(135deg,#c89a6a,#7a4a2a);"><span class="strip-label">bday</span></div>
+            <div class="strip-frame" style="background: linear-gradient(135deg,#e8b98a,#8a5a3a);"></div>
+            <div class="strip-frame" style="background: linear-gradient(135deg,#a87a5a,#4a2a1a);"></div>
+            <div class="strip-frame" style="background: linear-gradient(135deg,#d6a87a,#6a3a1a);"></div>
+          </div>
+          <div class="tape tape-tr"></div>
+          <div class="sticky-note yellow" style="--r:2deg;">
+            <p>"Sent a strip to my grandma in Manila. She <u>framed it</u>. Said it looked like photos from her own wedding, 1962."</p>
+            <div class="note-sig">— Carla M.<br/><em>Makati · Manila</em></div>
+          </div>
+          <div class="pushpin"></div>
+        </div>
+      </div>
+      <div class="board-hint" aria-hidden="true">
+        <span>← drag the board →</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="chapter" id="pricing" data-screen-label="08 Pricing">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <span class="eyebrow">Packages · 007</span>
+        <h2>Three ways<br/>to <em>play</em>.</h2>
+      </div>
+      <p>All packages include setup, teardown, an on-site attendant, unlimited prints, and every digital file.</p>
+    </div>
+
+    <!-- Three perforated tickets stacked like a booklet -->
+    <div class="ticket-booklet reveal">
+      <article class="ticket t-keepsake">
+        <div class="ticket-stub">
+          <div class="stub-label">admit one</div>
+          <div class="stub-num">№ 001</div>
+          <div class="stub-foot">keepsake</div>
+        </div>
+        <div class="ticket-perf" aria-hidden="true"></div>
+        <div class="ticket-body">
+          <header class="ticket-hd">
+            <span class="ticket-kicker">The Keepsake · half day</span>
+            <div class="ticket-price"><span class="cur">S$</span>880<small>· 3 hrs</small></div>
+          </header>
+          <ul class="ticket-list">
+            <li>3 hours of shooting</li>
+            <li>Unlimited printed strips</li>
+            <li>All digital files delivered</li>
+            <li>3 AI film styles</li>
+            <li>On-site attendant</li>
+          </ul>
+          <footer class="ticket-ft">
+            <div class="ticket-stamp">intimate</div>
+            <a href="#book" class="btn ghost">Enquire</a>
+          </footer>
+        </div>
+      </article>
+
+      <article class="ticket t-showpiece featured">
+        <div class="ticket-ribbon">most booked</div>
+        <div class="ticket-stub dark">
+          <div class="stub-label">admit one</div>
+          <div class="stub-num">№ 002</div>
+          <div class="stub-foot">showpiece</div>
+        </div>
+        <div class="ticket-perf" aria-hidden="true"></div>
+        <div class="ticket-body">
+          <header class="ticket-hd">
+            <span class="ticket-kicker">The Showpiece · full evening</span>
+            <div class="ticket-price"><span class="cur">S$</span>1,380<small>· 5 hrs</small></div>
+          </header>
+          <ul class="ticket-list">
+            <li>5 hours of shooting</li>
+            <li>Unlimited printed strips</li>
+            <li>All digital files + gallery link</li>
+            <li>All 5 AI film styles</li>
+            <li>Custom branded footer</li>
+            <li>On-site attendant</li>
+          </ul>
+          <footer class="ticket-ft">
+            <div class="ticket-stamp red">feature film</div>
+            <a href="#book" class="btn">Book it</a>
+          </footer>
+        </div>
+      </article>
+
+      <article class="ticket t-activation">
+        <div class="ticket-stub">
+          <div class="stub-label">admit one</div>
+          <div class="stub-num">№ 003</div>
+          <div class="stub-foot">activation</div>
+        </div>
+        <div class="ticket-perf" aria-hidden="true"></div>
+        <div class="ticket-body">
+          <header class="ticket-hd">
+            <span class="ticket-kicker">The Activation · brands &amp; fests</span>
+            <div class="ticket-price"><span class="cur">S$</span>Custom<small>· full day+</small></div>
+          </header>
+          <ul class="ticket-list">
+            <li>Full-day or multi-day</li>
+            <li>Custom-branded booth wrap</li>
+            <li>Bespoke AI style training</li>
+            <li>Live gallery feed</li>
+            <li>Multi-operator team</li>
+          </ul>
+          <footer class="ticket-ft">
+            <div class="ticket-stamp">headline act</div>
+            <a href="#book" class="btn ghost">Get a quote</a>
+          </footer>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT JEFF -->
+<section class="chapter about-chapter" id="about" data-screen-label="09 About Jeff">
+  <div class="wrap">
+    <div class="about-grid reveal">
+      <div class="about-portrait">
+        <div class="img">
+          <svg viewBox="0 0 300 400" style="width:100%;height:100%;">
+            <rect width="300" height="400" fill="#c89a6a"/>
+            <!-- Simple stylized Jeff portrait -->
+            <circle cx="150" cy="150" r="70" fill="#d9b681"/>
+            <!-- Hair -->
+            <path d="M85 130 Q90 70 150 68 Q210 70 215 130 Q215 100 195 88 Q175 78 150 80 Q125 78 105 88 Q85 100 85 130Z" fill="#3a2614"/>
+            <!-- Eyes -->
+            <circle cx="128" cy="150" r="3.5" fill="#2a1a0c"/>
+            <circle cx="172" cy="150" r="3.5" fill="#2a1a0c"/>
+            <!-- Glasses -->
+            <circle cx="128" cy="150" r="14" fill="none" stroke="#2a1a0c" stroke-width="2.5"/>
+            <circle cx="172" cy="150" r="14" fill="none" stroke="#2a1a0c" stroke-width="2.5"/>
+            <line x1="142" y1="150" x2="158" y2="150" stroke="#2a1a0c" stroke-width="2"/>
+            <!-- Nose -->
+            <path d="M150 158 Q146 172 150 180 Q154 180 155 175" stroke="#8a4620" stroke-width="2" fill="none"/>
+            <!-- Smile -->
+            <path d="M135 193 Q150 203 165 193" stroke="#8a4620" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <!-- Beard scruff -->
+            <path d="M135 198 Q150 215 165 198" stroke="#3a2614" stroke-width="1" fill="none" opacity=".3"/>
+            <!-- Body/shirt -->
+            <path d="M80 400 L80 260 Q150 240 220 260 L220 400 Z" fill="#8a4620"/>
+            <path d="M120 260 Q150 250 180 260 L175 310 Q150 315 125 310 Z" fill="#c89a6a"/>
+            <!-- Pencil in pocket -->
+            <rect x="165" y="285" width="4" height="25" fill="#f2c48c" transform="rotate(8 167 297)"/>
+            <circle cx="167" cy="283" r="2" fill="#2a1a0c"/>
+          </svg>
+        </div>
+        <div class="label">— Jeff, 2026</div>
+        <div class="stamp">Singapore · est. 2018</div>
+      </div>
+
+      <div class="about-copy">
+        <span class="eyebrow">The maker · 008</span>
+        <h2>Hi, I'm <em>Jeff.</em></h2>
+        <p class="lede">
+          I've been drawing portraits of strangers at Singapore markets for eight years
+          under the name <i>Playing With Pencil</i>. This is what happened when I taught
+          my pencil to use a camera.
+        </p>
+        <p>
+          Every sketch I do is two things at once: a likeness, and a <i>memory</i>. I
+          wanted a photobooth that did both — something that catches you faithfully
+          <i>and</i> wraps you in a little bit of nostalgia. So I built one. Hardwood
+          tripod, brass fittings, and an AI model I fine-tuned on forty years of film
+          photographs. Six months of tinkering later, Playing With Photo was born.
+        </p>
+        <p>
+          I still show up to every event myself. If you book the booth, you're booking
+          <i>me</i> too — complete with terrible jokes and pencil smudges on my fingers.
+        </p>
+
+        <div class="signature">
+          <svg viewBox="0 0 260 80" style="height: 62px;">
+            <path d="M 10 50 Q 25 20 45 45 Q 55 60 70 35 Q 85 15 95 45 L 100 50 Q 110 30 125 50 Q 140 70 155 35 Q 170 10 185 45 Q 200 70 220 30 Q 240 10 250 30"
+                  stroke="var(--rust-2)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+            <path d="M 90 55 L 200 58" stroke="var(--rust-2)" stroke-width="1" fill="none" opacity=".5"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =============================
+     METAMORPHOSIS: Vintage → Pixar / Anime / Dreamy
+     The final act: pick an era, watch your strip transform.
+     ============================= -->
+<section class="meta-chapter" id="metamorphosis" data-screen-label="09 Metamorphosis">
+  <div class="meta-bg"></div>
+  <div class="wrap" style="position:relative; z-index:2;">
+    <div class="section-head reveal">
+      <div>
+        <span class="eyebrow" style="color:#ffd6f0;">The twist · 008</span>
+        <h2 style="color:#fff;">Vintage isn't the <em style="color:#ffd88a;">only</em> brush we have.</h2>
+      </div>
+      <p style="color: rgba(255,255,255,.75);">
+        Jeff trained bonus models on the masters — <b>Van&nbsp;Gogh</b>, <b>Monet</b>, <b>Picasso</b>, <b>Warhol</b>, <b>Hokusai</b>.
+        Same face, different century. Pick a painter — watch your strip get repainted in place.
+      </p>
+    </div>
+
+    <div class="meta-picker reveal">
+      <button data-meta="vintage" class="active">
+        <span class="dot" style="background:#c38a52"></span>Vintage <small>Default</small>
+      </button>
+      <button data-meta="vangogh">
+        <span class="dot" style="background:#f4b731"></span>Van Gogh <small>Starry</small>
+      </button>
+      <button data-meta="monet">
+        <span class="dot" style="background:#a7c8e8"></span>Monet <small>Water Lilies</small>
+      </button>
+      <button data-meta="picasso">
+        <span class="dot" style="background:#d87a3c"></span>Picasso <small>Cubist</small>
+      </button>
+      <button data-meta="warhol">
+        <span class="dot" style="background:#ff2d88"></span>Warhol <small>Pop Art</small>
+      </button>
+      <button data-meta="hokusai">
+        <span class="dot" style="background:#1e5aa8"></span>Hokusai <small>Ukiyo-e</small>
+      </button>
+    </div>
+
+    <div class="meta-stage reveal">
+      <div class="meta-before">
+        <div class="meta-label">Before — 70s Kodak</div>
+        <div class="meta-card" id="metaBefore">
+          <div class="meta-photo"><div class="meta-img" data-meta-src="0"></div></div>
+          <div class="meta-photo"><div class="meta-img" data-meta-src="1"></div></div>
+          <div class="meta-photo"><div class="meta-img" data-meta-src="2"></div></div>
+          <div class="meta-photo"><div class="meta-img" data-meta-src="3"></div></div>
+          <div class="meta-strip-brand">Playing With Photo · Vintage</div>
+        </div>
+      </div>
+
+      <div class="meta-arrow">
+        <svg viewBox="0 0 60 80" style="width:60px;">
+          <path d="M10 40 L50 40 M30 20 L50 40 L30 60" stroke="#ffd88a" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <div class="meta-arrow-label">AI rewrites it</div>
+      </div>
+
+      <div class="meta-after">
+        <div class="meta-label" id="metaAfterLabel">After — Van Gogh</div>
+        <div class="meta-card" id="metaAfter">
+          <div class="meta-photo"><div class="meta-img meta-after-img" data-meta-src="0"></div><div class="meta-shine"></div></div>
+          <div class="meta-photo"><div class="meta-img meta-after-img" data-meta-src="1"></div><div class="meta-shine"></div></div>
+          <div class="meta-photo"><div class="meta-img meta-after-img" data-meta-src="2"></div><div class="meta-shine"></div></div>
+          <div class="meta-photo"><div class="meta-img meta-after-img" data-meta-src="3"></div><div class="meta-shine"></div></div>
+          <div class="meta-strip-brand" id="metaAfterBrand">Playing With Photo · Van Gogh Edition</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="meta-cta reveal">
+      <p style="color: rgba(255,255,255,.7); max-width: 480px; margin: 0;">
+        <b style="color:#fff;">Jeff tip:</b> couples love the vintage strip for the album — and the Van&nbsp;Gogh strip framed on the wall. Get both at every booking.
+      </p>
+      <a href="#book" class="btn" style="background:#ffd88a; color:#1a0f2a; border-color:#ffd88a; box-shadow: 0 4px 0 #c09050;">Book the full kit
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- BOOKING -->
+<section class="chapter book-chapter" id="book" data-screen-label="10 Booking">
+  <div class="wrap">
+    <div class="book-grid">
+      <div class="reveal">
+        <span class="eyebrow" style="color: var(--highlight);">Let's make a memory · 009</span>
+        <h2>Book the<br/>booth. <em>Today.</em></h2>
+        <p class="lede">
+          Reply within 24 hours. Setup is included. We travel across Singapore and to
+          regional events in Malaysia, Indonesia, and Thailand.
+        </p>
+        <div style="margin-top: 48px; display: flex; gap: 36px; flex-wrap: wrap;">
+          <div>
+            <div style="font-family:var(--ff-mono); font-size: 11px; letter-spacing: .2em; opacity:.7; text-transform:uppercase;">Email</div>
+            <div style="font-family:var(--ff-display); font-style: italic; font-size: 24px; margin-top: 4px;"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="92f8f7f4f4d2e2fef3ebfbfcf5e5fbe6fabce2fafde6fd">[email&#160;protected]</a></div>
+          </div>
+          <div>
+            <div style="font-family:var(--ff-mono); font-size: 11px; letter-spacing: .2em; opacity:.7; text-transform:uppercase;">WhatsApp</div>
+            <div style="font-family:var(--ff-display); font-style: italic; font-size: 24px; margin-top: 4px;">+65 8123 4567</div>
+          </div>
+        </div>
+      </div>
+
+      <form class="book-form reveal" onsubmit="event.preventDefault(); this.querySelector('.btn').innerHTML='Thanks — I\\'ll reply soon ✓'; this.querySelector('.btn').style.background='var(--rust)'; this.querySelector('.btn').style.color='var(--cream)'; this.querySelector('.btn').style.borderColor='var(--rust)';">
+        <small>/ Enquiry form</small>
+        <h3>Tell me about your event</h3>
+        <div class="row">
+          <div class="field">
+            <label>Your name</label>
+            <input type="text" placeholder="Jeff A." required />
+          </div>
+          <div class="field">
+            <label>Email</label>
+            <input type="email" placeholder="you@example.com" required />
+          </div>
+        </div>
+        <div class="row">
+          <div class="field">
+            <label>Event type</label>
+            <select>
+              <option>Wedding</option>
+              <option>Corporate / brand</option>
+              <option>Birthday</option>
+              <option>Festival / public</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Event date</label>
+            <input type="date" />
+          </div>
+        </div>
+        <div class="row">
+          <div class="field">
+            <label>Venue / city</label>
+            <input type="text" placeholder="Cliveden House, Singapore" />
+          </div>
+        </div>
+        <button type="submit" class="btn">Send enquiry
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div>
+      <div class="biglogo">Playing<br/>With <em>Photo.</em></div>
+      <div class="colophon" style="margin-top: 24px;">Est. 2026 · Singapore · By Jeff / Playing With Pencil</div>
+    </div>
+    <div class="colophon" style="text-align:right;">
+      © 2026 Playing With Photo<br/>
+      Hand-coded with love · Not AI-generated
+    </div>
+  </div>
+</footer>
+
+<!-- Tweaks panel -->
+<div class="tweaks-panel" id="tweaksPanel">
+  <h4>Tweaks</h4>
+  <div class="tw-row">
+    <label>Palette</label>
+    <div class="opts" data-tweak="palette">
+      <button data-v="sepia">Sepia</button>
+      <button data-v="mono">Mono</button>
+      <button data-v="rose">Rose</button>
+    </div>
+  </div>
+  <div class="tw-row">
+    <label>Default filter</label>
+    <div class="opts" data-tweak="filter">
+      <button data-v="sepia">Sepia 70s</button>
+      <button data-v="bw">B&W</button>
+      <button data-v="polaroid">Polaroid</button>
+      <button data-v="kodachrome">Kodachrome</button>
+    </div>
+  </div>
+  <div class="tw-row">
+    <label>Paper grain</label>
+    <div class="opts" data-tweak="grain">
+      <button data-v="true">On</button>
+      <button data-v="false">Off</button>
+    </div>
+  </div>
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  // ============= Editorial rail scroll-spy =============
+  (function() {
+    const rail = document.querySelector('.edition-rail');
+    if (!rail) return;
+    const items = [...rail.querySelectorAll('.rail-chapters li')];
+    const sections = items.map(li => {
+      const sel = li.getAttribute('data-target');
+      return sel ? document.querySelector(sel) : null;
+    });
+
+    function updateActive() {
+      const y = window.scrollY + window.innerHeight * 0.35;
+      let activeIdx = 0;
+      sections.forEach((sec, i) => {
+        if (!sec) return;
+        const top = sec.offsetTop;
+        if (y >= top) activeIdx = i;
+      });
+      items.forEach((li, i) => li.classList.toggle('is-active', i === activeIdx));
+    }
+
+    window.addEventListener('scroll', updateActive, { passive: true });
+    updateActive();
+  })();
+</script>
+<script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
+<script src="bg.js?v=1"></script>
+<script src="app.js?v=3"></script>
+<script src="enhancements.js?v=3"></script>
+<script src="creation.js?v=3"></script>
+
+</body>
+</html>

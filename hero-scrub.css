@@ -1,0 +1,250 @@
+/* ============================================================
+   HERO SCRUB — painterly bg + image-sequence foreground
+   Scroll pins hero for ~1.5 viewports while the frame scrubs
+   ============================================================ */
+
+.hero-scrub {
+  position: relative;
+  height: 250vh;            /* extra scroll drives the scrub */
+  margin: 0 !important;
+  padding: 0 !important;
+  display: block !important;
+  background: transparent !important;
+  overflow: visible;
+}
+
+/* Sticky inner viewport — all layers absolutely positioned inside */
+.hero-stage {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.hero-bg-layer,
+.hero-fg-layer,
+.hero-title-card,
+.hero-scrub-hint,
+.hero-dust {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* ----- Parallax BG painterly landscape ----- */
+.hero-bg-layer { z-index: 1; pointer-events: none; }
+.hero-bg-img {
+  position: absolute;
+  inset: -8%;               /* overscan for parallax motion */
+  background-image: url('hero-bg.webp');
+  background-size: cover;
+  background-position: center 30%;
+  transform: translate3d(0, 0, 0);
+  transition: transform 0.05s linear;
+  filter: saturate(0.92) contrast(0.98) brightness(0.95);
+}
+.hero-bg-wash {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 30% 70%, rgba(244, 234, 213, 0.0) 30%, rgba(42, 26, 12, 0.35) 100%),
+    linear-gradient(180deg, rgba(244, 234, 213, 0.15) 0%, transparent 20%, transparent 70%, rgba(42, 26, 12, 0.28) 100%);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+/* ----- Foreground image-sequence canvas ----- */
+.hero-fg-layer { z-index: 2; pointer-events: none; }
+#heroScrubCanvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  /* Frames have REAL alpha now (chroma-keyed from black) — no blend mode */
+  transform: translate3d(0, 0, 0);
+  transition: transform 0.05s linear;
+  filter: contrast(1.05) saturate(1.02);
+}
+
+/* ----- Dissolve particle overlay (triggers near end of hero scrub, only for image→image transitions) ----- */
+#heroDissolveCanvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 5;
+  opacity: 0;
+  transition: opacity 0.1s linear;
+  mix-blend-mode: screen;
+}
+
+/* ----- Dust motes floating between bg and fg ----- */
+.hero-dust { z-index: 3; pointer-events: none; overflow: hidden; }
+.hero-dust span {
+  position: absolute;
+  width: 3px; height: 3px;
+  background: radial-gradient(circle, rgba(255, 240, 210, 0.9) 20%, transparent 70%);
+  border-radius: 50%;
+  animation: dust-drift 18s linear infinite;
+  opacity: 0;
+}
+.hero-dust span:nth-child(1) { left: 8%;  top: 80%; animation-duration: 22s; animation-delay:  0s; }
+.hero-dust span:nth-child(2) { left: 18%; top: 60%; animation-duration: 26s; animation-delay: -4s; }
+.hero-dust span:nth-child(3) { left: 32%; top: 75%; animation-duration: 20s; animation-delay: -9s; }
+.hero-dust span:nth-child(4) { left: 48%; top: 85%; animation-duration: 30s; animation-delay: -2s; }
+.hero-dust span:nth-child(5) { left: 62%; top: 65%; animation-duration: 24s; animation-delay: -12s; }
+.hero-dust span:nth-child(6) { left: 72%; top: 80%; animation-duration: 28s; animation-delay: -6s; }
+.hero-dust span:nth-child(7) { left: 84%; top: 70%; animation-duration: 21s; animation-delay: -14s; }
+.hero-dust span:nth-child(8) { left: 92%; top: 82%; animation-duration: 25s; animation-delay: -3s; }
+.hero-dust span:nth-child(9) { left: 14%; top: 88%; animation-duration: 27s; animation-delay: -10s; }
+.hero-dust span:nth-child(10){ left: 78%; top: 90%; animation-duration: 23s; animation-delay: -17s; }
+@keyframes dust-drift {
+  0%   { transform: translate(0, 0) scale(0.8);       opacity: 0; }
+  15%  { opacity: 0.8; }
+  80%  { opacity: 0.5; }
+  100% { transform: translate(40px, -90vh) scale(1.2); opacity: 0; }
+}
+
+/* ----- Overlaid editorial card (title + CTAs) ----- */
+.hero-title-card {
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 60px 36px;
+  pointer-events: none;     /* allow content through, buttons re-enable */
+  color: var(--ink);
+  transition: opacity 0.25s ease;
+}
+.hero-title-card > * { pointer-events: auto; }
+.hero-title-card .kicker {
+  font-family: var(--ff-mono);
+  font-size: 11px;
+  letter-spacing: .32em;
+  text-transform: uppercase;
+  color: var(--rust-2);
+  margin-bottom: 14px;
+  opacity: 0.85;
+}
+.hero-big {
+  font-family: var(--ff-display);
+  font-weight: 300;
+  font-size: clamp(58px, 9vw, 136px);
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  margin: 0 0 20px;
+  color: var(--ink);
+  text-shadow:
+    0 2px 10px rgba(244, 234, 213, 0.6),
+    0 0 40px rgba(244, 234, 213, 0.4);
+}
+.hero-big em {
+  font-style: italic;
+  font-weight: 400;
+  color: var(--rust-2);
+  font-variant: small-caps;
+  letter-spacing: 0.02em;
+}
+.hero-title-card .ornament {
+  width: 120px; height: 10px;
+  margin: 4px 0 18px;
+  color: var(--rust-2);
+  opacity: 0.8;
+}
+.hero-sub {
+  font-family: var(--ff-display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(16px, 1.4vw, 20px);
+  line-height: 1.55;
+  max-width: 520px;
+  color: rgba(42, 26, 12, 0.85);
+  margin: 0 0 22px;
+  text-shadow: 0 1px 6px rgba(244, 234, 213, 0.7);
+}
+.hero-sub em { color: var(--rust-2); font-style: italic; font-weight: 500; }
+.hero-title-card .meta-line {
+  font-family: var(--ff-mono);
+  font-size: 11px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: rgba(42, 26, 12, 0.65);
+  display: flex; gap: 10px;
+  margin-bottom: 28px;
+}
+.hero-title-card .meta-line em {
+  font-family: var(--ff-display);
+  font-style: italic;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--rust-2);
+}
+.hero-ctas { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
+.hero-ctas .btn-edition {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 13px 26px;
+  font-family: var(--ff-body);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: .06em;
+  text-decoration: none;
+  border-radius: 999px;
+  border: 1px solid var(--ink);
+  color: var(--ink);
+  background: rgba(244, 234, 213, 0.75);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  transition: transform 0.2s, background 0.2s;
+}
+.hero-ctas .btn-edition.primary {
+  background: var(--ink);
+  color: var(--cream);
+}
+.hero-ctas .btn-edition:hover { transform: translateY(-1px); }
+
+/* Scrub hint bar at bottom */
+.hero-scrub-hint {
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 0 36px;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+.hero-scrub-hint .hint-label {
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  color: rgba(42, 26, 12, 0.55);
+  margin-bottom: 10px;
+}
+.hero-scrub-hint .hint-bar {
+  width: 180px;
+  height: 2px;
+  background: rgba(42, 26, 12, 0.15);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.hero-scrub-hint .hint-bar-fill {
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(90deg, var(--rust-2), var(--rust));
+  transition: width 0.1s linear;
+}
+
+/* Mobile: tighten up */
+@media (max-width: 720px) {
+  .hero-scrub { height: 200vh; }
+  .hero-title-card { padding: 40px 24px; }
+  .hero-big { font-size: clamp(44px, 12vw, 72px); }
+  .hero-sub { font-size: 15px; max-width: 90%; }
+}

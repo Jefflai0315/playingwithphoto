@@ -51,3 +51,17 @@ Then open `http://localhost:4173`.
 
 - Camera features require HTTPS in production (Vercel/Netlify both provide this).
 - If camera access fails, confirm browser permission settings and reload.
+
+## Booking Form Submissions (easy setup)
+
+Use [Formspree](https://formspree.io/) to collect all enquiries in one dashboard without building a backend.
+
+1. Create a free Formspree account and a new form.
+2. Copy your endpoint URL (looks like `https://formspree.io/f/xxxxabcd`).
+3. In `index.html`, set it on the booking form:
+
+```html
+<form id="bookForm" data-provider="formspree" data-endpoint="https://formspree.io/f/xxxxabcd">
+```
+
+After that, submissions will appear in your Formspree dashboard and can also notify your email.

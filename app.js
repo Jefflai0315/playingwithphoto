@@ -441,3 +441,107 @@ try {
     }
   }, { passive: false });
 })();
+
+// --- Booking form submit ---
+(function () {
+  const form = document.getElementById('bookForm');
+  if (!form) return;
+
+  const submitBtn = form.querySelector('button[type="submit"]');
+  const statusEl = document.getElementById('bookFormStatus');
+  const defaultBtnHtml = submitBtn ? submitBtn.innerHTML : '';
+
+  function setStatus(message, isError = false) {
+    if (!statusEl) return;
+    statusEl.textContent = message;
+    statusEl.style.color = isError ? '#b63a2a' : 'var(--rust)';
+  }
+
+  function mailtoFallback(data) {
+    const subject = encodeURIComponent(`Booking enquiry — ${data.eventType || 'Event'}`);
+    const body = encodeURIComponent(
+      [
+        'Hello Jeff,',
+        '',
+        'I would like to enquire about Playing With Photo.',
+        '',
+        `Name: ${data.name || '-'}`,
+        `Email: ${data.email || '-'}`,
+        `WhatsApp: ${data.whatsapp || '-'}`,
+        `Event type: ${data.eventType || '-'}`,
+        `Event date: ${data.eventDate || '-'}`,
+        `Venue / city: ${data.venue || '-'}`,
+        '',
+        'Thank you!'
+      ].join('\n')
+    );
+    window.location.href = `mailto:hello@playingwithphoto.com?subject=${subject}&body=${body}`;
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    setStatus('');
+
+    const data = {
+      name: form.elements.name?.value?.trim() || '',
+      email: form.elements.email?.value?.trim() || '',
+      whatsapp: form.elements.whatsapp?.value?.trim() || '',
+      eventType: form.elements.eventType?.value?.trim() || '',
+      eventDate: form.elements.eventDate?.value || '',
+      venue: form.elements.venue?.value?.trim() || ''
+    };
+
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending...';
+    }
+
+    try {
+      const endpoint = (form.dataset.endpoint || '').trim();
+      const provider = (form.dataset.provider || '').trim().toLowerCase();
+
+      // If no endpoint is configured yet, open email client as a safe fallback.
+      if (!endpoint) {
+        mailtoFallback(data);
+        setStatus('Opened your email app to send this enquiry.');
+      } else {
+        let res;
+        if (provider === 'formspree' || endpoint.includes('formspree.io')) {
+          const payload = new FormData();
+          payload.append('name', data.name);
+          payload.append('email', data.email);
+          payload.append('whatsapp', data.whatsapp);
+          payload.append('eventType', data.eventType);
+          payload.append('eventDate', data.eventDate);
+          payload.append('venue', data.venue);
+          payload.append('_subject', `Booking enquiry — ${data.eventType || 'Event'}`);
+
+          res = await fetch(endpoint, {
+            method: 'POST',
+            headers: { Accept: 'application/json' },
+            body: payload
+          });
+        } else {
+          res = await fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+          });
+        }
+
+        if (!res.ok) throw new Error(`Request failed with ${res.status}`);
+        setStatus("Thanks — enquiry sent. I'll reply soon.");
+        form.reset();
+      }
+    } catch (err) {
+      console.warn('Booking form error:', err);
+      setStatus('Could not send automatically. Opening email fallback...', true);
+      mailtoFallback(data);
+    } finally {
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = defaultBtnHtml;
+      }
+    }
+  });
+})();

@@ -1,0 +1,22 @@
+{
+  "name": "playingwithphoto",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "python3 -m http.server 5173",
+    "build": "echo \"Static site: no build step required\"",
+    "preview": "python3 -m http.server 4173"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jefflai0315/playingwithphoto.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Jefflai0315/playingwithphoto/issues"
+  },
+  "homepage": "https://github.com/Jefflai0315/playingwithphoto#readme",
+  "description": ""
+}

@@ -4,7 +4,7 @@
 
 (() => {
   const FRAME_COUNT = 61;
-  const FRAME_PATH = (i) => `frames/f_${String(i).padStart(3, '0')}.png`;
+  const FRAME_PATH = (i) => `frames/f_${String(i).padStart(3, '0')}.webp`;
 
   const hero = document.querySelector('.hero-scrub');
   if (!hero) { console.warn('[hero-scrub] no .hero-scrub element found'); return; }

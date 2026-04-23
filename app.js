@@ -436,8 +436,15 @@ try {
   // wheel → horizontal
   board.addEventListener('wheel', (e) => {
     if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
-      board.scrollLeft += e.deltaY;
-      e.preventDefault();
+      const maxScroll = board.scrollWidth - board.clientWidth;
+      const current = board.scrollLeft;
+      const next = Math.max(0, Math.min(maxScroll, current + e.deltaY));
+      const moved = Math.abs(next - current) > 0.5;
+
+      if (moved) {
+        board.scrollLeft = next;
+        e.preventDefault();
+      }
     }
   }, { passive: false });
 })();

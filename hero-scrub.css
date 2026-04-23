@@ -46,6 +46,16 @@
   transition: transform 0.05s linear;
   filter: saturate(0.92) contrast(0.98) brightness(0.95);
 }
+.hero-bg-webgl {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.hero-bg-img.three-ready {
+  background-image: none;
+}
 .hero-bg-wash {
   position: absolute;
   inset: 0;
@@ -63,7 +73,8 @@
   inset: 0;
   width: 100%;
   height: 100%;
-  /* Frames have REAL alpha now (chroma-keyed from black) — no blend mode */
+  /* Sequence frames are rendered over hero bg; lighten removes dark matte cheaply */
+  mix-blend-mode: lighten;
   transform: translate3d(0, 0, 0);
   transition: transform 0.05s linear;
   filter: contrast(1.05) saturate(1.02);

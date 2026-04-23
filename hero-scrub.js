@@ -17,6 +17,80 @@
   const bar = document.getElementById('heroScrubBar');
   const ctx = canvas.getContext('2d');
   const dctx = dissolveCanvas ? dissolveCanvas.getContext('2d') : null;
+  const bgThree = initHeroBgThree(bgImg);
+
+  function initHeroBgThree(host) {
+    if (!host || !window.THREE) return null;
+    const THREE = window.THREE;
+    const scene = new THREE.Scene();
+    const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
+    camera.position.z = 1;
+
+    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.setClearColor(0x000000, 0);
+    renderer.domElement.className = 'hero-bg-webgl';
+    host.appendChild(renderer.domElement);
+
+    const material = new THREE.MeshBasicMaterial({ color: 0xffffff });
+    const mesh = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), material);
+    mesh.scale.set(1.15, 1.15, 1);
+    scene.add(mesh);
+
+    let textureReady = false;
+    let texW = 1;
+    let texH = 1;
+    const loader = new THREE.TextureLoader();
+    loader.load(
+      'hero-bg.png',
+      (texture) => {
+        if ('colorSpace' in texture && THREE.SRGBColorSpace) texture.colorSpace = THREE.SRGBColorSpace;
+        if ('encoding' in texture && THREE.sRGBEncoding) texture.encoding = THREE.sRGBEncoding;
+        texture.minFilter = THREE.LinearFilter;
+        texture.magFilter = THREE.LinearFilter;
+        texture.generateMipmaps = false;
+        texture.wrapS = THREE.ClampToEdgeWrapping;
+        texture.wrapT = THREE.ClampToEdgeWrapping;
+        material.map = texture;
+        material.needsUpdate = true;
+        texW = texture.image?.width || 1;
+        texH = texture.image?.height || 1;
+        textureReady = true;
+        host.classList.add('three-ready');
+        resize();
+      },
+      undefined,
+      () => {
+        // Keep CSS fallback image if texture fails to load.
+      }
+    );
+
+    function resize() {
+      const w = host.clientWidth || window.innerWidth;
+      const h = host.clientHeight || window.innerHeight;
+      renderer.setSize(w, h);
+      if (!textureReady || !material.map) return;
+      const viewAspect = w / h;
+      const texAspect = texW / texH;
+      if (texAspect > viewAspect) {
+        material.map.repeat.set(viewAspect / texAspect, 1);
+        material.map.offset.set((1 - material.map.repeat.x) * 0.5, 0);
+      } else {
+        material.map.repeat.set(1, texAspect / viewAspect);
+        material.map.offset.set(0, (1 - material.map.repeat.y) * 0.5);
+      }
+      material.map.needsUpdate = true;
+    }
+
+    function render(scrollIntoHero, mouseX, mouseY) {
+      if (!textureReady) return;
+      mesh.position.x = mouseX * 0.06;
+      mesh.position.y = (-mouseY * 0.05) + (-scrollIntoHero * 0.0002);
+      renderer.render(scene, camera);
+    }
+
+    return { resize, render };
+  }
 
   // Is next section paper? If so, skip dissolve. Checks bg.js STACKS if available,
   // otherwise detects from .paper-* classes on the next section element.
@@ -90,6 +164,7 @@
   // We sample bright-ish alpha pixels from the current frame to seed emission points.
   const particles = [];
   let emitterPoints = [];
+  const emitterCache = new Map();
 
   function sampleEmitterPoints(idx) {
     // Use the current frame to pick N bright-ish non-transparent points.
@@ -97,8 +172,9 @@
     const img = frames[idx];
     if (!img || !lastFrameRect) return [];
     const { dx, dy, dw, dh } = lastFrameRect;
+    if (emitterCache.has(idx)) return emitterCache.get(idx);
     const points = [];
-    const tries = 800;
+    const tries = 220;
     // Sample in the image's native space then map to canvas space
     const tempC = document.createElement('canvas');
     const SAMPLE_W = 120;
@@ -119,6 +195,7 @@
         points.push({ x: cx, y: cy });
       }
     }
+    emitterCache.set(idx, points);
     return points;
   }
 
@@ -230,11 +307,13 @@
   let targetIdx = 0;
   let currentIdx = 0;
   let scrubProgress = 0;
+  let heroScrollInto = 0;
 
   function updateScrub() {
     const rect = hero.getBoundingClientRect();
     const vh = window.innerHeight;
     const scrollIntoHero = -rect.top;
+    heroScrollInto = scrollIntoHero;
     const scrubRange = hero.offsetHeight - vh;
     const p = Math.max(0, Math.min(1, scrollIntoHero / scrubRange));
     scrubProgress = p;
@@ -248,7 +327,7 @@
     if (bar) bar.style.width = (p * 100) + '%';
     if (hint) hint.style.opacity = p < 0.9 ? 1 : Math.max(0, 1 - (p - 0.9) / 0.1);
 
-    if (bgImg) {
+    if (bgImg && !bgThree) {
       const bgY = scrollIntoHero * 0.25;
       bgImg.style.transform = `translate3d(${mx * 15}px, ${-bgY + my * 10}px, 0) scale(1.05)`;
     }
@@ -277,6 +356,7 @@
   function loop() {
     mx += (tmx - mx) * 0.06;
     my += (tmy - my) * 0.06;
+    updateScrub();
 
     currentIdx += (targetIdx - currentIdx) * 0.2;
     const drawIdx = Math.round(currentIdx);
@@ -286,6 +366,7 @@
       canvas.style.transform =
         `translate3d(${mx * -22}px, ${my * -14}px, 0)`;
     }
+    if (bgThree) bgThree.render(heroScrollInto, mx, my);
 
     // Resample emitter points when we're near the dissolve zone and frame advanced
     if (scrubProgress > 0.5 && drawIdx !== lastSampleFrame && frames[drawIdx]) {
@@ -293,7 +374,6 @@
       lastSampleFrame = drawIdx;
     }
 
-    updateScrub();
     updateAndDrawDissolve(scrubProgress, shouldSkipDissolve());
 
     requestAnimationFrame(loop);
@@ -309,6 +389,7 @@
   window.addEventListener('resize', () => {
     sizeCanvas();
     drawFrame(Math.round(currentIdx));
+    if (bgThree) bgThree.resize();
   });
   window.addEventListener('scroll', updateScrub, { passive: true });
 

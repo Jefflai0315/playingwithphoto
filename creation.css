@@ -537,9 +537,22 @@ body.flash-shake > * { animation: flash-shake .5s cubic-bezier(.36,.07,.19,.97);
 
 /* Mobile */
 @media (max-width: 860px) {
-  .spark-stage { grid-template-columns: 1fr; }
-  .spark-arrow { flex-direction: row; transform: none; }
+  .spark-chapter { padding: 96px 0 82px; }
+  .spark-stage {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-top: 36px;
+    max-width: 340px;
+    margin-inline: auto;
+  }
+  .spark-slot { width: 100%; }
+  .spark-frame { max-width: 250px; margin-inline: auto; }
+  .spark-arrow { flex-direction: row; transform: none; min-width: 0; gap: 10px; }
   .spark-arrow-line { width: 60px; }
+  .spark-arrow-icon { font-size: 22px; }
+  .spark-arrow-label { letter-spacing: .16em; font-size: 9px; }
+  .spark-picker { margin-top: 34px; gap: 8px; }
+  .spark-picker button { padding: 8px 12px; font-size: 12px; }
   .hero-hands .hand { top: 52%; width: 56vw; }
   .hero-title-creation { font-size: clamp(56px, 15vw, 88px); }
 }

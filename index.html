@@ -879,9 +879,20 @@
     background: var(--cream-2);
     border-radius: 999px;
     border: 1px solid rgba(42,26,12,.15);
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    overflow: hidden;
   }
-  .filter-options { display: flex; gap: 6px; flex-wrap: wrap; }
+  .filter-options {
+    display: flex;
+    gap: 6px;
+    flex-wrap: nowrap;
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .filter-options::-webkit-scrollbar { display: none; }
   .filter-options button {
     background: transparent;
     border: 1px solid rgba(42,26,12,.25);
@@ -909,11 +920,19 @@
     display: grid; place-items: center;
     box-shadow: 0 0 0 4px var(--cream), 0 0 0 6px var(--rust);
     transition: transform .15s;
+    flex: 0 0 auto;
+    margin-left: 6px;
   }
   .shutter-btn:hover { transform: scale(1.05); }
   .shutter-btn:active { transform: scale(.94); }
   .shutter-btn svg { width: 24px; height: 24px; fill: currentColor; }
   .shutter-btn[disabled] { opacity: .4; cursor: not-allowed; }
+
+  @media (max-width: 520px) {
+    .demo-controls { padding: 10px 12px; gap: 8px; }
+    .filter-options button { padding: 6px 10px; font-size: 10px; white-space: nowrap; }
+    .shutter-btn { width: 46px; height: 46px; flex: 0 0 auto; }
+  }
 
   /* Result film strip */
   .result-strip {
@@ -1437,6 +1456,8 @@
     .meta-arrow { transform: rotate(90deg); }
     .reel-frames { grid-template-columns: repeat(2, 1fr); }
     .reel-spacer { height: 200vh; }
+    .reel-stage { gap: 28px; max-width: 94vw; }
+    .reel-strip { max-width: 92vw; padding: 12px 10px; }
     .hero-grid, .booth-grid, .about-grid, .book-grid { grid-template-columns: 1fr; }
     .section-head { grid-template-columns: 1fr; gap: 20px; }
     .howit-steps { grid-template-columns: repeat(2, 1fr); }
@@ -1445,6 +1466,20 @@
     .testis, .pricing { grid-template-columns: 1fr; }
     .navlinks { display: none; }
     .hero h1 { font-size: 56px; }
+    #demoGrid { grid-template-columns: 1fr !important; gap: 28px !important; }
+    #demoGrid > * { min-width: 0; }
+    .demo-ui {
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      align-items: stretch;
+    }
+    .demo, .demo-controls, .result-strip, #demoPlaceholder {
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      box-sizing: border-box;
+    }
   }
 
   /* ================================================================
@@ -2048,9 +2083,30 @@
     pointer-events: none;
   }
   @media (max-width: 700px) {
+    #demo { padding: 88px 0 !important; }
+    .filmstrip-wrap { padding: 10px 0; }
+    .filmstrip { gap: 12px; padding: 0 10px; }
+    .polaroid { width: 210px; padding: 10px 10px 44px; }
+    .polaroid .caption { font-size: 18px; bottom: 10px; }
     .corkboard-rail { padding: 28px 48px; gap: 48px; }
     .strip-card { width: 260px; }
     .sticky-note { right: -40px; bottom: -30px; width: 170px; font-size: 15px; }
+  }
+
+  @media (max-width: 520px) {
+    .corkboard { margin: 28px -14px 0; padding: 26px 0 34px; }
+    .corkboard-rail { padding: 18px 28px; gap: 28px; }
+    .strip-card { width: 210px; }
+    .strip-frames { padding: 10px 10px 26px; }
+    .strip-frame { margin-bottom: 6px; }
+    .sticky-note {
+      width: 132px;
+      right: -26px;
+      bottom: -18px;
+      padding: 10px 12px 12px;
+      font-size: 12px;
+    }
+    .sticky-note .note-sig { font-size: 11px; }
   }
 
   /* ===== Ticket-booklet pricing ===== */

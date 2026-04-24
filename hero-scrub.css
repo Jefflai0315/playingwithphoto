@@ -39,7 +39,7 @@
 .hero-bg-img {
   position: absolute;
   inset: -8%;               /* overscan for parallax motion */
-  background-image: url('hero-bg.webp');
+  background-image: url('hero-bg.png');
   background-size: cover;
   background-position: center 30%;
   transform: translate3d(0, 0, 0);

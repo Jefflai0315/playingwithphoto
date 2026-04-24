@@ -8,6 +8,9 @@
 
   const hero = document.querySelector('.hero-scrub');
   if (!hero) { console.warn('[hero-scrub] no .hero-scrub element found'); return; }
+  hero.classList.add('is-loading');
+  const loadStartedAt = performance.now();
+  const MIN_LOADER_MS = 1000;
 
   const canvas = document.getElementById('heroScrubCanvas');
   const dissolveCanvas = document.getElementById('heroDissolveCanvas');
@@ -395,6 +398,12 @@
 
   preload().then(() => {
     init();
+    const elapsed = performance.now() - loadStartedAt;
+    const waitMs = Math.max(0, MIN_LOADER_MS - elapsed);
+    setTimeout(() => {
+      hero.classList.remove('is-loading');
+      hero.classList.add('is-ready');
+    }, waitMs);
     console.log('[hero-scrub] ready — 61 frames loaded');
   });
   const checkFirst = setInterval(() => {

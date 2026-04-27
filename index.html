@@ -1625,6 +1625,16 @@
     height: 100% !important;
     display: block;
   }
+  /* Subtle global atmosphere wash — keeps the canvas warm without fighting
+     per-section scrims. Heavy lifting is done by the per-section ::before
+     scrims defined further down. */
+  #bg-canvas-host::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(180deg, rgba(20,12,6,0.18) 0%, rgba(20,12,6,0.22) 100%);
+  }
   /* Make sections sit ABOVE the bg canvas. All transparent — bg canvas drives everything. */
   body.has-bg-canvas > section,
   body.has-bg-canvas > .torn-edge {
@@ -1633,6 +1643,49 @@
     background: transparent !important;
     background-color: transparent !important;
     background-image: none !important;
+  }
+
+  /* ===== Per-section readable scrims =====
+     Each section originally had its own background tone (cream, ink, rust, …)
+     that was wiped by the transparent rule above. We restore that tone here
+     via a ::before scrim so each section's text reads against the backdrop
+     it was designed for, while the scrolling photos still peek through softly.
+     Tune the alpha to let more/less photo bleed through. */
+  body.has-bg-canvas > section::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+  }
+  /* Hero (own bg layers) and metamorphosis (own .meta-bg) opt out */
+  body.has-bg-canvas > #hero::before,
+  body.has-bg-canvas > #metamorphosis::before { display: none; }
+
+  /* CREAM scrims — sections designed with dark ink text on light paper */
+  body.has-bg-canvas > #spark::before,
+  body.has-bg-canvas > #how::before,
+  body.has-bg-canvas > #demo::before,
+  body.has-bg-canvas > #usecases::before,
+  body.has-bg-canvas > #testimonials::before {
+    background: rgba(244, 234, 213, 0.82);
+  }
+  /* Slightly warmer "aged paper" for the chapters originally on var(--paper) */
+  body.has-bg-canvas > #booth::before,
+  body.has-bg-canvas > #pricing::before,
+  body.has-bg-canvas > #about::before {
+    background: rgba(235, 220, 183, 0.85);
+  }
+  /* DARK scrims — sections designed with cream text on ink */
+  body.has-bg-canvas > #reel::before {
+    background: linear-gradient(180deg, rgba(10,6,4,0.92) 0%, rgba(20,12,6,0.88) 100%);
+  }
+  body.has-bg-canvas > #styles::before {
+    background: rgba(15, 9, 5, 0.90);
+  }
+  /* RUST scrim — book chapter's left column has cream text on rust */
+  body.has-bg-canvas > #book::before {
+    background: rgba(178, 95, 46, 0.90);
   }
   /* Kill torn-paper dividers — bg canvas handles transitions with burn-edge */
   body.has-bg-canvas .torn-edge { display: none !important; }
@@ -1647,12 +1700,24 @@
   body.has-bg-canvas .chapter-numeral {
     text-shadow: 0 1px 2px rgba(28, 14, 8, 0.25), 0 0 14px rgba(244, 234, 213, 0.35);
   }
-  /* Dark text on bright bgs needs different shadow */
-  body.has-bg-canvas .testis-chapter h2,
-  body.has-bg-canvas .testis-chapter p,
-  body.has-bg-canvas #about h2,
-  body.has-bg-canvas #about p {
-    text-shadow: 0 1px 2px rgba(244, 234, 213, 0.55);
+  /* Light/cream sections have dark text — give it a soft light halo instead */
+  body.has-bg-canvas #spark h1, body.has-bg-canvas #spark h2, body.has-bg-canvas #spark h3,
+  body.has-bg-canvas #spark p, body.has-bg-canvas #spark li, body.has-bg-canvas #spark .eyebrow,
+  body.has-bg-canvas #how h1, body.has-bg-canvas #how h2, body.has-bg-canvas #how h3,
+  body.has-bg-canvas #how p, body.has-bg-canvas #how li, body.has-bg-canvas #how .eyebrow,
+  body.has-bg-canvas #demo h1, body.has-bg-canvas #demo h2, body.has-bg-canvas #demo h3,
+  body.has-bg-canvas #demo p, body.has-bg-canvas #demo li, body.has-bg-canvas #demo .eyebrow,
+  body.has-bg-canvas #booth h1, body.has-bg-canvas #booth h2, body.has-bg-canvas #booth h3,
+  body.has-bg-canvas #booth p, body.has-bg-canvas #booth li, body.has-bg-canvas #booth .eyebrow,
+  body.has-bg-canvas #usecases h1, body.has-bg-canvas #usecases h2, body.has-bg-canvas #usecases h3,
+  body.has-bg-canvas #usecases p, body.has-bg-canvas #usecases li, body.has-bg-canvas #usecases .eyebrow,
+  body.has-bg-canvas #testimonials h1, body.has-bg-canvas #testimonials h2, body.has-bg-canvas #testimonials h3,
+  body.has-bg-canvas #testimonials p, body.has-bg-canvas #testimonials li, body.has-bg-canvas #testimonials .eyebrow,
+  body.has-bg-canvas #pricing h1, body.has-bg-canvas #pricing h2, body.has-bg-canvas #pricing h3,
+  body.has-bg-canvas #pricing p, body.has-bg-canvas #pricing li, body.has-bg-canvas #pricing .eyebrow,
+  body.has-bg-canvas #about h1, body.has-bg-canvas #about h2, body.has-bg-canvas #about h3,
+  body.has-bg-canvas #about p, body.has-bg-canvas #about li, body.has-bg-canvas #about .eyebrow {
+    text-shadow: 0 1px 1px rgba(244, 234, 213, 0.45);
   }
 
   body.has-bg-canvas .edition-rail {
@@ -3265,17 +3330,17 @@
         <span class="eyebrow" style="color: var(--highlight);">Let's make a memory · 009</span>
         <h2>Book the<br/>booth. <em>Today.</em></h2>
         <p class="lede">
-          Reply within 24 hours. Setup is included. We travel across Singapore and to
-          regional events in Malaysia, Indonesia, and Thailand.
+          Reply within 24 hours. Setup is included. Currently serving
+          <b>Singapore</b> and <b>Johor Bahru</b>.
         </p>
         <div style="margin-top: 48px; display: flex; gap: 36px; flex-wrap: wrap;">
           <div>
             <div style="font-family:var(--ff-mono); font-size: 11px; letter-spacing: .2em; opacity:.7; text-transform:uppercase;">Email</div>
-            <div style="font-family:var(--ff-display); font-style: italic; font-size: 24px; margin-top: 4px;"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="731916151533031f120a1a1d14041a071b5d031b1c071c">[email&#160;protected]</a></div>
+            <div style="font-family:var(--ff-display); font-style: italic; font-size: 24px; margin-top: 4px;"><a href="mailto:pencilwithjoy@gmail.com">pencilwithjoy@gmail.com</a></div>
           </div>
           <div>
             <div style="font-family:var(--ff-mono); font-size: 11px; letter-spacing: .2em; opacity:.7; text-transform:uppercase;">WhatsApp</div>
-            <div style="font-family:var(--ff-display); font-style: italic; font-size: 24px; margin-top: 4px;">+65 8123 4567</div>
+            <div style="font-family:var(--ff-display); font-style: italic; font-size: 24px; margin-top: 4px;"><a href="https://wa.me/6591866059" target="_blank" rel="noopener">+65 9186 6059</a></div>
           </div>
         </div>
       </div>

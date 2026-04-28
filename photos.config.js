@@ -1,0 +1,140 @@
+/* ============================================================
+   PHOTOS CONFIG
+   ============================================================
+   This is the ONE file you edit to plug in real photos.
+
+   How to use:
+   1. Drop your image files into the matching subfolder of /photos.
+      WebP or JPG both work. Aim for ~1200px on the long side.
+   2. Below, list each filename relative to /photos (e.g. 'hero/01.webp').
+   3. Save, refresh the page. That's it.
+
+   Any section left with an empty list / empty string keeps showing the
+   existing drawn cartoon placeholder, so you can fill these in over time.
+   ============================================================ */
+
+window.PHOTO_CONFIG = {
+  // Root folder for all photos. Don't change unless you move the folder.
+  base: "photos",
+
+  // ─── HERO FLOATING STRIPS ───────────────────────────────────
+  // The 2 vertical filmstrips on either side of the hero title.
+  // List as many photos as you like; they cycle.
+  hero: {
+    files: [
+      // 'hero/01.webp',
+      // 'hero/02.webp',
+      // 'hero/03.webp',
+      // 'hero/04.webp',
+      // 'hero/05.webp',
+      // 'hero/06.webp',
+    ],
+  },
+
+  // ─── STYLES FILMSTRIP ───────────────────────────────────────
+  // The horizontal scrolling polaroids under "Five films, one roll."
+  // One photo per filter style. Same photo in different filters is fine —
+  // or use different shots to show variety.
+  styles: {
+    sepia: "", // e.g. 'styles/sepia.webp'
+    polaroid: "", // e.g. 'styles/polaroid.webp'
+    bw: "", // e.g. 'styles/bw.webp'
+    kodachrome: "", // e.g. 'styles/kodachrome.webp'
+  },
+
+  // ─── REEL STRIP ─────────────────────────────────────────────
+  // The 4 frames on the cinema sticky panel (id #reel section).
+  // Provide EXACTLY 4 files for it to switch on.
+  reel: {
+    files: [
+      "spark/jenmike.png",
+      "reel/jenmike-vangogh1.png",
+      "spark/jenmike-vangogh.png",
+      "reel/jenmike-keepsake.png",
+    ],
+  },
+
+  // ─── SPARK BEFORE / AFTER GALLERY ───────────────────────────
+  // ONE entry per painter. Clicking a painter button on the page jumps to
+  // that painter's photo. Auto-rotate cycles through the painters in order.
+  //
+  //   'before' = path to your real photo (REQUIRED)
+  //   'after'  = path to your AI-painted version (OPTIONAL — falls back to
+  //              the SVG painting placeholder until you add it)
+  //   'name'   = caption shown under the "before" frame
+  //
+  // Tip: as you generate each painted version (e.g. with Midjourney /
+  // ChatGPT image-gen), drop it into /photos/spark/ and uncomment the
+  // 'after' line for that painter. No code changes needed.
+  spark: {
+    byPainter: {
+      vangogh: {
+        before: "spark/jenmike.png",
+        after: "spark/jenmike-vangogh.png",
+        name: "Jen & Mike",
+      },
+      monet: {
+        before: "spark/myra.png",
+        after: "spark/myra-monet1.png",
+        name: "Myra Sweet 16",
+      },
+      picasso: {
+        before: "spark/co.png",
+        after: "spark/co-picasso.png",
+        name: "Studio session",
+      },
+      warhol: {
+        before: "spark/olivebirthday.png",
+        after: "spark/olivebirthday-warhol.png",
+        name: "Pop duo Birthday",
+      },
+      hokusai: {
+        before: "spark/jenmikeguests.png",
+        after: "spark/jenmikeguests-hokusai.png",
+        name: "Wave portrait",
+      },
+    },
+  },
+
+  // ─── METAMORPHOSIS SECTION ──────────────────────────────────
+  // The 4 strip frames that get re-painted as you click painters.
+  // Provide EXACTLY 4 files.
+  meta: {
+    files: [
+      "spark/jenmikeguests.png",
+      "spark/jenmikeguests-hokusai.png",
+      "spark/jenmikeguests.png",
+      "spark/jenmikeguests-hokusai.png",
+    ],
+  },
+};
+
+/* ============================================================
+   Tiny helper API used by app.js / enhancements.js / creation.js.
+   You don't need to touch anything below this line.
+   ============================================================ */
+(function () {
+  const cfg = window.PHOTO_CONFIG || {};
+  const base = (cfg.base || "photos").replace(/\/+$/, "");
+
+  function resolve(rel) {
+    if (!rel) return null;
+    if (/^(https?:|data:|\/)/.test(rel)) return rel;
+    return base + "/" + rel.replace(/^\/+/, "");
+  }
+  function asCss(rel) {
+    const u = resolve(rel);
+    return u ? 'url("' + u + '")' : null;
+  }
+
+  window.PhotoLib = {
+    base,
+    resolve,
+    asCss,
+    heroPhotos: () => (cfg.hero?.files || []).map(resolve).filter(Boolean),
+    stylePhoto: (key) => asCss(cfg.styles?.[key]),
+    reelPhotos: () => (cfg.reel?.files || []).map(asCss).filter(Boolean),
+    metaPhotos: () => (cfg.meta?.files || []).map(asCss).filter(Boolean),
+    sparkByPainter: () => cfg.spark?.byPainter || {},
+  };
+})();

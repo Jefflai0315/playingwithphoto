@@ -391,6 +391,70 @@
   color: rgba(42,26,12,.5);
 }
 
+/* ─── Prompt card: shows the exact prompt for the active painter ──────── */
+.spark-prompt {
+  --prompt-accent: #8a2e14;
+  position: relative;
+  margin: 32px auto 0;
+  max-width: 640px;
+  padding: 22px 28px 24px;
+  background: #fbf3df;
+  border-radius: 4px;
+  box-shadow:
+    0 1px 0 rgba(42,26,12,.06),
+    0 14px 30px rgba(42,26,12,.10);
+  border-left: 4px solid var(--prompt-accent);
+  text-align: left;
+  transition: border-color .5s ease, background .5s ease;
+}
+.spark-prompt::before {
+  /* tiny strip of "tape" at the top-left to feel like a clipped note */
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: 22px;
+  width: 56px;
+  height: 18px;
+  background: rgba(255,255,255,.55);
+  border: 1px solid rgba(42,26,12,.08);
+  transform: rotate(-3deg);
+  box-shadow: 0 2px 4px rgba(42,26,12,.08);
+}
+.spark-prompt-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  color: rgba(42,26,12,.55);
+  margin-bottom: 12px;
+}
+.spark-prompt-pin {
+  color: var(--prompt-accent);
+  font-size: 12px;
+  transition: color .5s ease;
+}
+.spark-prompt-text {
+  margin: 0;
+  font-family: var(--ff-display, Georgia, serif);
+  font-style: italic;
+  font-size: 19px;
+  line-height: 1.5;
+  color: #2a1a0c;
+  transition: opacity .35s ease;
+}
+.spark-prompt-text.is-swapping { opacity: 0; }
+
+/* Painter-specific accent — the left edge + pin pick up the painter's color */
+body[data-painter="vangogh"] .spark-prompt { --prompt-accent: #f4b731; }
+body[data-painter="monet"]   .spark-prompt { --prompt-accent: #6f9bd0; }
+body[data-painter="picasso"] .spark-prompt { --prompt-accent: #d87a3c; }
+body[data-painter="warhol"]  .spark-prompt { --prompt-accent: #ff2d88; }
+body[data-painter="hokusai"] .spark-prompt { --prompt-accent: #1e5aa8; }
+
+
 /* Painter filters applied to the AFTER image */
 body[data-painter="vangogh"] .spark-painting { filter: saturate(2.2) contrast(1.2) brightness(1.05) hue-rotate(-12deg); }
 body[data-painter="monet"] .spark-painting { filter: blur(.4px) saturate(1.3) brightness(1.12) contrast(.95) hue-rotate(15deg); }
@@ -553,6 +617,8 @@ body.flash-shake > * { animation: flash-shake .5s cubic-bezier(.36,.07,.19,.97);
   .spark-arrow-label { letter-spacing: .16em; font-size: 9px; }
   .spark-picker { margin-top: 34px; gap: 8px; }
   .spark-picker button { padding: 8px 12px; font-size: 12px; }
+  .spark-prompt { padding: 20px 20px 22px; margin-top: 26px; }
+  .spark-prompt-text { font-size: 16px; }
   .hero-hands .hand { top: 52%; width: 56vw; }
   .hero-title-creation { font-size: clamp(56px, 15vw, 88px); }
 }

@@ -52,34 +52,53 @@ function fakePortraitSVG(i, sepia = true) {
   `;
 }
 
-// Populate hero floating strips
-document.querySelectorAll('.floating-strip .frame').forEach((el, i) => {
-  el.innerHTML = fakePortraitSVG(parseInt(el.dataset.portrait || i));
-});
+// Populate hero floating strips — real photos from photos.config.js if provided,
+// otherwise fall back to the drawn SVG portraits above.
+(() => {
+  const heroPhotos = window.PhotoLib?.heroPhotos() || [];
+  document.querySelectorAll('.floating-strip .frame').forEach((el, i) => {
+    const idx = parseInt(el.dataset.portrait || i);
+    if (heroPhotos.length) {
+      const src = heroPhotos[idx % heroPhotos.length];
+      el.innerHTML = '';
+      el.style.backgroundImage = `url("${src}")`;
+      el.style.backgroundSize = 'cover';
+      el.style.backgroundPosition = 'center';
+    } else {
+      el.innerHTML = fakePortraitSVG(idx);
+    }
+  });
+})();
 
 // --- Style gallery filmstrip ---
+// Each style has a `key` matching photos.config.js → styles.<key>.
+// If a photo is provided in the config, we use that real photo (with the
+// CSS filter on top); otherwise we fall back to the drawn SVG portrait.
 const STYLES = [
-  { name: '70s Kodak', caption: 'Summer of \'78', filter: 'sepia(.5) saturate(1.4) contrast(.95) hue-rotate(-8deg)' },
-  { name: 'Polaroid', caption: 'Say cheese', filter: 'sepia(.2) saturate(1.3) contrast(1.05) brightness(1.05)' },
-  { name: 'B&W', caption: 'The classics', filter: 'grayscale(1) contrast(1.2) brightness(.95)' },
-  { name: 'Kodachrome', caption: 'Golden hour', filter: 'sepia(.3) saturate(1.6) contrast(1.1) hue-rotate(-15deg)' },
-  { name: 'Studio Sepia', caption: 'Portrait No. 4', filter: 'sepia(1) contrast(1.1) brightness(.95)' },
-  { name: '70s Kodak', caption: 'On the road', filter: 'sepia(.5) saturate(1.4) contrast(.95) hue-rotate(-8deg)' },
-  { name: 'Polaroid', caption: 'Forever 25', filter: 'sepia(.2) saturate(1.3) contrast(1.05) brightness(1.05)' },
-  { name: 'B&W', caption: 'Midnight', filter: 'grayscale(1) contrast(1.2) brightness(.95)' },
+  { key: 'sepia',      name: '70s Kodak',    caption: 'Summer of \'78',  filter: 'sepia(.5) saturate(1.4) contrast(.95) hue-rotate(-8deg)' },
+  { key: 'polaroid',   name: 'Polaroid',     caption: 'Say cheese',      filter: 'sepia(.2) saturate(1.3) contrast(1.05) brightness(1.05)' },
+  { key: 'bw',         name: 'B&W',          caption: 'The classics',    filter: 'grayscale(1) contrast(1.2) brightness(.95)' },
+  { key: 'kodachrome', name: 'Kodachrome',   caption: 'Golden hour',     filter: 'sepia(.3) saturate(1.6) contrast(1.1) hue-rotate(-15deg)' },
+  { key: 'sepia',      name: 'Studio Sepia', caption: 'Portrait No. 4',  filter: 'sepia(1) contrast(1.1) brightness(.95)' },
+  { key: 'sepia',      name: '70s Kodak',    caption: 'On the road',     filter: 'sepia(.5) saturate(1.4) contrast(.95) hue-rotate(-8deg)' },
+  { key: 'polaroid',   name: 'Polaroid',     caption: 'Forever 25',      filter: 'sepia(.2) saturate(1.3) contrast(1.05) brightness(1.05)' },
+  { key: 'bw',         name: 'B&W',          caption: 'Midnight',        filter: 'grayscale(1) contrast(1.2) brightness(.95)' },
 ];
 
 const filmstripEl = document.getElementById('styleFilmstrip');
 if (filmstripEl) {
-  // Double for seamless loop
   const all = [...STYLES, ...STYLES];
   filmstripEl.innerHTML = all.map((s, i) => {
     const rot = (Math.sin(i * 1.3) * 3).toFixed(2);
+    const photoCss = window.PhotoLib?.stylePhoto(s.key);
+    const inner = photoCss
+      ? `<div style="background-image:${photoCss};background-size:cover;background-position:center;width:100%;height:100%;"></div>`
+      : fakePortraitSVG(i, false);
     return `
       <div class="polaroid" style="--r:${rot}deg;">
         <span class="tag">${s.name}</span>
         <div class="img" style="filter:${s.filter};">
-          ${fakePortraitSVG(i, false)}
+          ${inner}
         </div>
         <div class="caption">${s.caption}</div>
       </div>

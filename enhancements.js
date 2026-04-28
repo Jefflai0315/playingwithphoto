@@ -26,9 +26,18 @@ function buildFaceBG(bg, hair, smile) {
 }
 
 const rootDoc = document.documentElement;
-SAMPLE_BG.forEach((bg, i) => rootDoc.style.setProperty(`--reel-img-${i}`, bg));
+
+// REEL: 4 frames in the cinema sticky panel. Use real photos from
+// photos.config.js if exactly 4 are provided, else fall back to SVG faces.
+const reelFromConfig = window.PhotoLib?.reelPhotos() || [];
+const reelImages = reelFromConfig.length === 4 ? reelFromConfig : SAMPLE_BG;
+reelImages.forEach((bg, i) => rootDoc.style.setProperty(`--reel-img-${i}`, bg));
+
+// METAMORPHOSIS: same idea — 4 strip frames; use real photos if 4 are configured.
+const metaFromConfig = window.PhotoLib?.metaPhotos() || [];
+const metaImages = metaFromConfig.length === 4 ? metaFromConfig : SAMPLE_BG;
 document.querySelectorAll('[data-meta-src]').forEach(el => {
-  el.style.backgroundImage = SAMPLE_BG[parseInt(el.dataset.metaSrc)];
+  el.style.backgroundImage = metaImages[parseInt(el.dataset.metaSrc)];
 });
 
 // ===== HERO LENS (disabled — creation.js owns the webcam now) =====

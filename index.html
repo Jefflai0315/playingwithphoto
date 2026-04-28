@@ -1374,6 +1374,63 @@
     border-top: 1px solid rgba(255,255,255,.12);
   }
 
+  .meta-keepsake {
+    margin-top: 90px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    text-align: center;
+  }
+  .meta-keepsake-eyebrow {
+    font-family: var(--ff-mono);
+    font-size: 11px;
+    letter-spacing: .25em;
+    text-transform: uppercase;
+    color: #ffd88a;
+    opacity: .85;
+  }
+  .meta-keepsake-title {
+    font-family: var(--ff-display);
+    font-size: clamp(28px, 4vw, 44px);
+    line-height: 1.1;
+    color: #fff;
+    margin: 0;
+    max-width: 22ch;
+  }
+  .meta-keepsake-title em {
+    font-family: var(--ff-script);
+    font-style: normal;
+    color: #ffd88a;
+  }
+  .meta-keepsake-frame {
+    margin-top: 14px;
+    max-width: 520px;
+    width: 100%;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow:
+      0 40px 100px rgba(0,0,0,.55),
+      0 0 60px rgba(255,216,138,.18),
+      0 0 0 1px rgba(255,216,138,.15);
+    transform: rotate(-1.2deg);
+    transition: transform .6s ease;
+  }
+  .meta-keepsake-frame:hover { transform: rotate(0deg) translateY(-4px); }
+  .meta-keepsake-frame img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .meta-keepsake-caption {
+    font-family: var(--ff-display);
+    font-style: italic;
+    color: rgba(255,255,255,.7);
+    max-width: 46ch;
+    margin: 4px 0 0;
+    font-size: 16px;
+  }
+
   /* Meta variants (applied to .meta-after-img via body[data-meta=X]) — FAMOUS PAINTERS */
   body[data-meta="vintage"] .meta-after-img { filter: sepia(.8) saturate(1.3) contrast(1.1) brightness(.92) hue-rotate(-8deg); }
 
@@ -3337,6 +3394,15 @@
       <a href="#book" class="btn" style="background:#ffd88a; color:#1a0f2a; border-color:#ffd88a; box-shadow: 0 4px 0 #c09050;">Book the full kit
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
       </a>
+    </div>
+
+    <div class="meta-keepsake reveal">
+      <span class="meta-keepsake-eyebrow">…and then it becomes this</span>
+      <h3 class="meta-keepsake-title">A real <em>keepsake</em> — gold frame, in your hand.</h3>
+      <div class="meta-keepsake-frame">
+        <img src="photos/reel/jenmike-keepsake.png" alt="Van Gogh-style keepsake portrait of Jen and Mike in an ornate gold frame" loading="lazy" />
+      </div>
+      <p class="meta-keepsake-caption">Every Van&nbsp;Gogh strip can be turned into a hand-finished mini portrait. One for the album, one for the mantelpiece.</p>
     </div>
   </div>
 </section>

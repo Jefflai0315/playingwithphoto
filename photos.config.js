@@ -33,13 +33,22 @@ window.PHOTO_CONFIG = {
 
   // ─── STYLES FILMSTRIP ───────────────────────────────────────
   // The horizontal scrolling polaroids under "Five films, one roll."
-  // One photo per filter style. Same photo in different filters is fine —
-  // or use different shots to show variety.
+  // One photo per chip / look. Use the SAME photo in all 5 to show
+  // a strong before/after of one shot under different "films",
+  // or use 5 different shots to show variety.
+  //
+  // Keys map to the 5 chips on the page:
+  //   kodak      → "70s Kodak"          caption: "Summer of '78"
+  //   bw         → "Silver Gelatin B&W" caption: "The classics"
+  //   polaroid   → "Polaroid 600"       caption: "Say cheese"
+  //   kodachrome → "Kodachrome Slide"   caption: "Golden hour"
+  //   sepia      → "Studio Sepia"       caption: "Portrait No. 4"
   styles: {
-    sepia: "", // e.g. 'styles/sepia.webp'
-    polaroid: "", // e.g. 'styles/polaroid.webp'
-    bw: "", // e.g. 'styles/bw.webp'
-    kodachrome: "", // e.g. 'styles/kodachrome.webp'
+    kodak: "styles/summerof78.png", // e.g. 'styles/kodak.webp'
+    bw: "styles/classic.png", // e.g. 'styles/bw.webp'
+    polaroid: "styles/saycheese.png", // e.g. 'styles/polaroid.webp'
+    kodachrome: "styles/goldenhour.png", // e.g. 'styles/kodachrome.webp'
+    sepia: "styles/portraitno4.png", // e.g. 'styles/sepia.webp'
   },
 
   // ─── REEL STRIP ─────────────────────────────────────────────
@@ -124,7 +133,9 @@ window.PHOTO_CONFIG = {
   }
   function asCss(rel) {
     const u = resolve(rel);
-    return u ? 'url("' + u + '")' : null;
+    // Use SINGLE quotes inside url(...) so the result is safe to embed inside
+    // a double-quoted HTML style attribute (e.g. style="background-image:${...}").
+    return u ? "url('" + u + "')" : null;
   }
 
   window.PhotoLib = {

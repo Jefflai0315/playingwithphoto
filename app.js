@@ -71,18 +71,16 @@ function fakePortraitSVG(i, sepia = true) {
 })();
 
 // --- Style gallery filmstrip ---
-// Each style has a `key` matching photos.config.js → styles.<key>.
-// If a photo is provided in the config, we use that real photo (with the
-// CSS filter on top); otherwise we fall back to the drawn SVG portrait.
+// One entry per chip on the page. Each `key` maps to photos.config.js →
+// styles.<key>. If a photo is configured, we use it (with the CSS filter
+// on top); otherwise we fall back to the drawn SVG portrait.
+// Keep this array in the SAME order as the chip buttons in #styles.
 const STYLES = [
-  { key: 'sepia',      name: '70s Kodak',    caption: 'Summer of \'78',  filter: 'sepia(.5) saturate(1.4) contrast(.95) hue-rotate(-8deg)' },
-  { key: 'polaroid',   name: 'Polaroid',     caption: 'Say cheese',      filter: 'sepia(.2) saturate(1.3) contrast(1.05) brightness(1.05)' },
-  { key: 'bw',         name: 'B&W',          caption: 'The classics',    filter: 'grayscale(1) contrast(1.2) brightness(.95)' },
-  { key: 'kodachrome', name: 'Kodachrome',   caption: 'Golden hour',     filter: 'sepia(.3) saturate(1.6) contrast(1.1) hue-rotate(-15deg)' },
-  { key: 'sepia',      name: 'Studio Sepia', caption: 'Portrait No. 4',  filter: 'sepia(1) contrast(1.1) brightness(.95)' },
-  { key: 'sepia',      name: '70s Kodak',    caption: 'On the road',     filter: 'sepia(.5) saturate(1.4) contrast(.95) hue-rotate(-8deg)' },
-  { key: 'polaroid',   name: 'Polaroid',     caption: 'Forever 25',      filter: 'sepia(.2) saturate(1.3) contrast(1.05) brightness(1.05)' },
-  { key: 'bw',         name: 'B&W',          caption: 'Midnight',        filter: 'grayscale(1) contrast(1.2) brightness(.95)' },
+  { key: 'kodak',      name: '70s Kodak',    caption: "Summer of '78",  filter: 'sepia(.5) saturate(1.4) contrast(.95) hue-rotate(-8deg)' },
+  { key: 'bw',         name: 'B&W',          caption: 'The classics',   filter: 'grayscale(1) contrast(1.2) brightness(.95)' },
+  { key: 'polaroid',   name: 'Polaroid',     caption: 'Say cheese',     filter: 'sepia(.2) saturate(1.3) contrast(1.05) brightness(1.05)' },
+  { key: 'kodachrome', name: 'Kodachrome',   caption: 'Golden hour',    filter: 'sepia(.15) saturate(1.15) contrast(1.04) hue-rotate(-6deg)' },
+  { key: 'sepia',      name: 'Studio Sepia', caption: 'Portrait No. 4', filter: 'sepia(1) contrast(1.1) brightness(.95)' },
 ];
 
 const filmstripEl = document.getElementById('styleFilmstrip');

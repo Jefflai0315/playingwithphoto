@@ -116,6 +116,33 @@ window.PHOTO_CONFIG = {
       "spark/jenmikeguests-hokusai.png",
     ],
   },
+
+  // ─── KIND WORDS / TESTIMONIALS ──────────────────────────────
+  // Each testimonial card on the cork-board is a 4-frame photo strip.
+  // For each card, list 1–4 photo paths:
+  //   - Give 1 path  → that photo fills all 4 frames.
+  //   - Give 4 paths → each frame gets its own photo (true filmstrip feel).
+  //   - Give 2 or 3  → they cycle to fill the 4 slots.
+  //   - Leave empty  → the original colored gradient placeholder stays.
+  //
+  // Keys map to the cards on the page (in display order):
+  //   wedding   → Priya & Aaron
+  //   brand     → Marcus L. · Aesop SG
+  //   sixtieth  → Lee Wei Ling · 60th birthday
+  //   gala      → Sophie K. · NGS Gala
+  //   bday      → Carla M. · Manila
+  testimonials: {
+    wedding: [
+      "testimonials/priya1.png",
+      "testimonials/priya2.png",
+      "testimonials/priya3.png",
+      "testimonials/priya4.png",
+    ], // e.g. ["testimonials/priya-1.jpg", "testimonials/priya-2.jpg"]
+    brand: ["testimonials/aesop.png"],
+    sixtieth: ["testimonials/60dad1.png"],
+    gala: ["testimonials/gala.png"],
+    bday: ["testimonials/bday.png"],
+  },
 };
 
 /* ============================================================
@@ -147,5 +174,17 @@ window.PHOTO_CONFIG = {
     reelPhotos: () => (cfg.reel?.files || []).map(asCss).filter(Boolean),
     metaPhotos: () => (cfg.meta?.files || []).map(asCss).filter(Boolean),
     sparkByPainter: () => cfg.spark?.byPainter || {},
+    // Returns up to 4 CSS url() values for a given testimonial card key.
+    // 1 photo  → repeated 4×.   2 photos → A,B,A,B.   3 → A,B,C,A.   4 → as-is.
+    testimonialPhotos: (key) => {
+      const list = (cfg.testimonials?.[key] || []).map(asCss).filter(Boolean);
+      if (list.length === 0) return [];
+      const out = [];
+      for (let i = 0; i < 4; i++) out.push(list[i % list.length]);
+      return out;
+    },
+    // Returns raw configured photo list for layout decisions.
+    testimonialSourcePhotos: (key) =>
+      (cfg.testimonials?.[key] || []).map(asCss).filter(Boolean),
   };
 })();

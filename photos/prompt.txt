@@ -1,0 +1,25 @@
+🎨 1. Van Gogh Style (Expressive, Emotional, Swirling)
+Core idea: movement, texture, emotional lighting
+Prompt:
+“Transform this image into a Van Gogh–inspired painting with expressive swirling brushstrokes, thick impasto texture, and dramatic lighting. Use vibrant blues, yellows, and warm contrasts. The background should feel alive and flowing, with motion in the sky and surroundings. Faces remain recognizable but painterly and emotional.”
+🌸 2. Monet Style (Soft, Impressionist, Dreamy)
+Core idea: light, softness, atmosphere
+Prompt:
+“Render this scene in a Monet-inspired impressionist style with soft brushstrokes, pastel tones, and diffused lighting. Create a dreamy, organic background with blended colors and natural textures. Keep details loose and slightly blurred, focusing on light, mood, and a gentle, joyful atmosphere.”
+🧩 3. Picasso Style (Cubism, Abstract Faces)
+Core idea: geometric abstraction, multiple perspectives
+Prompt:
+“Reimagine this image in a Picasso-inspired cubist style. Break faces and bodies into geometric shapes and multiple perspectives, with abstract and asymmetrical features. Use bold, contrasting colors and strong composition. Emphasize expressive distortion while keeping each person distinguishable.”
+🌊 4. Hokusai Style (Japanese Woodblock, Graphic Waves)
+Core idea: composition + storytelling + stylized nature
+Prompt:
+“Transform this scene into a Hokusai-inspired Japanese woodblock print. Use clean lines, flat color blocks, and stylized patterns. Place the subjects in a dynamic composition (e.g., on a boat under a large wave), with flowing water, rhythmic shapes, and a strong sense of movement and storytelling.”
+🎨 5. Warhol Style (Pop Art, Flat, Graphic)
+Core idea: bold, flat, iconic
+Prompt:
+“Convert this image into a Warhol-inspired pop art portrait with flat color blocks, minimal shading, and strong black outlines. Use bold, high-contrast colors (e.g., pink, yellow, blue). Simplify facial features while keeping expressions clear. Add slight screen-print texture and keep the composition clean and graphic.”
+✨ Pro Tip (this is what makes your results better)
+You can upgrade any of these prompts by adding:
+“high-quality composition, balanced framing”
+“natural but stylized skin tones”
+“artistic but recognizable likeness”

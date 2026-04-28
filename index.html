@@ -697,6 +697,12 @@
   }
   .about-portrait .img { width: 100%; height: 100%; background: var(--tan); overflow: hidden; position: relative; }
   .about-portrait .img svg { width: 100%; height: 100%; }
+  .about-portrait .img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
   .about-portrait .label {
     position: absolute; bottom: 22px; left: 0; right: 0;
     text-align: center;
@@ -2075,6 +2081,25 @@
     box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1);
   }
   .strip-frame:last-child { margin-bottom: 0; }
+  .strip-card.single-photo .strip-frames {
+    background: transparent;
+    padding: 0;
+    border-radius: 0;
+  }
+  .strip-card.single-photo .strip-frame,
+  .strip-card.single-photo .tape,
+  .strip-card.single-photo .pushpin {
+    display: none;
+  }
+  .strip-card.single-photo .strip-single-photo {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+    border-radius: 0;
+  }
   .strip-label {
     position: absolute;
     top: 8px; left: 8px;
@@ -3003,7 +3028,7 @@
     <!-- Cork board of pinned photo strips with handwritten notes taped on -->
     <div class="corkboard reveal" id="testiBoard">
       <div class="corkboard-rail">
-        <div class="strip-card" style="--r:-4deg; --x:0;">
+        <div class="strip-card" data-strip="wedding" style="--r:-4deg; --x:0;">
           <div class="strip-frames">
             <div class="strip-frame" style="background: linear-gradient(135deg,#d9a87a,#8a5a3a);"><span class="strip-label">wedding</span></div>
             <div class="strip-frame" style="background: linear-gradient(135deg,#e8b98a,#b48a5a);"></div>
@@ -3019,7 +3044,7 @@
           <div class="pushpin"></div>
         </div>
 
-        <div class="strip-card" style="--r:3deg;">
+        <div class="strip-card" data-strip="brand" style="--r:3deg;">
           <div class="strip-frames">
             <div class="strip-frame" style="background: linear-gradient(135deg,#2a1a10,#5a3a24);"><span class="strip-label">brand</span></div>
             <div class="strip-frame" style="background: linear-gradient(135deg,#4a2a1a,#8a5a3a);"></div>
@@ -3034,7 +3059,7 @@
           <div class="pushpin red"></div>
         </div>
 
-        <div class="strip-card" style="--r:-2deg;">
+        <div class="strip-card" data-strip="sixtieth" style="--r:-2deg;">
           <div class="strip-frames">
             <div class="strip-frame" style="background: linear-gradient(135deg,#e8c89a,#ba8a5a);"><span class="strip-label">60th</span></div>
             <div class="strip-frame" style="background: linear-gradient(135deg,#d6a87a,#8a5a3a);"></div>
@@ -3049,7 +3074,7 @@
           <div class="pushpin"></div>
         </div>
 
-        <div class="strip-card" style="--r:4deg;">
+        <div class="strip-card" data-strip="gala" style="--r:4deg;">
           <div class="strip-frames">
             <div class="strip-frame" style="background: linear-gradient(135deg,#3a4a6a,#1a2a4a);"><span class="strip-label">gala</span></div>
             <div class="strip-frame" style="background: linear-gradient(135deg,#5a6a8a,#2a3a5a);"></div>
@@ -3064,7 +3089,7 @@
           <div class="pushpin red"></div>
         </div>
 
-        <div class="strip-card" style="--r:-3deg;">
+        <div class="strip-card" data-strip="bday" style="--r:-3deg;">
           <div class="strip-frames">
             <div class="strip-frame" style="background: linear-gradient(135deg,#c89a6a,#7a4a2a);"><span class="strip-label">bday</span></div>
             <div class="strip-frame" style="background: linear-gradient(135deg,#e8b98a,#8a5a3a);"></div>
@@ -3188,32 +3213,7 @@
     <div class="about-grid reveal">
       <div class="about-portrait">
         <div class="img">
-          <svg viewBox="0 0 300 400" style="width:100%;height:100%;">
-            <rect width="300" height="400" fill="#c89a6a"/>
-            <!-- Simple stylized Jeff portrait -->
-            <circle cx="150" cy="150" r="70" fill="#d9b681"/>
-            <!-- Hair -->
-            <path d="M85 130 Q90 70 150 68 Q210 70 215 130 Q215 100 195 88 Q175 78 150 80 Q125 78 105 88 Q85 100 85 130Z" fill="#3a2614"/>
-            <!-- Eyes -->
-            <circle cx="128" cy="150" r="3.5" fill="#2a1a0c"/>
-            <circle cx="172" cy="150" r="3.5" fill="#2a1a0c"/>
-            <!-- Glasses -->
-            <circle cx="128" cy="150" r="14" fill="none" stroke="#2a1a0c" stroke-width="2.5"/>
-            <circle cx="172" cy="150" r="14" fill="none" stroke="#2a1a0c" stroke-width="2.5"/>
-            <line x1="142" y1="150" x2="158" y2="150" stroke="#2a1a0c" stroke-width="2"/>
-            <!-- Nose -->
-            <path d="M150 158 Q146 172 150 180 Q154 180 155 175" stroke="#8a4620" stroke-width="2" fill="none"/>
-            <!-- Smile -->
-            <path d="M135 193 Q150 203 165 193" stroke="#8a4620" stroke-width="3" fill="none" stroke-linecap="round"/>
-            <!-- Beard scruff -->
-            <path d="M135 198 Q150 215 165 198" stroke="#3a2614" stroke-width="1" fill="none" opacity=".3"/>
-            <!-- Body/shirt -->
-            <path d="M80 400 L80 260 Q150 240 220 260 L220 400 Z" fill="#8a4620"/>
-            <path d="M120 260 Q150 250 180 260 L175 310 Q150 315 125 310 Z" fill="#c89a6a"/>
-            <!-- Pencil in pocket -->
-            <rect x="165" y="285" width="4" height="25" fill="#f2c48c" transform="rotate(8 167 297)"/>
-            <circle cx="167" cy="283" r="2" fill="#2a1a0c"/>
-          </svg>
+          <img src="photos/about/jeff.jpg" alt="Jeff portrait" />
         </div>
         <div class="label">— Jeff, 2026</div>
         <div class="stamp">Singapore · est. 2018</div>
@@ -3475,10 +3475,10 @@
   })();
 </script>
 <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
-<script src="photos.config.js?v=5"></script>
+<script src="photos.config.js?v=6"></script>
 <script src="bg.js?v=1"></script>
 <script src="app.js?v=7"></script>
-<script src="enhancements.js?v=5"></script>
+<script src="enhancements.js?v=6"></script>
 <script src="creation.js?v=6"></script>
 <script src="hero-scrub.js?v=1"></script>
 

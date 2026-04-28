@@ -40,6 +40,45 @@ document.querySelectorAll('[data-meta-src]').forEach(el => {
   el.style.backgroundImage = metaImages[parseInt(el.dataset.metaSrc)];
 });
 
+// KIND WORDS: each .strip-card has data-strip="<key>" matching photos.config.js
+// → testimonials.<key>. Replace the colored gradient placeholders with real
+// photos when configured; otherwise leave the gradient untouched.
+document.querySelectorAll('.strip-card[data-strip]').forEach(card => {
+  const key = card.dataset.strip;
+  const sourcePhotos = window.PhotoLib?.testimonialSourcePhotos?.(key) || [];
+  const photos = window.PhotoLib?.testimonialPhotos(key) || [];
+  if (photos.length === 0) return;
+  const stripFrames = card.querySelector('.strip-frames');
+  const frames = card.querySelectorAll('.strip-frame');
+  const existingSingle = card.querySelector('.strip-single-photo');
+
+  // Optional layout: if only one photo is configured, show a single hero frame.
+  if (sourcePhotos.length === 1 && stripFrames) {
+    card.classList.add('single-photo');
+    const singleSrc = sourcePhotos[0].replace(/^url\((['"]?)(.*?)\1\)$/, '$2');
+    if (singleSrc) {
+      let img = existingSingle;
+      if (!img) {
+        img = document.createElement('img');
+        img.className = 'strip-single-photo';
+        img.alt = `${key} testimonial photo`;
+        stripFrames.appendChild(img);
+      }
+      img.src = singleSrc;
+    }
+  } else {
+    card.classList.remove('single-photo');
+    if (existingSingle) existingSingle.remove();
+  }
+
+  frames.forEach((frame, i) => {
+    if (!photos[i]) return;
+    frame.style.backgroundImage = photos[i];
+    frame.style.backgroundSize = 'cover';
+    frame.style.backgroundPosition = 'center';
+  });
+});
+
 // ===== HERO LENS (disabled — creation.js owns the webcam now) =====
 const heroLens = document.getElementById('heroLens');
 if (heroLens) {

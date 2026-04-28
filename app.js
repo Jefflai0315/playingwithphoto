@@ -450,19 +450,20 @@ try {
   board.addEventListener('pointerup', end);
   board.addEventListener('pointercancel', end);
   board.addEventListener('pointerleave', end);
-  // wheel → horizontal
+  // Keep vertical wheel for page scroll.
+  // Only consume true horizontal wheel gestures (trackpad / shift+wheel).
   board.addEventListener('wheel', (e) => {
-    if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
-      const maxScroll = board.scrollWidth - board.clientWidth;
-      const current = board.scrollLeft;
-      const next = Math.max(0, Math.min(maxScroll, current + e.deltaY));
-      const moved = Math.abs(next - current) > 0.5;
+    const horizontalIntent = Math.abs(e.deltaX) > Math.abs(e.deltaY);
+    if (!horizontalIntent) return;
 
-      if (moved) {
-        board.scrollLeft = next;
-        e.preventDefault();
-      }
-    }
+    const maxScroll = board.scrollWidth - board.clientWidth;
+    const current = board.scrollLeft;
+    const next = Math.max(0, Math.min(maxScroll, current + e.deltaX));
+    const moved = Math.abs(next - current) > 0.5;
+    if (!moved) return;
+
+    board.scrollLeft = next;
+    e.preventDefault();
   }, { passive: false });
 })();
 

@@ -1398,6 +1398,11 @@
   body[data-meta="hokusai"] .meta-after-img {
     filter: saturate(.75) contrast(1.3) brightness(1.02) hue-rotate(190deg) sepia(.2);
   }
+  /* Real AI image mode: disable synthetic painter filters */
+  body[data-meta-real-after="1"] .meta-after-img {
+    filter: none !important;
+    transform: none !important;
+  }
 
   .meta-after .meta-photo { position: relative; }
   /* Overlay layer on after frames for the art style */
@@ -1454,6 +1459,10 @@
       linear-gradient(180deg, rgba(240,230,200,.35), rgba(30,90,168,.25));
     opacity: .8;
     mix-blend-mode: multiply;
+  }
+  /* Real AI image mode: remove synthetic painter overlays */
+  body[data-meta-real-after="1"] .meta-after .meta-photo::after {
+    display: none;
   }
 
   @media (max-width: 960px) {

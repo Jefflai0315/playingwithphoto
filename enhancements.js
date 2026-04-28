@@ -33,12 +33,21 @@ const reelFromConfig = window.PhotoLib?.reelPhotos() || [];
 const reelImages = reelFromConfig.length === 4 ? reelFromConfig : SAMPLE_BG;
 reelImages.forEach((bg, i) => rootDoc.style.setProperty(`--reel-img-${i}`, bg));
 
-// METAMORPHOSIS: same idea — 4 strip frames; use real photos if 4 are configured.
-const metaFromConfig = window.PhotoLib?.metaPhotos() || [];
-const metaImages = metaFromConfig.length === 4 ? metaFromConfig : SAMPLE_BG;
-document.querySelectorAll('[data-meta-src]').forEach(el => {
-  el.style.backgroundImage = metaImages[parseInt(el.dataset.metaSrc)];
-});
+// METAMORPHOSIS: support per-option before/after images from photos.config.js.
+const metaBeforeImages = document.querySelectorAll('.meta-before [data-meta-src]');
+const metaAfterImages = document.querySelectorAll('.meta-after .meta-after-img');
+const metaLegacyFrames = window.PhotoLib?.metaPhotos?.() || [];
+const sparkByPainterConfig = window.PhotoLib?.sparkByPainter?.() || {};
+
+function applyMetaFrames(nodeList, frames, fallbackFrames) {
+  const use = frames.length ? frames : fallbackFrames;
+  const out = use.length ? use : SAMPLE_BG;
+  nodeList.forEach((el, idx) => {
+    el.style.backgroundImage = out[idx % out.length];
+    el.style.backgroundSize = 'cover';
+    el.style.backgroundPosition = 'center';
+  });
+}
 
 // KIND WORDS: each .strip-card has data-strip="<key>" matching photos.config.js
 // → testimonials.<key>. Replace the colored gradient placeholders with real
@@ -217,6 +226,21 @@ function setMeta(name) {
   const display = META_NAMES[name].split(' · ')[0];
   metaAfterLabel.textContent = 'After — ' + display;
   metaAfterBrand.textContent = 'Playing With Photo · ' + display + ' Edition';
+
+  const beforeFrames = window.PhotoLib?.metaFrames?.(name, 'before') || [];
+  const afterFrames = window.PhotoLib?.metaFrames?.(name, 'after') || [];
+  applyMetaFrames(metaBeforeImages, beforeFrames, metaLegacyFrames);
+
+  // If no meta.after frames are provided, fall back to spark.after single image.
+  const painterCfg = sparkByPainterConfig[name];
+  const sparkAfter = painterCfg?.after ? window.PhotoLib?.asCss?.(painterCfg.after) : null;
+  const fallbackAfterFrames = sparkAfter ? [sparkAfter, sparkAfter, sparkAfter, sparkAfter] : [];
+  const resolvedAfter = afterFrames.length ? afterFrames : fallbackAfterFrames;
+  applyMetaFrames(metaAfterImages, resolvedAfter, metaLegacyFrames);
+
+  const hasRealAfter = resolvedAfter.length > 0;
+  document.body.dataset.metaRealAfter = hasRealAfter ? '1' : '0';
+
   document.querySelectorAll('.meta-shine').forEach(el => {
     el.classList.remove('shine');
     void el.offsetWidth;

@@ -106,14 +106,48 @@ window.PHOTO_CONFIG = {
   },
 
   // ─── METAMORPHOSIS SECTION ──────────────────────────────────
-  // The 4 strip frames that get re-painted as you click painters.
-  // Provide EXACTLY 4 files.
+  // Per option, define BEFORE and AFTER frames (1–4 each):
+  //  - 1 photo  → repeated 4x
+  //  - 2 photos → A,B,A,B
+  //  - 3 photos → A,B,C,A
+  //  - 4 photos → used as-is
+  //
+  // Keys should match the picker options:
+  // vintage, vangogh, monet, picasso, warhol, hokusai
+  //
+  // Legacy fallback: meta.files is still supported.
   meta: {
+    byPainter: {
+      vintage: {
+        before: ["spark/jenmikeguests.png", "spark/jenmike.png"],
+        after: ["spark/jenmikeguests.png", "spark/jenmike.png"],
+      },
+      vangogh: {
+        before: ["spark/jenmikeguests.png", "spark/jenmike.png"],
+        after: ["meta/jenmikeguests-vangogh.png", "reel/jenmike-vangogh1.png"],
+      },
+      monet: {
+        before: ["spark/jenmikeguests.png", "spark/jenmike.png"],
+        after: ["meta/jenmikeguests-monet.png", "meta/jenmike-monet.png"],
+      },
+      picasso: {
+        before: ["spark/jenmikeguests.png", "spark/jenmike.png"],
+        after: ["meta/jenmikeguests-picasso.png", "meta/jenmike-picasso.png"],
+      },
+      warhol: {
+        before: ["spark/jenmikeguests.png", "spark/jenmike.png"],
+        after: ["meta/jenmikeguests-warhol.png", "meta/jenmike-warhol.png"],
+      },
+      hokusai: {
+        before: ["spark/jenmikeguests.png", "spark/jenmike.png"],
+        after: ["spark/jenmikeguests-hokusai.png", "meta/jenmike-hokusai.png"],
+      },
+    },
     files: [
       "spark/jenmikeguests.png",
-      "spark/jenmikeguests-hokusai.png",
+      "spark/jenmike.png",
       "spark/jenmikeguests.png",
-      "spark/jenmikeguests-hokusai.png",
+      "spark/jenmike.png",
     ],
   },
 
@@ -173,6 +207,16 @@ window.PHOTO_CONFIG = {
     stylePhoto: (key) => asCss(cfg.styles?.[key]),
     reelPhotos: () => (cfg.reel?.files || []).map(asCss).filter(Boolean),
     metaPhotos: () => (cfg.meta?.files || []).map(asCss).filter(Boolean),
+    metaFrames: (painter, side) => {
+      const key = side === "after" ? "after" : "before";
+      const list = (cfg.meta?.byPainter?.[painter]?.[key] || [])
+        .map(asCss)
+        .filter(Boolean);
+      if (list.length === 0) return [];
+      const out = [];
+      for (let i = 0; i < 4; i++) out.push(list[i % list.length]);
+      return out;
+    },
     sparkByPainter: () => cfg.spark?.byPainter || {},
     // Returns up to 4 CSS url() values for a given testimonial card key.
     // 1 photo  → repeated 4×.   2 photos → A,B,A,B.   3 → A,B,C,A.   4 → as-is.

@@ -1752,7 +1752,8 @@
     background: rgba(235, 220, 183, 0.85);
   }
   /* DARK scrims — sections designed with cream text on ink */
-  body.has-bg-canvas > #reel::before {
+  body.has-bg-canvas > #reel::before,
+  body.has-bg-canvas > #animation::before {
     background: linear-gradient(180deg, rgba(10,6,4,0.92) 0%, rgba(20,12,6,0.88) 100%);
   }
   body.has-bg-canvas > #styles::before {
@@ -2268,6 +2269,382 @@
     .sticky-note .note-sig { font-size: 11px; }
   }
 
+  /* ===== AI animation preview ===== */
+  .animation-chapter {
+    background:
+      radial-gradient(900px 520px at 80% 20%, rgba(255,216,138,.18), transparent 60%),
+      linear-gradient(180deg, #160c08 0%, #2a150c 100%);
+    color: var(--cream);
+    overflow: hidden;
+  }
+  .animation-chapter .eyebrow { color: var(--highlight); }
+  .animation-chapter .section-head h2 { color: var(--cream); }
+  .animation-chapter .section-head p { color: rgba(244,234,213,.72); }
+  .animation-grid {
+    display: grid;
+    grid-template-columns: 1.1fr .9fr;
+    gap: 56px;
+    align-items: center;
+  }
+  .animation-stage {
+    position: relative;
+    background: #080403;
+    border: 14px solid #f0dfbc;
+    box-shadow: 0 34px 90px rgba(0,0,0,.45), 0 0 0 1px rgba(255,216,138,.2);
+    transform: rotate(-1.2deg);
+    overflow: hidden;
+  }
+  .animation-stage::before,
+  .animation-stage::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 18px;
+    background-image: radial-gradient(circle at 9px 9px, transparent 4px, #0a0503 4.5px);
+    background-size: 22px 18px;
+    z-index: 2;
+    pointer-events: none;
+  }
+  .animation-stage::before { top: 0; }
+  .animation-stage::after { bottom: 0; transform: rotate(180deg); }
+  .animation-stage canvas {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    background: radial-gradient(circle at center, #342016, #080403 70%);
+  }
+  .animation-badge {
+    position: absolute;
+    left: 22px;
+    bottom: 24px;
+    z-index: 3;
+    background: rgba(8,4,3,.72);
+    color: var(--highlight);
+    border: 1px solid rgba(255,216,138,.35);
+    border-radius: 999px;
+    padding: 8px 12px;
+    font-family: var(--ff-mono);
+    font-size: 10px;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    backdrop-filter: blur(8px);
+  }
+  .animation-panel {
+    background: rgba(244,234,213,.08);
+    border: 1px solid rgba(244,234,213,.14);
+    padding: 34px;
+    box-shadow: 0 24px 60px rgba(0,0,0,.25);
+  }
+  .animation-panel h3 {
+    font-size: clamp(34px, 4vw, 54px);
+    line-height: 1;
+    font-weight: 400;
+    margin-bottom: 18px;
+  }
+  .animation-panel p {
+    color: rgba(244,234,213,.76);
+    margin: 0;
+  }
+  .animation-price {
+    margin-top: 30px;
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    font-family: var(--ff-display);
+    font-size: 56px;
+    line-height: 1;
+    color: var(--highlight);
+  }
+  .animation-price small {
+    font-family: var(--ff-mono);
+    font-size: 12px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: rgba(244,234,213,.64);
+  }
+  .animation-points {
+    list-style: none;
+    padding: 0;
+    margin: 28px 0 0;
+    display: grid;
+    gap: 12px;
+  }
+  .animation-points li {
+    border-top: 1px dashed rgba(244,234,213,.18);
+    padding-top: 12px;
+    color: rgba(244,234,213,.72);
+    font-size: 15px;
+  }
+  @media (max-width: 900px) {
+    .animation-grid { grid-template-columns: 1fr; gap: 30px; }
+    .animation-stage { transform: none; }
+  }
+
+  /* ===== Add-ons board ===== */
+  .addons-chapter {
+    background:
+      radial-gradient(900px 420px at 18% 12%, rgba(255,216,138,.28), transparent 62%),
+      linear-gradient(180deg, var(--cream) 0%, var(--paper) 100%);
+  }
+  .included-strip {
+    display: grid;
+    grid-template-columns: 1fr minmax(220px, 320px) 1fr;
+    gap: 24px;
+    margin: -24px 0 48px;
+    align-items: center;
+  }
+  .included-panel,
+  .queue-panel {
+    background: rgba(255,248,226,.78);
+    border: 1px solid rgba(42,26,12,.16);
+    box-shadow: 0 16px 36px rgba(62,34,12,.12);
+    padding: 28px;
+    position: relative;
+  }
+  .included-panel::before,
+  .queue-panel::before {
+    content: "";
+    position: absolute;
+    top: -10px;
+    left: 28px;
+    width: 86px;
+    height: 22px;
+    background: rgba(255,244,203,.75);
+    box-shadow: 0 2px 8px rgba(42,26,12,.12);
+    transform: rotate(-4deg);
+  }
+  .included-panel h3,
+  .queue-panel h3,
+  .addon-card h3 {
+    font-size: 30px;
+    font-style: italic;
+    font-weight: 500;
+  }
+  .included-list {
+    list-style: none;
+    margin: 22px 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+  .included-list li {
+    border-top: 1px dashed rgba(42,26,12,.22);
+    padding-top: 10px;
+    font-size: 14px;
+    color: var(--ink-2);
+  }
+  .motion-example-card {
+    margin: 0;
+    background: #1a0e08;
+    border: 1px solid rgba(42,26,12,.12);
+    padding: 14px;
+    box-shadow: 0 18px 38px rgba(62,34,12,.2);
+    transform: rotate(-1deg);
+    animation: motionCardFloat 4s ease-in-out infinite;
+    position: relative;
+  }
+  .motion-example-card::before {
+    content: "";
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    width: 78px;
+    height: 22px;
+    background: rgba(255,244,203,.72);
+    box-shadow: 0 2px 8px rgba(42,26,12,.18);
+    transform: translateX(-50%) rotate(3deg);
+    z-index: 2;
+  }
+  @keyframes motionCardFloat {
+    0%, 100% { transform: rotate(-1deg) translateY(0); }
+    50% { transform: rotate(.3deg) translateY(-5px); }
+  }
+  .motion-example-copy {
+    margin-bottom: 12px;
+    color: var(--cream);
+  }
+  .motion-example-copy span {
+    display: block;
+    font-family: var(--ff-mono);
+    font-size: 10px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--highlight);
+    opacity: .86;
+  }
+  .motion-example-copy strong {
+    display: block;
+    margin-top: 4px;
+    font-family: var(--ff-display);
+    font-size: 24px;
+    font-style: italic;
+    font-weight: 500;
+    line-height: 1;
+  }
+  .motion-preview-shell {
+    display: block;
+  }
+  .motion-preview-screen {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(255,216,138,.28);
+    background: #090503;
+  }
+  .motion-gif-preview {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .motion-preview-screen::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(circle at 18% 18%, rgba(255,255,255,.2), transparent 16%),
+      linear-gradient(90deg, rgba(255,216,138,.08), transparent 30%, rgba(255,255,255,.06));
+    mix-blend-mode: screen;
+  }
+  .motion-sticker {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    background: var(--highlight);
+    color: var(--ink);
+    border-radius: 999px;
+    padding: 5px 8px;
+    font-family: var(--ff-script);
+    font-size: 20px;
+    line-height: 1;
+    box-shadow: 0 5px 14px rgba(0,0,0,.28);
+    transform-origin: center;
+    animation: stickerPop 2.8s ease-in-out infinite;
+  }
+  @keyframes stickerPop {
+    0%, 45%, 100% { transform: scale(.75) rotate(-8deg); opacity: 0; }
+    55%, 88% { transform: scale(1) rotate(-4deg); opacity: 1; }
+  }
+  .motion-example-card figcaption {
+    margin-top: 8px;
+    font-family: var(--ff-mono);
+    font-size: 9px;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: rgba(244,234,213,.72);
+  }
+  .queue-display {
+    margin-top: 20px;
+    background: #1a0e08;
+    color: var(--highlight);
+    border-radius: 8px;
+    padding: 18px 20px;
+    font-family: var(--ff-mono);
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: inset 0 0 0 1px rgba(255,216,138,.28), 0 12px 24px rgba(42,26,12,.18);
+  }
+  .queue-display strong {
+    font-family: var(--ff-display);
+    font-size: 46px;
+    line-height: 1;
+    letter-spacing: 0;
+    color: var(--cream);
+  }
+  .addons-board {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+  }
+  .addon-card {
+    min-height: 270px;
+    background: #f4e4c3;
+    color: var(--ink);
+    border: 1px solid rgba(42,26,12,.16);
+    box-shadow: 0 18px 34px rgba(62,34,12,.14);
+    padding: 26px 24px;
+    position: relative;
+    overflow: hidden;
+    transform: rotate(var(--r, 0deg));
+  }
+  .addon-card.featured {
+    grid-column: span 2;
+    background: #1a0e08;
+    color: var(--cream);
+  }
+  .addon-card.featured p,
+  .addon-card.featured .addon-note { color: rgba(244,234,213,.72); }
+  .addon-card.guestbook-addon {
+    background:
+      linear-gradient(135deg, rgba(12,6,4,.82), rgba(42,20,10,.7)),
+      url("photos/addons/guestbook.png") center / cover;
+    box-shadow: 0 24px 50px rgba(42,20,10,.26);
+  }
+  .addon-card.guestbook-addon h3,
+  .addon-card.guestbook-addon .addon-price {
+    text-shadow: 0 2px 12px rgba(0,0,0,.45);
+  }
+  .addon-card p {
+    color: var(--ink-2);
+    font-size: 15px;
+    margin: 12px 0 0;
+    max-width: 36ch;
+  }
+  .addon-price {
+    margin-top: 24px;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    font-family: var(--ff-display);
+    font-size: 42px;
+    line-height: 1;
+  }
+  .addon-price small {
+    font-family: var(--ff-mono);
+    font-size: 11px;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    opacity: .68;
+  }
+  .addon-note {
+    display: inline-flex;
+    margin-top: 16px;
+    padding: 5px 9px;
+    border: 1px solid currentColor;
+    border-radius: 999px;
+    font-family: var(--ff-mono);
+    font-size: 10px;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--rust-2);
+  }
+  .addon-scribble {
+    position: absolute;
+    right: -18px;
+    bottom: -18px;
+    font-family: var(--ff-script);
+    font-size: 86px;
+    color: rgba(178,95,46,.16);
+    transform: rotate(-12deg);
+    pointer-events: none;
+  }
+  .addon-card.featured .addon-scribble { color: rgba(255,216,138,.16); }
+  @media (max-width: 900px) {
+    .included-strip,
+    .addons-board { grid-template-columns: 1fr; }
+    .addon-card.featured { grid-column: auto; }
+    .motion-example-card { max-width: 320px; justify-self: center; }
+  }
+  @media (max-width: 560px) {
+    .included-list { grid-template-columns: 1fr; }
+    .motion-example-card { max-width: 280px; justify-self: start; }
+    .queue-display { align-items: flex-start; flex-direction: column; gap: 8px; }
+  }
+
   /* ===== Ticket-booklet pricing ===== */
   .ticket-booklet {
     display: grid;
@@ -2494,7 +2871,9 @@
     <li data-target="#usecases"><span class="num">ᴠɪɪɪ</span><a href="#usecases">Occasions</a></li>
     <li data-target="#testimonials"><span class="num">ɪx</span><a href="#testimonials">Voices</a></li>
     <li data-target="#pricing"><span class="num">x</span><a href="#pricing">Tariff</a></li>
-    <li data-target="#about"><span class="num">xɪ</span><a href="#about">Jeff</a></li>
+    <li data-target="#animation"><span class="num">xɪ</span><a href="#animation">Motion</a></li>
+    <li data-target="#addons"><span class="num">xɪɪ</span><a href="#addons">Add-ons</a></li>
+    <li data-target="#about"><span class="num">xɪɪɪ</span><a href="#about">Jeff</a></li>
   </ol>
   <div class="edition-footnote">
     <span class="seal" aria-hidden="true"></span>
@@ -2514,6 +2893,8 @@
     <a href="#how">How it works</a>
     <a href="#styles">Styles</a>
     <a href="#pricing">Pricing</a>
+    <a href="#animation">AI Motion</a>
+    <a href="#addons">Add-ons</a>
     <a href="#about">About Jeff</a>
   </div>
   <a href="#book" class="nav-cta">Book the booth</a>
@@ -2565,7 +2946,7 @@
       <em>20+ painter styles</em> · the hand of Van&nbsp;Gogh, Monet,<br/>Hokusai &amp; more, in sixty&nbsp;seconds.
     </p>
     <div class="meta-line">
-      <span>xi <em>Chapters</em></span><span>·</span>
+      <span>xiii <em>Chapters</em></span><span>·</span>
       <span>By <em>Jeff</em></span><span>·</span><span>Singapore</span>
     </div>
     <div class="hero-ctas">
@@ -2945,7 +3326,7 @@
           </div>
           <div class="f">
             <h4>Event-ready</h4>
-            <p>Folds down to a suitcase. Power is a single wall socket. Done.</p>
+            <p>Folds down to a suitcase, runs from one wall socket, and includes the queue screen.</p>
           </div>
         </div>
       </div>
@@ -2987,7 +3368,7 @@
         <span class="num">04</span>
         <span class="stamp">Step four</span>
         <h4>Take it home</h4>
-        <p>Printed strip in hand. Digital copy texted. A tiny gallery at your event.</p>
+        <p>The queue screen calls their number. Printed strip in hand, digital copy texted.</p>
       </div>
     </div>
   </div>
@@ -3002,15 +3383,16 @@
         <span class="eyebrow">The looks · 004</span>
         <h2 style="color:var(--cream);">Five films,<br/><em style="color:var(--highlight)!important;">one roll.</em></h2>
       </div>
-      <p>Each style is tuned for a different mood. Switch mid-event, or commit to one look for a uniform gallery. Hover the strip to pause.</p>
+      <p>Start with every photo in its own film look. Tap a vintage filter to apply that same look across the whole moving strip.</p>
     </div>
 
-    <div class="style-chips reveal">
-      <button class="active">70s Kodak</button>
-      <button>Silver Gelatin B&W</button>
-      <button>Polaroid 600</button>
-      <button>Kodachrome Slide</button>
-      <button>Studio Sepia</button>
+    <div class="style-chips reveal" aria-label="Choose a film look">
+      <button class="active" data-style="all" aria-pressed="true">All Looks</button>
+      <button data-style="kodak" aria-pressed="false">70s Kodak</button>
+      <button data-style="bw" aria-pressed="false">Silver Gelatin B&amp;W</button>
+      <button data-style="polaroid" aria-pressed="false">Polaroid 600</button>
+      <button data-style="kodachrome" aria-pressed="false">Kodachrome Slide</button>
+      <button data-style="sepia" aria-pressed="false">Studio Sepia</button>
     </div>
   </div>
 
@@ -3280,8 +3662,163 @@
   </div>
 </section>
 
+<!-- AI ANIMATION -->
+<section class="chapter animation-chapter" id="animation" data-screen-label="09 AI Animation">
+  <span class="chapter-numeral tr light" aria-hidden="true">xɪ</span>
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <span class="eyebrow">AI animation · 009</span>
+        <h2>Turn a still<br/>into a <em style="color:var(--highlight);">moving</em> memory.</h2>
+      </div>
+      <p>
+        A short AI animation booth moment for couples, brands, and anyone who wants
+        their portrait to breathe, sparkle, and move on the event screen.
+      </p>
+    </div>
+
+    <div class="animation-grid reveal">
+      <div class="animation-stage">
+        <canvas id="aiAnimationCanvas" width="960" height="600" aria-label="AI animation example preview"></canvas>
+        <span class="animation-badge">example loop · AI motion</span>
+      </div>
+
+      <article class="animation-panel">
+        <h3>AI motion clips, made live.</h3>
+        <p>
+          Guests take a portrait, choose a mood, and receive a short animated clip
+          alongside their print. It is perfect for a screen loop, social stories, or a
+          branded activation wall.
+        </p>
+        <div class="animation-price"><span>S$200</span><small>add-on / hour</small></div>
+        <ul class="animation-points">
+          <li>Short generated motion clips from selected guest portraits</li>
+          <li>Works well with the live slideshow add-on for real-time display</li>
+          <li>Pricing is flexible while the service is still being tested</li>
+        </ul>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ADD-ONS -->
+<section class="chapter addons-chapter" id="addons" data-screen-label="10 Add-ons">
+  <span class="chapter-numeral tl" aria-hidden="true">xɪɪ</span>
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <span class="eyebrow">Add-ons · 008</span>
+        <h2>Make the booth<br/><em>yours.</em></h2>
+      </div>
+      <p>
+        A few things are already included with every booking. The rest are optional
+        upgrades for weddings, brand activations, and guests who want a little more magic.
+      </p>
+    </div>
+
+    <div class="included-strip reveal">
+      <article class="included-panel">
+        <h3>Already in the booth</h3>
+        <ul class="included-list">
+          <li>GIF motion moments for the example board</li>
+          <li>On-screen sticker pack guests can add to their photo strips</li>
+          <li>Physical photo props available at the booth</li>
+          <li>Setup, teardown, attendant, prints, and digital files</li>
+          <li>Example board so guests know what they can make</li>
+        </ul>
+      </article>
+
+      <figure class="motion-example-card">
+        <div class="motion-example-copy">
+          <span>Example board</span>
+          <strong>See the strip move.</strong>
+        </div>
+        <div class="motion-preview-shell">
+          <div class="motion-preview-screen">
+            <img class="motion-gif-preview" src="photos/addons/example.gif?v=1" alt="Animated GIF photo strip example" loading="lazy" />
+            <span class="motion-sticker" aria-hidden="true">GIF</span>
+          </div>
+        </div>
+        <figcaption>Looping GIF preview</figcaption>
+      </figure>
+
+      <article class="queue-panel">
+        <h3>Queue number screen</h3>
+        <p style="color:var(--ink-2); margin: 10px 0 0;">
+          Guests get a simple screen callout, so they know when their print or keepsake is ready.
+        </p>
+        <div class="queue-display" aria-label="Sample queue number screen">
+          <span>Now serving</span>
+          <strong>A07</strong>
+        </div>
+      </article>
+    </div>
+
+    <div class="addons-board reveal">
+      <article class="addon-card featured guestbook-addon" style="--r:-1deg;">
+        <h3>Guestbook, Glitter &amp; Glue</h3>
+        <p>A hands-on station for messages, stickers, instant prints, and messy little memories.</p>
+        <div class="addon-price"><span>S$68</span><small>now only</small></div>
+        <span class="addon-note">launch price</span>
+        <div class="addon-scribble" aria-hidden="true">glue</div>
+      </article>
+
+      <article class="addon-card" style="--r:1deg;">
+        <h3>More AI Styles</h3>
+        <p>Go beyond the default looks with a custom AI direction for your event.</p>
+        <div class="addon-price"><span>+S$100</span><small>custom</small></div>
+        <span class="addon-note">free for now</span>
+        <div class="addon-scribble" aria-hidden="true">AI</div>
+      </article>
+
+      <article class="addon-card" style="--r:-.6deg;">
+        <h3>AI Animation Clips</h3>
+        <p>Short motion clips generated from guest portraits during the event.</p>
+        <div class="addon-price"><span>S$200</span><small>per hour</small></div>
+        <span class="addon-note">testing price</span>
+      </article>
+
+      <article class="addon-card" style="--r:.6deg;">
+        <h3>Additional Hour</h3>
+        <p>Keep the booth open longer when the queue is still moving.</p>
+        <div class="addon-price"><span>S$180</span><small>per hour</small></div>
+      </article>
+
+      <article class="addon-card" style="--r:-.8deg;">
+        <h3>Custom Interface</h3>
+        <p>Photobooth screen design matched to your wedding, brand, or party theme.</p>
+        <div class="addon-price"><span>S$180</span><small>design</small></div>
+      </article>
+
+      <article class="addon-card" style="--r:.8deg;">
+        <h3>Custom Stickers</h3>
+        <p>Sticker pack for the event, with AI-generated options available.</p>
+        <div class="addon-price"><span>S$180</span><small>pack</small></div>
+      </article>
+
+      <article class="addon-card" style="--r:-.4deg;">
+        <h3>Email &amp; SMS Sharing</h3>
+        <p>Collect contacts while guests receive their photos - useful for lead generation.</p>
+        <div class="addon-price"><span>S$300</span><small>activation</small></div>
+      </article>
+
+      <article class="addon-card" style="--r:.4deg;">
+        <h3>Live Slideshow</h3>
+        <p>Livestream a rolling slideshow of real-time generations on venue screens.</p>
+        <div class="addon-price"><span>S$230</span><small>screen feed</small></div>
+      </article>
+
+      <article class="addon-card" style="--r:-1deg;">
+        <h3>Keychain Making</h3>
+        <p>Turn guest portraits into physical keychains for the event table.</p>
+        <div class="addon-price"><span>S$330</span><small>per 100</small></div>
+      </article>
+    </div>
+  </div>
+</section>
+
 <!-- ABOUT JEFF -->
-<section class="chapter about-chapter" id="about" data-screen-label="09 About Jeff">
+<section class="chapter about-chapter" id="about" data-screen-label="11 About Jeff">
   <div class="wrap">
     <div class="about-grid reveal">
       <div class="about-portrait">
@@ -3293,7 +3830,7 @@
       </div>
 
       <div class="about-copy">
-        <span class="eyebrow">The maker · 008</span>
+        <span class="eyebrow">The maker · 011</span>
         <h2>Hi, I'm <em>Jeff.</em></h2>
         <p class="lede">
           I've been drawing portraits of strangers at Singapore markets for eight years
@@ -3328,12 +3865,12 @@
      METAMORPHOSIS: Vintage → Pixar / Anime / Dreamy
      The final act: pick an era, watch your strip transform.
      ============================= -->
-<section class="meta-chapter" id="metamorphosis" data-screen-label="09 Metamorphosis">
+<section class="meta-chapter" id="metamorphosis" data-screen-label="12 Metamorphosis">
   <div class="meta-bg"></div>
   <div class="wrap" style="position:relative; z-index:2;">
     <div class="section-head reveal">
       <div>
-        <span class="eyebrow" style="color:#ffd6f0;">The twist · 008</span>
+        <span class="eyebrow" style="color:#ffd6f0;">The twist · 012</span>
         <h2 style="color:#fff;">Vintage isn't the <em style="color:#ffd88a;">only</em> brush we have.</h2>
       </div>
       <p style="color: rgba(255,255,255,.75);">
@@ -3415,11 +3952,11 @@
 </section>
 
 <!-- BOOKING -->
-<section class="chapter book-chapter" id="book" data-screen-label="10 Booking">
+<section class="chapter book-chapter" id="book" data-screen-label="13 Booking">
   <div class="wrap">
     <div class="book-grid">
       <div class="reveal">
-        <span class="eyebrow" style="color: var(--highlight);">Let's make a memory · 009</span>
+        <span class="eyebrow" style="color: var(--highlight);">Let's make a memory · 013</span>
         <h2>Book the<br/>booth. <em>Today.</em></h2>
         <p class="lede">
           Reply within 24 hours. Setup is included. Currently serving

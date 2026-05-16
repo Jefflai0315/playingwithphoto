@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "python3 -m http.server 5173",
     "build": "echo \"Static site: no build step required\"",
+    "packages:pdf": "\"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome\" --headless=new --disable-gpu --no-pdf-header-footer --print-to-pdf=PWP_Packages-2.pdf file://$PWD/PWP_Packages.html",
     "preview": "python3 -m http.server 4173"
   },
   "repository": {

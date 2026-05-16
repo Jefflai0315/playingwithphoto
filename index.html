@@ -363,7 +363,31 @@
   .section-head h2 .italic { font-style: italic; }
   .section-head h2 em { font-family: var(--ff-script); font-style: normal; color: var(--rust); font-weight: 600; font-size: .95em; }
   .section-head p { color: var(--ink-2); max-width: 48ch; font-size: 17px; }
+  #pricing .wrap { max-width: 1320px; }
   .pricing-meta .btn { margin-top: 18px; }
+  .pricing-guide {
+    margin-top: 22px;
+    max-width: 46ch;
+    font-size: 16px;
+    line-height: 1.55;
+    color: var(--ink-2);
+  }
+  .pricing-guide strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .ticket-scene {
+    display: block;
+    margin-top: 8px;
+    font-size: 14px;
+    font-style: italic;
+    line-height: 1.35;
+    opacity: 0.72;
+  }
+  .ticket.t-showpiece .ticket-scene {
+    opacity: 0.88;
+    color: #e8d4a8;
+  }
 
   /* ======= THE BOOTH ======= */
   .booth-chapter { background: var(--paper); }
@@ -2647,17 +2671,46 @@
 
   /* ===== Ticket-booklet pricing ===== */
   .ticket-booklet {
-    display: grid;
-    grid-template-columns: 1fr 1.1fr 1fr;
-    gap: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 52px;
     margin-top: 56px;
-    perspective: 1400px;
+  }
+  .ticket-grid-weddings {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(20px, 3vw, 36px);
     align-items: center;
+    perspective: 1400px;
+  }
+  .ticket-grid-brands {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    padding-top: 40px;
+    border-top: 1px dashed rgba(80,50,20,0.22);
+  }
+  .ticket-brands-label {
+    margin: 0;
+    font-family: var(--ff-mono);
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+  }
+  .ticket-grid-brands .ticket {
+    width: min(100%, 440px);
+    transform: rotate(0deg) !important;
+  }
+  .ticket-grid-brands .ticket:hover {
+    transform: translateY(-6px) scale(1.02) !important;
   }
   .ticket {
     position: relative;
     display: grid;
-    grid-template-columns: 68px minmax(0, 1fr);
+    grid-template-columns: 56px minmax(0, 1fr);
+    min-width: 0;
     background: #f3e3c1;
     color: #2a1a10;
     box-shadow: 0 20px 40px rgba(0,0,0,0.35), inset 0 0 0 1px rgba(80,50,20,0.15);
@@ -2680,12 +2733,18 @@
   }
   .ticket::before { top: -4px; }
   .ticket::after { bottom: -4px; transform: rotate(180deg); }
-  .ticket.t-showpiece {
+  .ticket-grid-weddings .ticket.t-prelude { transform: rotate(-1.5deg); }
+  .ticket-grid-weddings .ticket.t-keepsake.featured {
+    transform: rotate(0deg) translateY(-12px) scale(1.04);
+    z-index: 4;
+    box-shadow: 0 28px 55px rgba(0,0,0,0.42), inset 0 0 0 1px rgba(80,50,20,0.2);
+  }
+  .ticket-grid-weddings .ticket.t-showpiece {
     background: #1a0e08;
     color: #f5e8c4;
-    transform: rotate(0deg) translateY(-24px) scale(1.08);
+    transform: rotate(1deg) translateY(-6px) scale(1.02);
     z-index: 3;
-    box-shadow: 0 30px 60px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(200,160,100,0.25);
+    box-shadow: 0 26px 52px rgba(0,0,0,0.48), inset 0 0 0 1px rgba(200,160,100,0.25);
     background-image:
       repeating-linear-gradient(45deg, transparent 0 4px, rgba(200,160,100,0.04) 4px 8px),
       radial-gradient(ellipse at 20% 20%, rgba(200,160,100,0.15), transparent 60%);
@@ -2693,9 +2752,9 @@
   .ticket.t-showpiece::before, .ticket.t-showpiece::after {
     background-image: radial-gradient(circle at 4px 4px, transparent 2.5px, #1a0e08 2.8px);
   }
-  .ticket.t-activation { transform: rotate(2deg); }
-  .ticket:hover { transform: rotate(0) translateY(-6px) scale(1.02); z-index: 4; }
-  .ticket.t-showpiece:hover { transform: rotate(0) translateY(-30px) scale(1.1); }
+  .ticket-grid-weddings .ticket:hover { transform: rotate(0) translateY(-6px) scale(1.02); z-index: 5; }
+  .ticket-grid-weddings .ticket.t-keepsake.featured:hover { transform: rotate(0) translateY(-18px) scale(1.06); }
+  .ticket-grid-weddings .ticket.t-showpiece:hover { transform: rotate(0) translateY(-12px) scale(1.05); }
   .ticket-stub {
     position: relative;
     grid-column: 1;
@@ -2704,7 +2763,7 @@
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 10px;
+    padding: 18px 8px;
     border-right: 2px dashed rgba(80,50,20,0.35);
     background: rgba(200, 160, 100, 0.08);
   }
@@ -2721,9 +2780,9 @@
   .ticket-stub.dark + .ticket-perf { border-right-color: rgba(200,160,100,0.3); }
   .stub-label {
     font-family: 'Abril Fatface', 'Playfair Display', serif;
-    font-size: 14px;
+    font-size: 12px;
     text-transform: uppercase;
-    letter-spacing: 0.35em;
+    letter-spacing: 0.28em;
     writing-mode: vertical-rl;
     transform: rotate(180deg);
   }
@@ -2743,10 +2802,10 @@
   .ticket-body {
     grid-column: 2;
     grid-row: 1;
-    padding: 24px 22px 20px;
+    padding: 20px 18px 18px;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 14px;
     width: 100%;
     min-width: 0;
   }
@@ -2766,7 +2825,7 @@
   }
   .ticket-price {
     font-family: 'Abril Fatface', 'Playfair Display', serif;
-    font-size: 44px;
+    font-size: clamp(32px, 3.2vw, 44px);
     line-height: 1;
     display: flex;
     align-items: baseline;
@@ -2791,10 +2850,11 @@
     margin: 0;
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    font-size: 16px;
-    line-height: 1.45;
+    gap: 8px;
+    font-size: 15px;
+    line-height: 1.4;
   }
+  .ticket.t-showpiece .ticket-list { font-size: 14px; gap: 7px; }
   .ticket-list li {
     padding-left: 22px;
     position: relative;
@@ -2843,9 +2903,39 @@
     box-shadow: 0 4px 8px rgba(0,0,0,0.35);
     z-index: 5;
   }
+  @media (min-width: 1101px) {
+    .ticket-grid-weddings {
+      grid-template-columns: 0.95fr 1.12fr 1.05fr;
+    }
+  }
+  @media (max-width: 1100px) {
+    .ticket-grid-weddings {
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    .ticket-grid-weddings .ticket.t-showpiece {
+      grid-column: 1 / -1;
+      width: min(100%, 520px);
+      justify-self: center;
+    }
+    .ticket-grid-weddings .ticket,
+    .ticket-grid-weddings .ticket.t-keepsake.featured,
+    .ticket-grid-weddings .ticket.t-showpiece { transform: rotate(0) !important; }
+  }
   @media (max-width: 900px) {
-    .ticket-booklet { grid-template-columns: 1fr; gap: 24px; }
-    .ticket, .ticket.t-showpiece { transform: rotate(0) !important; }
+    .ticket-booklet { gap: 40px; }
+    .ticket-grid-weddings {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .ticket-grid-weddings .ticket.t-showpiece {
+      width: 100%;
+      grid-column: auto;
+    }
+    .ticket-grid-weddings .ticket.t-keepsake { order: -2; }
+    .ticket-grid-weddings .ticket.t-showpiece { order: -1; }
+    .ticket-grid-weddings .ticket.t-prelude { order: 0; }
   }
 </style>
 </head>
@@ -3569,20 +3659,49 @@
     <div class="section-head reveal">
       <div>
         <span class="eyebrow">Packages · 007</span>
-        <h2>Three ways<br/>to <em>play</em>.</h2>
+        <h2>Four ways<br/>to <em>play</em>.</h2>
       </div>
       <div class="pricing-meta">
         <p>All packages include setup, teardown, an on-site attendant, unlimited prints, and every digital file.</p>
+        <p class="pricing-guide">Most couples book <strong>The Keepsake</strong> (3 hrs). Full receptions choose <strong>The Showpiece</strong> (5 hrs).</p>
         <a href="./PWP_Packages-2.pdf" class="btn ghost" target="_blank" rel="noopener noreferrer">View full package details</a>
       </div>
     </div>
 
-    <!-- Three perforated tickets stacked like a booklet -->
     <div class="ticket-booklet reveal">
-      <article class="ticket t-keepsake">
+      <div class="ticket-grid-weddings">
+      <article class="ticket t-prelude">
         <div class="ticket-stub">
           <div class="stub-label">admit one</div>
           <div class="stub-num">№ 001</div>
+          <div class="stub-foot">prelude</div>
+        </div>
+        <div class="ticket-perf" aria-hidden="true"></div>
+        <div class="ticket-body">
+          <header class="ticket-hd">
+            <span class="ticket-kicker">The Prelude · short set</span>
+            <div class="ticket-price"><span class="cur">S$</span>750<small>· 2 hrs</small></div>
+            <span class="ticket-scene">ROM, tea ceremony, or cocktail hour</span>
+          </header>
+          <ul class="ticket-list">
+            <li>2 hours of shooting</li>
+            <li>Unlimited printed strips</li>
+            <li>All digital files delivered</li>
+            <li>2 AI film styles</li>
+            <li>On-site attendant</li>
+          </ul>
+          <footer class="ticket-ft">
+            <div class="ticket-stamp">first look</div>
+            <a href="#book" class="btn ghost" data-package="prelude">Enquire</a>
+          </footer>
+        </div>
+      </article>
+
+      <article class="ticket t-keepsake featured">
+        <div class="ticket-ribbon">most booked</div>
+        <div class="ticket-stub">
+          <div class="stub-label">admit one</div>
+          <div class="stub-num">№ 002</div>
           <div class="stub-foot">keepsake</div>
         </div>
         <div class="ticket-perf" aria-hidden="true"></div>
@@ -3590,6 +3709,7 @@
           <header class="ticket-hd">
             <span class="ticket-kicker">The Keepsake · half day</span>
             <div class="ticket-price"><span class="cur">S$</span>880<small>· 3 hrs</small></div>
+            <span class="ticket-scene">Portraits and one celebration segment</span>
           </header>
           <ul class="ticket-list">
             <li>3 hours of shooting</li>
@@ -3599,17 +3719,16 @@
             <li>On-site attendant</li>
           </ul>
           <footer class="ticket-ft">
-            <div class="ticket-stamp">intimate</div>
-            <a href="#book" class="btn ghost">Enquire</a>
+            <div class="ticket-stamp red">half day</div>
+            <a href="#book" class="btn" data-package="keepsake">Book it</a>
           </footer>
         </div>
       </article>
 
-      <article class="ticket t-showpiece featured">
-        <div class="ticket-ribbon">most booked</div>
+      <article class="ticket t-showpiece">
         <div class="ticket-stub dark">
           <div class="stub-label">admit one</div>
-          <div class="stub-num">№ 002</div>
+          <div class="stub-num">№ 003</div>
           <div class="stub-foot">showpiece</div>
         </div>
         <div class="ticket-perf" aria-hidden="true"></div>
@@ -3617,6 +3736,7 @@
           <header class="ticket-hd">
             <span class="ticket-kicker">The Showpiece · full evening</span>
             <div class="ticket-price"><span class="cur">S$</span>1,380<small>· 5 hrs</small></div>
+            <span class="ticket-scene">Cocktail through first dance</span>
           </header>
           <ul class="ticket-list">
             <li>5 hours of shooting</li>
@@ -3628,15 +3748,18 @@
           </ul>
           <footer class="ticket-ft">
             <div class="ticket-stamp red">feature film</div>
-            <a href="#book" class="btn">Book it</a>
+            <a href="#book" class="btn" data-package="showpiece">Book it</a>
           </footer>
         </div>
       </article>
+      </div>
 
-      <article class="ticket t-activation">
+      <div class="ticket-grid-brands">
+        <p class="ticket-brands-label">For brands &amp; festivals</p>
+        <article class="ticket t-activation">
         <div class="ticket-stub">
           <div class="stub-label">admit one</div>
-          <div class="stub-num">№ 003</div>
+          <div class="stub-num">№ 004</div>
           <div class="stub-foot">activation</div>
         </div>
         <div class="ticket-perf" aria-hidden="true"></div>
@@ -3654,10 +3777,11 @@
           </ul>
           <footer class="ticket-ft">
             <div class="ticket-stamp">headline act</div>
-            <a href="#book" class="btn ghost">Get a quote</a>
+            <a href="#book" class="btn ghost" data-package="activation">Get a quote</a>
           </footer>
         </div>
       </article>
+      </div>
     </div>
   </div>
 </section>
@@ -3991,6 +4115,18 @@
           <div class="field">
             <label>WhatsApp</label>
             <input type="tel" name="whatsapp" placeholder="+65 8123 4567" />
+          </div>
+        </div>
+        <div class="row">
+          <div class="field">
+            <label>Package</label>
+            <select name="package" id="bookPackage">
+              <option value="prelude">The Prelude — S$750 · 2 hrs</option>
+              <option value="keepsake" selected>The Keepsake — S$880 · 3 hrs (most booked)</option>
+              <option value="showpiece">The Showpiece — S$1,380 · 5 hrs</option>
+              <option value="activation">The Activation — custom quote</option>
+              <option value="undecided">Not sure yet</option>
+            </select>
           </div>
         </div>
         <div class="row">

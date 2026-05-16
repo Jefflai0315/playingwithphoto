@@ -592,6 +592,33 @@ try {
   }, { passive: false });
 })();
 
+// --- Booking: package pre-select from pricing CTAs ---
+(function () {
+  const form = document.getElementById('bookForm');
+  if (!form) return;
+
+  const pkgSelect = form.elements.package;
+  const DEFAULT_PACKAGE = 'keepsake';
+
+  function setPackage(value) {
+    if (!pkgSelect || !value) return;
+    const opt = pkgSelect.querySelector(`option[value="${value}"]`);
+    if (opt) pkgSelect.value = value;
+  }
+
+  document.querySelectorAll('[data-package]').forEach((link) => {
+    link.addEventListener('click', () => setPackage(link.dataset.package));
+  });
+
+  const hash = window.location.hash;
+  const hashMatch = hash.match(/^#book[-:]?(prelude|keepsake|showpiece|activation)$/i);
+  if (hashMatch) setPackage(hashMatch[1].toLowerCase());
+
+  const params = new URLSearchParams(window.location.search);
+  const queryPkg = params.get('package');
+  if (queryPkg) setPackage(queryPkg.toLowerCase());
+})();
+
 // --- Booking form submit ---
 (function () {
   const form = document.getElementById('bookForm');
@@ -600,6 +627,7 @@ try {
   const submitBtn = form.querySelector('button[type="submit"]');
   const statusEl = document.getElementById('bookFormStatus');
   const defaultBtnHtml = submitBtn ? submitBtn.innerHTML : '';
+  const defaultPackage = 'keepsake';
 
   function setStatus(message, isError = false) {
     if (!statusEl) return;
@@ -618,6 +646,7 @@ try {
         `Name: ${data.name || '-'}`,
         `Email: ${data.email || '-'}`,
         `WhatsApp: ${data.whatsapp || '-'}`,
+        `Package: ${data.package || '-'}`,
         `Event type: ${data.eventType || '-'}`,
         `Event date: ${data.eventDate || '-'}`,
         `Venue / city: ${data.venue || '-'}`,
@@ -636,6 +665,7 @@ try {
       name: form.elements.name?.value?.trim() || '',
       email: form.elements.email?.value?.trim() || '',
       whatsapp: form.elements.whatsapp?.value?.trim() || '',
+      package: form.elements.package?.value?.trim() || '',
       eventType: form.elements.eventType?.value?.trim() || '',
       eventDate: form.elements.eventDate?.value || '',
       venue: form.elements.venue?.value?.trim() || ''
@@ -661,10 +691,12 @@ try {
           payload.append('name', data.name);
           payload.append('email', data.email);
           payload.append('whatsapp', data.whatsapp);
+          payload.append('package', data.package);
           payload.append('eventType', data.eventType);
           payload.append('eventDate', data.eventDate);
           payload.append('venue', data.venue);
-          payload.append('_subject', `Booking enquiry — ${data.eventType || 'Event'}`);
+          const pkgLabel = data.package ? ` · ${data.package}` : '';
+          payload.append('_subject', `Booking enquiry — ${data.eventType || 'Event'}${pkgLabel}`);
 
           res = await fetch(endpoint, {
             method: 'POST',
@@ -682,6 +714,7 @@ try {
         if (!res.ok) throw new Error(`Request failed with ${res.status}`);
         setStatus("Thanks — enquiry sent. I'll reply soon.");
         form.reset();
+        if (form.elements.package) form.elements.package.value = defaultPackage;
       }
     } catch (err) {
       console.warn('Booking form error:', err);

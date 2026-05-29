@@ -86,6 +86,8 @@ for (const key of PAINTERS) {
     GALLERY[key] = {
       before: window.PhotoLib.asCss(cfg.before),
       after: cfg.after ? window.PhotoLib.asCss(cfg.after) : null,
+      afterVideo: cfg.afterVideo ? window.PhotoLib.resolve(cfg.afterVideo) : null,
+      afterPoster: cfg.after ? window.PhotoLib.resolve(cfg.after) : null,
       name: cfg.name || "Untitled",
     };
   } else {
@@ -255,6 +257,8 @@ if (hero) {
 // ==========================================================
 const sparkBeforeImg = document.getElementById("sparkBeforeImg");
 const sparkAfterImg = document.getElementById("sparkAfterImg");
+const sparkAfterVideo = document.getElementById("sparkAfterVideo");
+const sparkAfterFrame = sparkAfterImg?.closest(".spark-frame");
 const sparkBeforeName = document.getElementById("sparkBeforeName");
 const sparkAfterName = document.getElementById("sparkAfterName");
 const sparkSignature = document.getElementById("sparkSignature");
@@ -318,9 +322,52 @@ function renderPainter(key) {
     }, 220);
   }
 
-  sparkAfterImg.classList.remove("emerging");
-  void sparkAfterImg.offsetWidth;
-  sparkAfterImg.classList.add("emerging");
+  sparkAfterImg.classList.remove("emerging", "is-hidden-by-video");
+  sparkAfterVideo?.classList.remove("emerging", "is-active");
+
+  // Optional looped video per painter (afterVideo in photos.config.js)
+  const videoUrl = entry.afterVideo || null;
+  if (sparkAfterVideo && videoUrl) {
+    sparkAfterFrame?.classList.add("has-video");
+    sparkAfterVideo.poster = entry.afterPoster || "";
+    sparkAfterImg.classList.add("is-hidden-by-video");
+
+    const playVideo = () => {
+      sparkAfterVideo.classList.add("is-active");
+      sparkAfterVideo.play().catch((err) => {
+        console.warn("[spark] video autoplay blocked or failed:", videoUrl, err);
+      });
+    };
+
+    if (sparkAfterVideo.dataset.src !== videoUrl) {
+      sparkAfterVideo.dataset.src = videoUrl;
+      sparkAfterVideo.classList.remove("emerging");
+      sparkAfterVideo.src = videoUrl;
+      sparkAfterVideo.load();
+      sparkAfterVideo.onloadeddata = () => {
+        sparkAfterVideo.classList.add("emerging");
+        playVideo();
+      };
+      sparkAfterVideo.onerror = () => {
+        console.error("[spark] could not load video:", videoUrl);
+        sparkAfterFrame?.classList.remove("has-video");
+        sparkAfterImg.classList.remove("is-hidden-by-video");
+        sparkAfterVideo.classList.remove("is-active");
+      };
+    } else {
+      sparkAfterVideo.classList.add("emerging");
+      playVideo();
+    }
+  } else {
+    sparkAfterFrame?.classList.remove("has-video");
+    if (sparkAfterVideo) {
+      sparkAfterVideo.pause();
+      sparkAfterVideo.removeAttribute("src");
+      sparkAfterVideo.dataset.src = "";
+    }
+    void sparkAfterImg.offsetWidth;
+    sparkAfterImg.classList.add("emerging");
+  }
 }
 
 function syncMetaPicker(key) {

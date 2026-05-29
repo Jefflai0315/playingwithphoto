@@ -1,5 +1,46 @@
-// Snapshot landing — booking form, package pre-select, add-on multi-select
+// Gallery: still by default; tap Animate to play loop (lazy-load MP4)
+(function () {
+  document.querySelectorAll("[data-gallery-media]").forEach((wrap) => {
+    const still = wrap.querySelector(".gallery-still");
+    const video = wrap.querySelector(".gallery-video");
+    const btn = wrap.querySelector(".gallery-play");
+    const label = btn?.querySelector(".gallery-play-label");
+    if (!still || !video || !btn) return;
 
+    function ensureSrc() {
+      const src = video.dataset.src;
+      if (src && !video.getAttribute("src")) {
+        video.setAttribute("src", src);
+        video.load();
+      }
+    }
+
+    function showPhoto() {
+      wrap.classList.remove("is-playing");
+      video.pause();
+      btn.setAttribute("aria-pressed", "false");
+      if (label) label.textContent = "Animate";
+      const name = still.alt || "style";
+      btn.setAttribute("aria-label", `Play ${name} animation`);
+    }
+
+    function showVideo() {
+      ensureSrc();
+      wrap.classList.add("is-playing");
+      video.play().catch(() => {});
+      btn.setAttribute("aria-pressed", "true");
+      if (label) label.textContent = "Photo";
+      btn.setAttribute("aria-label", "Show still photo");
+    }
+
+    btn.addEventListener("click", () => {
+      if (wrap.classList.contains("is-playing")) showPhoto();
+      else showVideo();
+    });
+  });
+})();
+
+// Snapshot landing — booking form, package pre-select, add-on multi-select
 (function () {
   const form = document.getElementById('bookForm');
   if (!form) return;

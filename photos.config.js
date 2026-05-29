@@ -67,10 +67,11 @@ window.PHOTO_CONFIG = {
   // ONE entry per painter. Clicking a painter button on the page jumps to
   // that painter's photo. Auto-rotate cycles through the painters in order.
   //
-  //   'before' = path to your real photo (REQUIRED)
-  //   'after'  = path to your AI-painted version (OPTIONAL — falls back to
-  //              the SVG painting placeholder until you add it)
-  //   'name'   = caption shown under the "before" frame
+  //   'before'     = path to your real photo (REQUIRED)
+  //   'after'      = still image (poster + fallback if no video)
+  //   'afterVideo' = optional MP4/WebM loop — plays in the "After" frame
+  //                  when that painter is selected (muted, looping)
+  //   'name'       = caption shown under the "before" frame
   //
   // Tip: as you generate each painted version (e.g. with Midjourney /
   // ChatGPT image-gen), drop it into /photos/spark/ and uncomment the
@@ -80,16 +81,19 @@ window.PHOTO_CONFIG = {
       vangogh: {
         before: "spark/jenmike.png",
         after: "spark/jenmike-vangogh.png",
+        afterVideo: "spark/jenmike-vangogh.mp4",
         name: "Jen & Mike",
       },
       monet: {
         before: "spark/myra.png",
         after: "spark/myra-monet1.png",
+        afterVideo: "spark/myra-monet.mp4",
         name: "Myra Sweet 16",
       },
       picasso: {
         before: "spark/co.png",
         after: "spark/co-picasso.png",
+        afterVideo: "spark/co-picasso.mp4",
         name: "Studio session",
       },
       warhol: {
@@ -218,6 +222,9 @@ window.PHOTO_CONFIG = {
       return out;
     },
     sparkByPainter: () => cfg.spark?.byPainter || {},
+    sparkVideo: (painter) =>
+      resolve(cfg.spark?.byPainter?.[painter]?.afterVideo),
+    sparkPoster: (painter) => resolve(cfg.spark?.byPainter?.[painter]?.after),
     // Returns up to 4 CSS url() values for a given testimonial card key.
     // 1 photo  → repeated 4×.   2 photos → A,B,A,B.   3 → A,B,C,A.   4 → as-is.
     testimonialPhotos: (key) => {

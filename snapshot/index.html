@@ -319,6 +319,98 @@
     border-radius: 4px;
     border: 1px solid rgba(42,26,12,.15);
     box-shadow: 0 8px 20px var(--shadow);
+    display: block;
+    background: #2a1a0c;
+  }
+  .gallery-media {
+    position: relative;
+    aspect-ratio: 3/4;
+    border-radius: 4px;
+    border: 1px solid rgba(42,26,12,.15);
+    box-shadow: 0 8px 20px var(--shadow);
+    background: #2a1a0c;
+    overflow: hidden;
+  }
+  .gallery-media .gallery-still,
+  .gallery-media video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: opacity .4s ease;
+  }
+  .gallery-media video {
+    opacity: 0;
+    pointer-events: none;
+  }
+  .gallery-media.is-playing .gallery-still { opacity: 0; }
+  .gallery-media.is-playing video {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .gallery-play {
+    position: absolute;
+    left: 50%;
+    bottom: 10px;
+    z-index: 2;
+    transform: translateX(-50%);
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 9px 16px 9px 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,235,200,.35);
+    background: rgba(42,26,12,.78);
+    color: var(--cream);
+    font-family: var(--ff-mono);
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 4px 16px rgba(0,0,0,.25);
+    transition: transform .2s, background .2s, color .2s, border-color .2s;
+  }
+  .gallery-play:hover { transform: translateX(-50%) translateY(-2px); }
+  .gallery-play-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--rust);
+    color: var(--cream);
+    flex-shrink: 0;
+  }
+  .gallery-play-icon svg { width: 10px; height: 10px; margin-left: 2px; }
+  .gallery-media:not(.is-playing) .gallery-play {
+    animation: gallery-play-glow 2.8s ease-in-out infinite;
+  }
+  @keyframes gallery-play-glow {
+    0%, 100% { box-shadow: 0 4px 16px rgba(0,0,0,.25), 0 0 0 0 rgba(255,216,138,.35); }
+    50% { box-shadow: 0 6px 20px rgba(0,0,0,.3), 0 0 0 5px rgba(255,216,138,0); }
+  }
+  .gallery-media.is-playing .gallery-play {
+    background: rgba(244,234,213,.94);
+    color: var(--ink);
+    border-color: rgba(42,26,12,.2);
+    animation: none;
+  }
+  .gallery-media.is-playing .gallery-play-icon {
+    background: var(--ink);
+  }
+  .gallery-media.is-playing .gallery-play-icon svg { display: none; }
+  .gallery-media.is-playing .gallery-play-icon::after {
+    content: "";
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    background: var(--cream);
   }
   .gallery figcaption {
     font-size: 11px;
@@ -742,7 +834,6 @@
     .hero-ctas .btn-hero-book { display: none; }
 
     section { padding: 40px var(--page-pad); }
-    .gallery { gap: 10px; }
     .pkg { grid-template-columns: 1fr; gap: 4px; padding: 18px; }
     .pkg .price { text-align: left; }
     .book-grid { gap: 28px; }
@@ -755,6 +846,7 @@
     }
     .footer { padding: 32px var(--page-pad) calc(24px + env(safe-area-inset-bottom, 0px)); }
     .addons-toolbar { flex-direction: column; align-items: flex-start; }
+    .gallery { gap: 10px; }
   }
 </style>
 </head>
@@ -809,7 +901,7 @@
   <div class="wrap">
     <p class="eyebrow">Examples</p>
     <h2>Real guests, <em>repainted</em> by AI</h2>
-    <p style="color:var(--ink-2); max-width: 50ch;">A quick look — the full site has before/after demos, scroll stories, and a live webcam try-on.</p>
+    <p style="color:var(--ink-2); max-width: 52ch;">Tap <strong>Animate</strong> on any style to see the moving AI painting. On the full site you can try <strong>vintage film</strong> filters on your webcam — nothing uploads.</p>
 
     <div class="gallery">
       <figure class="pair">
@@ -818,23 +910,48 @@
           <figcaption>Before</figcaption>
         </div>
         <div>
-          <img src="../photos/spark/jenmike-vangogh.png" alt="Van Gogh style" width="400" height="500" loading="lazy" />
+          <div class="gallery-media" data-gallery-media>
+            <img class="gallery-still" src="../photos/spark/jenmike-vangogh.png" alt="Van Gogh style" width="400" height="500" loading="lazy" />
+            <video class="gallery-video" data-src="../photos/spark/jenmike-vangogh.mp4" muted loop playsinline webkit-playsinline preload="none" aria-hidden="true"></video>
+            <button type="button" class="gallery-play" aria-pressed="false" aria-label="Play Van Gogh animation">
+              <span class="gallery-play-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+              <span class="gallery-play-label">Animate</span>
+            </button>
+          </div>
           <figcaption>Van Gogh</figcaption>
         </div>
       </figure>
       <figure>
-        <img src="../photos/spark/myra-monet.png" alt="Monet style portrait" loading="lazy" />
+        <div class="gallery-media" data-gallery-media>
+          <img class="gallery-still" src="../photos/spark/myra-monet.png" alt="Monet style portrait" width="400" height="500" loading="lazy" />
+          <video class="gallery-video" data-src="../photos/spark/myra-monet.mp4" muted loop playsinline webkit-playsinline preload="none" aria-hidden="true"></video>
+          <button type="button" class="gallery-play" aria-pressed="false" aria-label="Play Monet animation">
+            <span class="gallery-play-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+            <span class="gallery-play-label">Animate</span>
+          </button>
+        </div>
         <figcaption>Monet</figcaption>
       </figure>
       <figure>
-        <img src="../photos/spark/co-picasso.png" alt="Picasso style portrait" loading="lazy" />
+        <div class="gallery-media" data-gallery-media>
+          <img class="gallery-still" src="../photos/spark/co-picasso.png" alt="Picasso style portrait" width="400" height="500" loading="lazy" />
+          <video class="gallery-video" data-src="../photos/spark/co-picasso.mp4" muted loop playsinline webkit-playsinline preload="none" aria-hidden="true"></video>
+          <button type="button" class="gallery-play" aria-pressed="false" aria-label="Play Picasso animation">
+            <span class="gallery-play-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+            <span class="gallery-play-label">Animate</span>
+          </button>
+        </div>
         <figcaption>Picasso</figcaption>
       </figure>
     </div>
 
     <div class="cta-row">
+      <a class="btn btn-outline" href="../#demo">
+        Try vintage film on your webcam
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="13" r="4"/><path d="M3 7h4l2-2h6l2 2h4v12H3z"/></svg>
+      </a>
       <a class="btn btn-outline" href="../#spark">
-        Explore the full experience
+        More painter examples
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
       </a>
     </div>
@@ -1160,6 +1277,6 @@
   </div>
 </footer>
 
-<script src="snapshot.js?v=4"></script>
+<script src="snapshot.js?v=7"></script>
 </body>
 </html>

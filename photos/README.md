@@ -10,7 +10,7 @@ them in the matching section of `/photos.config.js` at the project root.
 | `hero/`     | Photos for the two floating film strips next to the hero title.                |
 | `styles/`   | One photo per filter (`sepia`, `polaroid`, `bw`, `kodachrome`).                |
 | `reel/`     | Exactly **4** photos for the cinema-reel section.                              |
-| `spark/`    | Real "before" photos for the spark gallery (paired with painted "after").     |
+| `spark/`    | Real "before" photos, painted "after" stills, and optional **`.mp4` loops**. |
 | `meta/`     | Exactly **4** photos for the metamorphosis painter switcher.                   |
 
 ## Recommended specs
@@ -29,3 +29,20 @@ them in the matching section of `/photos.config.js` at the project root.
 
 Any section left empty in the config keeps using the existing cartoon
 placeholder, so you can fill these in over time.
+
+## AI style videos (Spark gallery)
+
+For each painter in `photos.config.js` → `spark.byPainter`, you can add:
+
+```js
+vangogh: {
+  before: "spark/jenmike.png",
+  after: "spark/jenmike-vangogh.png",      // still — poster + fallback
+  afterVideo: "spark/jenmike-vangogh.mp4",  // loop plays in "After" frame
+  name: "Jen & Mike",
+},
+```
+
+**Export tips:** 3–8 second loop, H.264 MP4, ~720–1080p, under ~3 MB if possible.
+Use `muted` + `loop` (the site sets this). The still `after` image shows until the
+video loads, and stays as the poster on slow connections.

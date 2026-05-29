@@ -275,9 +275,35 @@
 }
 /* The "after" painting receives a filter determined by body[data-painter=X] */
 .spark-painting { }
+.spark-after-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity .45s ease;
+  z-index: 3;
+  background: #2a1a0c;
+}
+.spark-after-video.is-active {
+  opacity: 1;
+}
+.spark-after-video.emerging {
+  animation: painting-emerge 1s cubic-bezier(.2,.9,.2,1) forwards;
+}
+/* Painter texture overlay sits above the still — hide it when video plays */
+.spark-frame.has-video::after {
+  opacity: 0 !important;
+}
+.spark-frame.has-video #sparkAfterImg.is-hidden-by-video {
+  opacity: 0 !important;
+  animation: none !important;
+}
 .spark-signature {
   position: absolute;
   bottom: 14px; right: 16px;
+  z-index: 4;
   font-family: var(--ff-display);
   font-style: italic;
   font-size: 16px;

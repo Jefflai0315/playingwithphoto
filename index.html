@@ -3,7 +3,8 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Playing With Photo — AI Vintage Photobooth by Jeff</title>
+<meta name="description" content="AI vintage photobooth for weddings, parties and brand events in Singapore. Printed strips, digital files, 20+ painter styles. Packages from S$750." />
+<title>Playing With Photo — AI Vintage Photobooth for Weddings & Events · Singapore</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -134,6 +135,195 @@
     transition: transform .2s;
   }
   .nav-cta:hover { transform: translateY(-1px); }
+
+  .nav-toggle {
+    display: none;
+    width: 44px; height: 44px;
+    border: 1px solid var(--ink);
+    border-radius: 10px;
+    background: rgba(244,234,213,.9);
+    cursor: pointer;
+    padding: 0;
+    align-items: center; justify-content: center;
+    flex-direction: column; gap: 5px;
+  }
+  .nav-toggle span {
+    display: block; width: 18px; height: 2px;
+    background: var(--ink); border-radius: 1px;
+    transition: transform .2s, opacity .2s;
+  }
+  body.nav-open .nav-toggle span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  body.nav-open .nav-toggle span:nth-child(2) { opacity: 0; }
+  body.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  .nav-drawer {
+    display: none;
+    position: fixed; inset: 0; z-index: 200;
+    pointer-events: none;
+  }
+  .nav-drawer.is-open { pointer-events: auto; }
+  .nav-drawer-backdrop {
+    position: absolute; inset: 0;
+    background: rgba(42,26,12,.45);
+    opacity: 0; transition: opacity .25s;
+  }
+  .nav-drawer.is-open .nav-drawer-backdrop { opacity: 1; }
+  .nav-drawer-panel {
+    position: absolute; top: 0; right: 0;
+    width: min(320px, 88vw); height: 100%;
+    background: var(--cream);
+    border-left: 1px solid rgba(42,26,12,.15);
+    padding: 88px 28px 32px;
+    transform: translateX(100%);
+    transition: transform .28s ease;
+    box-shadow: -12px 0 40px var(--shadow);
+  }
+  .nav-drawer.is-open .nav-drawer-panel { transform: translateX(0); }
+  .nav-drawer-panel a {
+    display: block;
+    padding: 14px 0;
+    border-bottom: 1px dotted rgba(42,26,12,.2);
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+  }
+  .nav-drawer-panel .drawer-cta {
+    margin-top: 24px;
+    text-align: center;
+    border: none;
+    padding: 14px 20px;
+    border-radius: 999px;
+    background: var(--ink);
+    color: var(--cream);
+  }
+
+  .mobile-book-bar {
+    display: none;
+    position: fixed; bottom: 0; left: 0; right: 0;
+    z-index: 110;
+    padding: 10px 16px calc(10px + env(safe-area-inset-bottom, 0px));
+    background: rgba(244,234,213,.94);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(42,26,12,.12);
+    box-shadow: 0 -8px 24px var(--shadow);
+    transform: translateY(110%);
+    transition: transform .3s ease;
+  }
+  .mobile-book-bar.is-visible { transform: translateY(0); }
+  .mobile-book-bar a {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    width: 100%;
+    padding: 14px 20px;
+    border-radius: 999px;
+    background: var(--ink);
+    color: var(--cream);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+
+  .hero-pitch {
+    font-family: var(--ff-body);
+    font-size: clamp(15px, 1.8vw, 18px);
+    line-height: 1.5;
+    color: var(--cream);
+    max-width: 38ch;
+    margin: 16px auto 0;
+    text-shadow: 0 1px 12px rgba(42,26,12,.5);
+  }
+  .hero-pitch strong { font-weight: 600; color: #fff; }
+  .hero-jumps {
+    display: flex; flex-wrap: wrap; gap: 10px 16px;
+    justify-content: center;
+    margin-top: 18px;
+    font-size: 12px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+  .hero-jumps a {
+    color: rgba(255,255,255,.85);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255,255,255,.35);
+    padding-bottom: 2px;
+  }
+  .hero-jumps a:hover { color: #fff; border-color: #fff; }
+
+  .section-bridge {
+    text-align: center;
+    padding: 48px 36px 0;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+  .section-bridge p {
+    margin: 12px 0 0;
+    color: var(--ink-2);
+    font-size: 16px;
+  }
+
+  .pricing-audience {
+    display: flex; flex-wrap: wrap; gap: 10px;
+    margin: 28px 0 8px;
+  }
+  .pricing-audience button {
+    font-family: var(--ff-body);
+    font-size: 13px;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    padding: 10px 18px;
+    border-radius: 999px;
+    border: 1px solid rgba(42,26,12,.25);
+    background: transparent;
+    color: var(--ink);
+    cursor: pointer;
+    transition: background .2s, border-color .2s;
+  }
+  .pricing-audience button.active,
+  .pricing-audience button:hover {
+    background: var(--ink);
+    color: var(--cream);
+    border-color: var(--ink);
+  }
+  .pricing-audience-hint {
+    font-size: 14px;
+    color: var(--ink-2);
+    margin: 0 0 24px;
+    min-height: 1.4em;
+  }
+  .ticket-booklet[data-audience] .ticket { transition: opacity .25s, transform .25s; }
+  .ticket-booklet[data-audience="wedding"] .ticket:not(.t-keepsake):not(.t-showpiece):not(.t-prelude) { opacity: .45; }
+  .ticket-booklet[data-audience="corporate"] .ticket:not(.t-activation):not(.t-showpiece) { opacity: .45; }
+  .ticket-booklet[data-audience="birthday"] .ticket:not(.t-keepsake):not(.t-prelude) { opacity: .45; }
+  .ticket-booklet[data-audience="wedding"] .ticket.t-keepsake,
+  .ticket-booklet[data-audience="corporate"] .ticket.t-activation,
+  .ticket-booklet[data-audience="birthday"] .ticket.t-keepsake {
+    opacity: 1;
+    transform: scale(1.02);
+    z-index: 2;
+  }
+
+  .site-footer-nav {
+    display: flex; flex-wrap: wrap; gap: 12px 24px;
+    margin-top: 20px;
+    font-size: 13px;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+  }
+  .site-footer-nav a { text-decoration: none; opacity: .75; }
+  .site-footer-nav a:hover { opacity: 1; }
+
+  @media (max-width: 900px) {
+    .nav-toggle { display: flex; }
+    .nav-drawer { display: block; }
+    .navlinks { display: none; }
+    .mobile-book-bar { display: block; }
+    body { padding-bottom: 72px; }
+    nav.topnav { padding: 14px 18px; }
+  }
 
   /* ======= Utility ======= */
   .wrap { max-width: 1280px; margin: 0 auto; padding: 0 36px; }
@@ -1708,8 +1898,7 @@
     opacity: .65;
   }
 
-  /* Hide the legacy topnav entirely when rail is active */
-  body.has-rail .topnav { display: none; }
+  /* Top nav stays visible alongside the chapter rail */
 
   /* ===== Three.js dissolve background ===== */
   #bg-canvas-host {
@@ -1851,10 +2040,16 @@
     flex: 0 0 auto;
   }
 
+  @media (max-width: 1100px) {
+    .edition-rail { width: 180px; padding-left: 16px; }
+    body.has-rail > section, body.has-rail > .torn-edge { margin-left: 180px; }
+    body.has-rail .topnav { left: 180px; width: calc(100% - 180px); }
+    .navlinks { gap: 18px; font-size: 11px; }
+  }
   @media (max-width: 900px) {
     .edition-rail { display: none; }
     body.has-rail > section, body.has-rail > .torn-edge { margin-left: 0; }
-    body.has-rail .topnav { display: flex; left: 0; width: 100%; }
+    body.has-rail .topnav { left: 0; width: 100%; }
   }
 
   /* ======= TORN-PAPER EDGES between sections ======= */
@@ -2948,47 +3143,58 @@
 <aside class="edition-rail" aria-label="Chapter index">
   <div class="edition-mark">
     Playing With Photo
-    <em>The <span class="variant">Photobooth</span> Edition</em>
+    <em>AI vintage <span class="variant">photobooth</span></em>
   </div>
   <ol class="rail-chapters">
-    <li data-target="#hero"><span class="num">ɪ</span><a href="#hero">Genesis</a></li>
-    <li data-target="#spark"><span class="num">ɪɪ</span><a href="#spark">The Spark</a></li>
-    <li data-target="#reel"><span class="num">ɪɪɪ</span><a href="#reel">The Reel</a></li>
-    <li data-target="#demo"><span class="num">ɪᴠ</span><a href="#demo">Live Booth</a></li>
-    <li data-target="#booth"><span class="num">ᴠ</span><a href="#booth">Cabinet</a></li>
-    <li data-target="#how"><span class="num">ᴠɪ</span><a href="#how">Ritual</a></li>
-    <li data-target="#styles"><span class="num">ᴠɪɪ</span><a href="#styles">The Masters</a></li>
-    <li data-target="#usecases"><span class="num">ᴠɪɪɪ</span><a href="#usecases">Occasions</a></li>
-    <li data-target="#testimonials"><span class="num">ɪx</span><a href="#testimonials">Voices</a></li>
-    <li data-target="#pricing"><span class="num">x</span><a href="#pricing">Tariff</a></li>
-    <li data-target="#animation"><span class="num">xɪ</span><a href="#animation">Motion</a></li>
-    <li data-target="#addons"><span class="num">xɪɪ</span><a href="#addons">Add-ons</a></li>
-    <li data-target="#about"><span class="num">xɪɪɪ</span><a href="#about">Jeff</a></li>
+    <li data-target="#hero"><span class="num">ɪ</span><a href="#hero">Home</a></li>
+    <li data-target="#spark"><span class="num">ɪɪ</span><a href="#spark">Examples</a></li>
+    <li data-target="#demo"><span class="num">ɪɪɪ</span><a href="#demo">Try it</a></li>
+    <li data-target="#pricing"><span class="num">ɪᴠ</span><a href="#pricing">Packages</a></li>
+    <li data-target="#testimonials"><span class="num">ᴠ</span><a href="#testimonials">Reviews</a></li>
+    <li data-target="#about"><span class="num">ᴠɪ</span><a href="#about">About</a></li>
+    <li data-target="#book"><span class="num">ᴠɪɪ</span><a href="#book">Book</a></li>
   </ol>
   <div class="edition-footnote">
     <span class="seal" aria-hidden="true"></span>
-    Printed in Singapore,<br/>
-    MMXXVI.<br/>
-    <em>20+ painter styles.</em>
+    Singapore · AI vintage photobooth<br/>
+    <em>From S$750 · 20+ painter styles</em>
   </div>
 </aside>
 
 <!-- NAV -->
-<nav class="topnav" id="topnav">
+<nav class="topnav" id="topnav" aria-label="Main">
   <div class="logo">
-    <span>Playing With <em>Photo</em></span>
+    <a href="#hero" style="text-decoration:none;color:inherit;"><span>Playing With <em>Photo</em></span></a>
   </div>
   <div class="navlinks">
-    <a href="#booth">The Booth</a>
-    <a href="#how">How it works</a>
-    <a href="#styles">Styles</a>
-    <a href="#pricing">Pricing</a>
-    <a href="#animation">AI Motion</a>
-    <a href="#addons">Add-ons</a>
-    <a href="#about">About Jeff</a>
+    <a href="#spark">Examples</a>
+    <a href="#demo">Try it</a>
+    <a href="#pricing">Packages</a>
+    <a href="#testimonials">Reviews</a>
+    <a href="#about">About</a>
+    <a href="#book">Book</a>
   </div>
+  <button type="button" class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navDrawer" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
   <a href="#book" class="nav-cta">Book the booth</a>
 </nav>
+
+<div class="nav-drawer" id="navDrawer" aria-hidden="true">
+  <div class="nav-drawer-backdrop" id="navDrawerBackdrop"></div>
+  <nav class="nav-drawer-panel" aria-label="Mobile menu">
+    <a href="#spark">Examples</a>
+    <a href="#demo">Try it</a>
+    <a href="#pricing">Packages</a>
+    <a href="#testimonials">Reviews</a>
+    <a href="#about">About</a>
+    <a href="#book" class="drawer-cta">Book the booth</a>
+  </nav>
+</div>
+
+<div class="mobile-book-bar" id="mobileBookBar" aria-hidden="true">
+  <a href="#book">Book the booth · from S$750</a>
+</div>
 
 <!-- HERO — Painterly Landscape + Scrolling Image Sequence -->
 <section class="hero-scrub" id="hero" data-screen-label="01 Hero">
@@ -3035,21 +3241,29 @@
       A new world of photography.<br/>
       <em>20+ painter styles</em> · the hand of Van&nbsp;Gogh, Monet,<br/>Hokusai &amp; more, in sixty&nbsp;seconds.
     </p>
+    <p class="hero-pitch">
+      <strong>AI vintage photobooth</strong> for weddings, parties &amp; brand events in Singapore.
+      Printed strips + digital files in about a minute.
+    </p>
     <div class="meta-line">
-      <span>xiii <em>Chapters</em></span><span>·</span>
-      <span>By <em>Jeff</em></span><span>·</span><span>Singapore</span>
+      <span>By <em>Jeff</em></span><span>·</span><span>Singapore &amp; JB</span><span>·</span><span>from <em>S$750</em></span>
     </div>
     <div class="hero-ctas">
-      <a href="#spark" class="btn-edition primary">Receive the spark
+      <a href="#spark" class="btn-edition primary">See examples
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
       </a>
       <a href="#book" class="btn-edition">Book the booth</a>
+    </div>
+    <div class="hero-jumps">
+      <a href="#pricing">Packages</a>
+      <a href="#demo">Try the demo</a>
+      <a href="#book">Get a quote</a>
     </div>
   </div>
 
   <!-- Scroll progress — tiny indicator at bottom of hero -->
   <div class="hero-scrub-hint" id="heroScrubHint">
-    <span class="hint-label">scroll to watch them meet</span>
+    <span class="hint-label">Scroll — watch a photo turn into a Van Gogh painting</span>
     <div class="hint-bar"><div class="hint-bar-fill" id="heroScrubBar"></div></div>
   </div>
 
@@ -3060,17 +3274,17 @@
 <div class="torn-edge to-dark" aria-hidden="true"></div>
 
 <!-- THE SPARK — rotating before/after gallery with cinematic flash transitions -->
-<section class="spark-chapter" id="spark" data-screen-label="02 The Spark" style="position:relative;">
+<section class="spark-chapter" id="spark" data-screen-label="02 Examples" style="position:relative;">
   <span class="chapter-numeral tr light" aria-hidden="true">ɪɪ</span>
   <div class="wrap">
     <div class="section-head reveal">
       <div>
-        <span class="eyebrow">The spark · 001</span>
-        <h2>One touch. <em>A thousand</em> brushes.</h2>
+        <span class="eyebrow">See the magic · Examples</span>
+        <h2>One snap. <em>A masterpiece.</em></h2>
       </div>
       <p class="lede">
-        The AI receives the spark and repaints your photograph in the style of a master.
-        Watch the transformation — or tap the lens to see your own face reborn.
+        Your photo is restyled in the brushwork of Van Gogh, Monet, Picasso, Warhol, Hokusai, and 20+ more.
+        Watch the before &amp; after — or tap the lens to try it on your own face.
       </p>
     </div>
 
@@ -3098,7 +3312,7 @@
       <div class="spark-arrow">
         <div class="spark-arrow-line"></div>
         <div class="spark-arrow-icon">✦</div>
-        <div class="spark-arrow-label" id="sparkArrowLabel">repainted by Claude</div>
+        <div class="spark-arrow-label" id="sparkArrowLabel">repainted by AI</div>
       </div>
 
       <!-- Right: after (painting) -->
@@ -3132,7 +3346,11 @@
     </figure>
 
     <div class="spark-foot reveal">
-      <span class="mono">Tap any painter to see how that style transforms a real moment</span>
+      <span class="mono">Tap any painter to see how that style transforms a real moment.</span>
+      <span class="mono" style="display:block; margin-top:8px; opacity:.85;">
+        <a href="#reel" style="color:inherit;">Scroll for the full strip story</a>
+        · <a href="#metamorphosis" style="color:inherit;">More style swaps</a>
+      </span>
     </div>
   </div>
 
@@ -3161,7 +3379,7 @@
       <div class="reel-head">
         <span class="eyebrow" style="color:var(--highlight);">The reel · 002</span>
         <h2 class="reel-title" id="reelTitle">Scroll to <em>develop</em> the strip</h2>
-        <p class="reel-sub" id="reelSub">Four poses. Four frames. Each one unfolds as you scroll down.</p>
+        <p class="reel-sub" id="reelSub">Four poses, four frames — keep scrolling to see how a real booth session unfolds.</p>
       </div>
 
       <div class="reel-strip" id="reelStrip">
@@ -3241,18 +3459,163 @@
   </div>
 </div>
 
+<div class="torn-edge to-cream" aria-hidden="true"></div>
+<!-- PRICING -->
+<section class="chapter" id="pricing" data-screen-label="04 Packages">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <span class="eyebrow">Packages · Pricing</span>
+        <h2>Four ways<br/>to <em>play</em>.</h2>
+      </div>
+      <div class="pricing-meta">
+        <p>All packages include setup, teardown, an on-site attendant, unlimited prints, and every digital file.</p>
+        <p class="pricing-guide">Most couples book <strong>The Keepsake</strong> (3 hrs). Full receptions choose <strong>The Showpiece</strong> (5 hrs).</p>
+        <a href="./PWP_Packages-2.pdf" class="btn ghost" target="_blank" rel="noopener noreferrer">View full package details (PDF)</a>
+      </div>
+    </div>
+
+    <div class="pricing-audience reveal" role="tablist" aria-label="Who are you booking for?">
+      <button type="button" class="active" data-audience="wedding" role="tab" aria-selected="true">Weddings</button>
+      <button type="button" data-audience="corporate" role="tab" aria-selected="false">Corporate</button>
+      <button type="button" data-audience="birthday" role="tab" aria-selected="false">Birthdays</button>
+    </div>
+    <p class="pricing-audience-hint reveal" id="pricingAudienceHint" aria-live="polite">
+      Most couples choose <strong>The Keepsake</strong> (3 hrs, S$880).
+    </p>
+
+    <div class="ticket-booklet reveal" data-audience="wedding">
+      <div class="ticket-grid-weddings">
+      <article class="ticket t-prelude">
+        <div class="ticket-stub">
+          <div class="stub-label">admit one</div>
+          <div class="stub-num">№ 001</div>
+          <div class="stub-foot">prelude</div>
+        </div>
+        <div class="ticket-perf" aria-hidden="true"></div>
+        <div class="ticket-body">
+          <header class="ticket-hd">
+            <span class="ticket-kicker">The Prelude · short set</span>
+            <div class="ticket-price"><span class="cur">S$</span>750<small>· 2 hrs</small></div>
+            <span class="ticket-scene">ROM, tea ceremony, or cocktail hour</span>
+          </header>
+          <ul class="ticket-list">
+            <li>2 hours of shooting</li>
+            <li>Unlimited printed strips</li>
+            <li>All digital files delivered</li>
+            <li>2 AI film styles</li>
+            <li>On-site attendant</li>
+          </ul>
+          <footer class="ticket-ft">
+            <div class="ticket-stamp">first look</div>
+            <a href="#book" class="btn ghost" data-package="prelude">Enquire</a>
+          </footer>
+        </div>
+      </article>
+
+      <article class="ticket t-keepsake featured">
+        <div class="ticket-ribbon">most booked</div>
+        <div class="ticket-stub">
+          <div class="stub-label">admit one</div>
+          <div class="stub-num">№ 002</div>
+          <div class="stub-foot">keepsake</div>
+        </div>
+        <div class="ticket-perf" aria-hidden="true"></div>
+        <div class="ticket-body">
+          <header class="ticket-hd">
+            <span class="ticket-kicker">The Keepsake · half day</span>
+            <div class="ticket-price"><span class="cur">S$</span>880<small>· 3 hrs</small></div>
+            <span class="ticket-scene">Portraits and one celebration segment</span>
+          </header>
+          <ul class="ticket-list">
+            <li>3 hours of shooting</li>
+            <li>Unlimited printed strips</li>
+            <li>All digital files delivered</li>
+            <li>3 AI film styles</li>
+            <li>On-site attendant</li>
+          </ul>
+          <footer class="ticket-ft">
+            <div class="ticket-stamp red">half day</div>
+            <a href="#book" class="btn" data-package="keepsake">Book it</a>
+          </footer>
+        </div>
+      </article>
+
+      <article class="ticket t-showpiece">
+        <div class="ticket-stub dark">
+          <div class="stub-label">admit one</div>
+          <div class="stub-num">№ 003</div>
+          <div class="stub-foot">showpiece</div>
+        </div>
+        <div class="ticket-perf" aria-hidden="true"></div>
+        <div class="ticket-body">
+          <header class="ticket-hd">
+            <span class="ticket-kicker">The Showpiece · full evening</span>
+            <div class="ticket-price"><span class="cur">S$</span>1,380<small>· 5 hrs</small></div>
+            <span class="ticket-scene">Cocktail through first dance</span>
+          </header>
+          <ul class="ticket-list">
+            <li>5 hours of shooting</li>
+            <li>Unlimited printed strips</li>
+            <li>All digital files + gallery link</li>
+            <li>All 5 AI film styles</li>
+            <li>Custom branded footer</li>
+            <li>On-site attendant</li>
+          </ul>
+          <footer class="ticket-ft">
+            <div class="ticket-stamp red">feature film</div>
+            <a href="#book" class="btn" data-package="showpiece">Book it</a>
+          </footer>
+        </div>
+      </article>
+      </div>
+
+      <div class="ticket-grid-brands">
+        <p class="ticket-brands-label">For brands &amp; festivals</p>
+        <article class="ticket t-activation">
+        <div class="ticket-stub">
+          <div class="stub-label">admit one</div>
+          <div class="stub-num">№ 004</div>
+          <div class="stub-foot">activation</div>
+        </div>
+        <div class="ticket-perf" aria-hidden="true"></div>
+        <div class="ticket-body">
+          <header class="ticket-hd">
+            <span class="ticket-kicker">The Activation · brands &amp; fests</span>
+            <div class="ticket-price"><span class="cur">S$</span>Custom<small>· full day+</small></div>
+          </header>
+          <ul class="ticket-list">
+            <li>Full-day or multi-day</li>
+            <li>Custom-branded booth wrap</li>
+            <li>Bespoke AI style training</li>
+            <li>Live gallery feed</li>
+            <li>Multi-operator team</li>
+          </ul>
+          <footer class="ticket-ft">
+            <div class="ticket-stamp">headline act</div>
+            <a href="#book" class="btn ghost" data-package="activation">Get a quote</a>
+          </footer>
+        </div>
+      </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+
 <!-- LIVE DEMO -->
 <section class="chapter" id="demo" data-screen-label="02 Live Demo" style="padding: 120px 0;">
   <div class="wrap">
     <div class="section-head reveal">
       <div>
-        <span class="eyebrow">Live demo · 001</span>
+        <span class="eyebrow">Try it · Live demo</span>
         <h2>Try it right <em>now</em>.</h2>
       </div>
       <p>
         Your webcam, a pinch of AI, and thirty years of film nostalgia. Click the shutter,
         strike four poses — we'll develop a vintage strip you can save and share.
         <b>Nothing is uploaded.</b> All processing happens in your browser.
+        On mobile, allow camera access when prompted — desktop works best for the full experience.
       </p>
     </div>
 
@@ -3332,13 +3695,21 @@
   </div>
 </section>
 
+<div class="section-bridge wrap reveal">
+  <span class="eyebrow">What you get on the day</span>
+  <h2 style="font-family:var(--ff-display); font-size:clamp(28px,4vw,40px); font-weight:400; margin-top:12px;">
+    The booth, the attendant, the prints.
+  </h2>
+  <p>Everything below is included with every package — hardware, setup, and a friendly operator who keeps the queue moving.</p>
+</div>
+
 <!-- THE BOOTH -->
 <section class="chapter booth-chapter" id="booth" data-screen-label="03 The Booth" style="position:relative;">
   <span class="chapter-numeral tl" aria-hidden="true">ᴠ</span>
   <div class="wrap">
     <div class="section-head reveal">
       <div>
-        <span class="eyebrow">The hardware · 002</span>
+        <span class="eyebrow">The booth · Hardware</span>
         <h2>Hand-built.<br/><span class="italic">Unapologetically</span> <em>analog</em>.</h2>
       </div>
       <p>
@@ -3429,7 +3800,7 @@
   <div class="wrap">
     <div class="section-head reveal">
       <div>
-        <span class="eyebrow">The process · 003</span>
+        <span class="eyebrow">How it works · 4 steps</span>
         <h2>Pose. Click.<br/><em>Develop.</em> Done.</h2>
       </div>
       <p>Four steps, forty seconds. The AI does the heavy lifting — your guests just show up and smile.</p>
@@ -3653,139 +4024,6 @@
   </div>
 </section>
 
-<!-- PRICING -->
-<section class="chapter" id="pricing" data-screen-label="08 Pricing">
-  <div class="wrap">
-    <div class="section-head reveal">
-      <div>
-        <span class="eyebrow">Packages · 007</span>
-        <h2>Four ways<br/>to <em>play</em>.</h2>
-      </div>
-      <div class="pricing-meta">
-        <p>All packages include setup, teardown, an on-site attendant, unlimited prints, and every digital file.</p>
-        <p class="pricing-guide">Most couples book <strong>The Keepsake</strong> (3 hrs). Full receptions choose <strong>The Showpiece</strong> (5 hrs).</p>
-        <a href="./PWP_Packages-2.pdf" class="btn ghost" target="_blank" rel="noopener noreferrer">View full package details</a>
-      </div>
-    </div>
-
-    <div class="ticket-booklet reveal">
-      <div class="ticket-grid-weddings">
-      <article class="ticket t-prelude">
-        <div class="ticket-stub">
-          <div class="stub-label">admit one</div>
-          <div class="stub-num">№ 001</div>
-          <div class="stub-foot">prelude</div>
-        </div>
-        <div class="ticket-perf" aria-hidden="true"></div>
-        <div class="ticket-body">
-          <header class="ticket-hd">
-            <span class="ticket-kicker">The Prelude · short set</span>
-            <div class="ticket-price"><span class="cur">S$</span>750<small>· 2 hrs</small></div>
-            <span class="ticket-scene">ROM, tea ceremony, or cocktail hour</span>
-          </header>
-          <ul class="ticket-list">
-            <li>2 hours of shooting</li>
-            <li>Unlimited printed strips</li>
-            <li>All digital files delivered</li>
-            <li>2 AI film styles</li>
-            <li>On-site attendant</li>
-          </ul>
-          <footer class="ticket-ft">
-            <div class="ticket-stamp">first look</div>
-            <a href="#book" class="btn ghost" data-package="prelude">Enquire</a>
-          </footer>
-        </div>
-      </article>
-
-      <article class="ticket t-keepsake featured">
-        <div class="ticket-ribbon">most booked</div>
-        <div class="ticket-stub">
-          <div class="stub-label">admit one</div>
-          <div class="stub-num">№ 002</div>
-          <div class="stub-foot">keepsake</div>
-        </div>
-        <div class="ticket-perf" aria-hidden="true"></div>
-        <div class="ticket-body">
-          <header class="ticket-hd">
-            <span class="ticket-kicker">The Keepsake · half day</span>
-            <div class="ticket-price"><span class="cur">S$</span>880<small>· 3 hrs</small></div>
-            <span class="ticket-scene">Portraits and one celebration segment</span>
-          </header>
-          <ul class="ticket-list">
-            <li>3 hours of shooting</li>
-            <li>Unlimited printed strips</li>
-            <li>All digital files delivered</li>
-            <li>3 AI film styles</li>
-            <li>On-site attendant</li>
-          </ul>
-          <footer class="ticket-ft">
-            <div class="ticket-stamp red">half day</div>
-            <a href="#book" class="btn" data-package="keepsake">Book it</a>
-          </footer>
-        </div>
-      </article>
-
-      <article class="ticket t-showpiece">
-        <div class="ticket-stub dark">
-          <div class="stub-label">admit one</div>
-          <div class="stub-num">№ 003</div>
-          <div class="stub-foot">showpiece</div>
-        </div>
-        <div class="ticket-perf" aria-hidden="true"></div>
-        <div class="ticket-body">
-          <header class="ticket-hd">
-            <span class="ticket-kicker">The Showpiece · full evening</span>
-            <div class="ticket-price"><span class="cur">S$</span>1,380<small>· 5 hrs</small></div>
-            <span class="ticket-scene">Cocktail through first dance</span>
-          </header>
-          <ul class="ticket-list">
-            <li>5 hours of shooting</li>
-            <li>Unlimited printed strips</li>
-            <li>All digital files + gallery link</li>
-            <li>All 5 AI film styles</li>
-            <li>Custom branded footer</li>
-            <li>On-site attendant</li>
-          </ul>
-          <footer class="ticket-ft">
-            <div class="ticket-stamp red">feature film</div>
-            <a href="#book" class="btn" data-package="showpiece">Book it</a>
-          </footer>
-        </div>
-      </article>
-      </div>
-
-      <div class="ticket-grid-brands">
-        <p class="ticket-brands-label">For brands &amp; festivals</p>
-        <article class="ticket t-activation">
-        <div class="ticket-stub">
-          <div class="stub-label">admit one</div>
-          <div class="stub-num">№ 004</div>
-          <div class="stub-foot">activation</div>
-        </div>
-        <div class="ticket-perf" aria-hidden="true"></div>
-        <div class="ticket-body">
-          <header class="ticket-hd">
-            <span class="ticket-kicker">The Activation · brands &amp; fests</span>
-            <div class="ticket-price"><span class="cur">S$</span>Custom<small>· full day+</small></div>
-          </header>
-          <ul class="ticket-list">
-            <li>Full-day or multi-day</li>
-            <li>Custom-branded booth wrap</li>
-            <li>Bespoke AI style training</li>
-            <li>Live gallery feed</li>
-            <li>Multi-operator team</li>
-          </ul>
-          <footer class="ticket-ft">
-            <div class="ticket-stamp">headline act</div>
-            <a href="#book" class="btn ghost" data-package="activation">Get a quote</a>
-          </footer>
-        </div>
-      </article>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- AI ANIMATION -->
 <section class="chapter animation-chapter" id="animation" data-screen-label="09 AI Animation">
   <span class="chapter-numeral tr light" aria-hidden="true">xɪ</span>
@@ -3935,7 +4173,7 @@
       <article class="addon-card" style="--r:-1deg;">
         <h3>Keychain Making</h3>
         <p>Turn guest portraits into physical keychains for the event table.</p>
-        <div class="addon-price"><span>S$330</span><small>per 100</small></div>
+        <div class="addon-price"><span>S$330</span><small>up to 100 keychains</small></div>
       </article>
     </div>
   </div>
@@ -4165,6 +4403,18 @@
   <div class="wrap">
     <div>
       <div class="biglogo">Playing<br/>With <em>Photo.</em></div>
+      <nav class="site-footer-nav" aria-label="Footer">
+        <a href="#spark">Examples</a>
+        <a href="#demo">Try it</a>
+        <a href="#pricing">Packages</a>
+        <a href="#booth">The booth</a>
+        <a href="#how">How it works</a>
+        <a href="#styles">Styles</a>
+        <a href="#testimonials">Reviews</a>
+        <a href="#addons">Add-ons</a>
+        <a href="#about">About</a>
+        <a href="#book">Book</a>
+      </nav>
       <div class="colophon" style="margin-top: 24px;">Est. 2026 · Singapore · By Jeff / Playing With Pencil</div>
     </div>
     <div class="colophon" style="text-align:right;">
@@ -4227,6 +4477,66 @@
 
     window.addEventListener('scroll', updateActive, { passive: true });
     updateActive();
+  })();
+
+  // ============= Mobile nav drawer =============
+  (function() {
+    const toggle = document.getElementById('navToggle');
+    const drawer = document.getElementById('navDrawer');
+    const backdrop = document.getElementById('navDrawerBackdrop');
+    if (!toggle || !drawer) return;
+
+    function setOpen(open) {
+      document.body.classList.toggle('nav-open', open);
+      drawer.classList.toggle('is-open', open);
+      drawer.setAttribute('aria-hidden', open ? 'false' : 'true');
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    }
+
+    toggle.addEventListener('click', () => setOpen(!drawer.classList.contains('is-open')));
+    backdrop?.addEventListener('click', () => setOpen(false));
+    drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setOpen(false)));
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') setOpen(false); });
+  })();
+
+  // ============= Sticky mobile book bar =============
+  (function() {
+    const bar = document.getElementById('mobileBookBar');
+    const hero = document.getElementById('hero');
+    if (!bar || !hero) return;
+    const io = new IntersectionObserver(([e]) => {
+      bar.classList.toggle('is-visible', !e.isIntersecting);
+      bar.setAttribute('aria-hidden', e.isIntersecting ? 'true' : 'false');
+    }, { threshold: 0, rootMargin: '0px' });
+    io.observe(hero);
+  })();
+
+  // ============= Pricing audience tabs =============
+  (function() {
+    const tabs = document.querySelectorAll('.pricing-audience button');
+    const booklet = document.querySelector('.ticket-booklet');
+    const hint = document.getElementById('pricingAudienceHint');
+    if (!tabs.length || !booklet) return;
+
+    const hints = {
+      wedding: 'Most couples choose <strong>The Keepsake</strong> (3 hrs, S$880).',
+      corporate: 'Brand activations usually pick <strong>The Activation</strong> (custom quote) or <strong>Showpiece</strong> (5 hrs).',
+      birthday: 'Milestone birthdays love <strong>The Keepsake</strong> (3 hrs) — enough time for every guest.',
+    };
+
+    tabs.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const aud = btn.dataset.audience;
+        tabs.forEach(b => {
+          const on = b === btn;
+          b.classList.toggle('active', on);
+          b.setAttribute('aria-selected', on ? 'true' : 'false');
+        });
+        booklet.dataset.audience = aud;
+        if (hint) hint.innerHTML = hints[aud] || '';
+      });
+    });
   })();
 </script>
 <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>

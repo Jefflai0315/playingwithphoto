@@ -610,7 +610,13 @@ try {
     link.addEventListener('click', () => setPackage(link.dataset.package));
   });
 
-  const hash = window.location.hash;
+  let hash = window.location.hash;
+  if (/^#book$/i.test(hash) && hash !== '#book') {
+    history.replaceState(null, '', '#book');
+    hash = '#book';
+    document.getElementById('book')?.scrollIntoView();
+  }
+
   const hashMatch = hash.match(/^#book[-:]?(prelude|keepsake|showpiece|activation)$/i);
   if (hashMatch) setPackage(hashMatch[1].toLowerCase());
 

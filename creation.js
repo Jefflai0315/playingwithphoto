@@ -307,7 +307,7 @@ function renderPainter(key) {
     });
   }
 
-  sparkArrowLabel.textContent = `repainted by artist · ${PAINTER_MAP[key].name}`;
+  sparkArrowLabel.textContent = `repainted by AI · ${PAINTER_MAP[key].name}`;
 
   // Swap the prompt card text with a quick cross-fade
   if (sparkPromptText) {

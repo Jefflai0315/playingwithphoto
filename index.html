@@ -995,6 +995,158 @@
   .book-form .field { flex: 1; }
   .book-form .btn { width: 100%; justify-content: center; margin-top: 24px; }
 
+  /* Booking form — add-ons */
+  .book-addons-block { margin-top: 22px; }
+  .book-addons-summary {
+    padding: 14px 16px;
+    background: rgba(42,26,12,.04);
+    border: 1px dashed rgba(42,26,12,.22);
+    border-radius: 6px;
+  }
+  .book-addons-summary-label {
+    margin: 0 0 6px;
+    font-family: var(--ff-mono);
+    font-size: 10px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+  }
+  .book-addons-summary-empty {
+    margin: 0;
+    font-size: 14px;
+    color: var(--ink-2);
+  }
+  .book-addons-summary-empty a { color: var(--rust); font-weight: 500; }
+  .book-addons-summary-list {
+    margin: 0;
+    padding: 0 0 0 1.15em;
+    font-size: 14px;
+    line-height: 1.45;
+    color: var(--ink);
+  }
+  .book-addons-details {
+    margin-top: 12px;
+    border: 1px solid rgba(42,26,12,.18);
+    border-radius: 6px;
+    background: rgba(255,255,255,.35);
+    overflow: hidden;
+  }
+  .book-addons-details summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 16px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: .04em;
+    list-style: none;
+    user-select: none;
+  }
+  .book-addons-details summary::-webkit-details-marker { display: none; }
+  .book-addons-details summary::after {
+    content: "+";
+    font-family: var(--ff-mono);
+    font-size: 18px;
+    line-height: 1;
+    opacity: .5;
+    transition: transform .2s;
+  }
+  .book-addons-details[open] summary {
+    border-bottom: 1px solid rgba(42,26,12,.12);
+    background: rgba(42,26,12,.03);
+  }
+  .book-addons-details[open] summary::after {
+    content: "−";
+    transform: none;
+  }
+  .book-addons-hint {
+    margin: 0;
+    padding: 10px 16px 0;
+    font-size: 13px;
+    color: var(--ink-2);
+  }
+  .book-addons-hint a { color: var(--rust); }
+  .book-addons-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    padding: 12px 14px 14px;
+  }
+  @media (max-width: 560px) {
+    .book-addons-grid { grid-template-columns: 1fr; }
+  }
+  .book-addon-pick {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin: 0;
+    padding: 11px 12px;
+    border: 1px solid rgba(42,26,12,.14);
+    border-radius: 6px;
+    background: var(--cream);
+    cursor: pointer;
+    transition: border-color .15s, background .15s, box-shadow .15s;
+  }
+  .book-addon-pick:hover {
+    border-color: rgba(42,26,12,.28);
+  }
+  .book-addon-pick:has(input:checked) {
+    border-color: var(--rust);
+    background: #fffdf8;
+    box-shadow: 0 2px 0 var(--rust);
+  }
+  .book-addon-pick input {
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+    pointer-events: none;
+  }
+  .book-addon-check {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    border: 2px solid rgba(42,26,12,.3);
+    border-radius: 4px;
+    background: #fff;
+    position: relative;
+  }
+  .book-addon-check::after {
+    content: "";
+    position: absolute;
+    left: 5px; top: 1px;
+    width: 4px; height: 8px;
+    border: solid var(--cream);
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg) scale(0);
+    transition: transform .12s ease;
+  }
+  .book-addon-pick:has(input:checked) .book-addon-check {
+    background: var(--rust);
+    border-color: var(--rust);
+  }
+  .book-addon-pick:has(input:checked) .book-addon-check::after {
+    transform: rotate(45deg) scale(1);
+  }
+  .book-addon-text { flex: 1; min-width: 0; }
+  .book-addon-text strong {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--ink);
+  }
+  .book-addon-text small {
+    display: block;
+    margin-top: 2px;
+    font-size: 12px;
+    color: var(--ink-2);
+    line-height: 1.35;
+  }
+
   /* ======= FOOTER ======= */
   footer {
     width: 100%;
@@ -4117,7 +4269,7 @@
     </div>
 
     <div class="addons-board reveal">
-      <article class="addon-card featured guestbook-addon" style="--r:-1deg;">
+      <article class="addon-card featured guestbook-addon" style="--r:-1deg;" data-addon-id="guestbook" role="button" tabindex="0" title="Add to enquiry form">
         <h3>Guestbook, Glitter &amp; Glue</h3>
         <p>A hands-on station for messages, stickers, instant prints, and messy little memories.</p>
         <div class="addon-price"><span>S$68</span><small>now only</small></div>
@@ -4125,7 +4277,7 @@
         <div class="addon-scribble" aria-hidden="true">glue</div>
       </article>
 
-      <article class="addon-card" style="--r:1deg;">
+      <article class="addon-card" style="--r:1deg;" data-addon-id="more-styles" role="button" tabindex="0" title="Add to enquiry form">
         <h3>More AI Styles</h3>
         <p>Go beyond the default looks with a custom AI direction for your event.</p>
         <div class="addon-price"><span>+S$100</span><small>custom</small></div>
@@ -4133,44 +4285,44 @@
         <div class="addon-scribble" aria-hidden="true">AI</div>
       </article>
 
-      <article class="addon-card" style="--r:-.6deg;">
+      <article class="addon-card" style="--r:-.6deg;" data-addon-id="animation" role="button" tabindex="0" title="Add to enquiry form">
         <h3>AI Animation Clips</h3>
         <p>Short motion clips generated from guest portraits during the event.</p>
         <div class="addon-price"><span>S$200</span><small>per hour</small></div>
         <span class="addon-note">testing price</span>
       </article>
 
-      <article class="addon-card" style="--r:.6deg;">
+      <article class="addon-card" style="--r:.6deg;" data-addon-id="extra-hour" role="button" tabindex="0" title="Add to enquiry form">
         <h3>Additional Hour</h3>
         <p>Keep the booth open longer when the queue is still moving.</p>
         <div class="addon-price"><span>S$180</span><small>per hour</small></div>
       </article>
 
-      <article class="addon-card" style="--r:-.8deg;">
+      <article class="addon-card" style="--r:-.8deg;" data-addon-id="custom-ui" role="button" tabindex="0" title="Add to enquiry form">
         <h3>Custom Interface</h3>
         <p>Photobooth screen design matched to your wedding, brand, or party theme.</p>
         <div class="addon-price"><span>S$180</span><small>design</small></div>
       </article>
 
-      <article class="addon-card" style="--r:.8deg;">
+      <article class="addon-card" style="--r:.8deg;" data-addon-id="custom-stickers" role="button" tabindex="0" title="Add to enquiry form">
         <h3>Custom Stickers</h3>
         <p>Sticker pack for the event, with AI-generated options available.</p>
         <div class="addon-price"><span>S$180</span><small>pack</small></div>
       </article>
 
-      <article class="addon-card" style="--r:-.4deg;">
+      <article class="addon-card" style="--r:-.4deg;" data-addon-id="email-sms" role="button" tabindex="0" title="Add to enquiry form">
         <h3>Email &amp; SMS Sharing</h3>
         <p>Collect contacts while guests receive their photos - useful for lead generation.</p>
         <div class="addon-price"><span>S$300</span><small>activation</small></div>
       </article>
 
-      <article class="addon-card" style="--r:.4deg;">
+      <article class="addon-card" style="--r:.4deg;" data-addon-id="slideshow" role="button" tabindex="0" title="Add to enquiry form">
         <h3>Live Slideshow</h3>
         <p>Livestream a rolling slideshow of real-time generations on venue screens.</p>
         <div class="addon-price"><span>S$230</span><small>screen feed</small></div>
       </article>
 
-      <article class="addon-card" style="--r:-1deg;">
+      <article class="addon-card" style="--r:-1deg;" data-addon-id="keychain" role="button" tabindex="0" title="Add to enquiry form">
         <h3>Keychain Making</h3>
         <p>Turn guest portraits into physical keychains for the event table.</p>
         <div class="addon-price"><span>S$330</span><small>up to 100 keychains</small></div>
@@ -4389,6 +4541,66 @@
             <input type="text" name="venue" placeholder="Cliveden House, Singapore" />
           </div>
         </div>
+
+        <div class="book-addons-block" id="bookAddonsField">
+          <div class="book-addons-summary" aria-live="polite">
+            <p class="book-addons-summary-label">Your add-ons</p>
+            <p class="book-addons-summary-empty" id="bookAddonsSummaryEmpty">None selected — tap an add-on card above or choose below</p>
+            <ul class="book-addons-summary-list" id="bookAddonsSummaryList" hidden></ul>
+          </div>
+          <details class="book-addons-details" id="bookAddonsDetails">
+            <summary>Choose add-ons <span style="font-weight:400;opacity:.75;">(optional)</span></summary>
+            <p class="book-addons-hint">Or scroll to <a href="#addons">Add-ons</a> and click a card — it selects here too.</p>
+            <div class="book-addons-grid">
+              <label class="book-addon-pick">
+                <input type="checkbox" name="addons" value="Guestbook, Glitter &amp; Glue (S$68)" data-addon-id="guestbook" />
+                <span class="book-addon-check" aria-hidden="true"></span>
+                <span class="book-addon-text"><strong>Guestbook, Glitter &amp; Glue</strong><small>S$68 · launch price</small></span>
+              </label>
+              <label class="book-addon-pick">
+                <input type="checkbox" name="addons" value="More AI Styles (+S$100)" data-addon-id="more-styles" />
+                <span class="book-addon-check" aria-hidden="true"></span>
+                <span class="book-addon-text"><strong>More AI Styles</strong><small>+S$100 · custom</small></span>
+              </label>
+              <label class="book-addon-pick">
+                <input type="checkbox" name="addons" value="AI Animation Clips (S$200/hr)" data-addon-id="animation" />
+                <span class="book-addon-check" aria-hidden="true"></span>
+                <span class="book-addon-text"><strong>AI Animation Clips</strong><small>S$200 per hour</small></span>
+              </label>
+              <label class="book-addon-pick">
+                <input type="checkbox" name="addons" value="Additional Hour (S$180/hr)" data-addon-id="extra-hour" />
+                <span class="book-addon-check" aria-hidden="true"></span>
+                <span class="book-addon-text"><strong>Additional Hour</strong><small>S$180 per hour</small></span>
+              </label>
+              <label class="book-addon-pick">
+                <input type="checkbox" name="addons" value="Custom Interface (S$180)" data-addon-id="custom-ui" />
+                <span class="book-addon-check" aria-hidden="true"></span>
+                <span class="book-addon-text"><strong>Custom Interface</strong><small>S$180 design</small></span>
+              </label>
+              <label class="book-addon-pick">
+                <input type="checkbox" name="addons" value="Custom Stickers (S$180)" data-addon-id="custom-stickers" />
+                <span class="book-addon-check" aria-hidden="true"></span>
+                <span class="book-addon-text"><strong>Custom Stickers</strong><small>S$180 pack</small></span>
+              </label>
+              <label class="book-addon-pick">
+                <input type="checkbox" name="addons" value="Email &amp; SMS Sharing (S$300)" data-addon-id="email-sms" />
+                <span class="book-addon-check" aria-hidden="true"></span>
+                <span class="book-addon-text"><strong>Email &amp; SMS Sharing</strong><small>S$300 activation</small></span>
+              </label>
+              <label class="book-addon-pick">
+                <input type="checkbox" name="addons" value="Live Slideshow (S$230)" data-addon-id="slideshow" />
+                <span class="book-addon-check" aria-hidden="true"></span>
+                <span class="book-addon-text"><strong>Live Slideshow</strong><small>S$230 screen feed</small></span>
+              </label>
+              <label class="book-addon-pick">
+                <input type="checkbox" name="addons" value="Keychain Making (S$330, up to 100)" data-addon-id="keychain" />
+                <span class="book-addon-check" aria-hidden="true"></span>
+                <span class="book-addon-text"><strong>Keychain Making</strong><small>S$330 · up to 100 keychains</small></span>
+              </label>
+            </div>
+          </details>
+        </div>
+
         <button type="submit" class="btn">Send enquiry
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
         </button>
@@ -4404,6 +4616,7 @@
     <div>
       <div class="biglogo">Playing<br/>With <em>Photo.</em></div>
       <nav class="site-footer-nav" aria-label="Footer">
+        <a href="/snapshot/">Quick book</a>
         <a href="#spark">Examples</a>
         <a href="#demo">Try it</a>
         <a href="#pricing">Packages</a>
@@ -4542,7 +4755,7 @@
 <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
 <script src="photos.config.js?v=6"></script>
 <script src="bg.js?v=1"></script>
-<script src="app.js?v=7"></script>
+<script src="app.js?v=9"></script>
 <script src="enhancements.js?v=6"></script>
 <script src="creation.js?v=6"></script>
 <script src="hero-scrub.js?v=1"></script>

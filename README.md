@@ -10,6 +10,8 @@ npm run dev
 
 Then open `http://localhost:5173`.
 
+**Quick booking page (short landing):** [http://localhost:5173/snapshot/](http://localhost:5173/snapshot/) — use this URL for Instagram bio, ads, or `playingwithpencil.art/snapshot`.
+
 ## Build
 
 ```bash

@@ -625,6 +625,69 @@ try {
   if (queryPkg) setPackage(queryPkg.toLowerCase());
 })();
 
+// --- Add-ons: toggle from marketing cards → booking checkboxes ---
+(function () {
+  const form = document.getElementById('bookForm');
+  if (!form) return;
+
+  const summaryEmpty = document.getElementById('bookAddonsSummaryEmpty');
+  const summaryList = document.getElementById('bookAddonsSummaryList');
+  const addonsDetails = document.getElementById('bookAddonsDetails');
+
+  function updateBookAddonsSummary() {
+    const selected = getSelectedAddons(form);
+    if (summaryEmpty) summaryEmpty.hidden = selected.length > 0;
+    if (summaryList) {
+      summaryList.hidden = selected.length === 0;
+      summaryList.innerHTML = selected.map((label) => `<li>${label}</li>`).join('');
+    }
+  }
+
+  function toggleAddon(id, scrollToBook = true) {
+    const inputs = form.querySelectorAll(`input[data-addon-id="${id}"][name="addons"]`);
+    if (!inputs.length) return;
+    const next = ![...inputs].some((i) => i.checked);
+    inputs.forEach((i) => { i.checked = next; });
+    updateBookAddonsSummary();
+    if (next && addonsDetails && !addonsDetails.open) addonsDetails.open = true;
+    if (scrollToBook) {
+      document.getElementById('book')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      form.querySelector(`input[data-addon-id="${id}"]`)?.focus({ preventScroll: true });
+    }
+  }
+
+  form.querySelectorAll('input[name="addons"]').forEach((input) => {
+    input.addEventListener('change', updateBookAddonsSummary);
+  });
+  form.addEventListener('addons-reset', updateBookAddonsSummary);
+
+  document.querySelectorAll('.addon-card[data-addon-id]').forEach((card) => {
+    const id = card.dataset.addonId;
+    const activate = () => toggleAddon(id);
+    card.addEventListener('click', activate);
+    card.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        activate();
+      }
+    });
+  });
+
+  updateBookAddonsSummary();
+})();
+
+function getSelectedAddons(form) {
+  if (!form) return [];
+  const seen = new Set();
+  const labels = [];
+  form.querySelectorAll('input[name="addons"]:checked').forEach((input) => {
+    if (seen.has(input.value)) return;
+    seen.add(input.value);
+    labels.push(input.value);
+  });
+  return labels;
+}
+
 // --- Booking form submit ---
 (function () {
   const form = document.getElementById('bookForm');
@@ -656,6 +719,7 @@ try {
         `Event type: ${data.eventType || '-'}`,
         `Event date: ${data.eventDate || '-'}`,
         `Venue / city: ${data.venue || '-'}`,
+        `Add-ons: ${data.addons || 'None selected'}`,
         '',
         'Thank you!'
       ].join('\n')
@@ -667,6 +731,7 @@ try {
     e.preventDefault();
     setStatus('');
 
+    const addons = getSelectedAddons(form);
     const data = {
       name: form.elements.name?.value?.trim() || '',
       email: form.elements.email?.value?.trim() || '',
@@ -674,7 +739,8 @@ try {
       package: form.elements.package?.value?.trim() || '',
       eventType: form.elements.eventType?.value?.trim() || '',
       eventDate: form.elements.eventDate?.value || '',
-      venue: form.elements.venue?.value?.trim() || ''
+      venue: form.elements.venue?.value?.trim() || '',
+      addons: addons.length ? addons.join('\n') : 'None selected'
     };
 
     if (submitBtn) {
@@ -701,8 +767,11 @@ try {
           payload.append('eventType', data.eventType);
           payload.append('eventDate', data.eventDate);
           payload.append('venue', data.venue);
+          payload.append('addons', data.addons);
+          addons.forEach((a) => payload.append('addons[]', a));
           const pkgLabel = data.package ? ` · ${data.package}` : '';
-          payload.append('_subject', `Booking enquiry — ${data.eventType || 'Event'}${pkgLabel}`);
+          const addonHint = addons.length ? ` · ${addons.length} add-on(s)` : '';
+          payload.append('_subject', `Booking enquiry — ${data.eventType || 'Event'}${pkgLabel}${addonHint}`);
 
           res = await fetch(endpoint, {
             method: 'POST',
@@ -721,6 +790,7 @@ try {
         setStatus("Thanks — enquiry sent. I'll reply soon.");
         form.reset();
         if (form.elements.package) form.elements.package.value = defaultPackage;
+        form.dispatchEvent(new Event('addons-reset', { bubbles: true }));
       }
     } catch (err) {
       console.warn('Booking form error:', err);

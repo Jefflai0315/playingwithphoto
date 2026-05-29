@@ -121,6 +121,7 @@
     color: var(--rust);
     font-style: normal;
   }
+  .logo-short { display: none; }
   .navlinks { display: flex; gap: 32px; }
   .navlinks a { text-decoration: none; opacity: .7; transition: opacity .2s; }
   .navlinks a:hover { opacity: 1; }
@@ -227,32 +228,6 @@
     text-transform: uppercase;
   }
 
-  .hero-pitch {
-    font-family: var(--ff-body);
-    font-size: clamp(15px, 1.8vw, 18px);
-    line-height: 1.5;
-    color: var(--cream);
-    max-width: 38ch;
-    margin: 16px auto 0;
-    text-shadow: 0 1px 12px rgba(42,26,12,.5);
-  }
-  .hero-pitch strong { font-weight: 600; color: #fff; }
-  .hero-jumps {
-    display: flex; flex-wrap: wrap; gap: 10px 16px;
-    justify-content: center;
-    margin-top: 18px;
-    font-size: 12px;
-    letter-spacing: .08em;
-    text-transform: uppercase;
-  }
-  .hero-jumps a {
-    color: rgba(255,255,255,.85);
-    text-decoration: none;
-    border-bottom: 1px solid rgba(255,255,255,.35);
-    padding-bottom: 2px;
-  }
-  .hero-jumps a:hover { color: #fff; border-color: #fff; }
-
   .section-bridge {
     text-align: center;
     padding: 48px 36px 0;
@@ -320,9 +295,23 @@
     .nav-toggle { display: flex; }
     .nav-drawer { display: block; }
     .navlinks { display: none; }
+    .nav-cta { display: none; }
     .mobile-book-bar { display: block; }
     body { padding-bottom: 72px; }
-    nav.topnav { padding: 14px 18px; }
+    nav.topnav {
+      padding: 12px 16px;
+      gap: 10px;
+      mix-blend-mode: normal;
+      background: rgba(244,234,213,.92);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(42,26,12,.08);
+    }
+    .logo { font-size: 18px; min-width: 0; flex: 1; }
+    .logo-long { display: none; }
+    .logo-short { display: inline; }
+    .hero-title-card .btn-hero-book { display: none; }
+    .hero-jumps { display: none; }
   }
 
   /* ======= Utility ======= */
@@ -390,7 +379,7 @@
   .hero h1 .italic { font-style: italic; font-weight: 300; }
   .hero h1 .amp { font-family: var(--ff-script); color: var(--rust); font-style: normal; font-size: .85em; display: inline-block; transform: translateY(.08em); }
   .hero h1 .dash { color: var(--rust); }
-  .hero-sub {
+  .hero:not(.hero-scrub) .hero-sub {
     margin-top: 28px;
     max-width: 480px;
     font-size: 18px;
@@ -3316,7 +3305,10 @@
 <!-- NAV -->
 <nav class="topnav" id="topnav" aria-label="Main">
   <div class="logo">
-    <a href="#hero" style="text-decoration:none;color:inherit;"><span>Playing With <em>Photo</em></span></a>
+    <a href="#hero" style="text-decoration:none;color:inherit;">
+      <span class="logo-long">Playing With <em>Photo</em></span>
+      <span class="logo-short">PWP</span>
+    </a>
   </div>
   <div class="navlinks">
     <a href="#spark">Examples</a>
@@ -3380,7 +3372,7 @@
         <path d="M150 1 H299 V399 H1 V1 H150" pathLength="100"></path>
       </svg>
     </div>
-    <div class="kicker">· Volume Ⅰ · 2026 ·</div>
+    <div class="kicker">Singapore · AI vintage photobooth</div>
     <h1 class="hero-big">
       The <em>Photobooth</em><br/>Edition
     </h1>
@@ -3389,27 +3381,22 @@
       <circle cx="60" cy="5" r="2.2" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".6"/>
       <circle cx="60" cy="5" r=".8" fill="currentColor" opacity=".7"/>
     </svg>
-    <p class="hero-sub">
-      A new world of photography.<br/>
-      <em>20+ painter styles</em> · the hand of Van&nbsp;Gogh, Monet,<br/>Hokusai &amp; more, in sixty&nbsp;seconds.
-    </p>
     <p class="hero-pitch">
-      <strong>AI vintage photobooth</strong> for weddings, parties &amp; brand events in Singapore.
-      Printed strips + digital files in about a minute.
+      <strong>Weddings, parties &amp; brand events.</strong>
+      Printed strips + digital files in about a minute · from <strong>S$750</strong>.
     </p>
     <div class="meta-line">
-      <span>By <em>Jeff</em></span><span>·</span><span>Singapore &amp; JB</span><span>·</span><span>from <em>S$750</em></span>
+      <span>By <em>Jeff</em></span><span>·</span><span>Singapore &amp; JB</span>
     </div>
     <div class="hero-ctas">
       <a href="#spark" class="btn-edition primary">See examples
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
       </a>
-      <a href="#book" class="btn-edition">Book the booth</a>
+      <a href="#book" class="btn-edition btn-hero-book">Book the booth</a>
     </div>
     <div class="hero-jumps">
       <a href="#pricing">Packages</a>
       <a href="#demo">Try the demo</a>
-      <a href="#book">Get a quote</a>
     </div>
   </div>
 

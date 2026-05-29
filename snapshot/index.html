@@ -25,7 +25,8 @@
     --ff-body: "DM Sans", system-ui, sans-serif;
     --ff-script: "Caveat", cursive;
     --ff-mono: "JetBrains Mono", monospace;
-    --wrap: min(1080px, 100% - 40px);
+    --page-pad: 20px;
+    --wrap: min(1080px, calc(100% - var(--page-pad) * 2));
   }
   * { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
@@ -52,10 +53,11 @@
   .top {
     position: sticky; top: 0; z-index: 40;
     display: flex; align-items: center; justify-content: space-between;
-    gap: 16px;
-    padding: 14px 20px;
+    gap: 12px;
+    padding: 12px var(--page-pad);
     background: rgba(244,234,213,.92);
     backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     border-bottom: 1px solid rgba(42,26,12,.1);
   }
   .logo {
@@ -64,16 +66,150 @@
     font-weight: 600;
     font-style: italic;
     text-decoration: none;
+    color: inherit;
+    min-width: 0;
+    flex: 1;
+    line-height: 1.15;
   }
-  .top-actions { display: flex; gap: 10px; align-items: center; flex-shrink: 0; }
+  .logo-short { display: none; }
+  .top-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-shrink: 0;
+  }
   .top-actions a {
     text-decoration: none;
     font-size: 12px;
     letter-spacing: .1em;
     text-transform: uppercase;
     font-weight: 500;
+    white-space: nowrap;
   }
   .top-actions .ghost { opacity: .7; }
+  .top-actions .nav-desktop { display: flex; gap: 8px; align-items: center; }
+
+  .nav-toggle {
+    display: none;
+    width: 42px;
+    height: 42px;
+    border: 1px solid rgba(42,26,12,.25);
+    border-radius: 10px;
+    background: rgba(255,255,255,.5);
+    cursor: pointer;
+    padding: 0;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 5px;
+    flex-shrink: 0;
+  }
+  .nav-toggle span {
+    display: block;
+    width: 18px;
+    height: 2px;
+    background: var(--ink);
+    border-radius: 1px;
+    transition: transform .2s, opacity .2s;
+  }
+  body.nav-open .nav-toggle span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  body.nav-open .nav-toggle span:nth-child(2) { opacity: 0; }
+  body.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  .nav-drawer {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    pointer-events: none;
+  }
+  .nav-drawer.is-open { pointer-events: auto; }
+  .nav-drawer-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(42,26,12,.45);
+    opacity: 0;
+    transition: opacity .25s;
+  }
+  .nav-drawer.is-open .nav-drawer-backdrop { opacity: 1; }
+  .nav-drawer-panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: min(300px, 86vw);
+    height: 100%;
+    background: var(--cream);
+    border-left: 1px solid rgba(42,26,12,.12);
+    padding: max(72px, calc(12px + env(safe-area-inset-top))) 22px 28px;
+    transform: translateX(100%);
+    transition: transform .28s ease;
+    box-shadow: -12px 0 40px var(--shadow);
+    overflow-y: auto;
+  }
+  .nav-drawer.is-open .nav-drawer-panel { transform: translateX(0); }
+  .nav-drawer-panel a {
+    display: block;
+    padding: 14px 0;
+    border-bottom: 1px dotted rgba(42,26,12,.2);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+  }
+  .nav-drawer-panel .drawer-cta {
+    display: block;
+    margin-top: 20px;
+    text-align: center;
+    padding: 14px 18px;
+    border-radius: 999px;
+    background: var(--ink);
+    color: var(--cream);
+    border: none;
+  }
+  .nav-drawer-panel .drawer-wa {
+    display: block;
+    margin-top: 10px;
+    text-align: center;
+    padding: 12px 18px;
+    border-radius: 999px;
+    background: #1a6b42;
+    color: var(--cream);
+    border: none;
+  }
+
+  .mobile-book-bar {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 110;
+    padding: 10px var(--page-pad) calc(10px + env(safe-area-inset-bottom, 0px));
+    background: rgba(244,234,213,.96);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(42,26,12,.1);
+    box-shadow: 0 -6px 20px var(--shadow);
+    transform: translateY(110%);
+    transition: transform .3s ease;
+  }
+  .mobile-book-bar.is-visible { transform: translateY(0); }
+  .mobile-book-bar a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 13px 18px;
+    border-radius: 999px;
+    background: var(--ink);
+    color: var(--cream);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
   .btn {
     display: inline-flex; align-items: center; justify-content: center; gap: 8px;
     padding: 12px 22px;
@@ -584,33 +720,92 @@
   }
   .footer a { color: var(--rust); font-weight: 500; }
   .footer-cta { margin-top: 20px; }
+
+  @media (max-width: 640px) {
+    :root { --page-pad: 16px; }
+    body { padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px)); font-size: 16px; }
+
+    .top { padding: 10px var(--page-pad); gap: 10px; }
+    .logo-long { display: none; }
+    .logo-short { display: inline; font-size: 19px; }
+    .top-actions .nav-desktop { display: none; }
+    .nav-toggle { display: flex; }
+    .nav-drawer { display: block; }
+    .mobile-book-bar { display: block; }
+
+    .hero { padding: 28px var(--page-pad) 32px; }
+    .hero h1 { font-size: clamp(32px, 9vw, 42px); }
+    .hero .lead { font-size: 16px; margin-bottom: 22px; }
+    .hero-ctas { flex-direction: column; align-items: stretch; }
+    .hero-ctas .btn { width: 100%; justify-content: center; }
+    /* One book path on mobile: sticky bar (not hero duplicate) */
+    .hero-ctas .btn-hero-book { display: none; }
+
+    section { padding: 40px var(--page-pad); }
+    .gallery { gap: 10px; }
+    .pkg { grid-template-columns: 1fr; gap: 4px; padding: 18px; }
+    .pkg .price { text-align: left; }
+    .book-grid { gap: 28px; }
+    .book-form { padding: 20px 16px; }
+    .cta-row .btn-outline {
+      width: 100%;
+      justify-content: center;
+      padding: 12px 18px;
+      font-size: 12px;
+    }
+    .footer { padding: 32px var(--page-pad) calc(24px + env(safe-area-inset-bottom, 0px)); }
+    .addons-toolbar { flex-direction: column; align-items: flex-start; }
+  }
 </style>
 </head>
 <body>
 
 <header class="top">
-  <a class="logo" href="../">Playing With <em>Photo</em></a>
+  <a class="logo" href="../">
+    <span class="logo-long">Playing With <em>Photo</em></span>
+    <span class="logo-short">PWP</span>
+  </a>
   <div class="top-actions">
-    <a class="ghost" href="../">Full site</a>
-    <a class="btn wa" href="https://wa.me/6591866059" target="_blank" rel="noopener">WhatsApp</a>
-    <a class="btn" href="#book">Book</a>
+    <div class="nav-desktop">
+      <a class="ghost" href="../">Full site</a>
+      <a class="btn wa" href="https://wa.me/6591866059" target="_blank" rel="noopener">WhatsApp</a>
+      <a class="btn" href="#book">Book</a>
+    </div>
+    <button type="button" class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navDrawer" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </header>
+
+<div class="nav-drawer" id="navDrawer" aria-hidden="true">
+  <div class="nav-drawer-backdrop" id="navDrawerBackdrop"></div>
+  <nav class="nav-drawer-panel" aria-label="Menu">
+    <a href="#packages">Packages</a>
+    <a href="#addons">Add-ons</a>
+    <a href="#examples">Examples</a>
+    <a class="ghost" href="../">Full experience site</a>
+    <a class="drawer-wa" href="https://wa.me/6591866059" target="_blank" rel="noopener">WhatsApp Jeff</a>
+    <a class="drawer-cta" href="#book">Book the booth</a>
+  </nav>
+</div>
+
+<div class="mobile-book-bar" id="mobileBookBar" aria-hidden="true">
+  <a href="#book">Book the booth · from S$750</a>
+</div>
 
 <header class="hero wrap">
   <p class="tag">Singapore · Johor Bahru</p>
   <h1>AI vintage <em>photobooth</em><br/>for your event</h1>
   <p class="lead">
-    Printed film strips and digital files in about a minute.
-    Van Gogh, Monet, 70s Kodak, and 20+ more styles — with an on-site attendant.
+    Printed strips + digital files in about a minute. On-site attendant included.
   </p>
   <div class="hero-ctas">
-    <a class="btn" href="#book">Book from S$750</a>
+    <a class="btn btn-hero-book" href="#book">Book from S$750</a>
     <a class="btn ghost" href="https://wa.me/6591866059?text=Hi%20Jeff%2C%20I%27d%20like%20to%20enquire%20about%20the%20photobooth." target="_blank" rel="noopener">Chat on WhatsApp</a>
   </div>
 </header>
 
-<section>
+<section id="examples">
   <div class="wrap">
     <p class="eyebrow">Examples</p>
     <h2>Real guests, <em>repainted</em> by AI</h2>
@@ -965,6 +1160,6 @@
   </div>
 </footer>
 
-<script src="snapshot.js?v=2"></script>
+<script src="snapshot.js?v=4"></script>
 </body>
 </html>

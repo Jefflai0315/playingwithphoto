@@ -127,3 +127,34 @@
 
   updateAddonUI();
 })();
+
+// Mobile nav drawer + sticky book bar
+(function () {
+  const toggle = document.getElementById('navToggle');
+  const drawer = document.getElementById('navDrawer');
+  const backdrop = document.getElementById('navDrawerBackdrop');
+  const hero = document.querySelector('.hero');
+  const bookBar = document.getElementById('mobileBookBar');
+
+  if (toggle && drawer) {
+    function setOpen(open) {
+      document.body.classList.toggle('nav-open', open);
+      drawer.classList.toggle('is-open', open);
+      drawer.setAttribute('aria-hidden', open ? 'false' : 'true');
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    }
+    toggle.addEventListener('click', () => setOpen(!drawer.classList.contains('is-open')));
+    backdrop?.addEventListener('click', () => setOpen(false));
+    drawer.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setOpen(false)));
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setOpen(false); });
+  }
+
+  if (bookBar && hero) {
+    const io = new IntersectionObserver(([e]) => {
+      bookBar.classList.toggle('is-visible', !e.isIntersecting);
+      bookBar.setAttribute('aria-hidden', e.isIntersecting ? 'true' : 'false');
+    }, { threshold: 0 });
+    io.observe(hero);
+  }
+})();

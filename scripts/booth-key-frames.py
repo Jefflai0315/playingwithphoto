@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Key booth frames: edge flood + global matte removal."""
+"""Key booth frames: edge flood + global matte/highlight removal."""
 
 from __future__ import annotations
 
@@ -12,9 +12,10 @@ from PIL import Image
 ROOT = Path(__file__).resolve().parents[1]
 FRAMES_DIR = ROOT / "photos" / "booth" / "frames"
 VIDEO = ROOT / "photos" / "booth" / "assembled-scrub.mp4"
-BG_FLOOR = 200
-MATTE_CEIL = 250
+BG_FLOOR = 185
+MATTE_CEIL = 248
 NEUTRAL_SPREAD = 16
+HIGHLIGHT_MIN = 247
 
 
 def is_neutral(r: int, g: int, b: int) -> bool:
@@ -26,9 +27,8 @@ def is_matte_pixel(r: int, g: int, b: int) -> bool:
     return BG_FLOOR <= lo < MATTE_CEIL and is_neutral(r, g, b)
 
 
-def is_ring_highlight(r: int, g: int, b: int) -> bool:
-    # Keep only near-pure white speculars (ring core), not the gray matte blob.
-    return min(r, g, b) >= MATTE_CEIL and is_neutral(r, g, b)
+def is_highlight_pixel(r: int, g: int, b: int) -> bool:
+    return min(r, g, b) >= HIGHLIGHT_MIN and is_neutral(r, g, b)
 
 
 def key_frame(img: Image.Image) -> Image.Image:
@@ -75,9 +75,9 @@ def key_frame(img: Image.Image) -> Image.Image:
     for y in range(h):
         for x in range(w):
             r, g, b, a = px[x, y]
-            if a == 0 or is_ring_highlight(r, g, b):
+            if a == 0:
                 continue
-            if is_matte_pixel(r, g, b):
+            if is_matte_pixel(r, g, b) or is_highlight_pixel(r, g, b):
                 px[x, y] = (r, g, b, 0)
 
     return img
@@ -120,7 +120,7 @@ def main() -> None:
     for tmp in FRAMES_DIR.glob("src_*.png"):
         tmp.unlink()
 
-    print(f"done — {len(sources)} frames (matte {BG_FLOOR}-{MATTE_CEIL - 1})")
+    print(f"done — {len(sources)} frames (matte {BG_FLOOR}+)")
 
 
 if __name__ == "__main__":

@@ -143,7 +143,19 @@
     });
   }
 
-  // ----- Frame draw — cover-fit like background-size:cover -----
+  // Mobile: pull back from cover so more of each frame is visible (less crop).
+  function fgScaleMultiplier() {
+    const w = window.innerWidth;
+    if (w <= 400) return 0.62;
+    if (w <= 720) return 0.74;
+    return 1;
+  }
+
+  function fgParallaxStrength() {
+    return window.innerWidth <= 720 ? 0.45 : 1;
+  }
+
+  // ----- Frame draw — cover-fit, softened on narrow viewports -----
   let lastFrameRect = null;
   function drawFrame(idx) {
     const img = frames[idx];
@@ -153,7 +165,8 @@
     ctx.clearRect(0, 0, cw, ch);
     const iw = img.naturalWidth || img.width;
     const ih = img.naturalHeight || img.height;
-    const scale = Math.max(cw / iw, ch / ih);
+    const coverScale = Math.max(cw / iw, ch / ih);
+    const scale = coverScale * fgScaleMultiplier();
     const dw = iw * scale;
     const dh = ih * scale;
     const dx = (cw - dw) / 2;
@@ -366,8 +379,9 @@
     if (frames[drawIdx]) drawFrame(drawIdx);
 
     if (canvas) {
+      const pm = fgParallaxStrength();
       canvas.style.transform =
-        `translate3d(${mx * -22}px, ${my * -14}px, 0)`;
+        `translate3d(${mx * -22 * pm}px, ${my * -14 * pm}px, 0)`;
     }
     if (bgThree) bgThree.render(heroScrollInto, mx, my);
 

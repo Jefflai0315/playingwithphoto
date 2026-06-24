@@ -181,6 +181,112 @@ window.PHOTO_CONFIG = {
     gala: ["testimonials/gala.png"],
     bday: ["testimonials/bday.png"],
   },
+
+  // ─── PUBLIC LOOKS (customer-facing style names) ─────────────
+  // Used in the spark gallery, sample wall, and metamorphosis picker.
+  // Keys (vangogh, kodak, …) stay internal — only labels show on site.
+  looks: {
+    filmBefore: "spark/jenmike.png",
+    painterly: {
+      vangogh: { label: "Swirl sky", swatch: "#f4b731", subtitle: "Bold golden brushwork" },
+      monet: { label: "Garden soft", swatch: "#a7c8e8", subtitle: "Dreamy pastel light" },
+      picasso: { label: "Cubist bold", swatch: "#d87a3c", subtitle: "Angles & warm colour" },
+      warhol: { label: "Pop colour", swatch: "#ff2d88", subtitle: "Screen-print vivid" },
+      hokusai: { label: "Ink & wave", swatch: "#1e5aa8", subtitle: "Woodblock drama" },
+    },
+    film: {
+      kodak: { label: "70s Kodak", swatch: "#c38a52", image: "styles/summerof78.png" },
+      bw: { label: "B&W classic", swatch: "#5a5a5a", image: "styles/classic.png" },
+      polaroid: { label: "Polaroid", swatch: "#e8dcc8", image: "styles/saycheese.png" },
+      kodachrome: { label: "Kodachrome", swatch: "#d4a056", image: "styles/goldenhour.png" },
+      sepia: { label: "Studio sepia", swatch: "#8a6a4a", image: "styles/portraitno4.png" },
+    },
+  },
+
+  // ─── SAMPLE WALL (public gallery — full catalogue on enquiry) ─
+  // tags: wedding | corporate | birthday | film | painterly | print
+  samples: [
+    {
+      src: "spark/jenmike-vangogh.png",
+      label: "Swirl sky",
+      tags: ["wedding", "painterly"],
+    },
+    {
+      src: "spark/myra-monet.png",
+      label: "Garden soft",
+      tags: ["birthday", "painterly"],
+    },
+    {
+      src: "spark/co-picasso.png",
+      label: "Cubist bold",
+      tags: ["corporate", "painterly"],
+    },
+    {
+      src: "spark/olivebirthday-warhol.png",
+      label: "Pop colour",
+      tags: ["birthday", "painterly"],
+    },
+    {
+      src: "spark/jenmikeguests-hokusai.png",
+      label: "Ink & wave",
+      tags: ["wedding", "painterly"],
+    },
+    {
+      src: "meta/jenmike-monet.png",
+      label: "Soft portrait",
+      tags: ["wedding", "painterly"],
+    },
+    {
+      src: "meta/jenmike-warhol.png",
+      label: "Pop art strip",
+      tags: ["corporate", "painterly"],
+    },
+    {
+      src: "styles/summerof78.png",
+      label: "70s Kodak",
+      tags: ["film", "wedding"],
+    },
+    { src: "styles/classic.png", label: "B&W classic", tags: ["film"] },
+    {
+      src: "styles/saycheese.png",
+      label: "Polaroid",
+      tags: ["film", "birthday"],
+    },
+    {
+      src: "styles/goldenhour.png",
+      label: "Kodachrome",
+      tags: ["film", "wedding"],
+    },
+    { src: "styles/portraitno4.png", label: "Studio sepia", tags: ["film"] },
+    {
+      src: "reel/jenmike-vangogh1.png",
+      label: "Wedding strip",
+      tags: ["wedding", "print"],
+    },
+    {
+      src: "reel/jenmike-keepsake.png",
+      label: "Gold frame keepsake",
+      tags: ["wedding", "print"],
+    },
+    {
+      src: "testimonials/aesop.png",
+      label: "Brand activation",
+      tags: ["corporate", "print"],
+    },
+    {
+      src: "testimonials/priya1.png",
+      label: "Reception guests",
+      tags: ["wedding", "print"],
+    },
+  ],
+
+  // ─── SITE / ANALYTICS ───────────────────────────────────────
+  // Paste your GA4 measurement ID to enable Google Analytics (optional).
+  site: {
+    ga4Id: "G-373B8EW1D0",
+    whatsapp: "6589896901",
+    whatsappMessage: "Hi Jeff, I'd like to enquire about the photobooth.",
+  },
 };
 
 /* ============================================================
@@ -237,5 +343,14 @@ window.PHOTO_CONFIG = {
     // Returns raw configured photo list for layout decisions.
     testimonialSourcePhotos: (key) =>
       (cfg.testimonials?.[key] || []).map(asCss).filter(Boolean),
+    samples: () =>
+      (cfg.samples || [])
+        .map((s) => ({
+          ...s,
+          src: resolve(s.src),
+        }))
+        .filter((s) => s.src),
+    looks: () => cfg.looks || {},
+    site: () => cfg.site || {},
   };
 })();

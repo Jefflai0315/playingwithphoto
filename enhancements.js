@@ -180,12 +180,12 @@ const metaPicker = document.querySelector('.meta-picker');
 const metaAfterLabel = document.getElementById('metaAfterLabel');
 const metaAfterBrand = document.getElementById('metaAfterBrand');
 const META_NAMES = {
-  vintage: 'Vintage · 70s Kodak',
-  vangogh: 'Van Gogh · Starry Night',
-  monet: 'Monet · Water Lilies',
-  picasso: 'Picasso · Cubist',
-  warhol: 'Warhol · Pop Art',
-  hokusai: 'Hokusai · Ukiyo-e',
+  vintage: '70s Kodak',
+  vangogh: 'Swirl sky',
+  monet: 'Garden soft',
+  picasso: 'Cubist bold',
+  warhol: 'Pop colour',
+  hokusai: 'Ink & wave',
 };
 
 let claudeBusy = false;

@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<meta name="description" content="AI vintage photobooth for weddings, parties and brand events in Singapore. Printed strips, digital files, 20+ painter styles. Packages from S$750." />
-<title>Playing With Photo — AI Vintage Photobooth for Weddings & Events · Singapore</title>
+<meta name="description" content="Vintage photobooth ritual meets AI — classic film filters and painter styles on every strip. Weddings, parties & brand events in Singapore. From S$750." />
+<title>Playing With Photo — Vintage Photobooth, AI Film & Painter Styles · Singapore</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="creation.css?v=3">
+<link rel="stylesheet" href="creation.css?v=4">
 <link rel="stylesheet" href="hero-scrub.css">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,800;0,9..144,900;1,9..144,400;1,9..144,700&family=Caveat:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
@@ -123,6 +123,9 @@
   }
   .logo-short { display: none; }
   .navlinks { display: flex; gap: 32px; }
+  @media (min-width: 901px) {
+    body.has-rail .navlinks { display: none; }
+  }
   .navlinks a { text-decoration: none; opacity: .7; transition: opacity .2s; }
   .navlinks a:hover { opacity: 1; }
   .nav-cta {
@@ -240,6 +243,146 @@
     font-size: 16px;
   }
 
+  /* ===== STORY GROUPS — rhythm + spacing; sections keep their own tone ===== */
+  .story-group {
+    position: relative;
+  }
+  .story-group--plan {
+    background: linear-gradient(180deg, var(--cream) 0%, var(--paper) 100%);
+  }
+  .story-group--experience,
+  .story-group--film {
+    background: transparent;
+  }
+  .story-group--trust {
+    background: linear-gradient(180deg, var(--paper) 0%, var(--cream-2) 100%);
+  }
+  .story-group > section:not(:first-child),
+  .story-group > .spark-chapter:not(:first-child),
+  .story-group > .meta-chapter:not(:first-child),
+  .story-group > .reel-chapter:not(:first-child) {
+    padding-top: 48px;
+  }
+  .story-group > section:not(:last-child),
+  .story-group > .spark-chapter:not(:last-child),
+  .story-group > .meta-chapter:not(:last-child),
+  .story-group > .reel-chapter:not(:last-child) {
+    padding-bottom: 48px;
+  }
+  .story-group--plan > #occasions { padding-top: 100px; }
+  .story-group--experience .spark-chapter { padding-top: 100px; padding-bottom: 72px; }
+  .story-group--experience .meta-chapter { padding-top: 0; padding-bottom: 48px; }
+  .story-group--film .gallery-chapter { padding-top: 88px; padding-bottom: 40px; }
+  .story-group--film #demo {
+    padding: 56px 0 100px;
+    background: var(--cream);
+    border-top: 1px solid rgba(42,26,12,.1);
+  }
+  .story-group--film .ticker {
+    border-color: rgba(244,234,213,.16);
+    background: var(--ink);
+    padding: 14px 0;
+  }
+  .story-group--film .ticker-track {
+    color: rgba(244,234,213,.9);
+    font-size: 22px;
+  }
+  .story-group--film .ticker-track .sep { color: var(--highlight); }
+  .story-group--trust .section-bridge { padding-top: 72px; }
+  /* One clean tone shift inside the experience band (cream → dark) */
+  .zone-edge {
+    height: 40px;
+    background: linear-gradient(180deg, var(--cream) 0%, #1a0f2a 100%);
+    pointer-events: none;
+  }
+  body.has-bg-canvas .zone-edge {
+    background: linear-gradient(180deg, rgba(244,234,213,0.94) 0%, rgba(26,15,42,0.96) 100%);
+  }
+  .group-divider {
+    width: min(680px, 88%);
+    height: 1px;
+    margin: 0 auto;
+    background: linear-gradient(90deg, transparent, rgba(42,26,12,.14), transparent);
+  }
+
+  .vision-chapter {
+    padding: 72px 0 24px;
+  }
+  .vision-chapter .section-head {
+    max-width: 720px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .vision-chapter .section-head p.lede {
+    max-width: 58ch;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .vision-duo {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin-top: 40px;
+    text-align: left;
+  }
+  .vision-card {
+    padding: 22px 24px;
+    border: 1px solid rgba(42,26,12,.14);
+    border-radius: 8px;
+    background: rgba(244,234,213,.4);
+  }
+  .vision-card-label {
+    font-family: var(--ff-mono);
+    font-size: 10px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin: 0 0 8px;
+  }
+  .vision-card h3 {
+    font-family: var(--ff-display);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(22px, 3vw, 28px);
+    margin: 0 0 10px;
+    color: var(--ink);
+    line-height: 1.15;
+  }
+  .vision-card p {
+    font-size: 14px;
+    color: var(--ink-2);
+    margin: 0 0 14px;
+    line-height: 1.55;
+  }
+  .vision-card-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 14px;
+    font-family: var(--ff-mono);
+    font-size: 11px;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+  }
+  .vision-card-links a {
+    color: var(--rust);
+    text-decoration: none;
+  }
+  .vision-card-links a:hover { text-decoration: underline; }
+  .vision-merge {
+    margin: 32px auto 0;
+    max-width: 50ch;
+    text-align: center;
+    font-family: var(--ff-display);
+    font-style: italic;
+    font-size: clamp(20px, 3.2vw, 28px);
+    font-weight: 400;
+    color: var(--ink);
+    line-height: 1.25;
+  }
+  @media (max-width: 700px) {
+    .vision-duo { grid-template-columns: 1fr; }
+  }
+
   .pricing-audience {
     display: flex; flex-wrap: wrap; gap: 10px;
     margin: 28px 0 8px;
@@ -269,6 +412,346 @@
     margin: 0 0 24px;
     min-height: 1.4em;
   }
+
+  .occasion-router { padding: 56px 0 24px; }
+  .occasion-router .section-head { margin-bottom: 28px; }
+  .occasion-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+  }
+  .occasion-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    text-align: left;
+    padding: 18px 16px;
+    border: 1px solid rgba(42,26,12,.2);
+    border-radius: 12px;
+    background: var(--cream);
+    cursor: pointer;
+    font-family: inherit;
+    color: var(--ink);
+    transition: border-color .2s, box-shadow .2s;
+  }
+  .occasion-card:hover,
+  .occasion-card:focus-visible {
+    border-color: var(--ink);
+    box-shadow: 0 4px 0 var(--shadow);
+    outline: none;
+  }
+  .occasion-card strong {
+    font-family: var(--ff-display);
+    font-size: 20px;
+    font-weight: 500;
+  }
+  .occasion-card span {
+    font-size: 13px;
+    color: var(--ink-2);
+    line-height: 1.35;
+  }
+  .occasion-foot {
+    margin: 20px 0 0;
+    font-size: 14px;
+    color: var(--ink-2);
+  }
+  .occasion-foot a { color: var(--rust); }
+
+  .hero-occasions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  .hero-occasions button {
+    font-family: var(--ff-mono);
+    font-size: 10px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    padding: 8px 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(42,26,12,.25);
+    background: rgba(255,255,255,.5);
+    color: var(--ink);
+    cursor: pointer;
+  }
+  .hero-occasions button:hover { border-color: var(--ink); }
+
+  .lead-cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 36px 48px;
+    text-align: center;
+  }
+  .lead-cta p {
+    width: 100%;
+    margin: 0 0 4px;
+    font-size: 14px;
+    color: var(--ink-2);
+  }
+
+  .book-form-actions {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 24px;
+  }
+  .book-form-actions .btn {
+    flex: 1 1 180px;
+    width: auto;
+    justify-content: center;
+    margin-top: 0;
+  }
+  .book-catalogue-pick {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-top: 16px;
+    font-size: 14px;
+    color: var(--ink-2);
+    cursor: pointer;
+  }
+  .book-catalogue-pick input { margin-top: 3px; accent-color: var(--rust); }
+
+  .mobile-book-bar .bar-inner {
+    display: flex;
+    gap: 10px;
+  }
+  .mobile-book-bar .bar-inner a { flex: 1; }
+  .mobile-book-bar a.bar-wa {
+    background: transparent;
+    color: var(--ink);
+    border: 1px solid rgba(42,26,12,.25);
+  }
+
+  @media (max-width: 900px) {
+    .occasion-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 520px) {
+    .occasion-grid { grid-template-columns: 1fr; }
+  }
+
+  /* Sample wall — compact grid, capped height */
+  .sample-wall { padding: 40px 0 24px; }
+  .sample-wall-filters {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    margin: 16px 0 10px;
+  }
+  .sample-wall-filters button {
+    font-family: var(--ff-body);
+    font-size: 11px;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    padding: 7px 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(42,26,12,.22);
+    background: transparent;
+    color: var(--ink);
+    cursor: pointer;
+  }
+  .sample-wall-filters button.active,
+  .sample-wall-filters button:hover {
+    background: var(--ink);
+    color: var(--cream);
+    border-color: var(--ink);
+  }
+  .sample-wall-count {
+    font-family: var(--ff-mono);
+    font-size: 10px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    margin: 0 0 12px;
+  }
+  .sample-wall-viewport {
+    position: relative;
+  }
+  .sample-wall-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 8px;
+    max-height: 280px;
+    overflow: hidden;
+    transition: max-height .35s ease;
+  }
+  .sample-wall-grid.is-expanded {
+    max-height: 4000px;
+  }
+  .sample-wall-fade {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 72px;
+    background: linear-gradient(to bottom, transparent, var(--cream));
+    pointer-events: none;
+    transition: opacity .25s;
+  }
+  .sample-wall-grid.is-expanded + .sample-wall-fade {
+    opacity: 0;
+  }
+  .sample-wall-more {
+    display: block;
+    width: 100%;
+    max-width: 280px;
+    margin: 12px auto 0;
+    justify-content: center;
+    text-align: center;
+  }
+  .sample-wall-more[hidden] { display: none; }
+  .sample-tile {
+    margin: 0;
+    position: relative;
+    border-radius: 6px;
+    overflow: hidden;
+    background: var(--paper);
+    border: 1px solid rgba(42,26,12,.1);
+  }
+  .sample-tile img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+  }
+  .sample-tile figcaption {
+    font-size: 9px;
+    letter-spacing: .03em;
+    padding: 4px 5px;
+    color: var(--ink-2);
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .sample-tile-cta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    aspect-ratio: 1;
+    padding: 10px;
+    text-align: center;
+    text-decoration: none;
+    color: var(--ink);
+    background: linear-gradient(145deg, var(--cream-2), var(--tan));
+    border: 2px dashed rgba(42,26,12,.25);
+  }
+  .sample-tile-cta:hover { border-color: var(--rust); color: var(--rust-2); }
+  .sample-tile-cta strong { font-family: var(--ff-display); font-size: 14px; font-weight: 500; line-height: 1.2; }
+  .sample-tile-cta span:last-child { font-size: 10px; color: var(--ink-2); line-height: 1.25; }
+  .sample-tile-lock {
+    font-family: var(--ff-display);
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--rust);
+  }
+  @media (max-width: 900px) {
+    .sample-wall-grid {
+      grid-template-columns: repeat(4, 1fr);
+      max-height: 240px;
+    }
+  }
+  @media (max-width: 520px) {
+    .sample-wall-viewport {
+      margin: 0 calc(-1 * var(--wrap-pad, 20px));
+      padding: 0 var(--wrap-pad, 20px);
+    }
+    .sample-wall-grid {
+      display: flex;
+      overflow-x: auto;
+      overflow-y: hidden;
+      max-height: none;
+      gap: 10px;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 4px;
+    }
+    .sample-wall-grid.is-expanded {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      max-height: none;
+      overflow: visible;
+    }
+    .sample-tile {
+      flex: 0 0 38vw;
+      max-width: 140px;
+      scroll-snap-align: start;
+    }
+    .sample-wall-grid.is-expanded .sample-tile {
+      flex: unset;
+      max-width: none;
+    }
+    .sample-wall-fade { display: none; }
+  }
+
+  .pricing-teaser {
+    text-align: center;
+    font-size: 14px;
+    color: var(--ink-2);
+    margin: 20px 0 0;
+  }
+  .pricing-teaser a { color: var(--rust); font-weight: 500; }
+
+  .book-form-hint {
+    font-size: 14px;
+    color: var(--ink-2);
+    margin: -4px 0 16px;
+  }
+  .book-form-more {
+    margin-top: 8px;
+    border-top: 1px solid rgba(42,26,12,.12);
+    padding-top: 12px;
+  }
+  .book-form-more summary {
+    cursor: pointer;
+    font-family: var(--ff-mono);
+    font-size: 11px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--rust);
+    list-style: none;
+  }
+  .book-form-more summary::-webkit-details-marker { display: none; }
+  .book-form-more[open] summary { margin-bottom: 16px; }
+  .book-form-more .row { margin-top: 0; }
+
+  /* WhatsApp floating button */
+  .wa-fab {
+    position: fixed;
+    right: 20px;
+    bottom: 24px;
+    z-index: 115;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #25d366;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,.22);
+    text-decoration: none;
+    transition: transform .2s, box-shadow .2s;
+  }
+  .wa-fab:hover {
+    transform: scale(1.06);
+    box-shadow: 0 6px 24px rgba(0,0,0,.28);
+    color: #fff;
+  }
+  .wa-fab svg { width: 28px; height: 28px; }
+  @media (max-width: 900px) {
+    .wa-fab {
+      bottom: calc(76px + env(safe-area-inset-bottom, 0px));
+      right: 16px;
+      width: 52px;
+      height: 52px;
+    }
+  }
   .ticket-booklet[data-audience] .ticket { transition: opacity .25s, transform .25s; }
   .ticket-booklet[data-audience="wedding"] .ticket:not(.t-keepsake):not(.t-showpiece):not(.t-prelude) { opacity: .45; }
   .ticket-booklet[data-audience="corporate"] .ticket:not(.t-activation):not(.t-showpiece) { opacity: .45; }
@@ -291,6 +774,10 @@
   .site-footer-nav a { text-decoration: none; opacity: .75; }
   .site-footer-nav a:hover { opacity: 1; }
 
+  @media (min-width: 901px) and (max-width: 1100px) {
+    body.has-rail .topnav { left: 180px; width: calc(100% - 180px); }
+  }
+
   @media (max-width: 900px) {
     .nav-toggle { display: flex; }
     .nav-drawer { display: block; }
@@ -310,7 +797,6 @@
     .logo { font-size: 18px; min-width: 0; flex: 1; }
     .logo-long { display: none; }
     .logo-short { display: inline; }
-    .hero-title-card .btn-hero-book { display: none; }
     .hero-jumps { display: none; }
   }
 
@@ -570,6 +1056,16 @@
 
   /* ======= THE BOOTH ======= */
   .booth-chapter { background: var(--paper); }
+  .booth-scrub {
+    height: 200vh; /* scroll runway — only the grid pins below */
+  }
+  .booth-scrub-pin {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+  }
   .booth-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -578,8 +1074,27 @@
   }
   .booth-stage {
     position: relative;
-    aspect-ratio: 4/5;
-    display: grid; place-items: center;
+    aspect-ratio: 834 / 1112;
+    display: grid;
+    place-items: center;
+    background: var(--paper);
+  }
+  .booth-canvas-wrap {
+    width: 90%;
+    aspect-ratio: 834 / 1112;
+    background: var(--paper);
+    filter: drop-shadow(0 30px 40px var(--shadow));
+  }
+  .booth-assembly-canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+    mix-blend-mode: multiply;
+    background: var(--paper);
+  }
+  .booth-labels {
+    opacity: 0;
+    transition: opacity 0.4s ease;
   }
   .booth-labels {
     position: absolute; inset: 0;
@@ -614,6 +1129,9 @@
     margin-bottom: 6px;
   }
   .booth-feat .f p { font-size: 14px; color: var(--ink-2); margin: 0; }
+  @media (max-width: 900px) {
+    .booth-scrub { height: 260vh; }
+  }
 
   /* ======= HOW IT WORKS ======= */
   .howit-steps {
@@ -661,7 +1179,7 @@
   /* ======= STYLE GALLERY ======= */
   .gallery-chapter { background: var(--ink); color: var(--cream); padding: 160px 0; }
   .gallery-chapter .section-head h2 { color: var(--cream); }
-  .gallery-chapter .section-head p { color: rgba(244,234,213,.7); }
+  .gallery-chapter .section-head p { color: rgba(244,234,213,.88); }
   .gallery-chapter .eyebrow { color: var(--highlight); }
   .filmstrip-wrap {
     overflow: hidden;
@@ -950,6 +1468,34 @@
   }
   .book-chapter h2 em { font-family: var(--ff-script); font-style: normal; color: var(--highlight); font-weight: 600; }
   .book-chapter p.lede { color: rgba(244,234,213,.85); max-width: 44ch; font-size: 18px; margin-top: 24px; }
+  .book-contact {
+    margin-top: 48px;
+    display: flex;
+    gap: 36px;
+    flex-wrap: wrap;
+  }
+  .book-contact > div {
+    flex: 1 1 200px;
+    min-width: 0;
+  }
+  .book-contact .label {
+    font-family: var(--ff-mono);
+    font-size: 11px;
+    letter-spacing: .2em;
+    opacity: .7;
+    text-transform: uppercase;
+  }
+  .book-contact a {
+    display: block;
+    font-family: var(--ff-display);
+    font-style: italic;
+    font-size: 24px;
+    margin-top: 4px;
+    color: inherit;
+    text-decoration: none;
+    word-break: break-word;
+  }
+  .book-contact a:hover { text-decoration: underline; }
   .book-form {
     background: var(--cream);
     color: var(--ink);
@@ -981,8 +1527,30 @@
     color: var(--ink);
   }
   .book-form input:focus, .book-form select:focus { outline: 2px solid var(--rust); outline-offset: -1px; }
-  .book-form .field { flex: 1; }
+  .book-form .field { flex: 1; min-width: 0; }
   .book-form .btn { width: 100%; justify-content: center; margin-top: 24px; }
+
+  @media (max-width: 720px) {
+    .book-contact {
+      flex-direction: column;
+      gap: 24px;
+    }
+    .book-contact > div { flex-basis: auto; }
+    .book-form .row {
+      flex-direction: column;
+      gap: 0;
+    }
+    .book-form .row .field + .field {
+      margin-top: 18px;
+    }
+    .book-form-actions {
+      flex-direction: column;
+    }
+    .book-form-actions .btn {
+      flex: none;
+      width: 100%;
+    }
+  }
 
   /* Booking form — add-ons */
   .book-addons-block { margin-top: 22px; }
@@ -1167,9 +1735,9 @@
     width: 100%;
   }
   .demo::before {
-    /* wood grain bezel */
     content: "";
-    position: absolute; inset: -12px;
+    position: absolute;
+    inset: -12px;
     border: 12px solid transparent;
     background:
       repeating-linear-gradient(135deg, rgba(0,0,0,.15) 0 2px, transparent 2px 8px),
@@ -1178,10 +1746,12 @@
     -webkit-background-clip: border-box;
     z-index: -1;
   }
-  .demo video, .demo canvas, .demo .frame-overlay, .demo .status, .demo .countdown, .demo .flash, .demo .shutter-ring {
+  .demo video, .demo canvas, .demo .frame-overlay, .demo .status,
+  .demo .countdown, .demo .capture-feedback, .demo .flash {
     position: absolute;
     inset: 0;
-    width: 100%; height: 100%;
+    width: 100%;
+    height: 100%;
   }
   .demo video {
     object-fit: cover;
@@ -1199,7 +1769,8 @@
   @keyframes flash { 0% { opacity: 0; } 8% { opacity: 1; } 100% { opacity: 0; } }
 
   .demo .countdown {
-    display: grid; place-items: center;
+    display: grid;
+    place-items: center;
     font-family: var(--ff-display);
     font-size: 220px;
     font-weight: 300;
@@ -1218,8 +1789,56 @@
     100% { opacity: 0; transform: scale(.7); }
   }
 
+  .demo .capture-feedback {
+    display: grid;
+    place-items: center;
+    align-content: center;
+    gap: 12px;
+    z-index: 9;
+    pointer-events: none;
+    opacity: 0;
+    background: rgba(13,7,4,.72);
+    backdrop-filter: blur(4px);
+    padding: 24px;
+    text-align: center;
+  }
+  .demo .capture-feedback.show {
+    animation: capturePop .95s ease-out forwards;
+  }
+  @keyframes capturePop {
+    0% { opacity: 0; }
+    12% { opacity: 1; }
+    78% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+  .demo .capture-feedback img {
+    width: min(42%, 140px);
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 3px solid var(--highlight);
+    box-shadow: 0 12px 28px rgba(0,0,0,.45);
+    transform: rotate(-2deg);
+  }
+  .demo .capture-feedback-title {
+    margin: 0;
+    font-family: var(--ff-display);
+    font-style: italic;
+    font-size: clamp(28px, 5vw, 36px);
+    color: var(--cream);
+  }
+  .demo .capture-feedback-sub {
+    margin: 0;
+    font-family: var(--ff-mono);
+    font-size: 11px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: rgba(244,234,213,.75);
+  }
+
   .demo .status {
-    display: grid; place-items: center;
+    display: grid;
+    place-items: center;
     background: var(--ink);
     color: var(--cream);
     z-index: 5;
@@ -1233,17 +1852,31 @@
   .demo .status .btn { background: var(--highlight); color: var(--ink); border-color: var(--highlight); box-shadow: 0 4px 0 var(--rust); }
 
   .demo-ui {
-    display: flex; flex-direction: column; gap: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
   }
   .demo-controls {
-    display: flex; gap: 10px; align-items: center; justify-content: space-between;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: space-between;
     padding: 14px 18px;
     background: var(--cream-2);
     border-radius: 999px;
     border: 1px solid rgba(42,26,12,.15);
     flex-wrap: nowrap;
     overflow: hidden;
+    max-width: 520px;
+    width: 100%;
   }
+  /* Demo result panel */
+  .demo-result-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
   .filter-options {
     display: flex;
     gap: 6px;
@@ -1296,54 +1929,286 @@
     .shutter-btn { width: 46px; height: 46px; flex: 0 0 auto; }
   }
 
-  /* Result film strip */
-  .result-strip {
-    display: none;
-    background: #1a1008;
-    padding: 14px 12px;
-    box-shadow: 0 20px 50px rgba(0,0,0,.4);
-    position: relative;
-    max-width: 520px;
-    transform: rotate(-1deg);
+  .demo-result-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    border: none;
   }
-  .result-strip.show { display: block; animation: popin .5s; }
-  @keyframes popin { from { opacity: 0; transform: scale(.8) rotate(-5deg); } to { opacity: 1; transform: scale(1) rotate(-1deg); } }
-  .result-strip .holes-row {
-    display: flex; justify-content: space-around; padding: 4px 0;
+  .demo-result-head h3 {
+    margin: 0;
+    font-family: var(--ff-mono);
+    font-style: normal;
+    font-weight: 500;
+    font-size: 10px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--ink-2);
   }
-  .result-strip .holes-row span { width: 10px; height: 7px; background: var(--cream); border-radius: 1px; }
-  .result-strip .photos {
+  .demo-result-head span {
+    font-family: var(--ff-mono);
+    font-size: 9px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    opacity: .75;
+  }
+  #demoPlaceholder {
+    padding: 0 !important;
+    text-align: left;
+    color: var(--ink-2);
+    font-size: 13px;
+    line-height: 1.45;
+  }
+  #demoPlaceholder p {
+    margin: 0;
+    max-width: none;
+  }
+  .demo-placeholder-title {
+    font-family: var(--ff-display);
+    font-style: italic;
+    font-size: clamp(22px, 3vw, 28px);
+    color: var(--ink);
+    margin: 0 0 8px;
+    line-height: 1.15;
+  }
+  .demo-result-layout {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 6px;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 14px;
+    align-items: start;
+    max-width: 100%;
   }
-  .result-strip .photo {
-    aspect-ratio: 1/1;
-    background: var(--ink);
+  .demo-result-layout.has-side-rail {
+    grid-template-columns: 48px minmax(0, 1fr);
+  }
+  .demo-side-rail[hidden] { display: none !important; }
+  .demo-thumb-strip,
+  .demo-template-rail {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 48px;
+  }
+  .demo-thumb-strip[hidden],
+  .demo-template-rail[hidden] { display: none !important; }
+  .demo-thumb-strip {
+    padding: 7px 5px;
+    background: #1a1008;
+    border-radius: 6px;
+    box-shadow: 0 10px 24px rgba(0,0,0,.18);
+  }
+  .demo-thumb-strip::before,
+  .demo-thumb-strip::after {
+    content: "";
+    display: block;
+    height: 4px;
+    margin: 0 1px;
+    background: repeating-linear-gradient(90deg, var(--cream) 0 6px, transparent 6px 10px);
+    opacity: .35;
+    border-radius: 1px;
+  }
+  .demo-thumb-slot {
+    aspect-ratio: 1;
+    background: rgba(255,255,255,.04);
+    border: 1px dashed rgba(244,234,213,.18);
+    border-radius: 3px;
     overflow: hidden;
     position: relative;
   }
-  .result-strip .photo img { width: 100%; height: 100%; object-fit: cover; }
-  .result-strip .footer-strip {
-    padding: 18px 8px 4px;
-    color: var(--cream);
-    display: flex; justify-content: space-between; align-items: baseline;
-    font-family: var(--ff-display);
-    font-style: italic;
+  .demo-thumb-slot.active {
+    border-color: var(--highlight);
+    border-style: solid;
   }
-  .result-strip .footer-strip .brand {
-    font-family: var(--ff-script);
-    color: var(--highlight);
-    font-size: 22px;
+  .demo-thumb-slot.done {
+    border-style: solid;
+    border-color: rgba(244,234,213,.25);
   }
-  .result-strip .footer-strip small {
+  .demo-thumb-slot img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .demo-thumb-slot span {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    font-family: var(--ff-mono);
+    font-size: 9px;
+    color: rgba(244,234,213,.35);
+  }
+  .demo-thumb-slot.done span,
+  .demo-thumb-slot.has-img span { display: none; }
+  .demo-template-rail {
+    gap: 6px;
+  }
+  .demo-template-rail .tpl-btn {
+    width: 48px;
+    height: 56px;
+    padding: 3px;
+    border: 1px solid rgba(42,26,12,.18);
+    border-radius: 5px;
+    background: var(--cream);
+    cursor: pointer;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  .demo-template-rail .tpl-btn:disabled {
+    opacity: .45;
+    cursor: wait;
+  }
+  .demo-template-rail .tpl-btn.active {
+    border-color: var(--rust);
+    box-shadow: 0 0 0 1px rgba(178,95,46,.35);
+  }
+  .demo-template-rail .tpl-btn img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 3px;
+    display: block;
+  }
+  .demo-result-main {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+  }
+  #demoPlaceholder[hidden] { display: none !important; }
+  .demo-result-content[hidden] { display: none !important; }
+  .result-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 100%;
+    max-width: min(280px, 100%);
+  }
+  .result-actions[hidden] { display: none !important; }
+
+  .demo-setup {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .demo-setup--result {
+    padding: 0;
+    background: none;
+    border: none;
+    border-radius: 0;
+  }
+  .demo-setup-label {
     font-family: var(--ff-mono);
     font-size: 10px;
-    letter-spacing: .2em;
-    opacity: .6;
+    letter-spacing: .14em;
     text-transform: uppercase;
+    color: var(--ink-2);
+    margin: 0;
   }
-  .result-actions { display: flex; gap: 10px; margin-top: 14px; justify-content: center; }
+  .demo-setup-hint {
+    font-size: 13px;
+    color: var(--ink-2);
+    margin: 0;
+  }
+  .demo-tries-note {
+    font-family: var(--ff-mono);
+    font-size: 11px;
+    letter-spacing: .08em;
+    color: var(--ink);
+    margin: 0 0 12px;
+  }
+  .demo-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: start;
+  }
+  .demo-gif-wrap {
+    position: relative;
+    max-width: min(280px, 100%);
+    max-height: min(72vh, calc(100dvh - 220px));
+    margin: 0 auto;
+    transform: rotate(-1deg);
+  }
+  .demo-gif-wrap::before,
+  .demo-gif-wrap::after {
+    display: none;
+  }
+  .demo-gif-wrap[hidden] { display: none !important; }
+  .demo-gif-wrap img {
+    display: block;
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    max-height: min(72vh, calc(100dvh - 220px));
+    object-fit: contain;
+    border-radius: 2px;
+    box-shadow: 0 16px 40px rgba(0,0,0,.25);
+  }
+  .demo-gif-badge {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    font-family: var(--ff-mono);
+    font-size: 8px;
+    letter-spacing: .1em;
+    background: var(--rust);
+    color: var(--cream);
+    padding: 2px 5px;
+    border-radius: 2px;
+  }
+  .demo-gif-loading {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    background: rgba(19,9,5,.72);
+    color: var(--cream);
+    font-family: var(--ff-mono);
+    font-size: 11px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    margin: 0;
+  }
+  .demo-gif-loading[hidden] { display: none !important; }
+  .demo-setup-hint { display: none; }
+  .result-actions .btn {
+    padding: 8px 14px;
+    font-size: 12px;
+  }
+  .demo-limit-overlay {
+    margin-top: 8px;
+    padding: 16px;
+    background: rgba(178,95,46,.08);
+    border: 1px solid rgba(178,95,46,.25);
+    border-radius: 8px;
+    text-align: center;
+  }
+  .demo-limit-overlay h4 {
+    font-family: var(--ff-display);
+    font-style: italic;
+    font-weight: 400;
+    font-size: 28px;
+    margin: 0 0 8px;
+    color: var(--ink);
+  }
+  .demo-limit-overlay p {
+    font-size: 14px;
+    color: var(--ink-2);
+    max-width: 36ch;
+    margin: 0 auto 18px;
+  }
+  .demo-limit-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
 
   /* Hero badge */
   .hero-badge {
@@ -1931,29 +2796,37 @@
     flex-direction: column;
     gap: 20px;
     pointer-events: none;
-    background: linear-gradient(90deg, rgba(244,234,213,.92) 0%, rgba(244,234,213,.85) 70%, rgba(244,234,213,0) 100%);
-    backdrop-filter: blur(2px);
-    border-right: 1px solid rgba(42,26,12,.08);
+    background: rgba(244, 234, 213, 0.97);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-right: 1px solid rgba(42, 26, 12, 0.14);
+    box-shadow: 2px 0 28px rgba(20, 12, 6, 0.1);
   }
   .edition-rail > * { pointer-events: auto; }
+  .edition-rail .edition-mark,
+  .edition-rail .rail-chapters li,
+  .edition-rail .rail-chapters a,
+  .edition-rail .edition-footnote {
+    text-shadow: none;
+  }
 
   .edition-mark {
     font-family: var(--ff-display);
     font-weight: 400;
-    font-size: 11px;
-    letter-spacing: .22em;
+    font-size: 12px;
+    letter-spacing: .2em;
     text-transform: uppercase;
     color: var(--ink);
     line-height: 1.7;
     padding: 10px 0 12px;
-    border-top: 1px solid rgba(42,26,12,.45);
-    border-bottom: 1px solid rgba(42,26,12,.45);
+    border-top: 1px solid rgba(42,26,12,.35);
+    border-bottom: 1px solid rgba(42,26,12,.35);
   }
   .edition-mark em {
     display: block;
     font-style: italic;
     font-weight: 500;
-    font-size: 14px;
+    font-size: 16px;
     letter-spacing: .05em;
     margin-top: 2px;
   }
@@ -1967,38 +2840,38 @@
     margin: 0; padding: 0;
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 4px;
   }
   .rail-chapters li {
     display: grid;
-    grid-template-columns: 28px 1fr;
-    gap: 8px;
+    grid-template-columns: 30px 1fr;
+    gap: 10px;
     align-items: baseline;
-    padding: 5px 0;
+    padding: 7px 0;
     font-family: var(--ff-display);
-    font-size: 12px;
-    line-height: 1.3;
+    font-size: 14px;
+    line-height: 1.35;
     letter-spacing: .03em;
-    color: rgba(42,26,12,.7);
+    color: rgba(42,26,12,.88);
     transition: color .25s ease;
-    border-bottom: 1px dotted rgba(42,26,12,.2);
+    border-bottom: 1px dotted rgba(42,26,12,.22);
   }
   .rail-chapters a {
     color: inherit;
     text-decoration: none;
     font-variant-caps: small-caps;
-    letter-spacing: .14em;
+    letter-spacing: .1em;
     font-weight: 500;
   }
   .rail-chapters .num {
     font-family: var(--ff-display);
     font-style: italic;
-    font-size: 11px;
+    font-size: 12px;
     font-variant-numeric: oldstyle-nums;
     letter-spacing: .05em;
     text-align: right;
     padding-right: 4px;
-    color: rgba(42,26,12,.55);
+    color: rgba(42,26,12,.62);
   }
   .rail-chapters li:hover,
   .rail-chapters li.is-active {
@@ -2021,18 +2894,18 @@
     margin-top: auto;
     font-family: var(--ff-display);
     font-style: italic;
-    font-size: 10.5px;
+    font-size: 12px;
     letter-spacing: .04em;
-    line-height: 1.45;
-    color: rgba(42,26,12,.55);
-    border-top: 1px solid rgba(42,26,12,.25);
+    line-height: 1.5;
+    color: rgba(42,26,12,.72);
+    border-top: 1px solid rgba(42,26,12,.28);
     padding-top: 10px;
   }
   .edition-footnote .seal {
     display: inline-block;
     width: 18px; height: 18px;
     border-radius: 50%;
-    border: 1px solid rgba(42,26,12,.5);
+    border: 1px solid rgba(42,26,12,.45);
     margin-right: 6px;
     vertical-align: middle;
     background: radial-gradient(circle, var(--rust) 20%, transparent 70%);
@@ -2066,12 +2939,82 @@
   }
   /* Make sections sit ABOVE the bg canvas. All transparent — bg canvas drives everything. */
   body.has-bg-canvas > section,
-  body.has-bg-canvas > .torn-edge {
+  body.has-bg-canvas > .torn-edge,
+  body.has-bg-canvas > .story-group,
+  body.has-bg-canvas > .zone-edge {
     position: relative;
     z-index: 2;
     background: transparent !important;
     background-color: transparent !important;
     background-image: none !important;
+  }
+  body.has-bg-canvas .story-group > section,
+  body.has-bg-canvas .story-group > .spark-chapter,
+  body.has-bg-canvas .story-group > .meta-chapter,
+  body.has-bg-canvas .story-group > .reel-chapter {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+  }
+
+  /* Story-group scrims — solid bands, sections inside keep their own scrims */
+  body.has-bg-canvas .story-group::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+  }
+  body.has-bg-canvas .story-group--plan::before {
+    background: rgba(244, 234, 213, 0.96);
+  }
+  body.has-bg-canvas .story-group--trust::before {
+    background: rgba(235, 220, 183, 0.97);
+  }
+  body.has-bg-canvas .story-group--experience::before,
+  body.has-bg-canvas .story-group--film::before {
+    display: none;
+  }
+  /* Per-section scrims inside story groups */
+  body.has-bg-canvas .story-group > section::before,
+  body.has-bg-canvas .story-group > .spark-chapter::before,
+  body.has-bg-canvas .story-group > .meta-chapter::before,
+  body.has-bg-canvas .story-group > .reel-chapter::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+  }
+  body.has-bg-canvas .story-group--plan > section::before {
+    display: none !important;
+  }
+  body.has-bg-canvas .story-group--trust > section::before {
+    display: none !important;
+  }
+  body.has-bg-canvas .story-group--experience #spark::before {
+    background: rgba(244, 234, 213, 0.96);
+  }
+  body.has-bg-canvas .story-group--experience #metamorphosis::before {
+    display: none !important;
+  }
+  body.has-bg-canvas .story-group--experience #reel::before {
+    background: linear-gradient(180deg, rgba(10,6,4,0.96) 0%, rgba(20,12,6,0.94) 100%);
+  }
+  body.has-bg-canvas .story-group--film .ticker::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: rgba(12, 8, 5, 0.96);
+    pointer-events: none;
+  }
+  body.has-bg-canvas .story-group--film .ticker { position: relative; }
+  body.has-bg-canvas .story-group--film #styles::before {
+    background: rgba(12, 8, 5, 0.96);
+  }
+  body.has-bg-canvas .story-group--film #demo::before {
+    background: rgba(244, 234, 213, 0.96);
   }
 
   /* ===== Per-section readable scrims =====
@@ -2091,27 +3034,18 @@
   body.has-bg-canvas > #hero::before,
   body.has-bg-canvas > #metamorphosis::before { display: none; }
 
-  /* CREAM scrims — sections designed with dark ink text on light paper */
-  body.has-bg-canvas > #spark::before,
-  body.has-bg-canvas > #how::before,
-  body.has-bg-canvas > #demo::before,
-  body.has-bg-canvas > #usecases::before,
-  body.has-bg-canvas > #testimonials::before {
-    background: rgba(244, 234, 213, 0.82);
+  /* CREAM scrims — top-level sections still on light paper */
+  body.has-bg-canvas > #addons::before {
+    background: rgba(244, 234, 213, 0.94);
   }
-  /* Slightly warmer "aged paper" for the chapters originally on var(--paper) */
-  body.has-bg-canvas > #booth::before,
+  /* Slightly warmer "aged paper" for standalone chapters */
   body.has-bg-canvas > #pricing::before,
   body.has-bg-canvas > #about::before {
-    background: rgba(235, 220, 183, 0.85);
+    background: rgba(235, 220, 183, 0.94);
   }
   /* DARK scrims — sections designed with cream text on ink */
-  body.has-bg-canvas > #reel::before,
   body.has-bg-canvas > #animation::before {
-    background: linear-gradient(180deg, rgba(10,6,4,0.92) 0%, rgba(20,12,6,0.88) 100%);
-  }
-  body.has-bg-canvas > #styles::before {
-    background: rgba(15, 9, 5, 0.90);
+    background: linear-gradient(180deg, rgba(10,6,4,0.96) 0%, rgba(20,12,6,0.94) 100%);
   }
   /* RUST scrim — book chapter's left column has cream text on rust */
   body.has-bg-canvas > #book::before {
@@ -2131,18 +3065,20 @@
     text-shadow: 0 1px 2px rgba(28, 14, 8, 0.25), 0 0 14px rgba(244, 234, 213, 0.35);
   }
   /* Light/cream sections have dark text — give it a soft light halo instead */
-  body.has-bg-canvas #spark h1, body.has-bg-canvas #spark h2, body.has-bg-canvas #spark h3,
-  body.has-bg-canvas #spark p, body.has-bg-canvas #spark li, body.has-bg-canvas #spark .eyebrow,
-  body.has-bg-canvas #how h1, body.has-bg-canvas #how h2, body.has-bg-canvas #how h3,
-  body.has-bg-canvas #how p, body.has-bg-canvas #how li, body.has-bg-canvas #how .eyebrow,
-  body.has-bg-canvas #demo h1, body.has-bg-canvas #demo h2, body.has-bg-canvas #demo h3,
-  body.has-bg-canvas #demo p, body.has-bg-canvas #demo li, body.has-bg-canvas #demo .eyebrow,
-  body.has-bg-canvas #booth h1, body.has-bg-canvas #booth h2, body.has-bg-canvas #booth h3,
-  body.has-bg-canvas #booth p, body.has-bg-canvas #booth li, body.has-bg-canvas #booth .eyebrow,
-  body.has-bg-canvas #usecases h1, body.has-bg-canvas #usecases h2, body.has-bg-canvas #usecases h3,
-  body.has-bg-canvas #usecases p, body.has-bg-canvas #usecases li, body.has-bg-canvas #usecases .eyebrow,
-  body.has-bg-canvas #testimonials h1, body.has-bg-canvas #testimonials h2, body.has-bg-canvas #testimonials h3,
-  body.has-bg-canvas #testimonials p, body.has-bg-canvas #testimonials li, body.has-bg-canvas #testimonials .eyebrow,
+  body.has-bg-canvas .story-group--plan h1, body.has-bg-canvas .story-group--plan h2,
+  body.has-bg-canvas .story-group--plan h3, body.has-bg-canvas .story-group--plan p,
+  body.has-bg-canvas .story-group--plan li, body.has-bg-canvas .story-group--plan .eyebrow,
+  body.has-bg-canvas .story-group--experience #spark h1, body.has-bg-canvas .story-group--experience #spark h2,
+  body.has-bg-canvas .story-group--experience #spark h3, body.has-bg-canvas .story-group--experience #spark p,
+  body.has-bg-canvas .story-group--experience #spark li, body.has-bg-canvas .story-group--experience #spark .eyebrow,
+  body.has-bg-canvas .story-group--film #demo h1, body.has-bg-canvas .story-group--film #demo h2,
+  body.has-bg-canvas .story-group--film #demo h3, body.has-bg-canvas .story-group--film #demo p,
+  body.has-bg-canvas .story-group--film #demo li, body.has-bg-canvas .story-group--film #demo .eyebrow,
+  body.has-bg-canvas .story-group--trust h1, body.has-bg-canvas .story-group--trust h2,
+  body.has-bg-canvas .story-group--trust h3, body.has-bg-canvas .story-group--trust p,
+  body.has-bg-canvas .story-group--trust li, body.has-bg-canvas .story-group--trust .eyebrow,
+  body.has-bg-canvas #addons h1, body.has-bg-canvas #addons h2, body.has-bg-canvas #addons h3,
+  body.has-bg-canvas #addons p, body.has-bg-canvas #addons li, body.has-bg-canvas #addons .eyebrow,
   body.has-bg-canvas #pricing h1, body.has-bg-canvas #pricing h2, body.has-bg-canvas #pricing h3,
   body.has-bg-canvas #pricing p, body.has-bg-canvas #pricing li, body.has-bg-canvas #pricing .eyebrow,
   body.has-bg-canvas #about h1, body.has-bg-canvas #about h2, body.has-bg-canvas #about h3,
@@ -2157,15 +3093,18 @@
   /* Body gets extra padding-left to make room for the rail */
   body.has-rail { padding-left: 0; }
   body.has-rail > section,
-  body.has-rail > .torn-edge { margin-left: 220px; }
+  body.has-rail > .torn-edge,
+  body.has-rail > .story-group,
+  body.has-rail > .zone-edge { margin-left: 220px; }
+  body.has-rail > #hero { margin-left: 0 !important; }
   body.has-rail .topnav { left: 220px; width: calc(100% - 220px); }
 
   /* Edition mark (top of rail) */
   .edition-rail .edition-mark {
     flex: 0 0 auto;
-    font-size: 10px;
-    letter-spacing: .24em;
-    padding: 0 0 10px;
+    font-size: 12px;
+    letter-spacing: .2em;
+    padding: 0 0 12px;
     border-top: none;
     border-bottom: 1px solid rgba(42,26,12,.25);
   }
@@ -2183,13 +3122,13 @@
 
   @media (max-width: 1100px) {
     .edition-rail { width: 180px; padding-left: 16px; }
-    body.has-rail > section, body.has-rail > .torn-edge { margin-left: 180px; }
+    body.has-rail > section, body.has-rail > .torn-edge, body.has-rail > .story-group, body.has-rail > .zone-edge { margin-left: 180px; }
+    body.has-rail > #hero { margin-left: 0 !important; }
     body.has-rail .topnav { left: 180px; width: calc(100% - 180px); }
-    .navlinks { gap: 18px; font-size: 11px; }
   }
   @media (max-width: 900px) {
     .edition-rail { display: none; }
-    body.has-rail > section, body.has-rail > .torn-edge { margin-left: 0; }
+    body.has-rail > section, body.has-rail > .torn-edge, body.has-rail > .story-group, body.has-rail > .zone-edge { margin-left: 0; }
     body.has-rail .topnav { left: 0; width: 100%; }
   }
 
@@ -2603,7 +3542,6 @@
     pointer-events: none;
   }
   @media (max-width: 700px) {
-    #demo { padding: 88px 0 !important; }
     .filmstrip-wrap { padding: 10px 0; }
     .filmstrip { gap: 12px; padding: 0 10px; }
     .polaroid { width: 210px; padding: 10px 10px 44px; }
@@ -2637,22 +3575,34 @@
     color: var(--cream);
     overflow: hidden;
   }
+  .animation-chapter .wrap {
+    overflow-x: clip;
+    max-width: 100%;
+  }
   .animation-chapter .eyebrow { color: var(--highlight); }
   .animation-chapter .section-head h2 { color: var(--cream); }
   .animation-chapter .section-head p { color: rgba(244,234,213,.72); }
   .animation-grid {
     display: grid;
-    grid-template-columns: 1.1fr .9fr;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr);
     gap: 56px;
     align-items: center;
+    min-width: 0;
+    max-width: 100%;
+  }
+  .animation-grid > * {
+    min-width: 0;
   }
   .animation-stage {
     position: relative;
+    width: 100%;
+    max-width: 100%;
     background: #080403;
     border: 14px solid #f0dfbc;
     box-shadow: 0 34px 90px rgba(0,0,0,.45), 0 0 0 1px rgba(255,216,138,.2);
     transform: rotate(-1.2deg);
     overflow: hidden;
+    justify-self: center;
   }
   .animation-stage::before,
   .animation-stage::after {
@@ -2695,6 +3645,9 @@
     border: 1px solid rgba(244,234,213,.14);
     padding: 34px;
     box-shadow: 0 24px 60px rgba(0,0,0,.25);
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
   }
   .animation-panel h3 {
     font-size: clamp(34px, 4vw, 54px);
@@ -2710,9 +3663,10 @@
     margin-top: 30px;
     display: flex;
     align-items: baseline;
+    flex-wrap: wrap;
     gap: 10px;
     font-family: var(--ff-display);
-    font-size: 56px;
+    font-size: clamp(36px, 5vw, 56px);
     line-height: 1;
     color: var(--highlight);
   }
@@ -2737,8 +3691,13 @@
     font-size: 15px;
   }
   @media (max-width: 900px) {
-    .animation-grid { grid-template-columns: 1fr; gap: 30px; }
+    .animation-grid {
+      grid-template-columns: 1fr;
+      gap: 30px;
+      padding: 0;
+    }
     .animation-stage { transform: none; }
+    .animation-panel { padding: 24px 20px; }
   }
 
   /* ===== Add-ons board ===== */
@@ -2969,6 +3928,13 @@
     letter-spacing: .16em;
     text-transform: uppercase;
     opacity: .68;
+  }
+  .addon-price-was,
+  .animation-price-was {
+    font-size: 0.58em;
+    font-weight: 400;
+    text-decoration: line-through;
+    opacity: 0.42;
   }
   .addon-note {
     display: inline-flex;
@@ -3288,17 +4254,20 @@
   </div>
   <ol class="rail-chapters">
     <li data-target="#hero"><span class="num">ɪ</span><a href="#hero">Home</a></li>
-    <li data-target="#spark"><span class="num">ɪɪ</span><a href="#spark">Examples</a></li>
-    <li data-target="#demo"><span class="num">ɪɪɪ</span><a href="#demo">Try it</a></li>
-    <li data-target="#pricing"><span class="num">ɪᴠ</span><a href="#pricing">Packages</a></li>
-    <li data-target="#testimonials"><span class="num">ᴠ</span><a href="#testimonials">Reviews</a></li>
-    <li data-target="#about"><span class="num">ᴠɪ</span><a href="#about">About</a></li>
-    <li data-target="#book"><span class="num">ᴠɪɪ</span><a href="#book">Book</a></li>
+    <li data-target="#pricing"><span class="num">ɪɪ</span><a href="#pricing">Packages</a></li>
+    <li data-target="#samples"><span class="num">ɪɪɪ</span><a href="#samples">Samples</a></li>
+    <li data-target="#vision"><span class="num">ɪᴠ</span><a href="#vision">The vision</a></li>
+    <li data-target="#spark"><span class="num">ᴠ</span><a href="#spark">AI examples</a></li>
+    <li data-target="#styles"><span class="num">ᴠɪ</span><a href="#styles">Film looks</a></li>
+    <li data-target="#demo"><span class="num">ᴠɪɪ</span><a href="#demo">Try film live</a></li>
+    <li data-target="#testimonials"><span class="num">ᴠɪɪɪ</span><a href="#testimonials">Reviews</a></li>
+    <li data-target="#about"><span class="num">ɪx</span><a href="#about">About</a></li>
+    <li data-target="#book"><span class="num">x</span><a href="#book">Book</a></li>
   </ol>
   <div class="edition-footnote">
     <span class="seal" aria-hidden="true"></span>
     Singapore · AI vintage photobooth<br/>
-    <em>From S$750 · 20+ painter styles</em>
+    <em>From S$750 · vintage ritual, AI inside</em>
   </div>
 </aside>
 
@@ -3311,25 +4280,30 @@
     </a>
   </div>
   <div class="navlinks">
-    <a href="#spark">Examples</a>
-    <a href="#demo">Try it</a>
     <a href="#pricing">Packages</a>
+    <a href="#samples">Samples</a>
+    <a href="#spark">AI examples</a>
+    <a href="#styles">Film looks</a>
+    <a href="#demo">Try filter &amp; GIF</a>
+    <a href="/snapshot/">Quick book</a>
     <a href="#testimonials">Reviews</a>
     <a href="#about">About</a>
-    <a href="#book">Book</a>
   </div>
   <button type="button" class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navDrawer" aria-label="Open menu">
     <span></span><span></span><span></span>
   </button>
-  <a href="#book" class="nav-cta">Book the booth</a>
+  <a href="#book" class="nav-cta" data-track="click_book_nav">Book the booth</a>
 </nav>
 
 <div class="nav-drawer" id="navDrawer" aria-hidden="true">
   <div class="nav-drawer-backdrop" id="navDrawerBackdrop"></div>
   <nav class="nav-drawer-panel" aria-label="Mobile menu">
-    <a href="#spark">Examples</a>
-    <a href="#demo">Try it</a>
     <a href="#pricing">Packages</a>
+    <a href="#samples">Samples</a>
+    <a href="#spark">AI examples</a>
+    <a href="#styles">Film looks</a>
+    <a href="#demo">Try filter &amp; GIF</a>
+    <a href="/snapshot/">Quick book page</a>
     <a href="#testimonials">Reviews</a>
     <a href="#about">About</a>
     <a href="#book" class="drawer-cta">Book the booth</a>
@@ -3367,12 +4341,13 @@
 
   <!-- Overlaid editorial card -->
   <div class="hero-title-card">
+    <div class="hero-frame-bounds">
     <div class="hero-frame-loader" aria-hidden="true">
       <svg viewBox="0 0 300 400" preserveAspectRatio="none">
         <path d="M150 1 H299 V399 H1 V1 H150" pathLength="100"></path>
       </svg>
     </div>
-    <div class="kicker">Singapore · AI vintage photobooth</div>
+    <div class="kicker">Singapore · vintage booth, AI inside</div>
     <h1 class="hero-big">
       The <em>Photobooth</em><br/>Edition
     </h1>
@@ -3382,48 +4357,166 @@
       <circle cx="60" cy="5" r=".8" fill="currentColor" opacity=".7"/>
     </svg>
     <p class="hero-pitch">
-      <strong>Weddings, parties &amp; brand events.</strong>
-      Printed strips + digital files in about a minute · from <strong>S$750</strong>.
+      <strong>Looks like a vintage strip. Develops with AI.</strong>
+      Classic film filters <em>and</em> painter styles on every four-pose roll — printed + digital in about a minute · from <strong>S$750</strong>.
     </p>
     <div class="meta-line">
       <span>By <em>Jeff</em></span><span>·</span><span>Singapore &amp; JB</span>
     </div>
     <div class="hero-ctas">
-      <a href="#spark" class="btn-edition primary">See examples
+      <a href="#book" class="btn-edition primary btn-hero-book">Book the booth</a>
+      <a href="#pricing" class="btn-edition">See packages
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
       </a>
-      <a href="#book" class="btn-edition btn-hero-book">Book the booth</a>
+    </div>
+    <div class="hero-occasions" role="group" aria-label="I'm planning a">
+      <button type="button" data-lead-audience="wedding" data-lead-event="Wedding" data-lead-package="keepsake" data-lead-scroll="#samples">Wedding</button>
+      <button type="button" data-lead-audience="corporate" data-lead-event="Corporate / brand" data-lead-package="activation" data-lead-scroll="#samples">Corporate</button>
+      <button type="button" data-lead-audience="birthday" data-lead-event="Birthday" data-lead-package="keepsake" data-lead-scroll="#samples">Birthday</button>
     </div>
     <div class="hero-jumps">
-      <a href="#pricing">Packages</a>
-      <a href="#demo">Try the demo</a>
+      <a href="#vision">The vision</a>
+      <a href="#spark">AI examples</a>
+      <a href="#demo">Try film live</a>
+    </div>
     </div>
   </div>
 
   <!-- Scroll progress — tiny indicator at bottom of hero -->
   <div class="hero-scrub-hint" id="heroScrubHint">
-    <span class="hint-label">Scroll — watch a photo turn into a Van Gogh painting</span>
+    <span class="hint-label">Scroll — watch a snap become film, then art</span>
     <div class="hint-bar"><div class="hint-bar-fill" id="heroScrubBar"></div></div>
   </div>
 
   </div><!-- /.hero-stage -->
 </section>
 
-<!-- torn paper transitioning into dark Spark chapter -->
-<div class="torn-edge to-dark" aria-hidden="true"></div>
+<!-- PLAN & DISCOVER — occasions through lookbook -->
+<div class="story-group story-group--plan" aria-label="Plan and discover">
+<section class="chapter occasion-router" id="occasions" data-screen-label="01b Occasions">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <span class="eyebrow">Start here</span>
+        <h2>What are you <em>planning?</em></h2>
+      </div>
+      <p class="lede">Pick your event — we'll show matching samples and pre-fill your enquiry.</p>
+    </div>
+    <div class="occasion-grid reveal" role="group" aria-label="Event type">
+      <button type="button" class="occasion-card" data-lead-audience="wedding" data-lead-event="Wedding" data-lead-package="keepsake" data-lead-scroll="#samples">
+        <strong>Wedding</strong>
+        <span>See wedding samples · 3 Hours from S$880</span>
+      </button>
+      <button type="button" class="occasion-card" data-lead-audience="corporate" data-lead-event="Corporate / brand" data-lead-package="activation" data-lead-scroll="#samples">
+        <strong>Corporate &amp; brand</strong>
+        <span>See activation samples · custom quote</span>
+      </button>
+      <button type="button" class="occasion-card" data-lead-audience="birthday" data-lead-event="Birthday" data-lead-package="keepsake" data-lead-scroll="#samples">
+        <strong>Birthday &amp; party</strong>
+        <span>See party samples · from S$750</span>
+      </button>
+      <button type="button" class="occasion-card" data-lead-event="Other" data-lead-package="undecided" data-lead-scroll="#book">
+        <strong>Not sure yet</strong>
+        <span>Skip to enquiry — Jeff replies within 24 hrs</span>
+      </button>
+    </div>
+    <p class="occasion-foot reveal">Prefer to chat first? <a href="https://wa.me/6589896901?text=Hi%20Jeff%2C%20I%27d%20like%20to%20enquire%20about%20the%20photobooth." target="_blank" rel="noopener">WhatsApp Jeff</a> · or use the <a href="/snapshot/">quick booking page</a></p>
+  </div>
+</section>
+
+<!-- THE VISION — vintage ritual + AI engine -->
+<section class="chapter vision-chapter" id="vision" data-screen-label="02 The vision">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <span class="eyebrow">The idea</span>
+        <h2>Vintage <em>ritual.</em> AI <em>alchemy.</em></h2>
+      </div>
+      <p class="lede">
+        A booth that <b>feels like 1978</b> and <b>develops like 2026</b> — hardwood tripod, four-pose strip,
+        that satisfying printer whir. Under the hood, AI gives you two kinds of magic on the same roll:
+        warm <b>film colour</b> or a full <b>painter repainting</b>.
+      </p>
+    </div>
+
+    <div class="vision-duo reveal">
+      <article class="vision-card">
+        <p class="vision-card-label">Layer one · film</p>
+        <h3>The nostalgia layer</h3>
+        <p>
+          70s Kodak, Polaroid, B&amp;W, Kodachrome — honest vintage colour grading on every frame.
+          Your face stays yours; the strip just looks like it was found in a shoebox.
+        </p>
+        <div class="vision-card-links">
+          <a href="#styles">See film looks</a>
+          <a href="#demo">Try filters live</a>
+        </div>
+      </article>
+      <article class="vision-card">
+        <p class="vision-card-label">Layer two · AI painter</p>
+        <h3>The wonder layer</h3>
+        <p>
+          Van Gogh, Monet, Warhol, Hokusai — AI reads your photo and repaints it in a master's hand.
+          The strip guests post, frame, and talk about for weeks.
+        </p>
+        <div class="vision-card-links">
+          <a href="#spark">See AI examples</a>
+          <a href="#metamorphosis">Watch a strip morph</a>
+        </div>
+      </article>
+    </div>
+
+    <p class="vision-merge reveal">
+      One booth. One ritual. Two ways to develop — pick film, pick painter, or mix across the night.
+    </p>
+  </div>
+</section>
+
+<!-- SAMPLE WALL — product proof (full catalogue on enquiry) -->
+<section class="chapter sample-wall" id="samples" data-screen-label="02b Samples">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <span class="eyebrow">The lookbook</span>
+        <h2>See what guests <em>take home.</em></h2>
+      </div>
+      <p class="lede">Real strips from real events — filter by occasion or style. Then <a href="#spark" style="color:inherit;">AI before/after</a>, <a href="#metamorphosis" style="color:inherit;">watch a strip morph</a>, or <a href="#reel" style="color:inherit;">feel the ritual</a>.</p>
+    </div>
+    <div class="sample-wall-filters reveal" id="sampleWallFilters" role="tablist" aria-label="Filter samples"></div>
+    <p class="sample-wall-count reveal" id="sampleWallCount" aria-live="polite"></p>
+    <div class="sample-wall-viewport reveal">
+      <div class="sample-wall-grid" id="sampleWallGrid"></div>
+      <div class="sample-wall-fade" id="sampleWallFade" aria-hidden="true"></div>
+    </div>
+    <button type="button" class="sample-wall-more btn ghost" id="sampleWallMore" hidden>Show all samples</button>
+    <div class="lead-cta reveal">
+      <p>Packages from <strong>S$750</strong> — 20+ styles in the full lookbook. Jeff replies within 24 hours.</p>
+      <a href="#book" class="btn" data-lead-catalogue="1" data-track="click_lookbook_samples">Get the full lookbook</a>
+      <a href="#book" class="btn ghost" data-track="click_book_samples">Book your date</a>
+    </div>
+    <p class="pricing-teaser reveal"><a href="#pricing">See all packages</a> · <a href="/snapshot/">Quick book page</a></p>
+  </div>
+</section>
+
+</div><!-- /.story-group--plan -->
+
+<!-- EXPERIENCE — AI painter, strip morph, ritual reel -->
+<div class="story-group story-group--experience" aria-label="Experience the magic">
 
 <!-- THE SPARK — rotating before/after gallery with cinematic flash transitions -->
-<section class="spark-chapter" id="spark" data-screen-label="02 Examples" style="position:relative;">
+<section class="spark-chapter" id="spark" data-screen-label="02 AI examples" style="position:relative;">
   <span class="chapter-numeral tr light" aria-hidden="true">ɪɪ</span>
   <div class="wrap">
     <div class="section-head reveal">
       <div>
-        <span class="eyebrow">See the magic · Examples</span>
+        <span class="eyebrow">The wonder layer · AI painter</span>
         <h2>One snap. <em>A masterpiece.</em></h2>
       </div>
       <p class="lede">
-        Your photo is restyled in the brushwork of Van Gogh, Monet, Picasso, Warhol, Hokusai, and 20+ more.
-        Watch the before &amp; after — or tap the lens to try it on your own face.
+        The painter side of the lookbook above — tap a style for a real before &amp; after.
+        Five AI looks repainting your photo as Van Gogh, Monet, Picasso, Warhol, or Hokusai.
+        <a href="#samples" style="color:inherit;">Back to samples</a> ·
+        <a href="#styles" style="color:inherit;">Film looks</a>.
       </p>
     </div>
 
@@ -3433,17 +4526,6 @@
         <figcaption>Before · <span id="sparkBeforeName">A candid snap</span></figcaption>
         <div class="spark-frame">
           <div class="spark-img" id="sparkBeforeImg"></div>
-          <!-- Webcam lens overlays when activated -->
-          <div class="spark-lens" id="sparkLens">
-            <video id="sparkVideo" autoplay playsinline muted></video>
-            <canvas id="sparkCanvas"></canvas>
-            <div class="spark-lens-off" id="sparkLensOff">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <circle cx="12" cy="13" r="4"/><path d="M3 7h4l2-2h6l2 2h4v12H3z"/>
-              </svg>
-              <span>Tap lens to use your face</span>
-            </div>
-          </div>
         </div>
       </figure>
 
@@ -3456,43 +4538,37 @@
 
       <!-- Right: after (painting) -->
       <figure class="spark-slot spark-after">
-        <figcaption>After · <span id="sparkAfterName">Van Gogh</span></figcaption>
+        <figcaption>After · <span id="sparkAfterName">Swirl sky</span></figcaption>
         <div class="spark-frame">
           <div class="spark-img spark-painting" id="sparkAfterImg"></div>
           <video id="sparkAfterVideo" class="spark-after-video" muted loop playsinline webkit-playsinline preload="auto" aria-label="AI style animation preview"></video>
-          <div class="spark-signature" id="sparkSignature">— V. van Gogh</div>
+          <div class="spark-signature" id="sparkSignature">— bold golden brushwork</div>
         </div>
       </figure>
     </div>
 
-    <!-- Painter picker — drives BOTH this gallery and the metamorphosis section -->
-    <div class="spark-picker reveal">
-      <button data-painter="vangogh" class="active"><span class="swatch" style="background:#f4b731"></span>Van Gogh</button>
-      <button data-painter="monet"><span class="swatch" style="background:#a7c8e8"></span>Monet</button>
-      <button data-painter="picasso"><span class="swatch" style="background:#d87a3c"></span>Picasso</button>
-      <button data-painter="warhol"><span class="swatch" style="background:#ff2d88"></span>Warhol</button>
-      <button data-painter="hokusai"><span class="swatch" style="background:#1e5aa8"></span>Hokusai</button>
-    </div>
+    <!-- Style picker — built by creation.js (AI painter looks only) -->
+    <div class="spark-picker reveal" id="sparkPicker"></div>
 
-    <!-- The exact prompt we whispered to Claude for the current painter -->
+    <!-- Style direction card -->
     <figure class="spark-prompt reveal" aria-live="polite">
       <figcaption class="spark-prompt-label">
         <span class="spark-prompt-pin" aria-hidden="true">✦</span>
-        <span>The prompt we whispered to PWP photobooth</span>
+        <span>The look we gave this snap</span>
       </figcaption>
       <blockquote class="spark-prompt-text" id="sparkPromptText">
-        &ldquo;Throw them into a Van Gogh fever dream&mdash;swirly sky, dramatic vibes, and make them pose like they&rsquo;re in a windy romance scene.&rdquo;
+        &ldquo;Swirly golden sky, thick brush strokes, and a pose like they&rsquo;re in a windy romance scene.&rdquo;
       </blockquote>
     </figure>
 
     <div class="spark-foot reveal">
-      <span class="mono">Tap any painter to see how that style transforms a real moment.</span>
+      <span class="mono">Tap a painter above — auto-rotates every 6s.</span>
       <span class="mono" style="display:block; margin-top:8px; opacity:.85;">
-        <a href="#reel" style="color:inherit;">Scroll for the full strip story</a>
-        · <a href="#metamorphosis" style="color:inherit;">More style swaps</a>
+        <a href="#metamorphosis" style="color:inherit;">Watch a strip morph</a>
+        · <a href="#styles" style="color:inherit;">Film looks</a>
+        · <a href="#reel" style="color:inherit;">The ritual</a>
       </span>
     </div>
-  </div>
 
   <!-- Fullscreen flash overlay (used for every painter swap + hero→spark entry) -->
   <div class="flash-overlay" id="flashOverlay" aria-hidden="true">
@@ -3508,6 +4584,95 @@
   </div>
 </section>
 
+<div class="zone-edge" aria-hidden="true"></div>
+
+<!-- METAMORPHOSIS — same strip, film → painter (the twist) -->
+<section class="meta-chapter" id="metamorphosis" data-screen-label="03 The twist">
+  <div class="meta-bg"></div>
+  <div class="wrap" style="position:relative; z-index:2;">
+    <div class="section-head reveal">
+      <div>
+        <span class="eyebrow" style="color:#ffd6f0;">The twist</span>
+        <h2 style="color:#fff;">Two layers. <em style="color:#ffd88a;">Endless strips.</em></h2>
+      </div>
+      <p style="color: rgba(255,255,255,.75);">
+        Spark showed one photo — here’s the full four-pose strip. Watch it morph from vintage film into Van&nbsp;Gogh, Monet, or Warhol.
+        That’s the booth: <b>nostalgia and wonder on one roll.</b>
+      </p>
+    </div>
+
+    <div class="meta-picker reveal">
+      <button data-meta="vintage" class="active">
+        <span class="dot" style="background:#c38a52"></span>70s Kodak <small>Default</small>
+      </button>
+      <button data-meta="vangogh">
+        <span class="dot" style="background:#f4b731"></span>Swirl sky
+      </button>
+      <button data-meta="monet">
+        <span class="dot" style="background:#a7c8e8"></span>Garden soft
+      </button>
+      <button data-meta="picasso">
+        <span class="dot" style="background:#d87a3c"></span>Cubist bold
+      </button>
+      <button data-meta="warhol">
+        <span class="dot" style="background:#ff2d88"></span>Pop colour
+      </button>
+      <button data-meta="hokusai">
+        <span class="dot" style="background:#1e5aa8"></span>Ink &amp; wave
+      </button>
+    </div>
+
+    <div class="meta-stage reveal">
+      <div class="meta-before">
+        <div class="meta-label">Before — 70s Kodak</div>
+        <div class="meta-card" id="metaBefore">
+          <div class="meta-photo"><div class="meta-img" data-meta-src="0"></div></div>
+          <div class="meta-photo"><div class="meta-img" data-meta-src="1"></div></div>
+          <div class="meta-photo"><div class="meta-img" data-meta-src="2"></div></div>
+          <div class="meta-photo"><div class="meta-img" data-meta-src="3"></div></div>
+          <div class="meta-strip-brand">Playing With Photo · Vintage</div>
+        </div>
+      </div>
+
+      <div class="meta-arrow">
+        <svg viewBox="0 0 60 80" style="width:60px;">
+          <path d="M10 40 L50 40 M30 20 L50 40 L30 60" stroke="#ffd88a" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <div class="meta-arrow-label">AI rewrites it</div>
+      </div>
+
+      <div class="meta-after">
+        <div class="meta-label" id="metaAfterLabel">After — Swirl sky</div>
+        <div class="meta-card" id="metaAfter">
+          <div class="meta-photo"><div class="meta-img meta-after-img" data-meta-src="0"></div><div class="meta-shine"></div></div>
+          <div class="meta-photo"><div class="meta-img meta-after-img" data-meta-src="1"></div><div class="meta-shine"></div></div>
+          <div class="meta-photo"><div class="meta-img meta-after-img" data-meta-src="2"></div><div class="meta-shine"></div></div>
+          <div class="meta-photo"><div class="meta-img meta-after-img" data-meta-src="3"></div><div class="meta-shine"></div></div>
+          <div class="meta-strip-brand" id="metaAfterBrand">Playing With Photo · Swirl sky</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="meta-cta reveal">
+      <p style="color: rgba(255,255,255,.7); max-width: 480px; margin: 0;">
+        <b style="color:#fff;">Jeff tip:</b> couples love the vintage strip for the album — and the Van&nbsp;Gogh strip framed on the wall. Mix both across the night.
+      </p>
+      <a href="#reel" class="btn" style="background:#ffd88a; color:#1a0f2a; border-color:#ffd88a; box-shadow: 0 4px 0 #c09050;">See the booth ritual
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+
+    <div class="meta-keepsake reveal">
+      <span class="meta-keepsake-eyebrow">…and then it becomes this</span>
+      <h3 class="meta-keepsake-title">A real <em>keepsake</em> — gold frame, in your hand.</h3>
+      <div class="meta-keepsake-frame">
+        <img src="photos/reel/jenmike-keepsake.png" alt="Van Gogh-style keepsake portrait of Jen and Mike in an ornate gold frame" loading="lazy" />
+      </div>
+      <p class="meta-keepsake-caption">Any painterly strip can become a hand-finished mini portrait. One for the album, one for the mantelpiece.</p>
+    </div>
+  </div>
+</section>
+
 <!-- =============================
      SCROLL-NARRATIVE: "The Reel"
      A pinned chapter where a film strip slides and 4 frames develop one by one.
@@ -3519,7 +4684,7 @@
       <div class="reel-head">
         <span class="eyebrow" style="color:var(--highlight);">The reel · 002</span>
         <h2 class="reel-title" id="reelTitle">Scroll to <em>develop</em> the strip</h2>
-        <p class="reel-sub" id="reelSub">Four poses, four frames — keep scrolling to see how a real booth session unfolds.</p>
+        <p class="reel-sub" id="reelSub">Four poses, four frames — step in, shoot, develop, take home. Scroll to feel the ritual.</p>
       </div>
 
       <div class="reel-strip" id="reelStrip">
@@ -3545,7 +4710,7 @@
           <div class="reel-frame" data-reel="3">
             <div class="reel-frame-inner" style="background-image: var(--reel-img-3);"></div>
             <div class="reel-devstage"></div>
-            <div class="reel-label">04 · The Keepsake</div>
+            <div class="reel-label">04 · Take it home</div>
           </div>
         </div>
         <div class="reel-holes">
@@ -3564,7 +4729,7 @@
         </div>
         <div class="reel-caption" data-cap="2">
           <span class="script">Let it develop.</span>
-          <p>AI restyles each frame to your chosen era — 70s Kodak, Polaroid, Kodachrome, B&amp;W.</p>
+          <p>AI develops each frame — vintage film colour <em>or</em> a painter repainting, your choice.</p>
         </div>
         <div class="reel-caption" data-cap="3">
           <span class="script">Take it home.</span>
@@ -3576,196 +4741,86 @@
   <!-- Scroll length drives pin timeline -->
   <div class="reel-spacer"></div>
 </section>
+</div><!-- /.story-group--experience -->
+
+<!-- TRY FILM — vintage looks + live demo -->
+<div class="story-group story-group--film" aria-label="Try the film layer">
 
 <!-- TICKER -->
 <div class="ticker" aria-hidden="true">
   <div class="ticker-track">
     <span>
       Strike a pose <span class="sep">✦</span>
-      Vintage vibes <span class="sep">✦</span>
-      AI-powered <span class="sep">✦</span>
+      Vintage meets AI <span class="sep">✦</span>
+      Film &amp; painter styles <span class="sep">✦</span>
       Hand-built in Singapore <span class="sep">✦</span>
       70s Kodak <span class="sep">✦</span>
-      Polaroid moments <span class="sep">✦</span>
+      Van Gogh nights <span class="sep">✦</span>
       Weddings · Parties · Brands <span class="sep">✦</span>
       Strike a pose <span class="sep">✦</span>
-      Vintage vibes <span class="sep">✦</span>
-      AI-powered <span class="sep">✦</span>
+      Vintage meets AI <span class="sep">✦</span>
+      Film &amp; painter styles <span class="sep">✦</span>
       Hand-built in Singapore <span class="sep">✦</span>
       70s Kodak <span class="sep">✦</span>
-      Polaroid moments <span class="sep">✦</span>
+      Van Gogh nights <span class="sep">✦</span>
       Weddings · Parties · Brands <span class="sep">✦</span>
     </span>
   </div>
 </div>
 
-<div class="torn-edge to-cream" aria-hidden="true"></div>
-<!-- PRICING -->
-<section class="chapter" id="pricing" data-screen-label="04 Packages">
+<!-- VINTAGE FILM LOOKS — nostalgia layer -->
+<section class="chapter gallery-chapter" id="styles" data-screen-label="05 Vintage film" style="position:relative;">
+  <span class="chapter-numeral tr light" aria-hidden="true">ᴠɪɪ</span>
   <div class="wrap">
     <div class="section-head reveal">
       <div>
-        <span class="eyebrow">Packages · Pricing</span>
-        <h2>Four ways<br/>to <em>play</em>.</h2>
+        <span class="eyebrow">The nostalgia layer · vintage film</span>
+        <h2 style="color:var(--cream);">Five films,<br/><em style="color:var(--highlight)!important;">one roll.</em></h2>
       </div>
-      <div class="pricing-meta">
-        <p>All packages include setup, teardown, an on-site attendant, unlimited prints, and every digital file.</p>
-        <p class="pricing-guide">Most couples book <strong>The Keepsake</strong> (3 hrs). Full receptions choose <strong>The Showpiece</strong> (5 hrs).</p>
-        <a href="./PWP_Packages-2.pdf" class="btn ghost" target="_blank" rel="noopener noreferrer">View full package details (PDF)</a>
-      </div>
+      <p>
+        Kodak, Polaroid, B&amp;W, and more — warm colour grading on every frame, not AI repainting.
+        Scroll the strip below, then try them on your webcam in the next section.
+      </p>
     </div>
 
-    <div class="pricing-audience reveal" role="tablist" aria-label="Who are you booking for?">
-      <button type="button" class="active" data-audience="wedding" role="tab" aria-selected="true">Weddings</button>
-      <button type="button" data-audience="corporate" role="tab" aria-selected="false">Corporate</button>
-      <button type="button" data-audience="birthday" role="tab" aria-selected="false">Birthdays</button>
+    <div class="style-chips reveal" aria-label="Choose a film look">
+      <button class="active" data-style="all" aria-pressed="true">All Looks</button>
+      <button data-style="kodak" aria-pressed="false">70s Kodak</button>
+      <button data-style="bw" aria-pressed="false">Silver Gelatin B&amp;W</button>
+      <button data-style="polaroid" aria-pressed="false">Polaroid 600</button>
+      <button data-style="kodachrome" aria-pressed="false">Kodachrome Slide</button>
+      <button data-style="sepia" aria-pressed="false">Studio Sepia</button>
     </div>
-    <p class="pricing-audience-hint reveal" id="pricingAudienceHint" aria-live="polite">
-      Most couples choose <strong>The Keepsake</strong> (3 hrs, S$880).
-    </p>
+  </div>
 
-    <div class="ticket-booklet reveal" data-audience="wedding">
-      <div class="ticket-grid-weddings">
-      <article class="ticket t-prelude">
-        <div class="ticket-stub">
-          <div class="stub-label">admit one</div>
-          <div class="stub-num">№ 001</div>
-          <div class="stub-foot">prelude</div>
-        </div>
-        <div class="ticket-perf" aria-hidden="true"></div>
-        <div class="ticket-body">
-          <header class="ticket-hd">
-            <span class="ticket-kicker">The Prelude · short set</span>
-            <div class="ticket-price"><span class="cur">S$</span>750<small>· 2 hrs</small></div>
-            <span class="ticket-scene">ROM, tea ceremony, or cocktail hour</span>
-          </header>
-          <ul class="ticket-list">
-            <li>2 hours of shooting</li>
-            <li>Unlimited printed strips</li>
-            <li>All digital files delivered</li>
-            <li>2 AI film styles</li>
-            <li>On-site attendant</li>
-          </ul>
-          <footer class="ticket-ft">
-            <div class="ticket-stamp">first look</div>
-            <a href="#book" class="btn ghost" data-package="prelude">Enquire</a>
-          </footer>
-        </div>
-      </article>
-
-      <article class="ticket t-keepsake featured">
-        <div class="ticket-ribbon">most booked</div>
-        <div class="ticket-stub">
-          <div class="stub-label">admit one</div>
-          <div class="stub-num">№ 002</div>
-          <div class="stub-foot">keepsake</div>
-        </div>
-        <div class="ticket-perf" aria-hidden="true"></div>
-        <div class="ticket-body">
-          <header class="ticket-hd">
-            <span class="ticket-kicker">The Keepsake · half day</span>
-            <div class="ticket-price"><span class="cur">S$</span>880<small>· 3 hrs</small></div>
-            <span class="ticket-scene">Portraits and one celebration segment</span>
-          </header>
-          <ul class="ticket-list">
-            <li>3 hours of shooting</li>
-            <li>Unlimited printed strips</li>
-            <li>All digital files delivered</li>
-            <li>3 AI film styles</li>
-            <li>On-site attendant</li>
-          </ul>
-          <footer class="ticket-ft">
-            <div class="ticket-stamp red">half day</div>
-            <a href="#book" class="btn" data-package="keepsake">Book it</a>
-          </footer>
-        </div>
-      </article>
-
-      <article class="ticket t-showpiece">
-        <div class="ticket-stub dark">
-          <div class="stub-label">admit one</div>
-          <div class="stub-num">№ 003</div>
-          <div class="stub-foot">showpiece</div>
-        </div>
-        <div class="ticket-perf" aria-hidden="true"></div>
-        <div class="ticket-body">
-          <header class="ticket-hd">
-            <span class="ticket-kicker">The Showpiece · full evening</span>
-            <div class="ticket-price"><span class="cur">S$</span>1,380<small>· 5 hrs</small></div>
-            <span class="ticket-scene">Cocktail through first dance</span>
-          </header>
-          <ul class="ticket-list">
-            <li>5 hours of shooting</li>
-            <li>Unlimited printed strips</li>
-            <li>All digital files + gallery link</li>
-            <li>All 5 AI film styles</li>
-            <li>Custom branded footer</li>
-            <li>On-site attendant</li>
-          </ul>
-          <footer class="ticket-ft">
-            <div class="ticket-stamp red">feature film</div>
-            <a href="#book" class="btn" data-package="showpiece">Book it</a>
-          </footer>
-        </div>
-      </article>
-      </div>
-
-      <div class="ticket-grid-brands">
-        <p class="ticket-brands-label">For brands &amp; festivals</p>
-        <article class="ticket t-activation">
-        <div class="ticket-stub">
-          <div class="stub-label">admit one</div>
-          <div class="stub-num">№ 004</div>
-          <div class="stub-foot">activation</div>
-        </div>
-        <div class="ticket-perf" aria-hidden="true"></div>
-        <div class="ticket-body">
-          <header class="ticket-hd">
-            <span class="ticket-kicker">The Activation · brands &amp; fests</span>
-            <div class="ticket-price"><span class="cur">S$</span>Custom<small>· full day+</small></div>
-          </header>
-          <ul class="ticket-list">
-            <li>Full-day or multi-day</li>
-            <li>Custom-branded booth wrap</li>
-            <li>Bespoke AI style training</li>
-            <li>Live gallery feed</li>
-            <li>Multi-operator team</li>
-          </ul>
-          <footer class="ticket-ft">
-            <div class="ticket-stamp">headline act</div>
-            <a href="#book" class="btn ghost" data-package="activation">Get a quote</a>
-          </footer>
-        </div>
-      </article>
-      </div>
+  <div class="filmstrip-wrap reveal" style="margin-top: 60px;">
+    <div class="filmstrip" id="styleFilmstrip">
+      <!-- Populated by JS -->
     </div>
   </div>
 </section>
 
-
-<!-- LIVE DEMO -->
-<section class="chapter" id="demo" data-screen-label="02 Live Demo" style="padding: 120px 0;">
+<!-- LIVE DEMO — try the film layer -->
+<section class="chapter" id="demo" data-screen-label="02 Filter & GIF demo">
   <div class="wrap">
     <div class="section-head reveal">
       <div>
-        <span class="eyebrow">Try it · Live demo</span>
-        <h2>Try it right <em>now</em>.</h2>
+        <span class="eyebrow">Try it · the nostalgia layer</span>
+        <h2>Feel the <em>film</em> yourself.</h2>
       </div>
       <p>
-        Your webcam, a pinch of AI, and thirty years of film nostalgia. Click the shutter,
-        strike four poses — we'll develop a vintage strip you can save and share.
-        <b>Nothing is uploaded.</b> All processing happens in your browser.
-        On mobile, allow camera access when prompted — desktop works best for the full experience.
+        Turn on your camera, pick a filter from above, shoot four poses, and save a looping GIF.
+        Same film grading guests get at the booth. <b>Nothing is uploaded.</b>
       </p>
     </div>
 
-    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start;" id="demoGrid">
+    <div class="demo-grid" id="demoGrid">
       <div class="demo-ui reveal">
         <div class="demo" id="demoBox">
           <div class="status" id="demoStatus">
             <div>
-              <h4>Turn on your camera</h4>
-              <p>We'll only use it for this demo — nothing leaves your browser.</p>
+              <h4>Try the filter live</h4>
+              <p>Turn on your camera to preview vintage film filters and shoot a GIF strip — nothing leaves your browser.</p>
               <button class="btn" id="startCam">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="13" r="4"/><path d="M3 7h4l2-2h6l2 2h4v12H3z"/></svg>
                 Turn on camera
@@ -3775,7 +4830,6 @@
           <video id="video" autoplay playsinline muted></video>
           <canvas class="filter-canvas" id="filterCanvas"></canvas>
           <svg class="frame-overlay" viewBox="0 0 100 100" preserveAspectRatio="none">
-            <!-- Corner registration marks -->
             <g fill="none" stroke="rgba(255,235,200,.5)" stroke-width=".4">
               <path d="M3 3 L3 9 M3 3 L9 3"/>
               <path d="M97 3 L97 9 M97 3 L91 3"/>
@@ -3783,58 +4837,72 @@
               <path d="M97 97 L97 91 M97 97 L91 97"/>
             </g>
           </svg>
-          <div class="countdown" id="countdown">3</div>
+          <div class="countdown" id="countdown" aria-live="polite">3</div>
+          <div class="capture-feedback" id="captureFeedback" aria-live="polite"></div>
           <div class="flash" id="flash"></div>
         </div>
 
         <div class="demo-controls">
-          <div class="filter-options" id="filterOptions">
-            <button data-f="sepia" class="active">Sepia 70s</button>
-            <button data-f="bw">B&W Classic</button>
-            <button data-f="polaroid">Polaroid</button>
-            <button data-f="kodachrome">Kodachrome</button>
-          </div>
+          <div class="filter-options" id="filterOptions"></div>
           <button class="shutter-btn" id="shutterBtn" disabled title="Snap a strip">
             <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg>
           </button>
         </div>
       </div>
 
-      <div class="reveal">
-        <div class="result-strip" id="resultStrip">
-          <div class="holes-row">
-            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-          </div>
-          <div class="photos" id="photos">
-            <div class="photo"></div>
-            <div class="photo"></div>
-            <div class="photo"></div>
-            <div class="photo"></div>
-          </div>
-          <div class="holes-row">
-            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-          </div>
-          <div class="footer-strip">
-            <span class="brand">Playing With Photo</span>
-            <small id="resultDate">— · — · —</small>
-          </div>
+      <div class="demo-result-panel reveal">
+        <div class="demo-result-head">
+          <h3>Your strip</h3>
+          <span id="demoResultStatus">Waiting for photos</span>
         </div>
-        <div class="result-actions" id="resultActions" style="display:none;">
-          <button class="btn ghost" id="retakeBtn">Retake</button>
-          <button class="btn" id="downloadBtn">Download strip
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 4v12m0 0l-5-5m5 5l5-5M4 20h16"/></svg>
-          </button>
+        <p class="demo-tries-note" id="demoTriesNote">3 free strips · vintage filter only · nothing uploads</p>
+
+        <div class="demo-result-layout" id="demoResultLayout">
+          <aside class="demo-side-rail" id="demoSideRail" hidden>
+            <div class="demo-thumb-strip" id="demoThumbStrip" hidden aria-label="Captured poses">
+              <div class="demo-thumb-slot" data-slot="0"><span>1</span></div>
+              <div class="demo-thumb-slot" data-slot="1"><span>2</span></div>
+              <div class="demo-thumb-slot" data-slot="2"><span>3</span></div>
+              <div class="demo-thumb-slot" data-slot="3"><span>4</span></div>
+            </div>
+            <div class="demo-template-rail" id="demoTemplateRail" hidden aria-label="Frame templates"></div>
+          </aside>
+
+          <div class="demo-result-main">
+            <div id="demoPlaceholder">
+              <p class="demo-placeholder-title">Your film strip<br/>will develop here</p>
+              <p>Shoot four poses — thumbnails stack on the side as you go.</p>
+            </div>
+
+            <div class="demo-gif-wrap" id="demoGifWrap" hidden>
+              <img id="demoGifPreview" alt="Your animated vintage strip GIF" />
+              <span class="demo-gif-badge">GIF</span>
+              <p class="demo-gif-loading" id="demoGifLoading" hidden>Developing…</p>
+            </div>
+
+            <div class="result-actions" id="resultActions" hidden>
+              <button class="btn ghost" id="retakeBtn">Retake</button>
+              <button class="btn" id="downloadGifBtn">Download GIF</button>
+            </div>
+          </div>
         </div>
 
-        <div id="demoPlaceholder" style="padding: 40px 20px; text-align:center; color: var(--ink-2);">
-          <div style="font-family:var(--ff-display); font-style:italic; font-size: 28px; color:var(--ink); margin-bottom: 8px;">Your film strip<br/>will develop here</div>
-          <p style="font-size:14px; max-width: 320px; margin: 0 auto;">Pick a style, aim your shot, and tap the shutter. We'll take four frames in sequence — just like the real booth.</p>
+        <div class="demo-limit-overlay" id="demoLimitOverlay" hidden>
+          <h4>Love the vintage look?</h4>
+          <p>You've tried the demo — book the booth for unlimited strips, prints, and the full AI painter experience at your event.</p>
+          <div class="demo-limit-actions">
+            <a class="btn" href="#book" id="demoBookBtn" data-track="demo_limit_book">Book the booth</a>
+            <a class="btn ghost" href="/snapshot/">See packages</a>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </section>
+</div><!-- /.story-group--film -->
 
+<!-- TRUST — booth hardware & social proof -->
+<div class="story-group story-group--trust" aria-label="What you get on the day">
 <div class="section-bridge wrap reveal">
   <span class="eyebrow">What you get on the day</span>
   <h2 style="font-family:var(--ff-display); font-size:clamp(28px,4vw,40px); font-weight:400; margin-top:12px;">
@@ -3855,43 +4923,19 @@
       <p>
         Every booth is assembled in Jeff's Singapore studio. A real hardwood tripod, a
         vintage-cased camera head, and a thermal printer that whirs like a polaroid —
-        but inside, modern AI does the magic of turning strangers into film stars.
+        with AI inside that develops each strip in classic film colour or a painter's style.
       </p>
     </div>
+  </div>
 
+  <div class="booth-scrub">
+    <div class="booth-scrub-pin">
+      <div class="wrap">
     <div class="booth-grid reveal">
       <div class="booth-stage">
-        <svg viewBox="0 0 400 480" style="width: 90%; filter: drop-shadow(0 30px 40px var(--shadow));">
-          <!-- Ring light -->
-          <circle cx="200" cy="70" r="56" fill="#fff" stroke="var(--ink)" stroke-width="3"/>
-          <circle cx="200" cy="70" r="44" fill="var(--cream)" stroke="var(--rust)" stroke-width="2"/>
-          <circle cx="200" cy="70" r="30" fill="var(--highlight)"/>
-          <circle cx="200" cy="70" r="14" fill="#fff"/>
-          <rect x="194" y="120" width="12" height="28" fill="var(--ink-2)"/>
-          <!-- Booth body -->
-          <rect x="115" y="145" width="170" height="160" rx="8" fill="#6b3f25" stroke="var(--ink)" stroke-width="3"/>
-          <rect x="123" y="153" width="154" height="144" rx="4" fill="#4a2814"/>
-          <!-- Screws -->
-          <circle cx="125" cy="155" r="3" fill="#2a1a0c"/>
-          <circle cx="275" cy="155" r="3" fill="#2a1a0c"/>
-          <circle cx="125" cy="295" r="3" fill="#2a1a0c"/>
-          <circle cx="275" cy="295" r="3" fill="#2a1a0c"/>
-          <!-- Lens -->
-          <circle cx="200" cy="200" r="40" fill="var(--ink)" stroke="var(--tan)" stroke-width="3"/>
-          <circle cx="200" cy="200" r="30" fill="#1a0f07"/>
-          <circle cx="200" cy="200" r="20" fill="#0a0604"/>
-          <circle cx="190" cy="190" r="6" fill="var(--highlight)" opacity=".7"/>
-          <!-- Screen -->
-          <rect x="140" y="255" width="120" height="36" rx="3" fill="var(--cream)"/>
-          <text x="200" y="278" text-anchor="middle" font-family="Caveat, cursive" font-size="20" fill="var(--rust)" font-weight="600">ready when you are</text>
-          <!-- Legs -->
-          <line x1="200" y1="305" x2="110" y2="465" stroke="#6b3f25" stroke-width="10" stroke-linecap="round"/>
-          <line x1="200" y1="305" x2="290" y2="465" stroke="#6b3f25" stroke-width="10" stroke-linecap="round"/>
-          <line x1="200" y1="305" x2="200" y2="465" stroke="#8a5030" stroke-width="7" stroke-linecap="round" opacity=".6"/>
-          <circle cx="200" cy="305" r="12" fill="var(--ink)"/>
-          <!-- Wood grain -->
-          <path d="M195 330 L113 460 M200 360 L122 465" stroke="#4a2814" stroke-width="1" opacity=".3"/>
-        </svg>
+        <div class="booth-canvas-wrap">
+          <canvas id="boothAssemblyCanvas" class="booth-assembly-canvas" aria-label="Photobooth assembly animation"></canvas>
+        </div>
 
         <div class="booth-labels">
           <div class="booth-label" style="top: 6%; right: -5%;"><b>Ring light</b><span class="line"></span>01</div>
@@ -3918,8 +4962,8 @@
             <p>Teak, hand-finished. Each one has its own grain — no two are identical.</p>
           </div>
           <div class="f">
-            <h4>Live AI filter</h4>
-            <p>See your vintage self in real-time before you ever hit the shutter.</p>
+            <h4>Filter &amp; GIF preview</h4>
+            <p>See your filtered self in real-time — the film layer of the booth. Pair it with AI painter styles on the next strip.</p>
           </div>
           <div class="f">
             <h4>Thermal printer</h4>
@@ -3932,141 +4976,13 @@
         </div>
       </div>
     </div>
-  </div>
-</section>
-
-<!-- HOW IT WORKS -->
-<section class="chapter" id="how" data-screen-label="04 How It Works">
-  <div class="wrap">
-    <div class="section-head reveal">
-      <div>
-        <span class="eyebrow">How it works · 4 steps</span>
-        <h2>Pose. Click.<br/><em>Develop.</em> Done.</h2>
-      </div>
-      <p>Four steps, forty seconds. The AI does the heavy lifting — your guests just show up and smile.</p>
-    </div>
-
-    <div class="howit-steps reveal">
-      <div class="step">
-        <span class="num">01</span>
-        <span class="stamp">Step one</span>
-        <h4>Step in</h4>
-        <p>Guest walks up to the booth. Ring light warms up. No app, no signup.</p>
-      </div>
-      <div class="step">
-        <span class="num">02</span>
-        <span class="stamp">Step two</span>
-        <h4>Strike a pose</h4>
-        <p>Countdown on the screen. Four poses in eight seconds, like the classic strip.</p>
-      </div>
-      <div class="step">
-        <span class="num">03</span>
-        <span class="stamp">Step three</span>
-        <h4>AI develops</h4>
-        <p>Model re-styles each frame in the chosen era — 70s Kodak, Polaroid, B&W.</p>
-      </div>
-      <div class="step">
-        <span class="num">04</span>
-        <span class="stamp">Step four</span>
-        <h4>Take it home</h4>
-        <p>The queue screen calls their number. Printed strip in hand, digital copy texted.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- STYLE GALLERY -->
-<section class="chapter gallery-chapter" id="styles" data-screen-label="05 Styles" style="position:relative;">
-  <span class="chapter-numeral tr light" aria-hidden="true">ᴠɪɪ</span>
-  <div class="wrap">
-    <div class="section-head reveal">
-      <div>
-        <span class="eyebrow">The looks · 004</span>
-        <h2 style="color:var(--cream);">Five films,<br/><em style="color:var(--highlight)!important;">one roll.</em></h2>
-      </div>
-      <p>Start with every photo in its own film look. Tap a vintage filter to apply that same look across the whole moving strip.</p>
-    </div>
-
-    <div class="style-chips reveal" aria-label="Choose a film look">
-      <button class="active" data-style="all" aria-pressed="true">All Looks</button>
-      <button data-style="kodak" aria-pressed="false">70s Kodak</button>
-      <button data-style="bw" aria-pressed="false">Silver Gelatin B&amp;W</button>
-      <button data-style="polaroid" aria-pressed="false">Polaroid 600</button>
-      <button data-style="kodachrome" aria-pressed="false">Kodachrome Slide</button>
-      <button data-style="sepia" aria-pressed="false">Studio Sepia</button>
-    </div>
-  </div>
-
-  <div class="filmstrip-wrap reveal" style="margin-top: 60px;">
-    <div class="filmstrip" id="styleFilmstrip">
-      <!-- Populated by JS -->
-    </div>
-  </div>
-</section>
-
-<!-- USE CASES -->
-<div class="torn-edge to-cream" aria-hidden="true"></div>
-<section class="chapter" id="usecases" data-screen-label="06 Use Cases" style="position:relative;">
-  <span class="chapter-numeral tl" aria-hidden="true">ᴠɪɪɪ</span>
-  <div class="wrap">
-    <div class="section-head reveal">
-      <div>
-        <span class="eyebrow">Where it lives · 005</span>
-        <h2>The booth <em>you'll</em><br/>want to book.</h2>
-      </div>
-      <p>Weddings, brand launches, festivals, birthdays. The booth fits any venue that has a wall socket and room for four people.</p>
-    </div>
-
-    <div class="usecases-grid reveal">
-      <div class="uc big" style="background: linear-gradient(135deg, var(--paper), var(--tan));">
-        <div>
-          <span class="uc-num">// 01</span>
-          <h3>Weddings<br/>& Receptions</h3>
-          <p>The most-talked-about corner of the night. Your guests leave with a keepsake that doesn't end up in a junk drawer.</p>
-        </div>
-        <svg class="uc-illus" viewBox="0 0 200 200">
-          <rect x="20" y="40" width="160" height="130" fill="var(--cream)" stroke="var(--ink)" stroke-width="2"/>
-          <rect x="30" y="55" width="140" height="90" fill="var(--tan)"/>
-          <circle cx="80" cy="95" r="18" fill="var(--cream)"/>
-          <circle cx="120" cy="95" r="18" fill="var(--cream)"/>
-          <path d="M70 125 Q100 140 130 125" stroke="var(--rust)" stroke-width="3" fill="none"/>
-          <text x="100" y="162" text-anchor="middle" font-family="Caveat, cursive" font-size="16" fill="var(--rust)">Mr & Mrs</text>
-        </svg>
-      </div>
-      <div class="uc">
-        <div>
-          <span class="uc-num">// 02</span>
-          <h3>Corporate</h3>
-          <p>Branded strips, custom filters, your logo on the film border.</p>
-        </div>
-      </div>
-      <div class="uc">
-        <div>
-          <span class="uc-num">// 03</span>
-          <h3>Festivals</h3>
-          <p>High-volume mode: 4 strips/minute, queue-friendly.</p>
-        </div>
-      </div>
-      <div class="uc">
-        <div>
-          <span class="uc-num">// 04</span>
-          <h3>Birthdays</h3>
-          <p>For milestone years. Grandma looks incredible in Kodachrome.</p>
-        </div>
-      </div>
-      <div class="uc">
-        <div>
-          <span class="uc-num">// 05</span>
-          <h3>Pop-ups</h3>
-          <p>Retail activations, openings, launches. Draws a crowd.</p>
-        </div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- TESTIMONIALS -->
-<div class="torn-edge to-paper" aria-hidden="true"></div>
+<div class="group-divider" aria-hidden="true"></div>
 <section class="chapter testis-chapter" id="testimonials" data-screen-label="07 Testimonials" style="position:relative;">
   <span class="chapter-numeral tr" aria-hidden="true">ɪx</span>
   <div class="wrap">
@@ -4163,6 +5079,7 @@
     </div>
   </div>
 </section>
+</div><!-- /.story-group--trust -->
 
 <!-- AI ANIMATION -->
 <section class="chapter animation-chapter" id="animation" data-screen-label="09 AI Animation">
@@ -4186,17 +5103,21 @@
       </div>
 
       <article class="animation-panel">
-        <h3>AI motion clips, made live.</h3>
+        <h3>AI motion clips + live slideshow.</h3>
         <p>
           Guests take a portrait, choose a mood, and receive a short animated clip
-          alongside their print. It is perfect for a screen loop, social stories, or a
-          branded activation wall.
+          alongside their print — with a rolling live feed on venue screens for everyone
+          to watch.
         </p>
-        <div class="animation-price"><span>S$200</span><small>add-on / hour</small></div>
+        <div class="animation-price">
+          <span class="animation-price-was">S$200</span>
+          <span>S$100</span>
+          <small>testing bundle</small>
+        </div>
         <ul class="animation-points">
           <li>Short generated motion clips from selected guest portraits</li>
-          <li>Works well with the live slideshow add-on for real-time display</li>
-          <li>Pricing is flexible while the service is still being tested</li>
+          <li>Live slideshow feed on venue screens — included in the same add-on</li>
+          <li>Testing price while we refine the experience</li>
         </ul>
       </article>
     </div>
@@ -4268,15 +5189,22 @@
       <article class="addon-card" style="--r:1deg;" data-addon-id="more-styles" role="button" tabindex="0" title="Add to enquiry form">
         <h3>More AI Styles</h3>
         <p>Go beyond the default looks with a custom AI direction for your event.</p>
-        <div class="addon-price"><span>+S$100</span><small>custom</small></div>
-        <span class="addon-note">free for now</span>
+        <div class="addon-price">
+          <span class="addon-price-was">+S$100</span>
+          <span>Free</span>
+          <small>for now</small>
+        </div>
         <div class="addon-scribble" aria-hidden="true">AI</div>
       </article>
 
       <article class="addon-card" style="--r:-.6deg;" data-addon-id="animation" role="button" tabindex="0" title="Add to enquiry form">
-        <h3>AI Animation Clips</h3>
-        <p>Short motion clips generated from guest portraits during the event.</p>
-        <div class="addon-price"><span>S$200</span><small>per hour</small></div>
+        <h3>AI Animation &amp; Live Slideshow</h3>
+        <p>Motion clips from guest portraits, streamed live on venue screens during the event.</p>
+        <div class="addon-price">
+          <span class="addon-price-was">S$200</span>
+          <span>S$100</span>
+          <small>testing bundle</small>
+        </div>
         <span class="addon-note">testing price</span>
       </article>
 
@@ -4301,13 +5229,7 @@
       <article class="addon-card" style="--r:-.4deg;" data-addon-id="email-sms" role="button" tabindex="0" title="Add to enquiry form">
         <h3>Email &amp; SMS Sharing</h3>
         <p>Collect contacts while guests receive their photos - useful for lead generation.</p>
-        <div class="addon-price"><span>S$300</span><small>activation</small></div>
-      </article>
-
-      <article class="addon-card" style="--r:.4deg;" data-addon-id="slideshow" role="button" tabindex="0" title="Add to enquiry form">
-        <h3>Live Slideshow</h3>
-        <p>Livestream a rolling slideshow of real-time generations on venue screens.</p>
-        <div class="addon-price"><span>S$230</span><small>screen feed</small></div>
+        <div class="addon-price"><span>+S$20</span><small>activation</small></div>
       </article>
 
       <article class="addon-card" style="--r:-1deg;" data-addon-id="keychain" role="button" tabindex="0" title="Add to enquiry form">
@@ -4336,15 +5258,15 @@
         <h2>Hi, I'm <em>Jeff.</em></h2>
         <p class="lede">
           I've been drawing portraits of strangers at Singapore markets for eight years
-          under the name <i>Playing With Pencil</i>. This is what happened when I taught
-          my pencil to use a camera.
+          under the name <i>Playing With Pencil</i>. This booth is what happened when I asked:
+          <i>what if nostalgia and AI could share the same strip?</i>
         </p>
         <p>
           Every sketch I do is two things at once: a likeness, and a <i>memory</i>. I
-          wanted a photobooth that did both — something that catches you faithfully
-          <i>and</i> wraps you in a little bit of nostalgia. So I built one. Hardwood
-          tripod, brass fittings, and an AI model I fine-tuned on forty years of film
-          photographs. Six months of tinkering later, Playing With Photo was born.
+          wanted a photobooth that did both — the ritual of film your parents remember,
+          with AI that can grade it in Kodak gold <i>or</i> paint you into a masterpiece.
+          Hardwood tripod, brass fittings, a model trained on forty years of photographs.
+          Six months of tinkering later, Playing With Photo was born.
         </p>
         <p>
           I still show up to every event myself. If you book the booth, you're booking
@@ -4363,95 +5285,148 @@
   </div>
 </section>
 
-<!-- =============================
-     METAMORPHOSIS: Vintage → Pixar / Anime / Dreamy
-     The final act: pick an era, watch your strip transform.
-     ============================= -->
-<section class="meta-chapter" id="metamorphosis" data-screen-label="12 Metamorphosis">
-  <div class="meta-bg"></div>
-  <div class="wrap" style="position:relative; z-index:2;">
+<!-- PRICING — after proof, before book -->
+<section class="chapter" id="pricing" data-screen-label="02 Packages">
+  <div class="wrap">
     <div class="section-head reveal">
       <div>
-        <span class="eyebrow" style="color:#ffd6f0;">The twist · 012</span>
-        <h2 style="color:#fff;">Vintage isn't the <em style="color:#ffd88a;">only</em> brush we have.</h2>
+        <span class="eyebrow">Packages · Pricing</span>
+        <h2>Pick your <em>hours.</em></h2>
       </div>
-      <p style="color: rgba(255,255,255,.75);">
-        Jeff trained bonus models on the masters — <b>Van&nbsp;Gogh</b>, <b>Monet</b>, <b>Picasso</b>, <b>Warhol</b>, <b>Hokusai</b>.
-        Same face, different century. Pick a painter — watch your strip get repainted in place.
-      </p>
+      <div class="pricing-meta">
+        <p>All packages include setup, teardown, an on-site attendant, unlimited prints, and every digital file.</p>
+        <p class="pricing-guide">Most couples book <strong>3 Hours</strong>. Full receptions choose <strong>5 Hours</strong>.</p>
+        <a href="./PWP_Packages-2.pdf" class="btn ghost" target="_blank" rel="noopener noreferrer">View full package details (PDF)</a>
+      </div>
     </div>
 
-    <div class="meta-picker reveal">
-      <button data-meta="vintage" class="active">
-        <span class="dot" style="background:#c38a52"></span>Vintage <small>Default</small>
-      </button>
-      <button data-meta="vangogh">
-        <span class="dot" style="background:#f4b731"></span>Van Gogh <small>Starry</small>
-      </button>
-      <button data-meta="monet">
-        <span class="dot" style="background:#a7c8e8"></span>Monet <small>Water Lilies</small>
-      </button>
-      <button data-meta="picasso">
-        <span class="dot" style="background:#d87a3c"></span>Picasso <small>Cubist</small>
-      </button>
-      <button data-meta="warhol">
-        <span class="dot" style="background:#ff2d88"></span>Warhol <small>Pop Art</small>
-      </button>
-      <button data-meta="hokusai">
-        <span class="dot" style="background:#1e5aa8"></span>Hokusai <small>Ukiyo-e</small>
-      </button>
+    <div class="pricing-audience reveal" role="tablist" aria-label="Who are you booking for?">
+      <button type="button" class="active" data-audience="wedding" role="tab" aria-selected="true">Weddings</button>
+      <button type="button" data-audience="corporate" role="tab" aria-selected="false">Corporate</button>
+      <button type="button" data-audience="birthday" role="tab" aria-selected="false">Birthdays</button>
     </div>
+    <p class="pricing-audience-hint reveal" id="pricingAudienceHint" aria-live="polite">
+      Most couples choose <strong>3 Hours</strong> (S$880).
+    </p>
 
-    <div class="meta-stage reveal">
-      <div class="meta-before">
-        <div class="meta-label">Before — 70s Kodak</div>
-        <div class="meta-card" id="metaBefore">
-          <div class="meta-photo"><div class="meta-img" data-meta-src="0"></div></div>
-          <div class="meta-photo"><div class="meta-img" data-meta-src="1"></div></div>
-          <div class="meta-photo"><div class="meta-img" data-meta-src="2"></div></div>
-          <div class="meta-photo"><div class="meta-img" data-meta-src="3"></div></div>
-          <div class="meta-strip-brand">Playing With Photo · Vintage</div>
+    <div class="ticket-booklet reveal" data-audience="wedding">
+      <div class="ticket-grid-weddings">
+      <article class="ticket t-prelude">
+        <div class="ticket-stub">
+          <div class="stub-label">admit one</div>
+          <div class="stub-num">№ 001</div>
+          <div class="stub-foot">2 hrs</div>
         </div>
-      </div>
-
-      <div class="meta-arrow">
-        <svg viewBox="0 0 60 80" style="width:60px;">
-          <path d="M10 40 L50 40 M30 20 L50 40 L30 60" stroke="#ffd88a" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        <div class="meta-arrow-label">AI rewrites it</div>
-      </div>
-
-      <div class="meta-after">
-        <div class="meta-label" id="metaAfterLabel">After — Van Gogh</div>
-        <div class="meta-card" id="metaAfter">
-          <div class="meta-photo"><div class="meta-img meta-after-img" data-meta-src="0"></div><div class="meta-shine"></div></div>
-          <div class="meta-photo"><div class="meta-img meta-after-img" data-meta-src="1"></div><div class="meta-shine"></div></div>
-          <div class="meta-photo"><div class="meta-img meta-after-img" data-meta-src="2"></div><div class="meta-shine"></div></div>
-          <div class="meta-photo"><div class="meta-img meta-after-img" data-meta-src="3"></div><div class="meta-shine"></div></div>
-          <div class="meta-strip-brand" id="metaAfterBrand">Playing With Photo · Van Gogh Edition</div>
+        <div class="ticket-perf" aria-hidden="true"></div>
+        <div class="ticket-body">
+          <header class="ticket-hd">
+            <span class="ticket-kicker">2 Hours · short set</span>
+            <div class="ticket-price"><span class="cur">S$</span>750<small>· 2 hrs</small></div>
+            <span class="ticket-scene">ROM, tea ceremony, or cocktail hour</span>
+          </header>
+          <ul class="ticket-list">
+            <li>2 hours of shooting</li>
+            <li>Unlimited printed strips</li>
+            <li>All digital files delivered</li>
+            <li>2 AI film styles</li>
+            <li>On-site attendant</li>
+          </ul>
+          <footer class="ticket-ft">
+            <div class="ticket-stamp">short set</div>
+            <a href="#book" class="btn ghost" data-package="prelude">Book 2 hours</a>
+          </footer>
         </div>
-      </div>
-    </div>
+      </article>
 
-    <div class="meta-cta reveal">
-      <p style="color: rgba(255,255,255,.7); max-width: 480px; margin: 0;">
-        <b style="color:#fff;">Jeff tip:</b> couples love the vintage strip for the album — and the Van&nbsp;Gogh strip framed on the wall. Get both at every booking.
-      </p>
-      <a href="#book" class="btn" style="background:#ffd88a; color:#1a0f2a; border-color:#ffd88a; box-shadow: 0 4px 0 #c09050;">Book the full kit
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-      </a>
-    </div>
+      <article class="ticket t-keepsake featured">
+        <div class="ticket-ribbon">most booked</div>
+        <div class="ticket-stub">
+          <div class="stub-label">admit one</div>
+          <div class="stub-num">№ 002</div>
+          <div class="stub-foot">3 hrs</div>
+        </div>
+        <div class="ticket-perf" aria-hidden="true"></div>
+        <div class="ticket-body">
+          <header class="ticket-hd">
+            <span class="ticket-kicker">3 Hours · most booked</span>
+            <div class="ticket-price"><span class="cur">S$</span>880<small>· 3 hrs</small></div>
+            <span class="ticket-scene">Portraits and one celebration segment</span>
+          </header>
+          <ul class="ticket-list">
+            <li>3 hours of shooting</li>
+            <li>Unlimited printed strips</li>
+            <li>All digital files delivered</li>
+            <li>3 AI film styles</li>
+            <li>On-site attendant</li>
+          </ul>
+          <footer class="ticket-ft">
+            <div class="ticket-stamp red">sweet spot</div>
+            <a href="#book" class="btn" data-package="keepsake">Book 3 hours</a>
+          </footer>
+        </div>
+      </article>
 
-    <div class="meta-keepsake reveal">
-      <span class="meta-keepsake-eyebrow">…and then it becomes this</span>
-      <h3 class="meta-keepsake-title">A real <em>keepsake</em> — gold frame, in your hand.</h3>
-      <div class="meta-keepsake-frame">
-        <img src="photos/reel/jenmike-keepsake.png" alt="Van Gogh-style keepsake portrait of Jen and Mike in an ornate gold frame" loading="lazy" />
+      <article class="ticket t-showpiece">
+        <div class="ticket-stub dark">
+          <div class="stub-label">admit one</div>
+          <div class="stub-num">№ 003</div>
+          <div class="stub-foot">5 hrs</div>
+        </div>
+        <div class="ticket-perf" aria-hidden="true"></div>
+        <div class="ticket-body">
+          <header class="ticket-hd">
+            <span class="ticket-kicker">5 Hours · full evening</span>
+            <div class="ticket-price"><span class="cur">S$</span>1,380<small>· 5 hrs</small></div>
+            <span class="ticket-scene">Cocktail through first dance</span>
+          </header>
+          <ul class="ticket-list">
+            <li>5 hours of shooting</li>
+            <li>Unlimited printed strips</li>
+            <li>All digital files + gallery link</li>
+            <li>All 5 AI film styles</li>
+            <li>Custom branded footer</li>
+            <li>On-site attendant</li>
+          </ul>
+          <footer class="ticket-ft">
+            <div class="ticket-stamp red">full evening</div>
+            <a href="#book" class="btn" data-package="showpiece">Book 5 hours</a>
+          </footer>
+        </div>
+      </article>
       </div>
-      <p class="meta-keepsake-caption">Every Van&nbsp;Gogh strip can be turned into a hand-finished mini portrait. One for the album, one for the mantelpiece.</p>
+
+      <div class="ticket-grid-brands">
+        <p class="ticket-brands-label">For brands &amp; festivals</p>
+        <article class="ticket t-activation">
+        <div class="ticket-stub">
+          <div class="stub-label">admit one</div>
+          <div class="stub-num">№ 004</div>
+          <div class="stub-foot">activation</div>
+        </div>
+        <div class="ticket-perf" aria-hidden="true"></div>
+        <div class="ticket-body">
+          <header class="ticket-hd">
+            <span class="ticket-kicker">Custom · brands &amp; fests</span>
+            <div class="ticket-price"><span class="cur">S$</span>Custom<small>· full day+</small></div>
+          </header>
+          <ul class="ticket-list">
+            <li>Full-day or multi-day</li>
+            <li>Custom-branded booth wrap</li>
+            <li>Bespoke AI style training</li>
+            <li>Live gallery feed</li>
+            <li>Multi-operator team</li>
+          </ul>
+          <footer class="ticket-ft">
+            <div class="ticket-stamp">brand build</div>
+            <a href="#book" class="btn ghost" data-package="activation">Get a quote</a>
+          </footer>
+        </div>
+      </article>
+      </div>
     </div>
   </div>
 </section>
+
 
 <!-- BOOKING -->
 <section class="chapter book-chapter" id="book" data-screen-label="13 Booking">
@@ -4464,71 +5439,76 @@
           Reply within 24 hours. Setup is included. Currently serving
           <b>Singapore</b> and <b>Johor Bahru</b>.
         </p>
-        <div style="margin-top: 48px; display: flex; gap: 36px; flex-wrap: wrap;">
+        <div class="book-contact">
           <div>
-            <div style="font-family:var(--ff-mono); font-size: 11px; letter-spacing: .2em; opacity:.7; text-transform:uppercase;">Email</div>
-            <div style="font-family:var(--ff-display); font-style: italic; font-size: 24px; margin-top: 4px;"><a href="mailto:pencilwithjoy@gmail.com">pencilwithjoy@gmail.com</a></div>
+            <div class="label">Email</div>
+            <a href="mailto:pencilwithjoy@gmail.com">pencilwithjoy@gmail.com</a>
           </div>
           <div>
-            <div style="font-family:var(--ff-mono); font-size: 11px; letter-spacing: .2em; opacity:.7; text-transform:uppercase;">WhatsApp</div>
-            <div style="font-family:var(--ff-display); font-style: italic; font-size: 24px; margin-top: 4px;"><a href="https://wa.me/6591866059" target="_blank" rel="noopener">+65 9186 6059</a></div>
+            <div class="label">WhatsApp</div>
+            <a href="https://wa.me/6589896901" target="_blank" rel="noopener">+65 8989 6901</a>
           </div>
         </div>
       </div>
 
       <form class="book-form reveal" id="bookForm" data-provider="formspree" data-endpoint="https://formspree.io/f/mwvargqq">
         <small>/ Enquiry form</small>
-        <h3>Tell me about your event</h3>
+        <h3>Quick enquiry</h3>
+        <p class="book-form-hint">3 fields to get started — Jeff replies within 24 hours.</p>
         <div class="row">
           <div class="field">
-            <label>Your name</label>
-            <input type="text" name="name" placeholder="Jeff A." required />
+            <label>Your name <span aria-hidden="true">*</span></label>
+            <input type="text" name="name" placeholder="Your name" required autocomplete="name" />
+          </div>
+        </div>
+        <div class="row">
+          <div class="field">
+            <label>WhatsApp <span aria-hidden="true">*</span></label>
+            <input type="tel" name="whatsapp" placeholder="+65 8123 4567" required autocomplete="tel" />
           </div>
           <div class="field">
             <label>Email</label>
-            <input type="email" name="email" placeholder="you@example.com" required />
+            <input type="email" name="email" placeholder="you@example.com" autocomplete="email" />
           </div>
         </div>
         <div class="row">
           <div class="field">
-            <label>WhatsApp</label>
-            <input type="tel" name="whatsapp" placeholder="+65 8123 4567" />
+            <label>Event date <span aria-hidden="true">*</span></label>
+            <input type="date" name="eventDate" required />
           </div>
         </div>
-        <div class="row">
-          <div class="field">
-            <label>Package</label>
-            <select name="package" id="bookPackage">
-              <option value="prelude">The Prelude — S$750 · 2 hrs</option>
-              <option value="keepsake" selected>The Keepsake — S$880 · 3 hrs (most booked)</option>
-              <option value="showpiece">The Showpiece — S$1,380 · 5 hrs</option>
-              <option value="activation">The Activation — custom quote</option>
-              <option value="undecided">Not sure yet</option>
-            </select>
+
+        <details class="book-form-more" id="bookFormMore">
+          <summary>More details (optional)</summary>
+          <div class="row">
+            <div class="field">
+              <label>Package</label>
+              <select name="package" id="bookPackage">
+                <option value="prelude">2 Hours — S$750</option>
+                <option value="keepsake" selected>3 Hours — S$880 (most booked)</option>
+                <option value="showpiece">5 Hours — S$1,380</option>
+                <option value="activation">Custom — quote</option>
+                <option value="undecided">Not sure yet</option>
+              </select>
+            </div>
           </div>
-        </div>
-        <div class="row">
-          <div class="field">
-            <label>Event type</label>
-            <select name="eventType">
-              <option>Wedding</option>
-              <option>Corporate / brand</option>
-              <option>Birthday</option>
-              <option>Festival / public</option>
-              <option>Other</option>
-            </select>
+          <div class="row">
+            <div class="field">
+              <label>Event type</label>
+              <select name="eventType" id="bookEventType">
+                <option>Wedding</option>
+                <option>Corporate / brand</option>
+                <option>Birthday</option>
+                <option>Festival / public</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Venue / city</label>
+              <input type="text" name="venue" placeholder="Cliveden House, Singapore" />
+            </div>
           </div>
-          <div class="field">
-            <label>Event date</label>
-            <input type="date" name="eventDate" />
-          </div>
-        </div>
-        <div class="row">
-          <div class="field">
-            <label>Venue / city</label>
-            <input type="text" name="venue" placeholder="Cliveden House, Singapore" />
-          </div>
-        </div>
+        </details>
 
         <div class="book-addons-block" id="bookAddonsField">
           <div class="book-addons-summary" aria-live="polite">
@@ -4546,14 +5526,14 @@
                 <span class="book-addon-text"><strong>Guestbook, Glitter &amp; Glue</strong><small>S$68 · launch price</small></span>
               </label>
               <label class="book-addon-pick">
-                <input type="checkbox" name="addons" value="More AI Styles (+S$100)" data-addon-id="more-styles" />
+                <input type="checkbox" name="addons" value="More AI Styles (Free for now)" data-addon-id="more-styles" />
                 <span class="book-addon-check" aria-hidden="true"></span>
-                <span class="book-addon-text"><strong>More AI Styles</strong><small>+S$100 · custom</small></span>
+                <span class="book-addon-text"><strong>More AI Styles</strong><small><s>+S$100</s> · Free for now</small></span>
               </label>
               <label class="book-addon-pick">
-                <input type="checkbox" name="addons" value="AI Animation Clips (S$200/hr)" data-addon-id="animation" />
+                <input type="checkbox" name="addons" value="AI Animation &amp; Live Slideshow (S$100 testing)" data-addon-id="animation" />
                 <span class="book-addon-check" aria-hidden="true"></span>
-                <span class="book-addon-text"><strong>AI Animation Clips</strong><small>S$200 per hour</small></span>
+                <span class="book-addon-text"><strong>AI Animation &amp; Live Slideshow</strong><small><s>S$200</s> · S$100 testing bundle</small></span>
               </label>
               <label class="book-addon-pick">
                 <input type="checkbox" name="addons" value="Additional Hour (S$180/hr)" data-addon-id="extra-hour" />
@@ -4571,14 +5551,9 @@
                 <span class="book-addon-text"><strong>Custom Stickers</strong><small>S$180 pack</small></span>
               </label>
               <label class="book-addon-pick">
-                <input type="checkbox" name="addons" value="Email &amp; SMS Sharing (S$300)" data-addon-id="email-sms" />
+                <input type="checkbox" name="addons" value="Email &amp; SMS Sharing (+S$20)" data-addon-id="email-sms" />
                 <span class="book-addon-check" aria-hidden="true"></span>
-                <span class="book-addon-text"><strong>Email &amp; SMS Sharing</strong><small>S$300 activation</small></span>
-              </label>
-              <label class="book-addon-pick">
-                <input type="checkbox" name="addons" value="Live Slideshow (S$230)" data-addon-id="slideshow" />
-                <span class="book-addon-check" aria-hidden="true"></span>
-                <span class="book-addon-text"><strong>Live Slideshow</strong><small>S$230 screen feed</small></span>
+                <span class="book-addon-text"><strong>Email &amp; SMS Sharing</strong><small>+S$20 activation</small></span>
               </label>
               <label class="book-addon-pick">
                 <input type="checkbox" name="addons" value="Keychain Making (S$330, up to 100)" data-addon-id="keychain" />
@@ -4589,14 +5564,26 @@
           </details>
         </div>
 
-        <button type="submit" class="btn">Send enquiry
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-        </button>
+        <label class="book-catalogue-pick">
+          <input type="checkbox" name="catalogue" id="bookCatalogue" value="yes" />
+          <span>Please send me the full style lookbook (20+ looks — not all shown on this site)</span>
+        </label>
+
+        <div class="book-form-actions">
+          <button type="submit" class="btn">Send enquiry
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </button>
+          <a href="#" class="btn ghost" id="bookWhatsApp" target="_blank" rel="noopener">Or chat on WhatsApp</a>
+        </div>
         <small id="bookFormStatus" aria-live="polite" style="display:block; margin-top: 10px; letter-spacing: .06em;"></small>
       </form>
     </div>
   </div>
 </section>
+
+<a class="wa-fab" id="waFab" href="https://wa.me/6589896901?text=Hi%20Jeff%2C%20I%27d%20like%20to%20enquire%20about%20the%20photobooth." target="_blank" rel="noopener" aria-label="Chat on WhatsApp" data-track="click_whatsapp_fab">
+  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.435 9.884-9.881 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
 
 <!-- FOOTER -->
 <footer>
@@ -4605,11 +5592,13 @@
       <div class="biglogo">Playing<br/>With <em>Photo.</em></div>
       <nav class="site-footer-nav" aria-label="Footer">
         <a href="/snapshot/">Quick book</a>
-        <a href="#spark">Examples</a>
-        <a href="#demo">Try it</a>
+        <a href="#samples">Samples</a>
+        <a href="#spark">AI examples</a>
+        <a href="#styles">Film looks</a>
+        <a href="#demo">Filter &amp; GIF demo</a>
         <a href="#pricing">Packages</a>
         <a href="#booth">The booth</a>
-        <a href="#how">How it works</a>
+        <a href="#reel">The ritual</a>
         <a href="#styles">Styles</a>
         <a href="#testimonials">Reviews</a>
         <a href="#addons">Add-ons</a>
@@ -4707,8 +5696,9 @@
     const hero = document.getElementById('hero');
     if (!bar || !hero) return;
     const io = new IntersectionObserver(([e]) => {
-      bar.classList.toggle('is-visible', !e.isIntersecting);
-      bar.setAttribute('aria-hidden', e.isIntersecting ? 'true' : 'false');
+      const show = !e.isIntersecting;
+      bar.classList.toggle('is-visible', show);
+      bar.setAttribute('aria-hidden', show ? 'false' : 'true');
     }, { threshold: 0, rootMargin: '0px' });
     io.observe(hero);
   })();
@@ -4721,9 +5711,9 @@
     if (!tabs.length || !booklet) return;
 
     const hints = {
-      wedding: 'Most couples choose <strong>The Keepsake</strong> (3 hrs, S$880).',
-      corporate: 'Brand activations usually pick <strong>The Activation</strong> (custom quote) or <strong>Showpiece</strong> (5 hrs).',
-      birthday: 'Milestone birthdays love <strong>The Keepsake</strong> (3 hrs) — enough time for every guest.',
+      wedding: 'Most couples choose <strong>3 Hours</strong> (S$880).',
+      corporate: 'Brand activations usually pick <strong>Custom</strong> (quote) or <strong>5 Hours</strong>.',
+      birthday: 'Milestone birthdays love <strong>3 Hours</strong> — enough time for every guest.',
     };
 
     tabs.forEach(btn => {
@@ -4741,12 +5731,16 @@
   })();
 </script>
 <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
-<script src="photos.config.js?v=7"></script>
+<script src="photos.config.js?v=8"></script>
+<script src="analytics.js?v=1"></script>
 <script src="bg.js?v=1"></script>
-<script src="app.js?v=9"></script>
+<script src="app.js?v=13"></script>
+<script type="module" src="demo-gif.js?v=9"></script>
 <script src="enhancements.js?v=6"></script>
-<script src="creation.js?v=8"></script>
-<script src="hero-scrub.js?v=1"></script>
+<script src="creation.js?v=11"></script>
+<script src="hero-scrub.js?v=2"></script>
+<script src="booth-scrub.js?v=13"></script>
+<script src="sample-wall.js?v=3"></script>
 
 </body>
 </html>

@@ -130,34 +130,45 @@
   align-items: center;
   justify-content: center;
   text-align: center;
+  box-sizing: border-box;
   padding: 60px 36px;
   pointer-events: none;     /* allow content through, buttons re-enable */
   color: #fff;
   transition: opacity 0.25s ease;
 }
-.hero-title-card::before {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 50%;
+.hero-frame-bounds {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
   width: min(70vw, 520px);
-  aspect-ratio: 3 / 4;
-  transform: translate(-50%, -50%);
-  border: var(--hero-frame-stroke) solid rgba(255, 255, 255, 0.85);
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity .2s ease;
+  max-width: 100%;
+  margin-inline: auto;
+  padding: 48px 32px 40px;
+  border: var(--hero-frame-stroke) solid transparent;
+  transition: border-color .2s ease;
+  text-align: center;
 }
-.hero-title-card::after {
-  content: none;
+.hero-frame-bounds > :not(.hero-frame-loader):not(.ornament):not(.hero-pitch):not(.meta-line) {
+  width: 100%;
+  max-width: 100%;
+}
+.hero-title-card .ornament {
+  width: 120px;
+  height: 10px;
+  margin: 4px auto 18px;
+  color: rgba(255, 255, 255, 0.9);
+  opacity: 0.95;
+}
+.hero-scrub.is-ready .hero-frame-bounds {
+  border-color: rgba(255, 255, 255, 0.85);
 }
 .hero-frame-loader {
   position: absolute;
-  left: 50%;
-  top: 50%;
-  width: min(70vw, 520px);
-  aspect-ratio: 3 / 4;
-  transform: translate(-50%, -50%);
+  inset: 0;
+  width: 100%;
+  height: 100%;
   pointer-events: none;
   opacity: 0;
 }
@@ -176,9 +187,6 @@
   stroke-dashoffset: 100;
   transition: stroke-dashoffset .45s cubic-bezier(.22,.61,.36,1);
 }
-.hero-scrub.is-ready .hero-title-card::before {
-  opacity: 1;
-}
 .hero-scrub.is-loading .hero-frame-loader {
   opacity: 1;
 }
@@ -190,7 +198,7 @@
   85% { stroke-dashoffset: 0; }
   100% { stroke-dashoffset: 0; }
 }
-.hero-title-card > * { pointer-events: auto; }
+.hero-title-card .hero-frame-bounds > * { pointer-events: auto; }
 .hero-title-card .kicker {
   font-family: var(--ff-mono);
   font-size: 10px;
@@ -199,6 +207,8 @@
   color: rgba(255, 255, 255, 0.92);
   margin-bottom: 14px;
   opacity: 0.85;
+  text-align: center;
+  padding-right: 0.24em;
 }
 .hero-big {
   font-family: var(--ff-display);
@@ -207,6 +217,7 @@
   line-height: 0.98;
   letter-spacing: -0.02em;
   margin: 0 0 20px;
+  max-width: 100%;
   color: #fff;
   text-shadow:
     0 2px 10px rgba(0, 0, 0, 0.45),
@@ -218,12 +229,6 @@
   color: rgba(255, 255, 255, 0.96);
   font-variant: small-caps;
   letter-spacing: 0.02em;
-}
-.hero-title-card .ornament {
-  width: 120px; height: 10px;
-  margin: 4px 0 18px;
-  color: rgba(255, 255, 255, 0.9);
-  opacity: 0.95;
 }
 .hero-sub {
   font-family: var(--ff-display);
@@ -241,9 +246,13 @@
   font-family: var(--ff-body);
   font-size: clamp(15px, 1.65vw, 18px);
   line-height: 1.55;
-  max-width: 36ch;
+  width: min(100%, 36ch);
+  max-width: 100%;
+  align-self: center;
   margin: 0 0 20px;
   color: rgba(255, 255, 255, 0.94);
+  text-align: center;
+  text-wrap: pretty;
   text-shadow: 0 1px 10px rgba(0, 0, 0, 0.55);
 }
 .hero-title-card .hero-pitch strong {
@@ -277,8 +286,20 @@
   letter-spacing: .13em;
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.86);
-  display: flex; gap: 10px;
-  margin-bottom: 28px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  align-items: baseline;
+  width: auto;
+  max-width: 100%;
+  align-self: center;
+  margin: 0 auto 28px;
+  padding-right: 0.13em;
+  text-align: center;
+}
+.hero-title-card .meta-line span {
+  display: inline-block;
 }
 .hero-title-card .meta-line em {
   font-family: var(--ff-display);
@@ -365,16 +386,86 @@
   transition: width 0.1s linear;
 }
 
-/* Mobile: tighten up */
+/* Desktop: center hero in the viewport area beside the edition rail */
+@media (min-width: 901px) {
+  body.has-rail .hero-title-card,
+  body.has-rail .hero-scrub-hint {
+    left: 220px;
+    width: calc(100% - 220px);
+    padding-left: 0;
+  }
+}
+@media (min-width: 901px) and (max-width: 1100px) {
+  body.has-rail .hero-title-card,
+  body.has-rail .hero-scrub-hint {
+    left: 180px;
+    width: calc(100% - 180px);
+  }
+}
+@media (max-width: 900px) {
+  body.has-rail .hero-title-card,
+  body.has-rail .hero-scrub-hint {
+    left: 0;
+    width: 100%;
+  }
+  body.has-rail .hero-title-card {
+    padding: 36px 20px 36px 24px;
+  }
+}
 @media (max-width: 720px) {
   .hero-scrub { height: 200vh; }
-  .hero-title-card { padding: 40px 24px; }
-  .hero-title-card::before {
-    width: min(80vw, 360px);
-    border-width: 1px;
+  .hero-fg-layer {
+    top: 6%;
+    bottom: 10%;
+    height: auto;
   }
-  .hero-frame-loader { width: min(80vw, 360px); }
-  .hero-big { font-size: clamp(34px, 9vw, 56px); }
+  .hero-title-card { padding: 28px 18px 28px 22px; }
+  .hero-frame-bounds {
+    width: 100%;
+    max-width: 100%;
+    padding: 28px 18px 24px;
+  }
+  .hero-title-card .kicker {
+    font-size: 9px;
+    letter-spacing: .18em;
+    line-height: 1.5;
+    padding-right: 0.18em;
+  }
+  .hero-title-card .hero-pitch {
+    font-size: 15px;
+    width: 100%;
+    max-width: 100%;
+    padding-inline: 0;
+    margin-bottom: 14px;
+    overflow-wrap: break-word;
+    hyphens: auto;
+  }
+  .hero-title-card .meta-line {
+    width: 100%;
+    margin: 0 0 18px;
+    gap: 8px 10px;
+    letter-spacing: .08em;
+    padding-right: 0.08em;
+    justify-content: center;
+  }
+  .hero-title-card .hero-ctas {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    gap: 10px;
+  }
+  .hero-title-card .hero-ctas .btn-edition {
+    justify-content: center;
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 12px;
+  }
+  .hero-title-card .hero-occasions {
+    justify-content: center;
+    width: 100%;
+  }
+  .hero-big { font-size: clamp(34px, 9vw, 56px); margin-bottom: 14px; }
   .hero-sub { font-size: 14px; max-width: 80vw; }
-  .hero-title-card .hero-pitch { font-size: 15px; max-width: 90%; }
+  .hero-title-card .hero-occasions { margin-top: 14px; }
+  .hero-title-card .hero-jumps { margin-top: 12px; }
 }

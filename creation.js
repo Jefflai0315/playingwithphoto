@@ -4,43 +4,63 @@
 
 const PAINTER_MAP = {
   vangogh: {
-    name: "Van Gogh",
-    sig: "— V. van Gogh",
+    name: "Swirl sky",
+    sig: "— bold golden brushwork",
     meta: "vangogh",
     prompt:
-      "\u201CThrow them into a Van Gogh fever dream\u2014swirly sky, dramatic vibes, and make them pose like they\u2019re in a windy romance scene.\u201D",
+      "\u201CSwirly golden sky, thick brush strokes, and a pose like they\u2019re in a windy romance scene.\u201D",
   },
   monet: {
-    name: "Monet",
-    sig: "— C. Monet",
+    name: "Garden soft",
+    sig: "— dreamy pastel light",
     meta: "monet",
     prompt:
-      "\u201CDrop them into a Monet garden\u2014soft, glowy, a little blurry, and make them giggle like it\u2019s the best birthday ever.\u201D",
+      "\u201CA soft garden glow\u2014blurry, luminous, and giggling like it\u2019s the best birthday ever.\u201D",
   },
   picasso: {
-    name: "Picasso",
-    sig: "— P. Picasso",
+    name: "Cubist bold",
+    sig: "— angles & warm colour",
     meta: "picasso",
     prompt:
-      "\u201CPicasso-ify them\u2014twist the faces, mix the angles, and give them a pose that makes zero sense but somehow works.\u201D",
+      "\u201CTwist the faces, mix the angles, and give them a pose that makes zero sense but somehow works.\u201D",
   },
   warhol: {
-    name: "Warhol",
-    sig: "— A. Warhol",
+    name: "Pop colour",
+    sig: "— screen-print vivid",
     meta: "warhol",
     prompt:
-      "\u201CPop-art them into Warhol mode\u2014loud colors, flat faces, and pose like they\u2019re accidentally famous.\u201D",
+      "\u201CLoud flat colours, poster-bright faces, and pose like they\u2019re accidentally famous.\u201D",
   },
   hokusai: {
-    name: "Hokusai",
-    sig: "— Hokusai",
+    name: "Ink & wave",
+    sig: "— woodblock drama",
     meta: "hokusai",
     prompt:
-      "\u201CStick them on a tiny boat under a giant wave\u2014slightly panicked but still posing like it\u2019s a photoshoot.\u201D",
+      "\u201CA tiny boat under a giant wave\u2014slightly panicked but still posing like it\u2019s a photoshoot.\u201D",
   },
 };
 
-const PAINTERS = Object.keys(PAINTER_MAP); // ['vangogh','monet','picasso','warhol','hokusai']
+const PAINTERS = Object.keys(PAINTER_MAP);
+
+function getLooks() {
+  return window.PhotoLib?.looks?.() || {};
+}
+
+function painterDisplay(key) {
+  return getLooks().painterly?.[key]?.label || PAINTER_MAP[key]?.name || key;
+}
+
+function painterSwatch(key) {
+  return getLooks().painterly?.[key]?.swatch || "#999";
+}
+
+// Sync display names from photos.config when available
+for (const key of PAINTERS) {
+  const label = getLooks().painterly?.[key]?.label;
+  if (label) PAINTER_MAP[key].name = label;
+  const sub = getLooks().painterly?.[key]?.subtitle;
+  if (sub) PAINTER_MAP[key].sig = "— " + sub;
+}
 
 // --- Spark gallery dataset: ONE entry per painter ---
 // Each painter key maps to { before, after, name } where:
@@ -282,8 +302,21 @@ function pauseAutoRotate() {
   }, RESUME_AFTER_MS);
 }
 
+function buildSparkPicker() {
+  if (!sparkPicker) return;
+  const html = [];
+  for (const key of PAINTERS) {
+    html.push(
+      `<button type="button" data-painter="${key}"${key === PAINTERS[0] ? ' class="active"' : ""}><span class="swatch" style="background:${painterSwatch(key)}"></span>${painterDisplay(key)}</button>`
+    );
+  }
+  sparkPicker.innerHTML = html.join("");
+}
+
 function renderPainter(key) {
   if (!PAINTER_MAP[key]) return;
+  document.body.dataset.film = "";
+
   const entry = GALLERY[key];
   currentPainterIndex = PAINTERS.indexOf(key);
 
@@ -298,7 +331,7 @@ function renderPainter(key) {
     ? entry.after
     : makePainting(key);
   sparkAfterImg.classList.toggle("is-real", useRealAfter);
-  sparkAfterName.textContent = PAINTER_MAP[key].name;
+  sparkAfterName.textContent = painterDisplay(key);
   sparkSignature.textContent = PAINTER_MAP[key].sig;
 
   // Keep the legacy metamorphosis section synced (if present)
@@ -311,7 +344,7 @@ function renderPainter(key) {
     });
   }
 
-  sparkArrowLabel.textContent = `repainted by AI · ${PAINTER_MAP[key].name}`;
+  sparkArrowLabel.textContent = `restyled as · ${painterDisplay(key)}`;
 
   // Swap the prompt card text with a quick cross-fade
   if (sparkPromptText) {
@@ -376,10 +409,10 @@ function syncMetaPicker(key) {
   metaBtns.forEach((b) => b.classList.toggle("active", b.dataset.meta === key));
   const afterLbl = document.getElementById("metaAfterLabel");
   const afterBrand = document.getElementById("metaAfterBrand");
-  if (afterLbl) afterLbl.textContent = "After — " + PAINTER_MAP[key].name;
+  if (afterLbl) afterLbl.textContent = "After — " + painterDisplay(key);
   if (afterBrand)
     afterBrand.textContent =
-      "Playing With Photo · " + PAINTER_MAP[key].name + " Edition";
+      "Playing With Photo · " + painterDisplay(key);
 }
 
 function advanceGallery() {
@@ -396,16 +429,16 @@ function startAutoRotate() {
   autoTimer = setInterval(advanceGallery, 6000);
 }
 
-// Painter picker — each button jumps to that painter's photo
+buildSparkPicker();
+
+// Style picker — AI painter looks only (film lives in #styles + #demo)
 if (sparkPicker) {
   sparkPicker.addEventListener("click", (e) => {
     const btn = e.target.closest("button[data-painter]");
     if (!btn) return;
     pauseAutoRotate();
     fireFlash();
-    setTimeout(() => {
-      renderPainter(btn.dataset.painter);
-    }, 350);
+    setTimeout(() => renderPainter(btn.dataset.painter), 350);
   });
 }
 
@@ -427,68 +460,3 @@ if (sparkBeforeImg) {
   renderPainter(PAINTERS[0]);
   startAutoRotate();
 }
-
-// ==========================================================
-// WEBCAM LENS (inside the before frame)
-// ==========================================================
-const sparkLens = document.getElementById("sparkLens");
-const sparkVideo = document.getElementById("sparkVideo");
-const sparkCanvas = document.getElementById("sparkCanvas");
-let webcamActive = false;
-
-async function startSparkLens() {
-  if (webcamActive || !sparkLens) return;
-  try {
-    const stream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: "user" },
-      audio: false,
-    });
-    sparkVideo.srcObject = stream;
-    await sparkVideo.play();
-    webcamActive = true;
-    sparkLens.classList.add("live");
-    const rect = sparkLens.getBoundingClientRect();
-    const dpr = window.devicePixelRatio || 1;
-    sparkCanvas.width = rect.width * dpr;
-    sparkCanvas.height = rect.height * dpr;
-    const ctx = sparkCanvas.getContext("2d");
-    const draw = () => {
-      if (!webcamActive) return;
-      if (sparkVideo.videoWidth) {
-        const w = sparkCanvas.width,
-          h = sparkCanvas.height;
-        ctx.save();
-        ctx.filter =
-          "sepia(.7) saturate(1.3) contrast(1.05) brightness(.95) hue-rotate(-5deg)";
-        ctx.translate(w, 0);
-        ctx.scale(-1, 1);
-        const vw = sparkVideo.videoWidth,
-          vh = sparkVideo.videoHeight;
-        const cr = w / h,
-          vr = vw / vh;
-        let sx = 0,
-          sy = 0,
-          sw = vw,
-          sh = vh;
-        if (vr > cr) {
-          sw = vh * cr;
-          sx = (vw - sw) / 2;
-        } else {
-          sh = vw / cr;
-          sy = (vh - sh) / 2;
-        }
-        ctx.drawImage(sparkVideo, sx, sy, sw, sh, 0, 0, w, h);
-        ctx.restore();
-      }
-      requestAnimationFrame(draw);
-    };
-    draw();
-    // When webcam is on, pin to that "before" and let the picker drive after-styles
-    userLocked = true;
-    clearInterval(autoTimer);
-  } catch (e) {
-    const off = document.getElementById("sparkLensOff");
-    if (off) off.innerHTML = '<span style="opacity:.8;">Camera blocked</span>';
-  }
-}
-if (sparkLens) sparkLens.addEventListener("click", startSparkLens);

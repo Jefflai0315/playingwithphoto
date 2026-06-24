@@ -54,12 +54,19 @@ window.PHOTO_CONFIG = {
   // ─── REEL STRIP ─────────────────────────────────────────────
   // The 4 frames on the cinema sticky panel (id #reel section).
   // Provide EXACTLY 4 files for it to switch on.
+  // Optional `videos` array (same length) — MP4 loop plays when that frame develops.
   reel: {
     files: [
       "spark/jenmike.png",
       "reel/jenmike-vangogh1.png",
       "spark/jenmike-vangogh.png",
       "reel/jenmike-keepsake.png",
+    ],
+    videos: [
+      null,
+      null,
+      "spark/jenmike-vangogh.mp4",
+      null,
     ],
   },
 
@@ -316,6 +323,9 @@ window.PHOTO_CONFIG = {
     heroPhotos: () => (cfg.hero?.files || []).map(resolve).filter(Boolean),
     stylePhoto: (key) => asCss(cfg.styles?.[key]),
     reelPhotos: () => (cfg.reel?.files || []).map(asCss).filter(Boolean),
+    reelVideos: () =>
+      (cfg.reel?.videos || []).map((v) => (v ? resolve(v) : null)),
+    reelStill: (index) => resolve(cfg.reel?.files?.[index]),
     metaPhotos: () => (cfg.meta?.files || []).map(asCss).filter(Boolean),
     metaFrames: (painter, side) => {
       const key = side === "after" ? "after" : "before";

@@ -33,6 +33,36 @@ const reelFromConfig = window.PhotoLib?.reelPhotos() || [];
 const reelImages = reelFromConfig.length === 4 ? reelFromConfig : SAMPLE_BG;
 reelImages.forEach((bg, i) => rootDoc.style.setProperty(`--reel-img-${i}`, bg));
 
+function setupReelFrameVideos() {
+  const reelVideoUrls = window.PhotoLib?.reelVideos?.() || [];
+  document.querySelectorAll('.reel-frame').forEach((frame, i) => {
+    const videoSrc = reelVideoUrls[i];
+    if (!videoSrc) return;
+    if (frame.querySelector('.reel-frame-video')) return;
+    frame.classList.add('has-reel-video');
+    const video = document.createElement('video');
+    video.className = 'reel-frame-video';
+    video.muted = true;
+    video.loop = true;
+    video.playsInline = true;
+    video.setAttribute('playsinline', '');
+    video.setAttribute('webkit-playsinline', '');
+    video.preload = 'none';
+    video.dataset.src = videoSrc;
+    const poster = window.PhotoLib?.reelStill?.(i);
+    if (poster) video.poster = poster;
+    const inner = frame.querySelector('.reel-frame-inner');
+    inner?.insertAdjacentElement('afterend', video);
+    video.addEventListener('playing', () => frame.classList.add('is-playing-video'));
+    video.addEventListener('pause', () => {
+      if (video.currentTime === 0 || video.ended) {
+        frame.classList.remove('is-playing-video');
+      }
+    });
+  });
+}
+setupReelFrameVideos();
+
 // METAMORPHOSIS: support per-option before/after images from photos.config.js.
 const metaBeforeImages = document.querySelectorAll('.meta-before [data-meta-src]');
 const metaAfterImages = document.querySelectorAll('.meta-after .meta-after-img');
@@ -154,6 +184,23 @@ function onReelScroll() {
   reelFill.style.width = `${(p * 100).toFixed(1)}%`;
 
   [0.15, 0.38, 0.6, 0.82].forEach((t, i) => reelFrames[i].classList.toggle('dev', p >= t));
+
+  reelFrames.forEach((frame) => {
+    const video = frame.querySelector('.reel-frame-video');
+    if (!video) return;
+    const isDev = frame.classList.contains('dev');
+    if (isDev) {
+      if (!video.src && video.dataset.src) {
+        video.src = video.dataset.src;
+        video.load();
+      }
+      if (video.paused) video.play().catch(() => {});
+    } else {
+      video.pause();
+      video.currentTime = 0;
+      frame.classList.remove('is-playing-video');
+    }
+  });
 
   let stage = 0;
   if (p >= 0.78) stage = 3;

@@ -472,7 +472,7 @@ try {
 
   document
     .querySelectorAll(
-      "[data-lead-audience], [data-lead-event], [data-lead-catalogue]",
+      "[data-lead-audience], [data-lead-event], [data-lead-catalogue], [data-lead-sample-filter]",
     )
     .forEach((el) => {
       el.addEventListener("click", (e) => {

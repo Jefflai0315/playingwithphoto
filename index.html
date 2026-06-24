@@ -281,11 +281,7 @@
   .story-group--film .ticker {
     border-color: rgba(244,234,213,.16);
     background: var(--ink);
-    padding: 14px 0;
-  }
-  .story-group--film .ticker-track {
-    color: rgba(244,234,213,.9);
-    font-size: 22px;
+    padding: clamp(8px, 1.8vw, 12px) 0;
   }
   .story-group--film .ticker-track .sep { color: var(--highlight); }
   .story-group--trust .section-bridge { padding-top: 72px; }
@@ -415,41 +411,99 @@
 
   .occasion-router { padding: 56px 0 24px; }
   .occasion-router .section-head { margin-bottom: 28px; }
+  .occasion-router .section-head .lede { max-width: 28ch; }
   .occasion-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
+    gap: 14px;
   }
   .occasion-card {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    gap: 6px;
     text-align: left;
-    padding: 18px 16px;
-    border: 1px solid rgba(42,26,12,.2);
-    border-radius: 12px;
-    background: var(--cream);
+    padding: 0;
+    border: 1px solid rgba(42,26,12,.14);
+    border-radius: 14px;
+    background: #fff;
     cursor: pointer;
     font-family: inherit;
     color: var(--ink);
-    transition: border-color .2s, box-shadow .2s;
+    overflow: hidden;
+    transition: border-color .25s, box-shadow .25s, transform .25s;
   }
   .occasion-card:hover,
   .occasion-card:focus-visible {
-    border-color: var(--ink);
-    box-shadow: 0 4px 0 var(--shadow);
+    border-color: rgba(42,26,12,.35);
+    box-shadow: 0 10px 28px rgba(42,26,12,.1);
+    transform: translateY(-3px);
     outline: none;
   }
-  .occasion-card strong {
-    font-family: var(--ff-display);
-    font-size: 20px;
-    font-weight: 500;
+  .occasion-card-media {
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    background: var(--paper, #ebe4d8);
   }
-  .occasion-card span {
-    font-size: 13px;
-    color: var(--ink-2);
-    line-height: 1.35;
+  .occasion-card-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    transition: transform .4s ease;
+  }
+  .occasion-card-media--collage {
+    aspect-ratio: 1 / 1;
+  }
+  .occasion-card-media--collage img {
+    object-position: 68% 52%;
+  }
+  .occasion-card:hover .occasion-card-media img,
+  .occasion-card:focus-visible .occasion-card-media img {
+    transform: scale(1.04);
+  }
+  .occasion-card.is-pending .occasion-card-media {
+    display: grid;
+    place-items: center;
+    background: linear-gradient(165deg, #f0ebe2 0%, #e4ddd2 100%);
+  }
+  .occasion-card.is-pending .occasion-card-media img { display: none; }
+  .occasion-card.is-pending .occasion-card-media::before {
+    content: "";
+    width: 42%;
+    aspect-ratio: 1 / 3.2;
+    border-radius: 4px;
+    border: 1.5px dashed rgba(42,26,12,.18);
+    background: rgba(255,255,255,.35);
+  }
+  .occasion-card-label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 12px 14px 13px;
+    font-family: var(--ff-display);
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.2;
+  }
+  .occasion-card-label em {
+    font-family: var(--ff-script);
+    font-style: normal;
+    color: var(--rust);
+    font-size: 1.05em;
+  }
+  .occasion-card-arrow {
+    flex-shrink: 0;
+    font-size: 15px;
+    color: var(--rust);
+    opacity: 0;
+    transform: translateX(-6px);
+    transition: opacity .2s, transform .2s;
+  }
+  .occasion-card:hover .occasion-card-arrow,
+  .occasion-card:focus-visible .occasion-card-arrow {
+    opacity: 1;
+    transform: translateX(0);
   }
   .occasion-foot {
     margin: 20px 0 0;
@@ -992,32 +1046,42 @@
   .ticker {
     border-top: 1px solid rgba(42,26,12,.25);
     border-bottom: 1px solid rgba(42,26,12,.25);
-    padding: 18px 0;
+    padding: clamp(8px, 1.8vw, 14px) 0;
     overflow: hidden;
     background: var(--cream-2);
     position: relative;
   }
   .ticker-track {
-    display: flex; gap: 56px;
+    display: flex;
+    gap: clamp(24px, 5vw, 56px);
     animation: tick 40s linear infinite;
     white-space: nowrap;
     font-family: var(--ff-display);
     font-style: italic;
-    font-size: 28px;
+    font-size: clamp(14px, 2.8vw, 22px);
+    font-weight: 400;
+    line-height: 1.1;
     color: var(--ink);
   }
-  .ticker-track span { display:inline-flex; align-items:center; gap: 56px; }
+  .story-group--film .ticker-track { color: rgba(244,234,213,.9); }
+  .ticker-track span {
+    display: inline-flex;
+    align-items: center;
+    gap: clamp(24px, 5vw, 56px);
+  }
   .ticker-track .sep {
     color: var(--rust);
     font-family: var(--ff-script);
-    font-size: 34px;
+    font-size: clamp(16px, 3.2vw, 26px);
     font-style: normal;
+    font-weight: 400;
+    line-height: 1;
   }
   @keyframes tick { to { transform: translateX(-50%); } }
 
   /* ======= Section base ======= */
   section.chapter {
-    padding: 140px 0;
+    padding: 1px 0;
     position: relative;
   }
   .section-head {
@@ -2451,7 +2515,28 @@
     opacity: 0;
     transition: opacity .6s;
   }
+  .reel-frame-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scale(1.04);
+    opacity: 0;
+    transition: opacity .5s ease;
+    z-index: 1;
+    background: #1a0f07;
+    pointer-events: none;
+  }
+  .reel-frame.dev.has-reel-video.is-playing-video .reel-frame-video {
+    opacity: 1;
+  }
   .reel-frame.dev .reel-frame-inner { opacity: 1; animation: reveal-photo 1.2s; }
+  .reel-frame.dev.has-reel-video.is-playing-video .reel-frame-inner {
+    opacity: 0;
+    animation: none;
+    transition: opacity .4s ease;
+  }
   @keyframes reveal-photo {
     0%   { opacity: 0;  filter: brightness(.3) contrast(1.4) blur(6px); }
     50%  { opacity: .7; filter: brightness(.7) contrast(1.15) blur(2px); }
@@ -2674,14 +2759,14 @@
     color: #ffd88a;
   }
   .meta-keepsake-frame {
-    margin-top: 14px;
-    max-width: 520px;
-    width: 100%;
-    border-radius: 18px;
+    margin-top: 10px;
+    max-width: 280px;
+    width: 72%;
+    border-radius: 14px;
     overflow: hidden;
     box-shadow:
-      0 40px 100px rgba(0,0,0,.55),
-      0 0 60px rgba(255,216,138,.18),
+      0 24px 56px rgba(0,0,0,.45),
+      0 0 36px rgba(255,216,138,.14),
       0 0 0 1px rgba(255,216,138,.15);
     transform: rotate(-1.2deg);
     transition: transform .6s ease;
@@ -3451,8 +3536,8 @@
   /* ===== Cork-board testimonials ===== */
   .corkboard {
     position: relative;
-    margin: 40px -24px 0;
-    padding: 48px 0 56px;
+    margin: 28px -24px 0;
+    padding: 32px 0 40px;
     overflow-x: auto;
     overflow-y: visible;
     cursor: grab;
@@ -3465,19 +3550,21 @@
     border-bottom: 1px solid rgba(0,0,0,0.15);
     box-shadow: inset 0 20px 40px rgba(0,0,0,0.18), inset 0 -20px 40px rgba(0,0,0,0.18);
   }
+  .corkboard.reveal { transform: translateY(16px); }
+  .corkboard.reveal.in { transform: none; }
   .corkboard::-webkit-scrollbar { display: none; }
   .corkboard.grabbing { cursor: grabbing; }
   .corkboard-rail {
     display: flex;
-    gap: 68px;
-    padding: 32px 120px;
+    gap: 44px;
+    padding: 20px 72px;
     align-items: center;
     min-width: max-content;
   }
   .strip-card {
     position: relative;
     flex: 0 0 auto;
-    width: 320px;
+    width: clamp(150px, 13vw, 190px);
     transform: rotate(var(--r, 0deg));
     transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
     filter: drop-shadow(0 12px 20px rgba(0,0,0,0.35));
@@ -3488,13 +3575,13 @@
   }
   .strip-frames {
     background: #f8f0dc;
-    padding: 14px 14px 36px;
+    padding: 10px 10px 24px;
     border-radius: 2px;
     position: relative;
   }
   .strip-frame {
     aspect-ratio: 1/1;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
     border-radius: 1px;
     position: relative;
     box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1);
@@ -3533,7 +3620,7 @@
   }
   .tape {
     position: absolute;
-    width: 74px; height: 22px;
+    width: 56px; height: 18px;
     background: rgba(250, 240, 210, 0.7);
     border-left: 1px dashed rgba(150, 110, 70, 0.3);
     border-right: 1px dashed rgba(150, 110, 70, 0.3);
@@ -3545,13 +3632,13 @@
   .tape-br { bottom: -8px; right: 20px; transform: rotate(15deg); }
   .sticky-note {
     position: absolute;
-    bottom: -40px; right: -90px;
-    width: 200px;
-    padding: 16px 18px 20px;
+    bottom: -24px; right: -52px;
+    width: 148px;
+    padding: 10px 12px 14px;
     background: #f5e8c4;
     color: #3a2818;
     font-family: 'Caveat', 'Dancing Script', cursive;
-    font-size: 17px;
+    font-size: 13px;
     line-height: 1.35;
     box-shadow: 0 8px 18px rgba(0,0,0,0.25), inset 0 -3px 8px rgba(180,140,80,0.2);
     transform: rotate(var(--r, 0deg));
@@ -3561,7 +3648,7 @@
   .sticky-note.pink { background: #f6cfc0; }
   .sticky-note p { margin: 0 0 10px; }
   .sticky-note .note-sig {
-    font-size: 14px;
+    font-size: 11px;
     color: #6a4828;
     border-top: 1px dashed rgba(100,60,30,0.3);
     padding-top: 6px;
@@ -3570,8 +3657,8 @@
   .strip-card:hover .sticky-note { transform: rotate(calc(var(--r, 0deg) * 0.2)); }
   .pushpin {
     position: absolute;
-    top: 6px; left: 50%;
-    width: 18px; height: 18px;
+    top: 5px; left: 50%;
+    width: 14px; height: 14px;
     transform: translateX(-50%);
     background: radial-gradient(circle at 35% 30%, #ffb080, #8b2a10 65%, #4a1008);
     border-radius: 50%;
@@ -3595,25 +3682,25 @@
     .filmstrip { gap: 12px; padding: 0 10px; }
     .polaroid { width: 210px; padding: 10px 10px 44px; }
     .polaroid .caption { font-size: 18px; bottom: 10px; }
-    .corkboard-rail { padding: 28px 48px; gap: 48px; }
-    .strip-card { width: 260px; }
-    .sticky-note { right: -40px; bottom: -30px; width: 170px; font-size: 15px; }
+    .corkboard-rail { padding: 18px 40px; gap: 32px; }
+    .strip-card { width: clamp(140px, 36vw, 175px); }
+    .sticky-note { right: -32px; bottom: -18px; width: 128px; font-size: 12px; }
   }
 
   @media (max-width: 520px) {
-    .corkboard { margin: 28px -14px 0; padding: 26px 0 34px; }
-    .corkboard-rail { padding: 18px 28px; gap: 28px; }
-    .strip-card { width: 210px; }
-    .strip-frames { padding: 10px 10px 26px; }
-    .strip-frame { margin-bottom: 6px; }
+    .corkboard { margin: 20px -14px 0; padding: 20px 0 28px; }
+    .corkboard-rail { padding: 14px 24px; gap: 22px; }
+    .strip-card { width: clamp(128px, 42vw, 155px); }
+    .strip-frames { padding: 8px 8px 20px; }
+    .strip-frame { margin-bottom: 5px; }
     .sticky-note {
-      width: 132px;
-      right: -26px;
-      bottom: -18px;
-      padding: 10px 12px 12px;
-      font-size: 12px;
+      width: 112px;
+      right: -20px;
+      bottom: -14px;
+      padding: 8px 10px 10px;
+      font-size: 11px;
     }
-    .sticky-note .note-sig { font-size: 11px; }
+    .sticky-note .note-sig { font-size: 10px; }
   }
 
   /* ===== AI animation preview ===== */
@@ -4449,24 +4536,32 @@
         <span class="eyebrow">Start here</span>
         <h2>What are you <em>planning?</em></h2>
       </div>
-      <p class="lede">Pick your event — we'll show matching samples and pre-fill your enquiry.</p>
+      <p class="lede">Pick your event — we’ll show matching strips.</p>
     </div>
     <div class="occasion-grid reveal" role="group" aria-label="Event type">
-      <button type="button" class="occasion-card" data-lead-audience="wedding" data-lead-event="Wedding" data-lead-package="keepsake" data-lead-scroll="#samples">
-        <strong>Wedding</strong>
-        <span>See wedding samples · 3 Hours from S$880</span>
-      </button>
       <button type="button" class="occasion-card" data-lead-audience="corporate" data-lead-event="Corporate / brand" data-lead-package="activation" data-lead-scroll="#samples">
-        <strong>Corporate &amp; brand</strong>
-        <span>See activation samples · custom quote</span>
+        <div class="occasion-card-media">
+          <img src="photos/occasions/corporate.png" alt="Branded corporate photobooth strip" width="400" height="500" loading="eager" />
+        </div>
+        <span class="occasion-card-label">Corporate <span class="occasion-card-arrow" aria-hidden="true">→</span></span>
+      </button>
+      <button type="button" class="occasion-card" data-lead-audience="wedding" data-lead-event="Wedding" data-lead-package="keepsake" data-lead-scroll="#samples">
+        <div class="occasion-card-media">
+          <img src="photos/occasions/wedding.png" alt="Wedding photobooth strip with custom illustration" width="400" height="500" loading="eager" />
+        </div>
+        <span class="occasion-card-label"><em>Wedding</em> <span class="occasion-card-arrow" aria-hidden="true">→</span></span>
       </button>
       <button type="button" class="occasion-card" data-lead-audience="birthday" data-lead-event="Birthday" data-lead-package="keepsake" data-lead-scroll="#samples">
-        <strong>Birthday &amp; party</strong>
-        <span>See party samples · from S$750</span>
+        <div class="occasion-card-media">
+          <img src="photos/occasions/birthday.png" alt="Birthday party photobooth strip" width="400" height="500" loading="eager" />
+        </div>
+        <span class="occasion-card-label">Birthday <span class="occasion-card-arrow" aria-hidden="true">→</span></span>
       </button>
       <button type="button" class="occasion-card" data-lead-event="Other" data-lead-package="undecided" data-lead-scroll="#book">
-        <strong>Not sure yet</strong>
-        <span>Skip to enquiry — Jeff replies within 24 hrs</span>
+        <div class="occasion-card-media occasion-card-media--collage">
+          <img src="photos/occasions/undecided.png" alt="Not sure yet? We’ll help you choose." width="400" height="500" loading="eager" />
+        </div>
+        <span class="occasion-card-label">Not sure <em>yet?</em> <span class="occasion-card-arrow" aria-hidden="true">→</span></span>
       </button>
     </div>
     <p class="occasion-foot reveal">Prefer to chat first? <a href="https://wa.me/6589896901?text=Hi%20Jeff%2C%20I%27d%20like%20to%20enquire%20about%20the%20photobooth." target="_blank" rel="noopener">WhatsApp Jeff</a> · or use the <a href="/snapshot/">quick booking page</a></p>
@@ -4539,7 +4634,7 @@
     </div>
     <button type="button" class="sample-wall-more btn ghost" id="sampleWallMore" hidden>Show all samples</button>
     <div class="lead-cta reveal">
-      <p>Packages from <strong>S$750</strong> — 20+ styles in the full lookbook. Jeff replies within 24 hours.</p>
+      <p>Packages from <strong>S$750</strong> — 20+ styles in the full lookbook. Jeff replies within 2 hours.</p>
       <a href="#book" class="btn" data-lead-catalogue="1" data-track="click_lookbook_samples">Get the full lookbook</a>
       <a href="#book" class="btn ghost" data-track="click_book_samples">Book your date</a>
     </div>
@@ -4754,7 +4849,7 @@
           <div class="reel-frame" data-reel="2">
             <div class="reel-frame-inner" style="background-image: var(--reel-img-2);"></div>
             <div class="reel-devstage"></div>
-            <div class="reel-label">03 · The Develop</div>
+            <div class="reel-label">03 · The Digital Animation</div>
           </div>
           <div class="reel-frame" data-reel="3">
             <div class="reel-frame-inner" style="background-image: var(--reel-img-3);"></div>
@@ -4991,7 +5086,7 @@
           <div class="booth-label" style="top: 24%; right: 2%;">02<span class="line"></span><b>AI lens</b></div>
           <div class="booth-label" style="top: 36%; right: -5%;">03<span class="line"></span><b>Live preview</b></div>
           <div class="booth-label" style="top: 48%; right: -8%;">04<span class="line"></span><b>Hardwood tripod</b></div>
-          <div class="booth-label" style="bottom: 40%; left: 2%;"><b>DNP Printer</b><span class="line"></span>05</div>
+          <div class="booth-label" style="top: 58%; right: 50%;"><b>DNP Printer</b><span class="line"></span>05</div>
         </div>
       </div>
 
@@ -5504,7 +5599,7 @@
       <form class="book-form reveal" id="bookForm" data-provider="formspree" data-endpoint="https://formspree.io/f/mwvargqq">
         <small>/ Enquiry form</small>
         <h3>Quick enquiry</h3>
-        <p class="book-form-hint">3 fields to get started — Jeff replies within 24 hours.</p>
+        <p class="book-form-hint">3 fields to get started — Jeff replies within 2 hours.</p>
         <div class="row">
           <div class="field">
             <label>Your name <span aria-hidden="true">*</span></label>

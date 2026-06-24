@@ -842,12 +842,21 @@
   }
   .wa-fab svg { width: 26px; height: 26px; }
   @media (max-width: 640px) {
-    .wa-fab { bottom: calc(72px + env(safe-area-inset-bottom, 0px)); }
+    .wa-fab {
+      bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+      transition: bottom .3s ease;
+    }
+    body.book-bar-visible .wa-fab {
+      bottom: calc(72px + env(safe-area-inset-bottom, 0px));
+    }
   }
 
   @media (max-width: 640px) {
     :root { --page-pad: 16px; }
-    body { padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px)); font-size: 16px; }
+    body { padding-bottom: env(safe-area-inset-bottom, 0px); font-size: 16px; }
+    body.book-bar-visible {
+      padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px));
+    }
 
     .top { padding: 10px var(--page-pad); gap: 10px; }
     .logo-long { display: none; }

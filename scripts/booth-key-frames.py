@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Remove edge-connected light background; keep bright whites (ring light)."""
+"""Key booth frames: edge flood + global matte removal."""
 
 from __future__ import annotations
 
@@ -12,47 +12,42 @@ from PIL import Image
 ROOT = Path(__file__).resolve().parents[1]
 FRAMES_DIR = ROOT / "photos" / "booth" / "frames"
 VIDEO = ROOT / "photos" / "booth" / "assembled-scrub.mp4"
-BG_FLOOR = 168
-HIGHLIGHT_PROTECT = 237
-NEUTRAL_SPREAD = 22
-HALO_PASSES = 6
+BG_FLOOR = 200
+MATTE_CEIL = 250
+NEUTRAL_SPREAD = 16
 
 
-def is_neutral_light(r: int, g: int, b: int) -> bool:
+def is_neutral(r: int, g: int, b: int) -> bool:
     return max(r, g, b) - min(r, g, b) <= NEUTRAL_SPREAD
 
 
-def is_flood_removable(r: int, g: int, b: int) -> bool:
+def is_matte_pixel(r: int, g: int, b: int) -> bool:
     lo = min(r, g, b)
-    if lo < BG_FLOOR or lo >= HIGHLIGHT_PROTECT:
-        return False
-    return is_neutral_light(r, g, b)
+    return BG_FLOOR <= lo < MATTE_CEIL and is_neutral(r, g, b)
 
 
-def is_halo_removable(r: int, g: int, b: int) -> bool:
-    lo = min(r, g, b)
-    if lo < BG_FLOOR or lo >= HIGHLIGHT_PROTECT - 1:
-        return False
-    return is_neutral_light(r, g, b)
+def is_ring_highlight(r: int, g: int, b: int) -> bool:
+    # Keep only near-pure white speculars (ring core), not the gray matte blob.
+    return min(r, g, b) >= MATTE_CEIL and is_neutral(r, g, b)
 
 
-def remove_edge_white(img: Image.Image) -> Image.Image:
+def key_frame(img: Image.Image) -> Image.Image:
     img = img.convert("RGBA")
     w, h = img.size
     px = img.load()
+
     seen = bytearray(w * h)
+    q: deque[tuple[int, int]] = deque()
 
     def idx(x: int, y: int) -> int:
         return y * w + x
-
-    q: deque[tuple[int, int]] = deque()
 
     def try_seed(x: int, y: int) -> None:
         i = idx(x, y)
         if seen[i]:
             return
         r, g, b, _ = px[x, y]
-        if not is_flood_removable(r, g, b):
+        if not is_matte_pixel(r, g, b):
             return
         seen[i] = 1
         q.append((x, y))
@@ -77,27 +72,13 @@ def remove_edge_white(img: Image.Image) -> Image.Image:
         if y + 1 < h:
             try_seed(x, y + 1)
 
-    return img
-
-
-def clean_halos(img: Image.Image) -> Image.Image:
-    px = img.load()
-    w, h = img.size
-
-    for _ in range(HALO_PASSES):
-        to_clear: list[tuple[int, int]] = []
-        for y in range(h):
-            for x in range(w):
-                r, g, b, a = px[x, y]
-                if a == 0 or not is_halo_removable(r, g, b):
-                    continue
-                for nx, ny in ((x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)):
-                    if 0 <= nx < w and 0 <= ny < h and px[nx, ny][3] == 0:
-                        to_clear.append((x, y))
-                        break
-        for x, y in to_clear:
-            r, g, b, _ = px[x, y]
-            px[x, y] = (r, g, b, 0)
+    for y in range(h):
+        for x in range(w):
+            r, g, b, a = px[x, y]
+            if a == 0 or is_ring_highlight(r, g, b):
+                continue
+            if is_matte_pixel(r, g, b):
+                px[x, y] = (r, g, b, 0)
 
     return img
 
@@ -132,20 +113,14 @@ def main() -> None:
 
     for i, src in enumerate(sources, 1):
         dst = FRAMES_DIR / f"b_{src.stem.replace('src_', '')}.png"
-        img = remove_edge_white(Image.open(src))
-        img = clean_halos(img)
-        img.save(dst, optimize=True)
+        key_frame(Image.open(src)).save(dst, optimize=True)
         if i % 20 == 0 or i == len(sources):
             print(f"keyed {i}/{len(sources)}")
 
     for tmp in FRAMES_DIR.glob("src_*.png"):
         tmp.unlink()
 
-    print(
-        f"done — {len(sources)} frames "
-        f"(key {BG_FLOOR}-{HIGHLIGHT_PROTECT - 1}, protect >= {HIGHLIGHT_PROTECT}, "
-        f"halo passes={HALO_PASSES})"
-    )
+    print(f"done — {len(sources)} frames (matte {BG_FLOOR}-{MATTE_CEIL - 1})")
 
 
 if __name__ == "__main__":

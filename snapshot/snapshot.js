@@ -246,11 +246,13 @@
   if (bookBar && hero) {
     const io = new IntersectionObserver(
       ([e]) => {
-        bookBar.classList.toggle("is-visible", !e.isIntersecting);
+        const show = !e.isIntersecting;
+        bookBar.classList.toggle("is-visible", show);
         bookBar.setAttribute(
           "aria-hidden",
-          e.isIntersecting ? "true" : "false",
+          show ? "false" : "true",
         );
+        document.body.classList.toggle("book-bar-visible", show);
       },
       { threshold: 0 },
     );

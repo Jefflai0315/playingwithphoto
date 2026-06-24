@@ -14,11 +14,8 @@
   if (!canvas) return;
 
   const labels = runway.querySelector('.booth-labels');
-  const ctx = canvas.getContext('2d', { willReadFrequently: true });
+  const ctx = canvas.getContext('2d');
   const ASSEMBLE_AT = 0.5;
-  const PAPER = '#ebdcb7';
-  const DEFRINGE_MIN = 224;
-  const DEFRINGE_PROTECT = 237;
 
   const frames = new Array(FRAME_COUNT);
   let loaded = 0;
@@ -28,40 +25,13 @@
 
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  function defringeImageData(imgData) {
-    const d = imgData.data;
-    for (let i = 0; i < d.length; i += 4) {
-      if (d[i + 3] === 0) continue;
-      const r = d[i];
-      const g = d[i + 1];
-      const b = d[i + 2];
-      const lo = Math.min(r, g, b);
-      const spread = Math.max(r, g, b) - lo;
-      if (lo >= DEFRINGE_PROTECT) continue;
-      if (lo >= DEFRINGE_MIN && spread <= 14) d[i + 3] = 0;
-    }
-    return imgData;
-  }
-
-  function processFrame(img) {
-    const w = img.naturalWidth || img.width;
-    const h = img.naturalHeight || img.height;
-    const off = document.createElement('canvas');
-    off.width = w;
-    off.height = h;
-    const octx = off.getContext('2d', { willReadFrequently: true });
-    octx.drawImage(img, 0, 0);
-    octx.putImageData(defringeImageData(octx.getImageData(0, 0, w, h)), 0, 0);
-    return off;
-  }
-
   function preload() {
     return Promise.all(
       Array.from({ length: FRAME_COUNT }, (_, i) =>
         new Promise((resolve) => {
           const img = new Image();
           img.onload = () => {
-            frames[i] = processFrame(img);
+            frames[i] = img;
             loaded += 1;
             resolve();
           };
@@ -90,11 +60,13 @@
     if (!img?.width) return;
     const cw = canvas.clientWidth;
     const ch = canvas.clientHeight;
-    ctx.fillStyle = PAPER;
-    ctx.fillRect(0, 0, cw, ch);
-    const iw = img.width;
-    const ih = img.height;
-    const scale = Math.min(cw / iw, ch / ih);
+    ctx.clearRect(0, 0, cw, ch);
+    const iw = img.naturalWidth || img.width;
+    const ih = img.naturalHeight || img.height;
+    const isMobile = window.matchMedia('(max-width: 900px)').matches;
+    const scale = isMobile
+      ? Math.max(cw / iw, ch / ih) * 1.06
+      : Math.min(cw / iw, ch / ih);
     const dw = iw * scale;
     const dh = ih * scale;
     const dx = (cw - dw) / 2;
@@ -106,11 +78,16 @@
     const vh = window.innerHeight;
     const rect = runway.getBoundingClientRect();
     const pinRange = Math.max(1, runway.offsetHeight - vh);
+    const isMobile = window.matchMedia('(max-width: 900px)').matches;
+    const startAt = isMobile ? vh * 0.88 : vh * 0.52;
 
-    if (rect.top > vh || rect.bottom < 0) return 0;
+    if (rect.top > startAt || rect.bottom < 0) {
+      return rect.bottom < 0 ? 1 : 0;
+    }
 
-    const scrollInto = Math.max(0, -rect.top);
-    return Math.min(1, scrollInto / pinRange);
+    const scrollInto = startAt - rect.top;
+    const range = startAt + pinRange;
+    return Math.min(1, Math.max(0, scrollInto / range));
   }
 
   function update() {

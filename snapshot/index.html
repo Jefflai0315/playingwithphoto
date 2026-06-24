@@ -452,8 +452,12 @@
 
   .packages {
     display: grid;
+    grid-template-columns: repeat(2, 1fr);
     gap: 16px;
     margin-top: 28px;
+  }
+  @media (max-width: 720px) {
+    .packages { grid-template-columns: 1fr; }
   }
   .pkg {
     display: grid;
@@ -485,6 +489,26 @@
     font-weight: 500;
   }
   .pkg .sub { font-size: 14px; color: var(--ink-2); margin: 4px 0 0; }
+  .pkg-includes {
+    grid-column: 1 / -1;
+    margin: 10px 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: 13px;
+    color: var(--ink-2);
+    line-height: 1.5;
+  }
+  .pkg-includes li {
+    padding-left: 1.2em;
+    position: relative;
+  }
+  .pkg-includes li::before {
+    content: "·";
+    position: absolute;
+    left: 0;
+    color: var(--rust);
+    font-weight: 700;
+  }
   .pkg .price {
     font-family: var(--ff-display);
     font-size: 28px;
@@ -504,14 +528,24 @@
     border-bottom: 1px solid currentColor;
   }
   .pdf-link { display: inline-block; margin-top: 20px; font-size: 14px; }
+  .packages-intro {
+    color: var(--ink-2);
+    max-width: 52ch;
+    margin: 0;
+    line-height: 1.55;
+  }
+  .packages-intro + .packages-intro { margin-top: 8px; }
 
   #addons { background: var(--paper); }
 
   .addons-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 16px;
     margin-top: 28px;
+  }
+  @media (max-width: 1100px) {
+    .addons-grid { grid-template-columns: repeat(3, 1fr); }
   }
   @media (max-width: 960px) {
     .addons-grid { grid-template-columns: repeat(2, 1fr); }
@@ -561,6 +595,13 @@
     border-color: var(--rust);
     box-shadow: 0 5px 0 var(--rust);
     background: #fffdf8;
+  }
+  .addon-pick-input:checked + .addon-card.featured {
+    background: #fff9f0;
+  }
+  .addon-card.featured {
+    border-color: rgba(166,77,77,.35);
+    background: linear-gradient(165deg, #fffdf8 0%, #faf4ea 100%);
   }
   .addon-card-head {
     display: flex;
@@ -625,6 +666,12 @@
     font-weight: 600;
     font-size: 15px;
     color: var(--rust);
+  }
+  .addon-card .price-was {
+    text-decoration: line-through;
+    opacity: .55;
+    font-weight: 500;
+    margin-right: 6px;
   }
   .addon-card .price small {
     font-weight: 400;
@@ -1016,9 +1063,10 @@
 
 <section id="packages">
   <div class="wrap">
-    <p class="eyebrow">Packages</p>
-    <h2>Pick your <em>slot</em></h2>
-    <p style="color:var(--ink-2);">Most weddings book <strong>3 Hours</strong>. Full receptions choose <strong>5 Hours</strong>.</p>
+    <p class="eyebrow">Packages · Pricing</p>
+    <h2>Pick your <em>hours.</em></h2>
+    <p class="packages-intro">All packages include setup, teardown, an on-site attendant, unlimited prints, and every digital file.</p>
+    <p class="packages-intro">Most couples book <strong>3 Hours</strong>. Full receptions choose <strong>5 Hours</strong>.</p>
 
     <div class="packages">
       <article class="pkg">
@@ -1027,7 +1075,14 @@
           <p class="sub">ROM, tea ceremony, or cocktail hour</p>
         </div>
         <div class="price">S$750<small>2 hours</small></div>
-        <a class="pick" href="#book" data-package="prelude">Select &amp; enquire →</a>
+        <ul class="pkg-includes">
+          <li>2 hours of shooting</li>
+          <li>Unlimited printed strips</li>
+          <li>All digital files delivered</li>
+          <li>2 AI film styles</li>
+          <li>On-site attendant</li>
+        </ul>
+        <a class="pick" href="#book" data-package="prelude">Book 2 hours →</a>
       </article>
 
       <article class="pkg featured">
@@ -1037,7 +1092,14 @@
           <p class="sub">Portraits + one celebration segment</p>
         </div>
         <div class="price">S$880<small>3 hours</small></div>
-        <a class="pick" href="#book" data-package="keepsake">Select &amp; enquire →</a>
+        <ul class="pkg-includes">
+          <li>3 hours of shooting</li>
+          <li>Unlimited printed strips</li>
+          <li>All digital files delivered</li>
+          <li>3 AI film styles</li>
+          <li>On-site attendant</li>
+        </ul>
+        <a class="pick" href="#book" data-package="keepsake">Book 3 hours →</a>
       </article>
 
       <article class="pkg">
@@ -1046,7 +1108,15 @@
           <p class="sub">Cocktail through first dance</p>
         </div>
         <div class="price">S$1,380<small>5 hours</small></div>
-        <a class="pick" href="#book" data-package="showpiece">Select &amp; enquire →</a>
+        <ul class="pkg-includes">
+          <li>5 hours of shooting</li>
+          <li>Unlimited printed strips</li>
+          <li>All digital files + gallery link</li>
+          <li>All 5 AI film styles</li>
+          <li>Custom branded footer</li>
+          <li>On-site attendant</li>
+        </ul>
+        <a class="pick" href="#book" data-package="showpiece">Book 5 hours →</a>
       </article>
 
       <article class="pkg">
@@ -1055,61 +1125,68 @@
           <p class="sub">Brands, festivals, multi-day</p>
         </div>
         <div class="price">Custom<small>quote</small></div>
+        <ul class="pkg-includes">
+          <li>Full-day or multi-day</li>
+          <li>Custom-branded booth wrap</li>
+          <li>Bespoke AI style training</li>
+          <li>Live gallery feed</li>
+          <li>Multi-operator team</li>
+        </ul>
         <a class="pick" href="#book" data-package="activation">Get a quote →</a>
       </article>
     </div>
 
-    <a class="pdf-link" href="../PWP_Packages-2.pdf" target="_blank" rel="noopener noreferrer">View full package PDF →</a>
+    <a class="pdf-link" href="../PWP_Packages-2.pdf" target="_blank" rel="noopener noreferrer">View full package details (PDF) →</a>
   </div>
 </section>
 
 <section id="addons">
   <div class="wrap">
     <p class="eyebrow">Add-ons</p>
-    <h2>Optional <em>upgrades</em></h2>
+    <h2>Make the booth <em>yours.</em></h2>
     <p style="color:var(--ink-2); max-width: 52ch;">
-      Everything in the base package is already a full booth experience.
-      Tick any extras you want — they’ll appear on your enquiry below.
+      A few things are already included with every booking. The rest are optional
+      upgrades — tick any extras you want and they’ll appear on your enquiry below.
     </p>
 
     <div class="addons-grid" id="addonsGrid">
       <label class="addon-pick">
         <input class="addon-pick-input" type="checkbox" name="addons" value="Guestbook, Glitter &amp; Glue (S$68)" data-addon-id="guestbook" />
-        <span class="addon-card">
+        <span class="addon-card featured">
           <div class="addon-card-head">
             <h3>Guestbook, Glitter &amp; Glue</h3>
             <span class="addon-check" aria-hidden="true"></span>
           </div>
-          <p>Messages, stickers, instant prints — a messy, joyful side table.</p>
+          <p>A hands-on station for messages, stickers, instant prints, and messy little memories.</p>
           <div class="addon-card-foot">
             <div class="price">S$68 <small>launch price</small></div>
           </div>
         </span>
       </label>
       <label class="addon-pick">
-        <input class="addon-pick-input" type="checkbox" name="addons" value="More AI Styles (+S$100)" data-addon-id="more-styles" />
+        <input class="addon-pick-input" type="checkbox" name="addons" value="More AI Styles (Free for now)" data-addon-id="more-styles" />
         <span class="addon-card">
           <div class="addon-card-head">
             <h3>More AI Styles</h3>
             <span class="addon-check" aria-hidden="true"></span>
           </div>
-          <p>Custom AI direction beyond the default looks for your event.</p>
+          <p>Go beyond the default looks with a custom AI direction for your event.</p>
           <div class="addon-card-foot">
-            <div class="price">+S$100 <small>custom</small></div>
-            <span class="badge">Often free — ask Jeff</span>
+            <div class="price"><span class="price-was">+S$100</span>Free <small>for now</small></div>
           </div>
         </span>
       </label>
       <label class="addon-pick">
-        <input class="addon-pick-input" type="checkbox" name="addons" value="AI Animation Clips (S$200/hr)" data-addon-id="animation" />
+        <input class="addon-pick-input" type="checkbox" name="addons" value="AI Animation &amp; Live Slideshow (S$100 testing)" data-addon-id="animation" />
         <span class="addon-card">
           <div class="addon-card-head">
-            <h3>AI Animation Clips</h3>
+            <h3>AI Animation &amp; Live Slideshow</h3>
             <span class="addon-check" aria-hidden="true"></span>
           </div>
-          <p>Short motion clips from guest portraits for screens &amp; social.</p>
+          <p>Motion clips from guest portraits, streamed live on venue screens during the event.</p>
           <div class="addon-card-foot">
-            <div class="price">S$200 <small>per hour</small></div>
+            <div class="price"><span class="price-was">S$200</span>S$100 <small>testing bundle</small></div>
+            <span class="badge">testing price</span>
           </div>
         </span>
       </label>
@@ -1120,7 +1197,7 @@
             <h3>Additional Hour</h3>
             <span class="addon-check" aria-hidden="true"></span>
           </div>
-          <p>Extend the booth when the queue is still going strong.</p>
+          <p>Keep the booth open longer when the queue is still moving.</p>
           <div class="addon-card-foot">
             <div class="price">S$180 <small>per hour</small></div>
           </div>
@@ -1133,7 +1210,7 @@
             <h3>Custom Interface</h3>
             <span class="addon-check" aria-hidden="true"></span>
           </div>
-          <p>On-screen design matched to your wedding, brand, or party theme.</p>
+          <p>Photobooth screen design matched to your wedding, brand, or party theme.</p>
           <div class="addon-card-foot">
             <div class="price">S$180 <small>design</small></div>
           </div>
@@ -1146,35 +1223,22 @@
             <h3>Custom Stickers</h3>
             <span class="addon-check" aria-hidden="true"></span>
           </div>
-          <p>Event sticker pack for the booth screen, with AI options.</p>
+          <p>Sticker pack for the event, with AI-generated options available.</p>
           <div class="addon-card-foot">
             <div class="price">S$180 <small>pack</small></div>
           </div>
         </span>
       </label>
       <label class="addon-pick">
-        <input class="addon-pick-input" type="checkbox" name="addons" value="Email &amp; SMS Sharing (S$300)" data-addon-id="email-sms" />
+        <input class="addon-pick-input" type="checkbox" name="addons" value="Email &amp; SMS Sharing (+S$20)" data-addon-id="email-sms" />
         <span class="addon-card">
           <div class="addon-card-head">
             <h3>Email &amp; SMS Sharing</h3>
             <span class="addon-check" aria-hidden="true"></span>
           </div>
-          <p>Guests receive photos while you collect contacts — great for brands.</p>
+          <p>Collect contacts while guests receive their photos — useful for lead generation.</p>
           <div class="addon-card-foot">
-            <div class="price">S$300 <small>activation</small></div>
-          </div>
-        </span>
-      </label>
-      <label class="addon-pick">
-        <input class="addon-pick-input" type="checkbox" name="addons" value="Live Slideshow (S$230)" data-addon-id="slideshow" />
-        <span class="addon-card">
-          <div class="addon-card-head">
-            <h3>Live Slideshow</h3>
-            <span class="addon-check" aria-hidden="true"></span>
-          </div>
-          <p>Rolling feed of real-time generations on venue screens.</p>
-          <div class="addon-card-foot">
-            <div class="price">S$230 <small>screen feed</small></div>
+            <div class="price">+S$20 <small>activation</small></div>
           </div>
         </span>
       </label>
@@ -1185,7 +1249,7 @@
             <h3>Keychain Making</h3>
             <span class="addon-check" aria-hidden="true"></span>
           </div>
-          <p>Physical keychains from guest portraits for the gift table.</p>
+          <p>Turn guest portraits into physical keychains for the event table.</p>
           <div class="addon-card-foot">
             <div class="price">S$330 <small>up to 100 keychains</small></div>
           </div>

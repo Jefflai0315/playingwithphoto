@@ -56,6 +56,13 @@
   ];
   window.__BG_STACKS__ = STACKS;
 
+  // Full-screen WebGL is the biggest GPU/thermal cost on phones — CSS section
+  // fallbacks (body.has-bg-canvas > section::before) cover mobile instead.
+  const LOW_POWER = window.matchMedia(
+    '(max-width: 900px), (hover: none) and (pointer: coarse)'
+  ).matches;
+  if (LOW_POWER) return;
+
   const host = document.getElementById('bg-canvas-host');
   if (!host) return;
 
@@ -470,17 +477,47 @@
     }
   }
 
-  // ---- Render loop ----
+  // ---- Render loop — only runs while scrolling (shader grain uses uTime) ----
   const clock = new THREE.Clock();
-  function animate() {
-    requestAnimationFrame(animate);
+  let animating = false;
+  let rafId = 0;
+
+  function renderFrame() {
     uniforms.uTime.value = clock.getElapsedTime();
-    // Decay velocity toward zero each frame + smooth toward raw
     const cur = uniforms.uScrollVel.value;
     uniforms.uScrollVel.value = cur + (rawVel - cur) * 0.25;
-    rawVel *= 0.82; // bleed off raw so it settles when scroll stops
+    rawVel *= 0.82;
     renderer.render(scene, camera);
   }
+
+  function tick() {
+    if (!animating || document.hidden) {
+      animating = false;
+      return;
+    }
+    rafId = requestAnimationFrame(tick);
+    renderFrame();
+    const vel = Math.abs(uniforms.uScrollVel.value);
+    if (vel < 0.002 && Math.abs(rawVel) < 0.002) {
+      animating = false;
+    }
+  }
+
+  function kickRender() {
+    if (document.hidden) return;
+    renderFrame();
+    if (!animating) {
+      animating = true;
+      rafId = requestAnimationFrame(tick);
+    }
+  }
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      animating = false;
+      cancelAnimationFrame(rafId);
+    }
+  });
 
   // Scroll velocity tracking — smoothed for the shader
   let lastScrollY = window.scrollY;
@@ -490,13 +527,12 @@
     const now = performance.now();
     const dt = Math.max(1, now - lastScrollT);
     const dy = window.scrollY - lastScrollY;
-    // px/ms, normalized so typical scrolls land in -1..1
     rawVel = (dy / dt) / 3.0;
-    // Advance phase by absolute scroll distance (normalized). Only grows with scroll.
     uniforms.uScrollPhase.value += Math.abs(dy) / 400.0;
     lastScrollY = window.scrollY;
     lastScrollT = now;
     updateFromScroll();
+    kickRender();
   }, { passive: true });
 
   function onResize() {
@@ -507,6 +543,6 @@
 
   preload().then(() => {
     updateFromScroll();
-    animate();
+    kickRender();
   });
 })();

@@ -12,6 +12,13 @@
   const loadStartedAt = performance.now();
   const MIN_LOADER_MS = 1000;
 
+  const LOW_POWER = window.matchMedia(
+    '(max-width: 900px), (hover: none) and (pointer: coarse)'
+  ).matches;
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let heroVisible = true;
+  let pageVisible = !document.hidden;
+
   const canvas = document.getElementById('heroScrubCanvas');
   const dissolveCanvas = document.getElementById('heroDissolveCanvas');
   const bgImg = document.getElementById('heroBgImg');
@@ -20,7 +27,7 @@
   const bar = document.getElementById('heroScrubBar');
   const ctx = canvas.getContext('2d');
   const dctx = dissolveCanvas ? dissolveCanvas.getContext('2d') : null;
-  const bgThree = initHeroBgThree(bgImg);
+  const bgThree = LOW_POWER ? null : initHeroBgThree(bgImg);
 
   function initHeroBgThree(host) {
     if (!host || !window.THREE) return null;
@@ -132,7 +139,7 @@
 
   // ----- Canvas sizing (HiDPI-aware) -----
   function sizeCanvas() {
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const dpr = LOW_POWER ? 1 : Math.min(window.devicePixelRatio || 1, 2);
     [canvas, dissolveCanvas].forEach(c => {
       if (!c) return;
       const w = c.clientWidth;
@@ -244,6 +251,7 @@
 
   function updateAndDrawDissolve(progress, skipDissolve) {
     if (!dctx || !dissolveCanvas) return;
+    if (LOW_POWER || prefersReducedMotion) skipDissolve = true;
     const cw = dissolveCanvas.clientWidth;
     const ch = dissolveCanvas.clientHeight;
 
@@ -354,10 +362,12 @@
 
   let mx = 0, my = 0;
   let tmx = 0, tmy = 0;
-  window.addEventListener('mousemove', (e) => {
-    tmx = (e.clientX / window.innerWidth - 0.5) * 2;
-    tmy = (e.clientY / window.innerHeight - 0.5) * 2;
-  }, { passive: true });
+  if (!LOW_POWER) {
+    window.addEventListener('mousemove', (e) => {
+      tmx = (e.clientX / window.innerWidth - 0.5) * 2;
+      tmy = (e.clientY / window.innerHeight - 0.5) * 2;
+    }, { passive: true });
+  }
 
   let _cachedSkip = null;
   function shouldSkipDissolve() {
@@ -372,14 +382,21 @@
 
   // Resample emitter points whenever the frame changes significantly
   let lastSampleFrame = -1;
+  let lastDrawIdx = -1;
   function loop() {
+    requestAnimationFrame(loop);
+    if (!pageVisible || !heroVisible || LOW_POWER || prefersReducedMotion) return;
+
     mx += (tmx - mx) * 0.06;
     my += (tmy - my) * 0.06;
     updateScrub();
 
     currentIdx += (targetIdx - currentIdx) * 0.2;
     const drawIdx = Math.round(currentIdx);
-    if (frames[drawIdx]) drawFrame(drawIdx);
+    if (frames[drawIdx] && drawIdx !== lastDrawIdx) {
+      drawFrame(drawIdx);
+      lastDrawIdx = drawIdx;
+    }
 
     if (canvas) {
       const pm = fgParallaxStrength();
@@ -388,22 +405,30 @@
     }
     if (bgThree) bgThree.render(heroScrollInto, mx, my);
 
-    // Resample emitter points when we're near the dissolve zone and frame advanced
-    if (scrubProgress > 0.5 && drawIdx !== lastSampleFrame && frames[drawIdx]) {
+    if (!LOW_POWER && scrubProgress > 0.5 && drawIdx !== lastSampleFrame && frames[drawIdx]) {
       emitterPoints = sampleEmitterPoints(drawIdx);
       lastSampleFrame = drawIdx;
     }
 
     updateAndDrawDissolve(scrubProgress, shouldSkipDissolve());
+  }
 
-    requestAnimationFrame(loop);
+  function onScrubScroll() {
+    updateScrub();
+    if (prefersReducedMotion || LOW_POWER) {
+      const drawIdx = Math.round(
+        Math.max(0, Math.min(FRAME_COUNT - 1, targetIdx))
+      );
+      if (frames[drawIdx]) drawFrame(drawIdx);
+      return;
+    }
   }
 
   function init() {
     sizeCanvas();
     drawFrame(0);
     updateScrub();
-    loop();
+    if (!LOW_POWER && !prefersReducedMotion) loop();
   }
 
   window.addEventListener('resize', () => {
@@ -411,7 +436,16 @@
     drawFrame(Math.round(currentIdx));
     if (bgThree) bgThree.resize();
   });
-  window.addEventListener('scroll', updateScrub, { passive: true });
+  window.addEventListener('scroll', onScrubScroll, { passive: true });
+
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(([e]) => {
+      heroVisible = e.isIntersecting;
+    }, { rootMargin: '80px 0px' }).observe(hero);
+  }
+  document.addEventListener('visibilitychange', () => {
+    pageVisible = !document.hidden;
+  });
 
   preload().then(() => {
     init();

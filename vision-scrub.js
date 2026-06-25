@@ -16,6 +16,14 @@
   const runway = document.querySelector('.vision-scrub');
   if (!runway) return;
 
+  const LOW_POWER = window.matchMedia(
+    '(max-width: 900px), (hover: none) and (pointer: coarse)'
+  ).matches;
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let runwayVisible = false;
+  let pageVisible = !document.hidden;
+  let loopStarted = false;
+
   const pin = document.querySelector('.vision-scrub-pin');
   const canvas = document.getElementById('visionScrubCanvas');
   const headline = document.getElementById('visionScrubHeadline');
@@ -31,6 +39,7 @@
 
   let targetIdx = 0;
   let currentIdx = 0;
+  let preloadStarted = false;
 
   function easeOutCubic(t) {
     return 1 - Math.pow(1 - t, 3);
@@ -67,7 +76,7 @@
   }
 
   function sizeCanvas() {
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const dpr = LOW_POWER ? 1 : Math.min(window.devicePixelRatio || 1, 2);
     const w = canvas.clientWidth;
     const h = canvas.clientHeight;
     if (!w || !h) return;
@@ -136,26 +145,60 @@
     }
   }
 
+  let lastDrawIdx = -1;
   function loop() {
+    requestAnimationFrame(loop);
+    if (!loopStarted || !pageVisible || !runwayVisible || LOW_POWER || prefersReducedMotion) return;
+
     updateScrub();
     const lerp = targetIdx >= FRAME_COUNT - 2 ? 0.14 : 0.2;
     currentIdx += (targetIdx - currentIdx) * lerp;
-    drawFrame(Math.round(currentIdx));
-    requestAnimationFrame(loop);
+    const drawIdx = Math.round(currentIdx);
+    if (drawIdx !== lastDrawIdx) {
+      drawFrame(drawIdx);
+      lastDrawIdx = drawIdx;
+    }
+  }
+
+  function onScrubScroll() {
+    updateScrub();
+    if (prefersReducedMotion || LOW_POWER) {
+      const drawIdx = Math.round(
+        Math.max(0, Math.min(FRAME_COUNT - 1, targetIdx))
+      );
+      if (frames[drawIdx]) drawFrame(drawIdx);
+    }
   }
 
   function init() {
     sizeCanvas();
     drawFrame(0);
     updateScrub();
-    loop();
+    if (!LOW_POWER && !prefersReducedMotion) {
+      loopStarted = true;
+      loop();
+    }
   }
 
   window.addEventListener('resize', () => {
     sizeCanvas();
     drawFrame(Math.round(currentIdx));
   });
-  window.addEventListener('scroll', updateScrub, { passive: true });
+  window.addEventListener('scroll', onScrubScroll, { passive: true });
 
-  preload();
+  document.addEventListener('visibilitychange', () => {
+    pageVisible = !document.hidden;
+  });
+
+  const visObs = new IntersectionObserver(
+    (entries) => {
+      runwayVisible = entries.some((e) => e.isIntersecting);
+      if (!preloadStarted && runwayVisible) {
+        preloadStarted = true;
+        preload();
+      }
+    },
+    { rootMargin: LOW_POWER ? '40% 0px' : '100% 0px' }
+  );
+  visObs.observe(runway);
 })();

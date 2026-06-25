@@ -447,16 +447,19 @@
     font-size: 9px;
     letter-spacing: .1em;
     text-transform: uppercase;
-    color: var(--rust-2);
+    color: var(--rust);
     margin-top: 8px;
     display: block;
   }
   .spark-chapter .section-head .custom-theme-note {
     margin-top: 10px;
-    color: rgba(255,216,138,.8);
+    color: var(--rust);
   }
   .vision-layer-card--ai .custom-theme-note {
-    color: rgba(42,26,12,.58);
+    color: var(--rust-2);
+  }
+  .meta-chapter .custom-theme-note {
+    color: #ffd88a;
   }
 
   .hero-occasions {
@@ -824,6 +827,7 @@
     .occasion-foot .spark {
       animation: none !important;
     }
+    body::before { display: none !important; }
     .logo { font-size: 18px; min-width: 0; flex: 1; }
     .logo-long { display: none; }
     .logo-short { display: inline; }
@@ -4877,7 +4881,7 @@
       <p style="color: rgba(255,255,255,.75);">
         Spark showed one photo — here’s the full four-pose strip. Watch it morph from vintage film into painter styles.
         That’s the booth: <b>nostalgia and wonder on one roll.</b>
-        <span class="custom-theme-note" style="color:rgba(255,216,138,.75);">Got a theme? Tell us — we'll make it happen.</span>
+        <span class="custom-theme-note">Got a theme? Tell us — we'll make it happen.</span>
       </p>
     </div>
 
@@ -6022,14 +6026,14 @@
 <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
 <script src="photos.config.js?v=12"></script>
 <script src="analytics.js?v=1"></script>
-<script src="bg.js?v=3"></script>
+<script src="bg.js?v=4"></script>
 <script src="app.js?v=20"></script>
 <script type="module" src="demo-gif.js?v=9"></script>
 <script src="enhancements.js?v=10"></script>
 <script src="creation.js?v=11"></script>
-<script src="hero-scrub.js?v=8"></script>
-<script src="vision-scrub.js?v=11"></script>
-<script src="booth-scrub.js?v=24"></script>
+<script src="hero-scrub.js?v=9"></script>
+<script src="vision-scrub.js?v=12"></script>
+<script src="booth-scrub.js?v=29"></script>
 <script src="sample-wall.js?v=3"></script>
 
 </body>

@@ -5,16 +5,16 @@
 (() => {
   const FRAME_COUNT = 121;
   const FRAME_PATH = (i) =>
-    `photos/booth/frames/b_${String(i + 1).padStart(4, '0')}.webp`;
+    `photos/booth/frames/b_${String(i + 1).padStart(4, "0")}.webp`;
 
-  const runway = document.querySelector('.booth-scrub');
+  const runway = document.querySelector(".booth-scrub");
   if (!runway) return;
 
-  const canvas = document.getElementById('boothAssemblyCanvas');
+  const canvas = document.getElementById("boothAssemblyCanvas");
   if (!canvas) return;
 
-  const labels = runway.querySelector('.booth-labels');
-  const ctx = canvas.getContext('2d');
+  const labels = runway.querySelector(".booth-labels");
+  const ctx = canvas.getContext("2d");
   const ASSEMBLE_AT = 0.5;
 
   const frames = new Array(FRAME_COUNT);
@@ -23,8 +23,16 @@
   let currentIdx = 0;
   let ready = false;
   let preloadStarted = false;
+  let loopRunning = false;
 
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
+  const LOW_POWER = window.matchMedia(
+    "(max-width: 900px), (hover: none) and (pointer: coarse)",
+  ).matches;
+  let runwayVisible = false;
+  let pageVisible = !document.hidden;
 
   function preload() {
     if (preloadStarted) return;
@@ -38,20 +46,21 @@
         if (!ready && loaded >= 1) init();
       };
       img.onerror = () => {
-        console.warn('[booth-scrub] missing frame:', FRAME_PATH(i));
+        console.warn("[booth-scrub] missing frame:", FRAME_PATH(i));
       };
       img.src = FRAME_PATH(i);
     }
   }
 
   function sizeCanvas() {
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const dpr = LOW_POWER ? 1 : Math.min(window.devicePixelRatio || 1, 2);
     const w = canvas.clientWidth;
     const h = canvas.clientHeight;
-    if (!w || !h) return;
+    if (!w || !h) return false;
     canvas.width = Math.round(w * dpr);
     canvas.height = Math.round(h * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    return true;
   }
 
   function drawFrame(idx) {
@@ -59,10 +68,11 @@
     if (!img?.width) return;
     const cw = canvas.clientWidth;
     const ch = canvas.clientHeight;
+    if (!cw || !ch) return;
     ctx.clearRect(0, 0, cw, ch);
     const iw = img.naturalWidth || img.width;
     const ih = img.naturalHeight || img.height;
-    const isMobile = window.matchMedia('(max-width: 900px)').matches;
+    const isMobile = window.matchMedia("(max-width: 900px)").matches;
     const scale = isMobile
       ? Math.max(cw / iw, ch / ih) * 1.06
       : Math.min(cw / iw, ch / ih);
@@ -76,17 +86,16 @@
   function scrollProgress() {
     const vh = window.innerHeight;
     const rect = runway.getBoundingClientRect();
-    const pinRange = Math.max(1, runway.offsetHeight - vh);
-    const isMobile = window.matchMedia('(max-width: 900px)').matches;
-    const startAt = isMobile ? vh * 0.88 : vh * 0.52;
+    const scrubRange = Math.max(1, runway.offsetHeight - vh);
+    // Begin scrub before the pin locks — ~40% of viewport early
+    const preRoll = vh * 0.4;
 
-    if (rect.top > startAt || rect.bottom < 0) {
-      return rect.bottom < 0 ? 1 : 0;
-    }
+    if (rect.top > preRoll) return 0;
+    if (rect.bottom <= vh) return 1;
 
-    const scrollInto = startAt - rect.top;
-    const range = startAt + pinRange;
-    return Math.min(1, Math.max(0, scrollInto / range));
+    const scrollInto = preRoll - rect.top;
+    const totalRange = scrubRange + preRoll;
+    return Math.min(1, Math.max(0, scrollInto / totalRange));
   }
 
   function update() {
@@ -99,47 +108,90 @@
     if (targetIdx > maxIdx) targetIdx = maxIdx;
 
     if (labels) {
-      const labelP = p <= ASSEMBLE_AT ? 0 : Math.min(1, (p - ASSEMBLE_AT) / 0.2);
+      const labelP =
+        p <= ASSEMBLE_AT ? 0 : Math.min(1, (p - ASSEMBLE_AT) / 0.2);
       labels.style.opacity = String(labelP);
     }
   }
 
   function loop() {
+    if (!loopRunning) return;
+    requestAnimationFrame(loop);
+
+    if (!ready || !pageVisible || !runwayVisible) return;
+
     update();
-    if (ready && !prefersReducedMotion) {
+    if (!prefersReducedMotion) {
       currentIdx += (targetIdx - currentIdx) * 0.35;
       drawFrame(Math.round(currentIdx));
     }
+  }
+
+  function startLoop() {
+    if (loopRunning) return;
+    loopRunning = true;
     requestAnimationFrame(loop);
+  }
+
+  function stopLoop() {
+    loopRunning = false;
   }
 
   function init() {
     if (ready) return;
-    sizeCanvas();
+    if (!sizeCanvas()) {
+      // Canvas may be 0×0 until layout/reveal — retry shortly
+      requestAnimationFrame(() => {
+        if (!ready) init();
+      });
+      return;
+    }
+
     if (prefersReducedMotion) {
       drawFrame(Math.min(FRAME_COUNT - 1, Math.max(0, loaded - 1)));
-      if (labels) labels.style.opacity = '1';
+      if (labels) labels.style.opacity = "1";
     } else {
       drawFrame(0);
-      loop();
+      currentIdx = 0;
     }
     ready = true;
-    console.log(`[booth-scrub] started — loading ${FRAME_COUNT} frames in background`);
+    update();
+    if (!prefersReducedMotion) startLoop();
+    console.log(`[booth-scrub] ready — loading ${FRAME_COUNT} frames`);
   }
 
-  window.addEventListener('resize', () => {
-    sizeCanvas();
+  window.addEventListener("resize", () => {
+    if (!sizeCanvas()) return;
     drawFrame(Math.round(currentIdx));
   });
 
-  const observer = new IntersectionObserver(
+  document.addEventListener("visibilitychange", () => {
+    pageVisible = !document.hidden;
+    if (pageVisible && ready && runwayVisible) startLoop();
+    else if (document.hidden) stopLoop();
+  });
+
+  const preloadObs = new IntersectionObserver(
     (entries) => {
-      if (entries.some((e) => e.isIntersecting)) {
-        observer.disconnect();
+      if (entries.some((e) => e.isIntersecting) && !preloadStarted) {
+        preloadObs.disconnect();
         preload();
       }
     },
-    { rootMargin: '120% 0px' }
+    { rootMargin: LOW_POWER ? "40% 0px" : "120% 0px" },
   );
-  observer.observe(runway);
+  preloadObs.observe(runway);
+
+  if ("IntersectionObserver" in window) {
+    new IntersectionObserver(
+      ([e]) => {
+        runwayVisible = e.isIntersecting;
+        if (runwayVisible && ready) startLoop();
+        else if (!runwayVisible) stopLoop();
+      },
+      { rootMargin: "80px 0px" },
+    ).observe(runway);
+  } else {
+    runwayVisible = true;
+  }
 })();

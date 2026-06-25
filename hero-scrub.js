@@ -143,12 +143,16 @@
     });
   }
 
-  // Mobile: pull back from cover so more of each frame is visible (less crop).
+  // Mobile: larger cover-fit (~30% bigger than pre-zoom contain fit).
   function fgScaleMultiplier() {
     const w = window.innerWidth;
-    if (w <= 400) return 0.62;
-    if (w <= 720) return 0.74;
+    if (w <= 400) return 0.92;
+    if (w <= 720) return 1;
     return 1;
+  }
+
+  function frameScale(cw, ch, iw, ih) {
+    return Math.max(cw / iw, ch / ih) * fgScaleMultiplier();
   }
 
   function fgParallaxStrength() {
@@ -165,8 +169,7 @@
     ctx.clearRect(0, 0, cw, ch);
     const iw = img.naturalWidth || img.width;
     const ih = img.naturalHeight || img.height;
-    const coverScale = Math.max(cw / iw, ch / ih);
-    const scale = coverScale * fgScaleMultiplier();
+    const scale = frameScale(cw, ch, iw, ih);
     const dw = iw * scale;
     const dh = ih * scale;
     const dx = (cw - dw) / 2;

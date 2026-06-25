@@ -1,11 +1,11 @@
 /* ============================================================
-   BOOTH SCRUB — scroll-driven assembly (image sequence)
+   BOOTH SCRUB — scroll-driven assembly (deferred + progressive)
    ============================================================ */
 
 (() => {
   const FRAME_COUNT = 121;
   const FRAME_PATH = (i) =>
-    `photos/booth/frames/b_${String(i + 1).padStart(4, '0')}.png`;
+    `photos/booth/frames/b_${String(i + 1).padStart(4, '0')}.webp`;
 
   const runway = document.querySelector('.booth-scrub');
   if (!runway) return;
@@ -22,27 +22,26 @@
   let targetIdx = 0;
   let currentIdx = 0;
   let ready = false;
+  let preloadStarted = false;
 
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   function preload() {
-    return Promise.all(
-      Array.from({ length: FRAME_COUNT }, (_, i) =>
-        new Promise((resolve) => {
-          const img = new Image();
-          img.onload = () => {
-            frames[i] = img;
-            loaded += 1;
-            resolve();
-          };
-          img.onerror = () => {
-            console.warn('[booth-scrub] missing frame:', FRAME_PATH(i));
-            resolve();
-          };
-          img.src = FRAME_PATH(i);
-        })
-      )
-    );
+    if (preloadStarted) return;
+    preloadStarted = true;
+
+    for (let i = 0; i < FRAME_COUNT; i++) {
+      const img = new Image();
+      img.onload = () => {
+        frames[i] = img;
+        loaded += 1;
+        if (!ready && loaded >= 1) init();
+      };
+      img.onerror = () => {
+        console.warn('[booth-scrub] missing frame:', FRAME_PATH(i));
+      };
+      img.src = FRAME_PATH(i);
+    }
   }
 
   function sizeCanvas() {
@@ -95,7 +94,9 @@
 
     const p = scrollProgress();
     const videoP = Math.min(1, p / ASSEMBLE_AT);
+    const maxIdx = Math.max(0, loaded - 1);
     targetIdx = Math.round(videoP * (FRAME_COUNT - 1));
+    if (targetIdx > maxIdx) targetIdx = maxIdx;
 
     if (labels) {
       const labelP = p <= ASSEMBLE_AT ? 0 : Math.min(1, (p - ASSEMBLE_AT) / 0.2);
@@ -113,15 +114,17 @@
   }
 
   function init() {
+    if (ready) return;
     sizeCanvas();
     if (prefersReducedMotion) {
-      drawFrame(FRAME_COUNT - 1);
+      drawFrame(Math.min(FRAME_COUNT - 1, Math.max(0, loaded - 1)));
       if (labels) labels.style.opacity = '1';
     } else {
       drawFrame(0);
       loop();
     }
     ready = true;
+    console.log(`[booth-scrub] started — loading ${FRAME_COUNT} frames in background`);
   }
 
   window.addEventListener('resize', () => {
@@ -129,12 +132,14 @@
     drawFrame(Math.round(currentIdx));
   });
 
-  preload().then(() => {
-    if (loaded === 0) {
-      console.warn('[booth-scrub] no frames loaded');
-      return;
-    }
-    init();
-    console.log(`[booth-scrub] ready — ${loaded}/${FRAME_COUNT} frames`);
-  });
+  const observer = new IntersectionObserver(
+    (entries) => {
+      if (entries.some((e) => e.isIntersecting)) {
+        observer.disconnect();
+        preload();
+      }
+    },
+    { rootMargin: '120% 0px' }
+  );
+  observer.observe(runway);
 })();

@@ -332,36 +332,6 @@
     padding-bottom: 0 !important;
   }
 
-  .pricing-audience {
-    display: flex; flex-wrap: wrap; gap: 10px;
-    margin: 28px 0 8px;
-  }
-  .pricing-audience button {
-    font-family: var(--ff-body);
-    font-size: 13px;
-    letter-spacing: .06em;
-    text-transform: uppercase;
-    padding: 10px 18px;
-    border-radius: 999px;
-    border: 1px solid rgba(42,26,12,.25);
-    background: transparent;
-    color: var(--ink);
-    cursor: pointer;
-    transition: background .2s, border-color .2s;
-  }
-  .pricing-audience button.active,
-  .pricing-audience button:hover {
-    background: var(--ink);
-    color: var(--cream);
-    border-color: var(--ink);
-  }
-  .pricing-audience-hint {
-    font-size: 14px;
-    color: var(--ink-2);
-    margin: 0 0 24px;
-    min-height: 1.4em;
-  }
-
   .occasion-router { padding: 56px 0 24px; }
   .occasion-router .section-head { margin-bottom: 28px; }
   .occasion-router .section-head .lede { max-width: 28ch; }
@@ -793,58 +763,6 @@
       bottom: calc(76px + env(safe-area-inset-bottom, 0px));
     }
   }
-  .ticket-booklet[data-audience] .ticket { transition: opacity .25s, transform .25s, order .25s; }
-  .ticket-booklet.is-ranked {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: stretch;
-    gap: 14px;
-    width: 100%;
-    max-width: 100%;
-    overflow: hidden;
-  }
-  .ticket-booklet.is-ranked .ticket-grid-weddings,
-  .ticket-booklet.is-ranked .ticket-grid-brands {
-    display: contents;
-  }
-  .ticket-booklet.is-ranked .ticket-brands-label {
-    display: none;
-  }
-  .ticket-booklet.is-ranked .ticket.is-pick {
-    order: -1;
-    flex: 1 1 100%;
-    width: 100%;
-    max-width: 100%;
-    opacity: 1 !important;
-    transform: rotate(0deg) translateY(-8px) scale(1.03) !important;
-    z-index: 4;
-  }
-  .ticket-booklet.is-ranked .ticket.is-dim {
-    flex: 1 1 calc((100% - 14px) / 2);
-    max-width: calc((100% - 14px) / 2);
-    min-width: 0;
-    opacity: .5 !important;
-    transform: scale(.9) rotate(var(--r, 0deg)) !important;
-    z-index: 1;
-  }
-  .ticket-booklet.is-ranked[data-audience="corporate"] .ticket.t-activation.is-pick {
-    order: -2;
-  }
-  .ticket-booklet.is-ranked[data-audience="corporate"] .ticket.t-showpiece.is-pick {
-    order: -1;
-  }
-  .ticket-booklet[data-audience="wedding"] .ticket:not(.t-keepsake):not(.t-showpiece):not(.t-prelude) { opacity: .45; }
-  .ticket-booklet[data-audience="corporate"] .ticket:not(.t-activation):not(.t-showpiece) { opacity: .45; }
-  .ticket-booklet[data-audience="birthday"] .ticket:not(.t-keepsake):not(.t-prelude) { opacity: .45; }
-  .ticket-booklet[data-audience="wedding"] .ticket.t-keepsake,
-  .ticket-booklet[data-audience="corporate"] .ticket.t-activation,
-  .ticket-booklet[data-audience="corporate"] .ticket.t-showpiece,
-  .ticket-booklet[data-audience="birthday"] .ticket.t-keepsake {
-    opacity: 1;
-    transform: scale(1.02);
-    z-index: 2;
-  }
-
   .site-footer-nav {
     display: flex; flex-wrap: wrap; gap: 12px 24px;
     margin-top: 20px;
@@ -903,14 +821,8 @@
     body.book-bar-visible .wa-fab {
       bottom: calc(76px + env(safe-area-inset-bottom, 0px)) !important;
     }
-    .filmstrip,
-    .demo .cta-primary,
     .occasion-foot .spark {
       animation: none !important;
-    }
-    .ticket-booklet.is-ranked .ticket.is-pick,
-    .ticket-booklet.is-ranked .ticket.is-dim {
-      transform: none !important;
     }
     .logo { font-size: 18px; min-width: 0; flex: 1; }
     .logo-long { display: none; }
@@ -1281,7 +1193,7 @@
       height: min(62vh, 520px);
       overflow: hidden;
       z-index: 0;
-      opacity: 0.46;
+      opacity: 0.72;
       pointer-events: none;
     }
     .booth-canvas-wrap {
@@ -1352,19 +1264,29 @@
   .gallery-chapter .section-head p { color: rgba(244,234,213,.88); }
   .gallery-chapter .eyebrow { color: var(--highlight); }
   .filmstrip-wrap {
-    overflow: hidden;
+    overflow-x: auto;
+    overflow-y: hidden;
     padding: 20px 0;
+    scroll-snap-type: x proximity;
+    scrollbar-width: thin;
+  }
+  .filmstrip-wrap.is-auto .filmstrip {
+    animation: scrollFilm 50s linear infinite;
+  }
+  .filmstrip-wrap:not(.is-auto) .filmstrip {
+    animation: none;
+    transform: none !important;
   }
   .filmstrip {
     display: flex;
     gap: 22px;
-    animation: scrollFilm 50s linear infinite;
     padding: 0 22px;
     width: max-content;
   }
   @keyframes scrollFilm { to { transform: translateX(-50%); } }
-  .filmstrip:hover { animation-play-state: paused; }
+  .filmstrip-wrap.is-auto:hover .filmstrip { animation-play-state: paused; }
   .polaroid {
+    scroll-snap-align: start;
     flex: 0 0 auto;
     width: 280px;
     background: var(--cream);
@@ -3068,31 +2990,6 @@
     .demo .status p { font-size: 12px; margin-bottom: 10px; max-width: 24ch; line-height: 1.35; }
     .demo .status .btn { padding: 11px 16px; font-size: 13px; margin-top: auto; flex-shrink: 0; }
   }
-  .meta-keepsake-burst .meta-keepsake-item {
-    opacity: 0;
-    transform: translateY(24px) scale(.92);
-  }
-  .meta-keepsake-burst.is-in .meta-keepsake-item {
-    animation: keepsakeBurst .7s cubic-bezier(.2,.9,.2,1) forwards;
-  }
-  .meta-keepsake-burst.is-in .meta-keepsake-item--alt {
-    animation-delay: .15s;
-  }
-  @keyframes keepsakeBurst {
-    0% { opacity: 0; transform: translateY(24px) scale(.92); }
-    100% { opacity: 1; transform: translateY(0) scale(1); }
-  }
-  .meta-keepsake-burst.is-in .meta-keepsake-item::after {
-    content: "✦";
-    position: absolute;
-    top: -8px;
-    right: -4px;
-    font-size: 14px;
-    color: var(--highlight);
-    opacity: 0;
-    animation: sparklePop .9s ease .35s forwards;
-    pointer-events: none;
-  }
   .meta-keepsake-item { position: relative; }
 
   /* ================================================================
@@ -4592,38 +4489,18 @@
   }
   @media (max-width: 900px) {
     .ticket-booklet { gap: 40px; }
-    .ticket-booklet:not(.is-ranked) .ticket-grid-weddings {
+    .ticket-grid-weddings {
       display: flex;
       flex-direction: column;
       gap: 24px;
     }
-    .ticket-booklet:not(.is-ranked) .ticket-grid-weddings .ticket.t-showpiece {
+    .ticket-grid-weddings .ticket.t-showpiece {
       width: 100%;
       grid-column: auto;
     }
-    .ticket-booklet:not(.is-ranked) .ticket-grid-weddings .ticket.t-keepsake { order: -2; }
-    .ticket-booklet:not(.is-ranked) .ticket-grid-weddings .ticket.t-showpiece { order: -1; }
-    .ticket-booklet:not(.is-ranked) .ticket-grid-weddings .ticket.t-prelude { order: 0; }
-    .ticket-booklet.is-ranked {
-      gap: 12px;
-    }
-    .ticket-booklet.is-ranked .ticket.is-pick {
-      flex: 1 1 100%;
-      width: 100%;
-      max-width: 100%;
-      transform: none !important;
-    }
-    .ticket-booklet.is-ranked .ticket.is-dim {
-      flex: 1 1 calc((100% - 12px) / 2);
-      max-width: calc((100% - 12px) / 2);
-      min-width: 0;
-      transform: scale(.96) !important;
-    }
-    .ticket-booklet.is-ranked[data-audience="corporate"] .ticket.is-dim:only-of-type,
-    .ticket-booklet.is-ranked .ticket.is-dim:only-of-type {
-      flex: 1 1 100%;
-      max-width: 100%;
-    }
+    .ticket-grid-weddings .ticket.t-keepsake { order: -2; }
+    .ticket-grid-weddings .ticket.t-showpiece { order: -1; }
+    .ticket-grid-weddings .ticket.t-prelude { order: 0; }
   }
 </style>
 </head>
@@ -5065,7 +4942,7 @@
       </a>
     </div>
 
-    <div class="meta-keepsake reveal meta-keepsake-burst" id="metaKeepsake">
+    <div class="meta-keepsake reveal" id="metaKeepsake">
       <span class="meta-keepsake-eyebrow">…and then it becomes this</span>
       <h3 class="meta-keepsake-title">A real <em>keepsake</em> — in your hand.</h3>
       <div class="meta-keepsake-duo">
@@ -5735,16 +5612,7 @@
       </div>
     </div>
 
-    <div class="pricing-audience reveal" role="tablist" aria-label="Who are you booking for?">
-      <button type="button" class="active" data-audience="wedding" role="tab" aria-selected="true">Weddings</button>
-      <button type="button" data-audience="corporate" role="tab" aria-selected="false">Corporate</button>
-      <button type="button" data-audience="birthday" role="tab" aria-selected="false">Party</button>
-    </div>
-    <p class="pricing-audience-hint reveal" id="pricingAudienceHint" aria-live="polite">
-      Most couples choose <strong>3 Hours</strong> (S$880).
-    </p>
-
-    <div class="ticket-booklet reveal" data-audience="wedding">
+    <div class="ticket-booklet reveal">
       <div class="ticket-grid-weddings">
       <article class="ticket t-prelude">
         <div class="ticket-stub">
@@ -6150,80 +6018,18 @@
     io.observe(hero);
   })();
 
-  // ============= Pricing audience tabs =============
-  (function() {
-    const tabs = document.querySelectorAll('.pricing-audience button');
-    const booklet = document.querySelector('.ticket-booklet');
-    const hint = document.getElementById('pricingAudienceHint');
-    if (!tabs.length || !booklet) return;
-
-    const hints = {
-      wedding: 'Most couples choose <strong>3 Hours</strong> (S$880).',
-      corporate: 'Brand activations usually pick <strong>Custom</strong> (quote) or <strong>5 Hours</strong> (S$1,380).',
-      birthday: 'Parties love <strong>3 Hours</strong> — enough time for every guest.',
-    };
-
-    const picks = {
-      wedding: ['.t-keepsake'],
-      corporate: ['.t-activation', '.t-showpiece'],
-      birthday: ['.t-keepsake'],
-    };
-
-    function ticketMatchesPick(ticket, aud) {
-      const sels = picks[aud];
-      if (!sels) return false;
-      return sels.some((sel) => ticket.matches(sel));
-    }
-
-    function applyAudience(aud) {
-      if (!aud) {
-        booklet.removeAttribute('data-audience');
-        booklet.classList.remove('is-ranked');
-        booklet.querySelectorAll('.ticket').forEach((t) => {
-          t.classList.remove('is-pick', 'is-dim');
-        });
-        if (hint) hint.innerHTML = 'Most couples choose <strong>3 Hours</strong> (S$880).';
-        return;
-      }
-
-      booklet.dataset.audience = aud;
-      booklet.classList.add('is-ranked');
-      if (hint) hint.innerHTML = hints[aud] || '';
-
-      booklet.querySelectorAll('.ticket').forEach((t) => {
-        const isPick = ticketMatchesPick(t, aud);
-        t.classList.toggle('is-pick', isPick);
-        t.classList.toggle('is-dim', !isPick);
-      });
-    }
-
-    tabs.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const aud = btn.dataset.audience;
-        const isActive = btn.classList.contains('active');
-
-        tabs.forEach(b => {
-          const on = !isActive && b === btn;
-          b.classList.toggle('active', on);
-          b.setAttribute('aria-selected', on ? 'true' : 'false');
-        });
-
-        applyAudience(isActive ? '' : aud);
-      });
-    });
-  })();
 </script>
 <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
 <script src="photos.config.js?v=12"></script>
 <script src="analytics.js?v=1"></script>
 <script src="bg.js?v=3"></script>
-<script src="app.js?v=18"></script>
+<script src="app.js?v=20"></script>
 <script type="module" src="demo-gif.js?v=9"></script>
-<script src="enhancements.js?v=9"></script>
+<script src="enhancements.js?v=10"></script>
 <script src="creation.js?v=11"></script>
-<script src="hero-scrub.js?v=7"></script>
+<script src="hero-scrub.js?v=8"></script>
 <script src="vision-scrub.js?v=11"></script>
-<script src="booth-scrub.js?v=23"></script>
+<script src="booth-scrub.js?v=24"></script>
 <script src="sample-wall.js?v=3"></script>
 
 </body>

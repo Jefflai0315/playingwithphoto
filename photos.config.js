@@ -70,6 +70,16 @@ window.PHOTO_CONFIG = {
     ],
   },
 
+  // ─── VISION SCRUB (The idea section) ────────────────────────
+  // Hero-style frame scrub. Source MP4 → extract with:
+  //   ffmpeg -i photos/vision/vision-scrub.mp4 -vf "fps=12,scale=960:-2" -c:v libwebp -quality 82 photos/vision/frames/v_%04d.webp
+  vision: {
+    video: "vision/vision-scrub.mp4",
+    frameCount: 61,
+    framePrefix: "vision/frames/v_",
+    frameExt: "webp",
+  },
+
   // ─── SPARK BEFORE / AFTER GALLERY ───────────────────────────
   // ONE entry per painter. Clicking a painter button on the page jumps to
   // that painter's photo. Auto-rotate cycles through the painters in order.
@@ -326,6 +336,24 @@ window.PHOTO_CONFIG = {
     reelVideos: () =>
       (cfg.reel?.videos || []).map((v) => (v ? resolve(v) : null)),
     reelStill: (index) => resolve(cfg.reel?.files?.[index]),
+    visionPoster: () => resolve(cfg.vision?.poster),
+    visionVideo: () => resolve(cfg.vision?.video),
+    visionFrameCount: () => cfg.vision?.frameCount || 0,
+    visionFramePath: (index) => {
+      const prefix = cfg.vision?.framePrefix || "vision/frames/v_";
+      const ext = cfg.vision?.frameExt || "webp";
+      const n = String(index).padStart(4, "0");
+      return resolve(`${prefix}${n}.${ext}`);
+    },
+    visionFrames: () => {
+      const count = cfg.vision?.frameCount || 0;
+      const prefix = cfg.vision?.framePrefix || "vision/frames/v_";
+      const ext = cfg.vision?.frameExt || "webp";
+      return Array.from({ length: count }, (_, i) => {
+        const n = String(i + 1).padStart(4, "0");
+        return resolve(`${prefix}${n}.${ext}`);
+      });
+    },
     metaPhotos: () => (cfg.meta?.files || []).map(asCss).filter(Boolean),
     metaFrames: (painter, side) => {
       const key = side === "after" ? "after" : "before";

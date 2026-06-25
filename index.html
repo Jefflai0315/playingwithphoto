@@ -10,6 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="creation.css?v=4">
 <link rel="stylesheet" href="hero-scrub.css">
+<link rel="stylesheet" href="vision-scrub.css?v=3">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,800;0,9..144,900;1,9..144,400;1,9..144,700&family=Caveat:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
 <script>
@@ -302,81 +303,11 @@
   }
 
   .vision-chapter {
-    padding: 72px 0 24px;
+    padding: 0;
   }
-  .vision-chapter .section-head {
-    max-width: 720px;
-    margin: 0 auto;
-    text-align: center;
-  }
-  .vision-chapter .section-head p.lede {
-    max-width: 58ch;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  .vision-duo {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 18px;
-    margin-top: 40px;
-    text-align: left;
-  }
-  .vision-card {
-    padding: 22px 24px;
-    border: 1px solid rgba(42,26,12,.14);
-    border-radius: 8px;
-    background: rgba(244,234,213,.4);
-  }
-  .vision-card-label {
-    font-family: var(--ff-mono);
-    font-size: 10px;
-    letter-spacing: .14em;
-    text-transform: uppercase;
-    color: var(--rust);
-    margin: 0 0 8px;
-  }
-  .vision-card h3 {
-    font-family: var(--ff-display);
-    font-style: italic;
-    font-weight: 400;
-    font-size: clamp(22px, 3vw, 28px);
-    margin: 0 0 10px;
-    color: var(--ink);
-    line-height: 1.15;
-  }
-  .vision-card p {
-    font-size: 14px;
-    color: var(--ink-2);
-    margin: 0 0 14px;
-    line-height: 1.55;
-  }
-  .vision-card-links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px 14px;
-    font-family: var(--ff-mono);
-    font-size: 11px;
-    letter-spacing: .06em;
-    text-transform: uppercase;
-  }
-  .vision-card-links a {
-    color: var(--rust);
-    text-decoration: none;
-  }
-  .vision-card-links a:hover { text-decoration: underline; }
-  .vision-merge {
-    margin: 32px auto 0;
-    max-width: 50ch;
-    text-align: center;
-    font-family: var(--ff-display);
-    font-style: italic;
-    font-size: clamp(20px, 3.2vw, 28px);
-    font-weight: 400;
-    color: var(--ink);
-    line-height: 1.25;
-  }
-  @media (max-width: 700px) {
-    .vision-duo { grid-template-columns: 1fr; }
+  .story-group--plan > #vision {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
   }
 
   .pricing-audience {
@@ -416,6 +347,7 @@
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 14px;
+    align-items: start;
   }
   .occasion-card {
     display: flex;
@@ -451,11 +383,8 @@
     display: block;
     transition: transform .4s ease;
   }
-  .occasion-card-media--collage {
-    aspect-ratio: 1 / 1;
-  }
   .occasion-card-media--collage img {
-    object-position: 68% 52%;
+    object-position: 72% 48%;
   }
   .occasion-card:hover .occasion-card-media img,
   .occasion-card:focus-visible .occasion-card-media img {
@@ -482,15 +411,9 @@
     gap: 8px;
     padding: 12px 14px 13px;
     font-family: var(--ff-display);
-    font-size: 18px;
-    font-weight: 500;
+    font-size: clamp(14px, 2.8vw, 18px);
+    font-weight: 600;
     line-height: 1.2;
-  }
-  .occasion-card-label em {
-    font-family: var(--ff-script);
-    font-style: normal;
-    color: var(--rust);
-    font-size: 1.05em;
   }
   .occasion-card-arrow {
     flex-shrink: 0;
@@ -585,10 +508,16 @@
   }
 
   @media (max-width: 900px) {
-    .occasion-grid { grid-template-columns: 1fr 1fr; }
+    .occasion-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .occasion-card-media { aspect-ratio: 5 / 6; }
+    .occasion-card-label { padding: 9px 10px 10px; }
   }
   @media (max-width: 520px) {
-    .occasion-grid { grid-template-columns: 1fr; }
+    .occasion-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+    .occasion-card { border-radius: 10px; }
+    .occasion-card-media { aspect-ratio: 4 / 5; }
+    .occasion-card-label { padding: 8px 8px 9px; font-size: 13px; }
+    .occasion-card-arrow { font-size: 13px; }
   }
 
   /* Sample wall — compact grid, capped height */
@@ -4543,76 +4472,90 @@
         <div class="occasion-card-media">
           <img src="photos/occasions/corporate.png" alt="Branded corporate photobooth strip" width="400" height="500" loading="eager" />
         </div>
-        <span class="occasion-card-label">Corporate <span class="occasion-card-arrow" aria-hidden="true">→</span></span>
+        <span class="occasion-card-label">Corporate &amp; Brands <span class="occasion-card-arrow" aria-hidden="true">→</span></span>
       </button>
       <button type="button" class="occasion-card" data-lead-audience="wedding" data-lead-event="Wedding" data-lead-package="keepsake" data-lead-scroll="#samples">
         <div class="occasion-card-media">
           <img src="photos/occasions/wedding.png" alt="Wedding photobooth strip with custom illustration" width="400" height="500" loading="eager" />
         </div>
-        <span class="occasion-card-label"><em>Wedding</em> <span class="occasion-card-arrow" aria-hidden="true">→</span></span>
+        <span class="occasion-card-label">Wedding <span class="occasion-card-arrow" aria-hidden="true">→</span></span>
       </button>
       <button type="button" class="occasion-card" data-lead-audience="birthday" data-lead-event="Birthday" data-lead-package="keepsake" data-lead-scroll="#samples">
         <div class="occasion-card-media">
           <img src="photos/occasions/birthday.png" alt="Birthday party photobooth strip" width="400" height="500" loading="eager" />
         </div>
-        <span class="occasion-card-label">Birthday <span class="occasion-card-arrow" aria-hidden="true">→</span></span>
+        <span class="occasion-card-label">Birthday &amp; Party <span class="occasion-card-arrow" aria-hidden="true">→</span></span>
       </button>
       <button type="button" class="occasion-card" data-lead-event="Other" data-lead-package="undecided" data-lead-scroll="#book">
         <div class="occasion-card-media occasion-card-media--collage">
           <img src="photos/occasions/undecided.png" alt="Not sure yet? We’ll help you choose." width="400" height="500" loading="eager" />
         </div>
-        <span class="occasion-card-label">Not sure <em>yet?</em> <span class="occasion-card-arrow" aria-hidden="true">→</span></span>
+        <span class="occasion-card-label">Not sure yet? <span class="occasion-card-arrow" aria-hidden="true">→</span></span>
       </button>
     </div>
     <p class="occasion-foot reveal">Prefer to chat first? <a href="https://wa.me/6589896901?text=Hi%20Jeff%2C%20I%27d%20like%20to%20enquire%20about%20the%20photobooth." target="_blank" rel="noopener">WhatsApp Jeff</a> · or use the <a href="/snapshot/">quick booking page</a></p>
   </div>
 </section>
 
-<!-- THE VISION — vintage ritual + AI engine -->
+<!-- THE VISION — torn paper window + scroll visual -->
 <section class="chapter vision-chapter" id="vision" data-screen-label="02 The vision">
-  <div class="wrap">
-    <div class="section-head reveal">
-      <div>
-        <span class="eyebrow">The idea</span>
-        <h2>Vintage <em>ritual.</em> AI <em>alchemy.</em></h2>
+  <div class="vision-scrub">
+    <div class="vision-scrub-pin">
+      <div class="vision-scrub-bg" aria-hidden="true">
+        <div class="vision-fg-layer">
+          <canvas id="visionScrubCanvas" aria-hidden="true"></canvas>
+        </div>
+        <div class="vision-scrub-wash"></div>
       </div>
-      <p class="lede">
-        A booth that <b>feels like 1978</b> and <b>develops like 2026</b> — hardwood tripod, four-pose strip,
-        that satisfying printer whir. Under the hood, AI gives you two kinds of magic on the same roll:
-        warm <b>film colour</b> or a full <b>painter repainting</b>.
-      </p>
-    </div>
 
-    <div class="vision-duo reveal">
-      <article class="vision-card">
-        <p class="vision-card-label">Layer one · film</p>
-        <h3>The nostalgia layer</h3>
-        <p>
-          70s Kodak, Polaroid, B&amp;W, Kodachrome — honest vintage colour grading on every frame.
-          Your face stays yours; the strip just looks like it was found in a shoebox.
-        </p>
-        <div class="vision-card-links">
-          <a href="#styles">See film looks</a>
-          <a href="#demo">Try filters live</a>
-        </div>
-      </article>
-      <article class="vision-card">
-        <p class="vision-card-label">Layer two · AI painter</p>
-        <h3>The wonder layer</h3>
-        <p>
-          Van Gogh, Monet, Warhol, Hokusai — AI reads your photo and repaints it in a master's hand.
-          The strip guests post, frame, and talk about for weeks.
-        </p>
-        <div class="vision-card-links">
-          <a href="#spark">See AI examples</a>
-          <a href="#metamorphosis">Watch a strip morph</a>
-        </div>
-      </article>
-    </div>
+      <div class="vision-paper vision-paper--top" aria-hidden="true"></div>
+      <div class="vision-paper vision-paper--bottom" aria-hidden="true"></div>
 
-    <p class="vision-merge reveal">
-      One booth. One ritual. Two ways to develop — pick film, pick painter, or mix across the night.
-    </p>
+      <div class="vision-scrub-copy wrap reveal" id="visionScrubCopy">
+        <div class="vision-scrub-headline" id="visionScrubHeadline">
+          <span class="eyebrow">The idea</span>
+          <h2>Vintage <em>ritual.</em> AI <em>alchemy.</em></h2>
+        </div>
+
+        <div class="vision-scrub-outro" id="visionScrubOutro" aria-label="Explore next">
+          <a href="#styles" class="vision-layer-card">
+            <div class="vision-layer-preview">
+              <img src="photos/styles/summerof78.png" alt="" width="72" height="90" loading="lazy" decoding="async">
+            </div>
+            <div class="vision-layer-body">
+              <span class="vision-layer-kicker">
+                <svg class="vision-layer-icon" viewBox="0 0 16 16" aria-hidden="true"><rect x="2" y="3" width="12" height="10" rx="1" fill="none" stroke="currentColor" stroke-width="1.2"/><rect x="4" y="5" width="8" height="6" rx=".5" fill="none" stroke="currentColor" stroke-width="1"/></svg>
+                Layer one
+              </span>
+              <span class="vision-layer-title">Vintage film looks</span>
+              <span class="vision-layer-desc">Warm Kodak colour, Polaroid grain, B&amp;W nostalgia</span>
+              <span class="vision-layer-cta">Explore film looks <span aria-hidden="true">→</span></span>
+            </div>
+          </a>
+
+          <a href="#spark" class="vision-layer-card vision-layer-card--ai">
+            <div class="vision-layer-preview">
+              <img src="photos/spark/jenmike-vangogh.png" alt="" width="72" height="90" loading="lazy" decoding="async">
+            </div>
+            <div class="vision-layer-body">
+              <span class="vision-layer-kicker">
+                <svg class="vision-layer-icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 13l3-8 2.5 5 1.5-3 3 6" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M11 3l1 2 2 1-2 1-1 2-1-2-2-1 2-1z" fill="none" stroke="currentColor" stroke-width="1"/></svg>
+                Layer two
+              </span>
+              <span class="vision-layer-title">AI painter</span>
+              <span class="vision-layer-desc">Your photo, repainted into whimsical art</span>
+              <span class="vision-layer-tags">Monet · Van Gogh · Hokusai</span>
+              <span class="vision-layer-cta">Explore AI examples <span aria-hidden="true">→</span></span>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <div class="vision-scrub-hint" id="visionScrubHint">
+        <span class="hint-label">Scroll — watch it develop</span>
+        <div class="hint-bar"><div class="hint-bar-fill" id="visionScrubBar"></div></div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -5877,7 +5820,7 @@
   })();
 </script>
 <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
-<script src="photos.config.js?v=8"></script>
+<script src="photos.config.js?v=11"></script>
 <script src="analytics.js?v=1"></script>
 <script src="bg.js?v=1"></script>
 <script src="app.js?v=13"></script>
@@ -5885,6 +5828,7 @@
 <script src="enhancements.js?v=6"></script>
 <script src="creation.js?v=11"></script>
 <script src="hero-scrub.js?v=2"></script>
+<script src="vision-scrub.js?v=8"></script>
 <script src="booth-scrub.js?v=20"></script>
 <script src="sample-wall.js?v=3"></script>
 

@@ -10,6 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&family=Caveat:wght@600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="snapshot-scrub.css?v=1" />
 
 <style>
   :root {
@@ -1014,9 +1015,7 @@
 <div class="nav-drawer" id="navDrawer" aria-hidden="true">
   <div class="nav-drawer-backdrop" id="navDrawerBackdrop"></div>
   <nav class="nav-drawer-panel" aria-label="Menu">
-    <a href="#packages">Packages</a>
-    <a href="#addons">Add-ons</a>
-    <a href="#examples">Examples</a>
+    <a href="#book">Book</a>
     <a class="ghost" href="../">Full experience site</a>
     <a class="drawer-wa" href="https://wa.me/6589896901" target="_blank" rel="noopener">WhatsApp Jeff</a>
     <a class="drawer-cta" href="#book">Book the booth</a>
@@ -1027,350 +1026,60 @@
   <a href="#book">Book the booth · from S$750</a>
 </div>
 
-<header class="hero wrap">
-  <p class="tag">Singapore · Johor Bahru</p>
-  <h1>AI vintage <em>photobooth</em><br/>for your event</h1>
-  <p class="lead">
-    Printed strips + digital files in about a minute. On-site attendant included.
-  </p>
-  <div class="hero-ctas">
-    <a class="btn btn-hero-book" href="#book">Book from S$750</a>
-    <a class="btn ghost" href="https://wa.me/6589896901?text=Hi%20Jeff%2C%20I%27d%20like%20to%20enquire%20about%20the%20photobooth." target="_blank" rel="noopener">Chat on WhatsApp</a>
-  </div>
-</header>
-
-<section id="examples">
-  <div class="wrap">
-    <p class="eyebrow">Examples</p>
-    <h2>Real guests, <em>repainted</em> by AI</h2>
-    <p style="color:var(--ink-2); max-width: 52ch;">Tap <strong>Animate</strong> on any style to see the moving AI painting. On the full site you can try <strong>vintage film</strong> filters on your webcam — nothing uploads.</p>
-
-    <div class="gallery">
-      <figure class="pair">
-        <div>
-          <img src="../photos/spark/jenmike.png" alt="Original photo" width="400" height="500" loading="lazy" />
-          <figcaption>Before</figcaption>
-        </div>
-        <div>
-          <div class="gallery-media" data-gallery-media>
-            <img class="gallery-still" src="../photos/spark/jenmike-vangogh.png" alt="Van Gogh style" width="400" height="500" loading="lazy" />
-            <video class="gallery-video" data-src="../photos/spark/jenmike-vangogh.mp4" muted loop playsinline webkit-playsinline preload="none" aria-hidden="true"></video>
-            <button type="button" class="gallery-play" aria-pressed="false" aria-label="Play Van Gogh animation">
-              <span class="gallery-play-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
-              <span class="gallery-play-label">Animate</span>
-            </button>
+<div class="snapshot-layout">
+  <section class="snapshot-scrub" id="snapshotHero" aria-label="AI painting demo">
+    <div class="snapshot-scrub-pin">
+      <div class="snapshot-canvas-wrap">
+        <canvas id="snapshotScrubCanvas" aria-label="Drag to see guests repainted by AI in Van Gogh, Monet, and Picasso styles"></canvas>
+        <div class="snapshot-scrub-overlay" id="snapshotScrubOverlay">
+          <h1>AI vintage <em>photobooth</em></h1>
+          <p class="lead">Printed strips + digital files in about a minute. On-site attendant included.</p>
+          <ul class="snapshot-trust">
+            <li>Unlimited prints</li>
+            <li>20+ AI styles</li>
+            <li>SG &amp; JB</li>
+          </ul>
+          <div class="snapshot-pills">
+            <a class="snapshot-pill" href="#book" data-package="prelude">2h · S$750</a>
+            <a class="snapshot-pill featured is-active" href="#book" data-package="keepsake">3h · S$880</a>
+            <a class="snapshot-pill" href="#book" data-package="showpiece">5h · S$1,380</a>
           </div>
-          <figcaption>Van Gogh</figcaption>
         </div>
-      </figure>
-      <figure>
-        <div class="gallery-media" data-gallery-media>
-          <img class="gallery-still" src="../photos/spark/myra-monet.png" alt="Monet style portrait" width="400" height="500" loading="lazy" />
-          <video class="gallery-video" data-src="../photos/spark/myra-monet.mp4" muted loop playsinline webkit-playsinline preload="none" aria-hidden="true"></video>
-          <button type="button" class="gallery-play" aria-pressed="false" aria-label="Play Monet animation">
-            <span class="gallery-play-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
-            <span class="gallery-play-label">Animate</span>
-          </button>
+      </div>
+      <div class="snapshot-scrub-ui">
+        <div class="snapshot-scrub-hint" id="snapshotScrubHint">
+          <span>Slide to repaint</span>
+          <span class="snapshot-style-label" id="snapshotStyleLabel">Before</span>
         </div>
-        <figcaption>Monet</figcaption>
-      </figure>
-      <figure>
-        <div class="gallery-media" data-gallery-media>
-          <img class="gallery-still" src="../photos/spark/co-picasso.png" alt="Picasso style portrait" width="400" height="500" loading="lazy" />
-          <video class="gallery-video" data-src="../photos/spark/co-picasso.mp4" muted loop playsinline webkit-playsinline preload="none" aria-hidden="true"></video>
-          <button type="button" class="gallery-play" aria-pressed="false" aria-label="Play Picasso animation">
-            <span class="gallery-play-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
-            <span class="gallery-play-label">Animate</span>
-          </button>
+        <div class="snapshot-scrub-bar" id="snapshotScrubBar" role="slider" aria-label="Scrub through AI styles" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+          <div class="snapshot-scrub-bar-fill" id="snapshotScrubBarFill"></div>
         </div>
-        <figcaption>Picasso</figcaption>
-      </figure>
+      </div>
     </div>
+  </section>
 
-    <div class="cta-row">
-      <a class="btn btn-outline" href="../#demo">
-        Try vintage film on your webcam
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="13" r="4"/><path d="M3 7h4l2-2h6l2 2h4v12H3z"/></svg>
-      </a>
-      <a class="btn btn-outline" href="../#samples">
-        See all samples on full site
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-      </a>
-    </div>
-  </div>
-</section>
-
-<section>
-  <div class="wrap">
-    <p class="eyebrow">Every booking includes</p>
-    <h2>Setup, prints, and <em>peace of mind</em></h2>
-    <ul class="included">
-      <li>On-site attendant for your whole slot</li>
-      <li>Setup and teardown</li>
-      <li>Unlimited printed strips</li>
-      <li>All digital files delivered</li>
-      <li>Hand-built vintage booth</li>
-      <li>20+ AI painter &amp; film styles</li>
-    </ul>
-  </div>
-</section>
-
-<section id="packages">
-  <div class="wrap">
-    <p class="eyebrow">Packages · Pricing</p>
-    <h2>Pick your <em>hours.</em></h2>
-    <p class="packages-intro">All packages include setup, teardown, an on-site attendant, unlimited prints, and every digital file.</p>
-    <p class="packages-intro">Most couples book <strong>3 Hours</strong>. Full receptions choose <strong>5 Hours</strong>.</p>
-
-    <div class="packages">
-      <article class="pkg">
-        <div>
-          <h3>2 Hours</h3>
-          <p class="sub">ROM, tea ceremony, or cocktail hour</p>
-        </div>
-        <div class="price">S$750<small>2 hours</small></div>
-        <ul class="pkg-includes">
-          <li>2 hours of shooting</li>
-          <li>Unlimited printed strips</li>
-          <li>All digital files delivered</li>
-          <li>2 AI film styles</li>
-          <li>On-site attendant</li>
-        </ul>
-        <a class="pick" href="#book" data-package="prelude">Book 2 hours →</a>
-      </article>
-
-      <article class="pkg featured">
-        <span class="ribbon">Most booked</span>
-        <div>
-          <h3>3 Hours</h3>
-          <p class="sub">Portraits + one celebration segment</p>
-        </div>
-        <div class="price">S$880<small>3 hours</small></div>
-        <ul class="pkg-includes">
-          <li>3 hours of shooting</li>
-          <li>Unlimited printed strips</li>
-          <li>All digital files delivered</li>
-          <li>3 AI film styles</li>
-          <li>On-site attendant</li>
-        </ul>
-        <a class="pick" href="#book" data-package="keepsake">Book 3 hours →</a>
-      </article>
-
-      <article class="pkg">
-        <div>
-          <h3>5 Hours</h3>
-          <p class="sub">Cocktail through first dance</p>
-        </div>
-        <div class="price">S$1,380<small>5 hours</small></div>
-        <ul class="pkg-includes">
-          <li>5 hours of shooting</li>
-          <li>Unlimited printed strips</li>
-          <li>All digital files + gallery link</li>
-          <li>All 5 AI film styles</li>
-          <li>Custom branded footer</li>
-          <li>On-site attendant</li>
-        </ul>
-        <a class="pick" href="#book" data-package="showpiece">Book 5 hours →</a>
-      </article>
-
-      <article class="pkg">
-        <div>
-          <h3>Custom</h3>
-          <p class="sub">Brands, festivals, multi-day</p>
-        </div>
-        <div class="price">Custom<small>quote</small></div>
-        <ul class="pkg-includes">
-          <li>Full-day or multi-day</li>
-          <li>Custom-branded booth wrap</li>
-          <li>Bespoke AI style training</li>
-          <li>Live gallery feed</li>
-          <li>Multi-operator team</li>
-        </ul>
-        <a class="pick" href="#book" data-package="activation">Get a quote →</a>
-      </article>
-    </div>
-
-    <a class="pdf-link" href="../PWP_Packages-2.pdf" target="_blank" rel="noopener noreferrer">View full package details (PDF) →</a>
-  </div>
-</section>
-
-<section id="addons">
-  <div class="wrap">
-    <p class="eyebrow">Add-ons</p>
-    <h2>Make the booth <em>yours.</em></h2>
-    <p style="color:var(--ink-2); max-width: 52ch;">
-      A few things are already included with every booking. The rest are optional
-      upgrades — tick any extras you want and they’ll appear on your enquiry below.
-    </p>
-
-    <div class="addons-grid" id="addonsGrid">
-      <label class="addon-pick">
-        <input class="addon-pick-input" type="checkbox" name="addons" value="Guestbook, Glitter &amp; Glue (S$68)" data-addon-id="guestbook" />
-        <span class="addon-card featured">
-          <div class="addon-card-head">
-            <h3>Guestbook, Glitter &amp; Glue</h3>
-            <span class="addon-check" aria-hidden="true"></span>
-          </div>
-          <p>A hands-on station for messages, stickers, instant prints, and messy little memories.</p>
-          <div class="addon-card-foot">
-            <div class="price">S$68 <small>launch price</small></div>
-          </div>
-        </span>
-      </label>
-      <label class="addon-pick">
-        <input class="addon-pick-input" type="checkbox" name="addons" value="More AI Styles (Free for now)" data-addon-id="more-styles" />
-        <span class="addon-card">
-          <div class="addon-card-head">
-            <h3>More AI Styles</h3>
-            <span class="addon-check" aria-hidden="true"></span>
-          </div>
-          <p>Go beyond the default looks with a custom AI direction for your event.</p>
-          <div class="addon-card-foot">
-            <div class="price"><span class="price-was">+S$100</span>Free <small>for now</small></div>
-          </div>
-        </span>
-      </label>
-      <label class="addon-pick">
-        <input class="addon-pick-input" type="checkbox" name="addons" value="AI Animation &amp; Live Slideshow (S$100 testing)" data-addon-id="animation" />
-        <span class="addon-card">
-          <div class="addon-card-head">
-            <h3>AI Animation &amp; Live Slideshow</h3>
-            <span class="addon-check" aria-hidden="true"></span>
-          </div>
-          <p>Motion clips from guest portraits, streamed live on venue screens during the event.</p>
-          <div class="addon-card-foot">
-            <div class="price"><span class="price-was">S$200</span>S$100 <small>testing bundle</small></div>
-            <span class="badge">testing price</span>
-          </div>
-        </span>
-      </label>
-      <label class="addon-pick">
-        <input class="addon-pick-input" type="checkbox" name="addons" value="Additional Hour (S$180/hr)" data-addon-id="extra-hour" />
-        <span class="addon-card">
-          <div class="addon-card-head">
-            <h3>Additional Hour</h3>
-            <span class="addon-check" aria-hidden="true"></span>
-          </div>
-          <p>Keep the booth open longer when the queue is still moving.</p>
-          <div class="addon-card-foot">
-            <div class="price">S$180 <small>per hour</small></div>
-          </div>
-        </span>
-      </label>
-      <label class="addon-pick">
-        <input class="addon-pick-input" type="checkbox" name="addons" value="Custom Interface (S$180)" data-addon-id="custom-ui" />
-        <span class="addon-card">
-          <div class="addon-card-head">
-            <h3>Custom Interface</h3>
-            <span class="addon-check" aria-hidden="true"></span>
-          </div>
-          <p>Photobooth screen design matched to your wedding, brand, or party theme.</p>
-          <div class="addon-card-foot">
-            <div class="price">S$180 <small>design</small></div>
-          </div>
-        </span>
-      </label>
-      <label class="addon-pick">
-        <input class="addon-pick-input" type="checkbox" name="addons" value="Custom Stickers (S$180)" data-addon-id="custom-stickers" />
-        <span class="addon-card">
-          <div class="addon-card-head">
-            <h3>Custom Stickers</h3>
-            <span class="addon-check" aria-hidden="true"></span>
-          </div>
-          <p>Sticker pack for the event, with AI-generated options available.</p>
-          <div class="addon-card-foot">
-            <div class="price">S$180 <small>pack</small></div>
-          </div>
-        </span>
-      </label>
-      <label class="addon-pick">
-        <input class="addon-pick-input" type="checkbox" name="addons" value="Email &amp; SMS Sharing (+S$20)" data-addon-id="email-sms" />
-        <span class="addon-card">
-          <div class="addon-card-head">
-            <h3>Email &amp; SMS Sharing</h3>
-            <span class="addon-check" aria-hidden="true"></span>
-          </div>
-          <p>Collect contacts while guests receive their photos — useful for lead generation.</p>
-          <div class="addon-card-foot">
-            <div class="price">+S$20 <small>activation</small></div>
-          </div>
-        </span>
-      </label>
-      <label class="addon-pick">
-        <input class="addon-pick-input" type="checkbox" name="addons" value="Keychains or Collector Cards (S$330, up to 100)" data-addon-id="keychain" />
-        <span class="addon-card addon-card--keepsake">
-          <div class="addon-card-head">
-            <h3>Keychains or Collector Cards</h3>
-            <span class="addon-check" aria-hidden="true"></span>
-          </div>
-          <p>Acrylic keychains for the party table, or personalised holographic collector cards with custom art and story stats.</p>
-          <details class="addon-expand" onclick="event.stopPropagation()">
-            <summary>See examples</summary>
-            <div class="addon-thumbs">
-              <img src="../photos/reel/jenmike-keepsake.png" alt="Gold frame portrait example" loading="lazy" width="56" height="56" />
-              <img src="../photos/addons/collector-cards.png" alt="Collector card example" loading="lazy" width="56" height="56" />
-            </div>
-          </details>
-          <span class="custom-theme-note">Custom themes welcome — tell us your idea</span>
-          <div class="addon-card-foot">
-            <div class="price">S$330 <small>up to 100 pieces</small></div>
-          </div>
-        </span>
-      </label>
-    </div>
-
-    <div class="addons-toolbar">
-      <p class="addons-count" id="addonsCount"><strong>0</strong> add-ons selected</p>
-      <button type="button" class="addon-clear-btn" id="addonClear" disabled>Clear selection</button>
-    </div>
-    <p class="addons-note">Tap a card to select. Not sure yet? Skip add-ons — Jeff can advise when he replies.</p>
-    <div class="cta-row" style="margin-top:20px;">
-      <a class="btn btn-outline" href="../#addons">
-        Add-on gallery on full site
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-      </a>
-    </div>
-  </div>
-</section>
-
-<section>
-  <div class="wrap">
-    <p class="eyebrow">Reviews</p>
-    <h2>Guests <em>queued</em> for it</h2>
-    <div class="quotes">
-      <blockquote class="quote">
-        “Three hours in and the line was still around the bar. Guests printed four strips each.”
-        <cite>— Priya &amp; Aaron · Cliveden House</cite>
-      </blockquote>
-      <blockquote class="quote">
-        “I've hired photo-booths for six galas. This was the first one guests actually queued for.”
-        <cite>— Sophie K. · Events Director, NGS</cite>
-      </blockquote>
-    </div>
-  </div>
-</section>
-
-<section id="book">
-  <div class="wrap">
-    <p class="eyebrow">Book</p>
-    <h2>Tell me about <em>your event</em></h2>
-    <p style="color:var(--ink-2);">Reply within 2 hours. Serving Singapore and Johor Bahru.</p>
-
+  <section id="book" class="snapshot-book">
     <div class="book-grid">
-      <div class="contact-blocks">
-        <div class="contact-block">
-          <div class="label">Email</div>
-          <a href="mailto:pencilwithjoy@gmail.com">pencilwithjoy@gmail.com</a>
-        </div>
-        <div class="contact-block">
-          <div class="label">WhatsApp</div>
-          <a href="https://wa.me/6589896901" target="_blank" rel="noopener">+65 8989 6901</a>
+      <div class="snapshot-aside">
+        <blockquote class="snapshot-quote">
+          “Three hours in and the line was still around the bar. Guests printed four strips each.”
+          <cite>— Priya &amp; Aaron · Cliveden House</cite>
+        </blockquote>
+        <div class="contact-blocks">
+          <div class="contact-block">
+            <div class="label">WhatsApp</div>
+            <a href="https://wa.me/6589896901" target="_blank" rel="noopener">+65 8989 6901</a>
+          </div>
+          <div class="contact-block">
+            <div class="label">Email</div>
+            <a href="mailto:pencilwithjoy@gmail.com">pencilwithjoy@gmail.com</a>
+          </div>
         </div>
       </div>
 
       <form class="book-form" id="bookForm" data-provider="formspree" data-endpoint="https://formspree.io/f/mwvargqq">
         <small class="meta">Enquiry · snapshot</small>
-        <h3>Quick booking form</h3>
+        <h3>Book the booth</h3>
         <p class="book-form-hint">Name, WhatsApp, and event date — that's enough to start.</p>
         <div class="row">
           <div class="field">
@@ -1425,6 +1134,41 @@
               <input type="text" id="venue" name="venue" placeholder="Singapore" />
             </div>
           </div>
+
+          <details class="form-addons" id="formAddons">
+            <summary>Add-ons <span id="addonsCount"><strong>0</strong> selected</span></summary>
+            <div class="form-addon-chips" id="addonsGrid">
+              <label class="form-addon-chip">
+                <input type="checkbox" name="addons" value="Guestbook, Glitter &amp; Glue (S$68)" data-addon-id="guestbook" />
+                <span>
+                  <strong>Guestbook, Glitter &amp; Glue</strong>
+                  <span class="meta">S$68 · messages, stickers &amp; instant prints</span>
+                </span>
+              </label>
+              <label class="form-addon-chip">
+                <input type="checkbox" name="addons" value="AI Animation &amp; Live Slideshow (S$100 testing)" data-addon-id="animation" />
+                <span>
+                  <strong>AI Animation &amp; Live Slideshow</strong>
+                  <span class="meta">S$100 testing · motion clips on venue screens</span>
+                </span>
+              </label>
+              <label class="form-addon-chip">
+                <input type="checkbox" name="addons" value="Additional Hour (S$180/hr)" data-addon-id="extra-hour" />
+                <span>
+                  <strong>Additional Hour</strong>
+                  <span class="meta">S$180/hr · extend when the queue is hot</span>
+                </span>
+              </label>
+              <label class="form-addon-chip">
+                <input type="checkbox" name="addons" value="More AI Styles (Free for now)" data-addon-id="more-styles" />
+                <span>
+                  <strong>More AI Styles</strong>
+                  <span class="meta">Free for now · custom AI direction</span>
+                </span>
+              </label>
+            </div>
+            <button type="button" class="addon-clear-btn" id="addonClear" disabled style="margin-top:10px;">Clear add-ons</button>
+          </details>
         </details>
 
         <label class="book-catalogue-pick">
@@ -1434,7 +1178,7 @@
 
         <div class="addon-summary" id="addonSummary" aria-live="polite">
           <p class="addon-summary-label">Your add-ons</p>
-          <p class="addon-summary-empty" id="addonSummaryEmpty">None selected — <a href="#addons">pick add-ons above</a>, or skip for now</p>
+          <p class="addon-summary-empty" id="addonSummaryEmpty">None selected — pick add-ons above, or skip for now</p>
           <ul class="addon-summary-list" id="addonSummaryList" hidden></ul>
         </div>
 
@@ -1443,8 +1187,8 @@
         <small id="bookFormStatus" aria-live="polite"></small>
       </form>
     </div>
-  </div>
-</section>
+  </section>
+</div>
 
 <footer class="footer">
   <p>© 2026 Playing With Photo · By Jeff / Playing With Pencil</p>
@@ -1462,6 +1206,7 @@
 
 <script src="../photos.config.js?v=8"></script>
 <script src="../analytics.js?v=1"></script>
-<script src="snapshot.js?v=8"></script>
+<script src="snapshot-scrub.js?v=1"></script>
+<script src="snapshot.js?v=9"></script>
 </body>
 </html>

@@ -269,9 +269,9 @@ window.PHOTO_CONFIG = {
       tags: ["birthday", "painterly"],
     },
     {
-      src: "spark/co-picasso.png",
-      label: "Cubist bold",
-      tags: ["corporate", "painterly"],
+      src: "samples/chickfila.png",
+      label: "Chick-fil-A activation",
+      tags: ["corporate", "print"],
     },
     {
       src: "spark/olivebirthday-warhol.png",
@@ -289,9 +289,9 @@ window.PHOTO_CONFIG = {
       tags: ["wedding", "painterly"],
     },
     {
-      src: "meta/jenmike-warhol.png",
-      label: "Pop art strip",
-      tags: ["corporate", "painterly"],
+      src: "samples/gala-night.jpeg",
+      label: "Gala night",
+      tags: ["corporate", "print"],
     },
     {
       src: "styles/summerof78.png",
@@ -311,7 +311,7 @@ window.PHOTO_CONFIG = {
     },
     { src: "styles/portraitno4.png", label: "Studio sepia", tags: ["film"] },
     {
-      src: "reel/jenmike-vangogh1.png",
+      src: "samples/yucompletemar.png",
       label: "Wedding strip",
       tags: ["wedding", "print"],
     },
@@ -321,8 +321,8 @@ window.PHOTO_CONFIG = {
       tags: ["wedding", "print"],
     },
     {
-      src: "testimonials/aesop.png",
-      label: "Brand activation",
+      src: "samples/aesop-opening.jpeg",
+      label: "Grand opening",
       tags: ["corporate", "print"],
     },
     {

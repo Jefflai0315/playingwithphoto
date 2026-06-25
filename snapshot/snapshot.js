@@ -1,46 +1,4 @@
-// Gallery: still by default; tap Animate to play loop (lazy-load MP4)
-(function () {
-  document.querySelectorAll("[data-gallery-media]").forEach((wrap) => {
-    const still = wrap.querySelector(".gallery-still");
-    const video = wrap.querySelector(".gallery-video");
-    const btn = wrap.querySelector(".gallery-play");
-    const label = btn?.querySelector(".gallery-play-label");
-    if (!still || !video || !btn) return;
-
-    function ensureSrc() {
-      const src = video.dataset.src;
-      if (src && !video.getAttribute("src")) {
-        video.setAttribute("src", src);
-        video.load();
-      }
-    }
-
-    function showPhoto() {
-      wrap.classList.remove("is-playing");
-      video.pause();
-      btn.setAttribute("aria-pressed", "false");
-      if (label) label.textContent = "Animate";
-      const name = still.alt || "style";
-      btn.setAttribute("aria-label", `Play ${name} animation`);
-    }
-
-    function showVideo() {
-      ensureSrc();
-      wrap.classList.add("is-playing");
-      video.play().catch(() => {});
-      btn.setAttribute("aria-pressed", "true");
-      if (label) label.textContent = "Photo";
-      btn.setAttribute("aria-label", "Show still photo");
-    }
-
-    btn.addEventListener("click", () => {
-      if (wrap.classList.contains("is-playing")) showPhoto();
-      else showVideo();
-    });
-  });
-})();
-
-// Snapshot landing — booking form, package pre-select, add-on multi-select
+// Snapshot landing — scrub package pills, booking form, add-on chips
 (function () {
   const form = document.getElementById("bookForm");
   if (!form) return;
@@ -51,11 +9,15 @@
   const addonSummaryEmpty = document.getElementById("addonSummaryEmpty");
   const addonSummaryList = document.getElementById("addonSummaryList");
   const addonsGrid = document.getElementById("addonsGrid");
+  const packagePills = document.querySelectorAll(".snapshot-pill[data-package]");
 
   function setPackage(value) {
     if (!pkgSelect || !value) return;
     const opt = pkgSelect.querySelector(`option[value="${value}"]`);
     if (opt) pkgSelect.value = value;
+    packagePills.forEach((pill) => {
+      pill.classList.toggle("is-active", pill.dataset.package === value);
+    });
   }
 
   document.querySelectorAll("[data-package]").forEach((el) => {
@@ -65,8 +27,14 @@
     });
   });
 
+  pkgSelect?.addEventListener("change", () => {
+    setPackage(pkgSelect.value);
+  });
+
   const params = new URLSearchParams(window.location.search);
   if (params.get("package")) setPackage(params.get("package").toLowerCase());
+  else setPackage(pkgSelect?.value || "keepsake");
+
   if (params.get("event")) {
     const map = {
       wedding: "Wedding",
@@ -93,8 +61,8 @@
     if (addonsCount) {
       addonsCount.innerHTML =
         n === 1
-          ? "<strong>1</strong> add-on selected"
-          : `<strong>${n}</strong> add-ons selected`;
+          ? "<strong>1</strong> selected"
+          : `<strong>${n}</strong> selected`;
     }
 
     if (addonClear) addonClear.disabled = n === 0;
@@ -194,6 +162,7 @@
       });
       form.reset();
       if (pkgSelect) pkgSelect.value = "keepsake";
+      setPackage("keepsake");
       addonsGrid?.querySelectorAll('input[name="addons"]').forEach((input) => {
         input.checked = false;
       });
@@ -220,7 +189,7 @@
   const toggle = document.getElementById("navToggle");
   const drawer = document.getElementById("navDrawer");
   const backdrop = document.getElementById("navDrawerBackdrop");
-  const hero = document.querySelector(".hero");
+  const hero = document.getElementById("snapshotHero");
   const bookBar = document.getElementById("mobileBookBar");
 
   if (toggle && drawer) {
@@ -248,10 +217,7 @@
       ([e]) => {
         const show = !e.isIntersecting;
         bookBar.classList.toggle("is-visible", show);
-        bookBar.setAttribute(
-          "aria-hidden",
-          show ? "false" : "true",
-        );
+        bookBar.setAttribute("aria-hidden", show ? "false" : "true");
         document.body.classList.toggle("book-bar-visible", show);
       },
       { threshold: 0 },

@@ -9,9 +9,6 @@
 // ==========================================================
 
 (function () {
-  const THREE = window.THREE;
-  if (!THREE) { console.warn('[bg] Three.js not loaded'); return; }
-
   const STACKS = [
     { id: 'hero',         type: 'image', images: [
       'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=1600&q=80',
@@ -63,8 +60,16 @@
   ).matches;
   if (LOW_POWER) return;
 
-  const host = document.getElementById('bg-canvas-host');
-  if (!host) return;
+  window.__initBgWebGL = function () {
+    const THREE = window.THREE;
+    if (!THREE) {
+      console.warn('[bg] Three.js not loaded');
+      return;
+    }
+
+    const host = document.getElementById('bg-canvas-host');
+    if (!host || host.dataset.bgWebgl) return;
+    host.dataset.bgWebgl = '1';
 
   const scene = new THREE.Scene();
   const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
@@ -545,4 +550,7 @@
     updateFromScroll();
     kickRender();
   });
+  };
+
+  if (window.THREE) window.__initBgWebGL();
 })();

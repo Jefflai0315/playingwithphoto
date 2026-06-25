@@ -331,10 +331,21 @@
     return p;
   }
 
-  async function preload() {
+  async function preloadAll() {
     const all = new Set();
     STACKS.forEach(s => (s.images || []).forEach(u => all.add(u)));
     await Promise.all([...all].map(loadTexture));
+  }
+
+  async function preload() {
+    const hero = STACKS[0];
+    if (hero?.images?.length) {
+      await Promise.all(hero.images.map(loadTexture));
+    }
+    updateFromScroll();
+    animate();
+    const idle = window.requestIdleCallback || ((cb) => setTimeout(cb, 1200));
+    idle(() => { preloadAll().catch(() => {}); });
   }
 
   // Get textures + sizes for a stack
@@ -501,8 +512,5 @@
   }
   window.addEventListener('resize', onResize);
 
-  preload().then(() => {
-    updateFromScroll();
-    animate();
-  });
+  preload();
 })();

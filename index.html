@@ -8,6 +8,8 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" href="frames/f_001.webp" as="image" fetchpriority="high">
+<link rel="preload" href="hero-bg.png" as="image" fetchpriority="high">
 <link rel="stylesheet" href="creation.css?v=4">
 <link rel="stylesheet" href="hero-scrub.css">
 <link rel="stylesheet" href="vision-scrub.css?v=3">
@@ -2687,10 +2689,29 @@
     font-style: normal;
     color: #ffd88a;
   }
+  .meta-keepsake-duo {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: clamp(16px, 4vw, 28px);
+    margin-top: 8px;
+    width: min(560px, 92vw);
+  }
+  .meta-keepsake-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    flex: 1;
+    min-width: 0;
+  }
+  .meta-keepsake-item--hero {
+    flex: 1.15;
+  }
   .meta-keepsake-frame {
-    margin-top: 10px;
+    width: 100%;
     max-width: 280px;
-    width: 72%;
     border-radius: 14px;
     overflow: hidden;
     box-shadow:
@@ -2700,11 +2721,36 @@
     transform: rotate(-1.2deg);
     transition: transform .6s ease;
   }
+  .meta-keepsake-item--hero .meta-keepsake-frame {
+    aspect-ratio: 1 / 1;
+    max-width: 240px;
+  }
+  .meta-keepsake-item--hero .meta-keepsake-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 42%;
+  }
+  .meta-keepsake-item--alt .meta-keepsake-frame {
+    max-width: 220px;
+    transform: rotate(1.4deg);
+    box-shadow:
+      0 20px 44px rgba(0,0,0,.4),
+      0 0 28px rgba(255,216,138,.1),
+      0 0 0 1px rgba(255,216,138,.12);
+  }
   .meta-keepsake-frame:hover { transform: rotate(0deg) translateY(-4px); }
   .meta-keepsake-frame img {
     display: block;
     width: 100%;
     height: auto;
+  }
+  .meta-keepsake-label {
+    font-family: var(--ff-mono);
+    font-size: 9px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: rgba(255,216,138,.75);
   }
   .meta-keepsake-caption {
     font-family: var(--ff-display);
@@ -2810,7 +2856,15 @@
     .meta-stage { grid-template-columns: 1fr; }
     .meta-arrow { transform: rotate(90deg); }
     .meta-keepsake { margin-top: 56px; gap: 14px; }
-    .meta-keepsake-frame { transform: rotate(-1deg); }
+    .meta-keepsake-duo {
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+    .meta-keepsake-item--hero,
+    .meta-keepsake-item--alt { flex: none; width: min(280px, 78vw); }
+    .meta-keepsake-item--alt .meta-keepsake-frame { max-width: none; transform: rotate(0.8deg); }
+    .meta-keepsake-frame { transform: rotate(-0.8deg); }
     .meta-keepsake-caption { font-size: 15px; padding: 0 8px; }
     .reel-frames { grid-template-columns: repeat(2, 1fr); }
     .reel-spacer { height: 200vh; }
@@ -3683,10 +3737,12 @@
   }
   .animation-stage::before { top: 0; }
   .animation-stage::after { bottom: 0; transform: rotate(180deg); }
-  .animation-stage canvas {
+  .animation-stage canvas,
+  .animation-stage .animation-preview-video {
     display: block;
     width: 100%;
     aspect-ratio: 16 / 10;
+    object-fit: cover;
     background: radial-gradient(circle at center, #342016, #080403 70%);
   }
   .animation-badge {
@@ -3970,6 +4026,21 @@
   }
   .addon-card.guestbook-addon h3,
   .addon-card.guestbook-addon .addon-price {
+    text-shadow: 0 2px 12px rgba(0,0,0,.45);
+  }
+  .addon-card.keepsake-addon {
+    background:
+      linear-gradient(135deg, rgba(12,6,4,.78), rgba(42,20,10,.62)),
+      url("photos/addons/collector-cards.png") center / cover;
+    color: var(--cream);
+    box-shadow: 0 24px 50px rgba(42,20,10,.26);
+  }
+  .addon-card.keepsake-addon p,
+  .addon-card.keepsake-addon .addon-note {
+    color: rgba(244,234,213,.78);
+  }
+  .addon-card.keepsake-addon h3,
+  .addon-card.keepsake-addon .addon-price {
     text-shadow: 0 2px 12px rgba(0,0,0,.45);
   }
   .addon-card p {
@@ -4412,7 +4483,7 @@
         <path d="M150 1 H299 V399 H1 V1 H150" pathLength="100"></path>
       </svg>
     </div>
-    <div class="kicker">Singapore · vintage booth, AI inside</div>
+    <div class="kicker">Singapore · vintage booth + AI</div>
     <h1 class="hero-big">
       The <em>Photobooth</em><br/>Edition
     </h1>
@@ -4422,12 +4493,8 @@
       <circle cx="60" cy="5" r=".8" fill="currentColor" opacity=".7"/>
     </svg>
     <p class="hero-pitch">
-      <strong>Looks like a vintage strip. Develops with AI.</strong>
-      Classic film filters <em>and</em> painter styles on every four-pose roll — printed + digital in about a minute · from <strong>S$750</strong>.
+      Film filters &amp; painter styles on every strip · from <strong>S$750</strong>.
     </p>
-    <div class="meta-line">
-      <span>By <em>Jeff</em></span><span>·</span><span>Singapore &amp; JB</span>
-    </div>
     <div class="hero-ctas">
       <a href="#book" class="btn-edition primary btn-hero-book">Book the booth</a>
       <a href="#pricing" class="btn-edition">See packages
@@ -4438,11 +4505,6 @@
       <button type="button" data-lead-audience="wedding" data-lead-event="Wedding" data-lead-package="keepsake" data-lead-scroll="#samples">Wedding</button>
       <button type="button" data-lead-audience="corporate" data-lead-event="Corporate / brand" data-lead-package="activation" data-lead-scroll="#samples">Corporate</button>
       <button type="button" data-lead-audience="birthday" data-lead-event="Birthday" data-lead-package="keepsake" data-lead-scroll="#samples">Birthday</button>
-    </div>
-    <div class="hero-jumps">
-      <a href="#vision">The vision</a>
-      <a href="#spark">AI examples</a>
-      <a href="#demo">Try film live</a>
     </div>
     </div>
   </div>
@@ -4470,25 +4532,25 @@
     <div class="occasion-grid reveal" role="group" aria-label="Event type">
       <button type="button" class="occasion-card" data-lead-audience="corporate" data-lead-event="Corporate / brand" data-lead-package="activation" data-lead-scroll="#samples">
         <div class="occasion-card-media">
-          <img src="photos/occasions/corporate.png" alt="Branded corporate photobooth strip" width="400" height="500" loading="eager" />
+          <img src="photos/occasions/corporate.png" alt="Branded corporate photobooth strip" width="400" height="500" loading="lazy" decoding="async" />
         </div>
         <span class="occasion-card-label">Corporate &amp; Brands <span class="occasion-card-arrow" aria-hidden="true">→</span></span>
       </button>
       <button type="button" class="occasion-card" data-lead-audience="wedding" data-lead-event="Wedding" data-lead-package="keepsake" data-lead-scroll="#samples">
         <div class="occasion-card-media">
-          <img src="photos/occasions/wedding.png" alt="Wedding photobooth strip with custom illustration" width="400" height="500" loading="eager" />
+          <img src="photos/occasions/wedding.png" alt="Wedding photobooth strip with custom illustration" width="400" height="500" loading="lazy" decoding="async" />
         </div>
         <span class="occasion-card-label">Wedding <span class="occasion-card-arrow" aria-hidden="true">→</span></span>
       </button>
       <button type="button" class="occasion-card" data-lead-audience="birthday" data-lead-event="Birthday" data-lead-package="keepsake" data-lead-scroll="#samples">
         <div class="occasion-card-media">
-          <img src="photos/occasions/birthday.png" alt="Birthday party photobooth strip" width="400" height="500" loading="eager" />
+          <img src="photos/occasions/birthday.png" alt="Birthday party photobooth strip" width="400" height="500" loading="lazy" decoding="async" />
         </div>
         <span class="occasion-card-label">Birthday &amp; Party <span class="occasion-card-arrow" aria-hidden="true">→</span></span>
       </button>
       <button type="button" class="occasion-card" data-lead-event="Other" data-lead-package="undecided" data-lead-scroll="#book">
         <div class="occasion-card-media occasion-card-media--collage">
-          <img src="photos/occasions/undecided.png" alt="Not sure yet? We’ll help you choose." width="400" height="500" loading="eager" />
+          <img src="photos/occasions/undecided.png" alt="Not sure yet? We’ll help you choose." width="400" height="500" loading="lazy" decoding="async" />
         </div>
         <span class="occasion-card-label">Not sure yet? <span class="occasion-card-arrow" aria-hidden="true">→</span></span>
       </button>
@@ -4628,7 +4690,7 @@
         <figcaption>After · <span id="sparkAfterName">Swirl sky</span></figcaption>
         <div class="spark-frame">
           <div class="spark-img spark-painting" id="sparkAfterImg"></div>
-          <video id="sparkAfterVideo" class="spark-after-video" muted loop playsinline webkit-playsinline preload="auto" aria-label="AI style animation preview"></video>
+          <video id="sparkAfterVideo" class="spark-after-video" muted loop playsinline webkit-playsinline preload="none" aria-label="AI style animation preview"></video>
           <div class="spark-signature" id="sparkSignature">— bold golden brushwork</div>
         </div>
       </figure>
@@ -4751,11 +4813,22 @@
 
     <div class="meta-keepsake reveal">
       <span class="meta-keepsake-eyebrow">…and then it becomes this</span>
-      <h3 class="meta-keepsake-title">A real <em>keepsake</em> — gold frame, in your hand.</h3>
-      <div class="meta-keepsake-frame">
-        <img src="photos/reel/jenmike-keepsake.png" alt="Van Gogh-style keepsake portrait of Jen and Mike in an ornate gold frame" loading="lazy" />
+      <h3 class="meta-keepsake-title">A real <em>keepsake</em> — in your hand.</h3>
+      <div class="meta-keepsake-duo">
+        <figure class="meta-keepsake-item meta-keepsake-item--hero">
+          <div class="meta-keepsake-frame">
+            <img src="photos/reel/jenmike-keepsake.png" alt="Van Gogh-style keepsake portrait of Jen and Mike in an ornate gold frame" loading="lazy" />
+          </div>
+          <figcaption class="meta-keepsake-label">Gold frame portrait</figcaption>
+        </figure>
+        <figure class="meta-keepsake-item meta-keepsake-item--alt">
+          <div class="meta-keepsake-frame">
+            <img src="photos/addons/collector-cards.png" alt="Personalised holographic collector cards with custom couple illustration" loading="lazy" />
+          </div>
+          <figcaption class="meta-keepsake-label">Collector cards</figcaption>
+        </figure>
       </div>
-      <p class="meta-keepsake-caption">Any painterly strip can become a hand-finished mini portrait. One for the album, one for the mantelpiece.</p>
+      <p class="meta-keepsake-caption">Any painterly strip can become a hand-finished mini portrait — or a personalised collector card. One for the album, one for the mantelpiece.</p>
     </div>
   </div>
 </section>
@@ -5186,7 +5259,17 @@
 
     <div class="animation-grid reveal">
       <div class="animation-stage">
-        <canvas id="aiAnimationCanvas" width="960" height="600" aria-label="AI animation example preview"></canvas>
+        <video
+          id="aiAnimationVideo"
+          class="animation-preview-video"
+          src="photos/addons/ai-animation.mp4"
+          muted
+          loop
+          playsinline
+          webkit-playsinline
+          preload="none"
+          aria-label="AI animation example preview"
+        ></video>
         <span class="animation-badge">example loop · AI motion</span>
       </div>
 
@@ -5320,10 +5403,12 @@
         <div class="addon-price"><span>+S$20</span><small>activation</small></div>
       </article>
 
-      <article class="addon-card" style="--r:-1deg;" data-addon-id="keychain" role="button" tabindex="0" title="Add to enquiry form">
-        <h3>Keychain Making</h3>
-        <p>Turn guest portraits into physical keychains for the event table.</p>
-        <div class="addon-price"><span>S$330</span><small>up to 100 keychains</small></div>
+      <article class="addon-card keepsake-addon" style="--r:-1deg;" data-addon-id="keychain" role="button" tabindex="0" title="Add to enquiry form">
+        <h3>Keychains or Collector Cards</h3>
+        <p>Physical keepsakes from guest portraits — acrylic keychains for the party table, or personalised holographic collector cards with custom art, story stats, and event details.</p>
+        <div class="addon-price"><span>S$330</span><small>up to 100 pieces</small></div>
+        <span class="addon-note">your choice of format</span>
+        <div class="addon-scribble" aria-hidden="true">keepsake</div>
       </article>
     </div>
   </div>
@@ -5644,9 +5729,9 @@
                 <span class="book-addon-text"><strong>Email &amp; SMS Sharing</strong><small>+S$20 activation</small></span>
               </label>
               <label class="book-addon-pick">
-                <input type="checkbox" name="addons" value="Keychain Making (S$330, up to 100)" data-addon-id="keychain" />
+                <input type="checkbox" name="addons" value="Keychains or Collector Cards (S$330, up to 100)" data-addon-id="keychain" />
                 <span class="book-addon-check" aria-hidden="true"></span>
-                <span class="book-addon-text"><strong>Keychain Making</strong><small>S$330 · up to 100 keychains</small></span>
+                <span class="book-addon-text"><strong>Keychains or Collector Cards</strong><small>S$330 · up to 100 pieces</small></span>
               </label>
             </div>
           </details>
@@ -5820,16 +5905,16 @@
   })();
 </script>
 <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
-<script src="photos.config.js?v=11"></script>
+<script src="photos.config.js?v=12"></script>
 <script src="analytics.js?v=1"></script>
-<script src="bg.js?v=1"></script>
-<script src="app.js?v=13"></script>
+<script src="bg.js?v=2"></script>
+<script src="app.js?v=15"></script>
 <script type="module" src="demo-gif.js?v=9"></script>
-<script src="enhancements.js?v=6"></script>
+<script src="enhancements.js?v=7"></script>
 <script src="creation.js?v=11"></script>
-<script src="hero-scrub.js?v=2"></script>
-<script src="vision-scrub.js?v=8"></script>
-<script src="booth-scrub.js?v=20"></script>
+<script src="hero-scrub.js?v=4"></script>
+<script src="vision-scrub.js?v=10"></script>
+<script src="booth-scrub.js?v=22"></script>
 <script src="sample-wall.js?v=3"></script>
 
 </body>

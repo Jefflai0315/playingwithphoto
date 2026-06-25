@@ -62,12 +62,7 @@ window.PHOTO_CONFIG = {
       "spark/jenmike-vangogh.png",
       "reel/jenmike-keepsake.png",
     ],
-    videos: [
-      null,
-      null,
-      "spark/jenmike-vangogh.mp4",
-      null,
-    ],
+    videos: [null, null, "spark/jenmike-vangogh.mp4", null],
   },
 
   // ─── VISION SCRUB (The idea section) ────────────────────────
@@ -75,7 +70,7 @@ window.PHOTO_CONFIG = {
   //   ffmpeg -i photos/vision/vision-scrub.mp4 -vf "fps=12,scale=960:-2" -c:v libwebp -quality 82 photos/vision/frames/v_%04d.webp
   vision: {
     video: "vision/vision-scrub.mp4",
-    frameCount: 61,
+    frameCount: 59,
     framePrefix: "vision/frames/v_",
     frameExt: "webp",
   },
@@ -205,18 +200,58 @@ window.PHOTO_CONFIG = {
   looks: {
     filmBefore: "spark/jenmike.png",
     painterly: {
-      vangogh: { label: "Swirl sky", swatch: "#f4b731", subtitle: "Bold golden brushwork" },
-      monet: { label: "Garden soft", swatch: "#a7c8e8", subtitle: "Dreamy pastel light" },
-      picasso: { label: "Cubist bold", swatch: "#d87a3c", subtitle: "Angles & warm colour" },
-      warhol: { label: "Pop colour", swatch: "#ff2d88", subtitle: "Screen-print vivid" },
-      hokusai: { label: "Ink & wave", swatch: "#1e5aa8", subtitle: "Woodblock drama" },
+      vangogh: {
+        label: "Swirl sky",
+        swatch: "#f4b731",
+        subtitle: "Bold golden brushwork",
+      },
+      monet: {
+        label: "Garden soft",
+        swatch: "#a7c8e8",
+        subtitle: "Dreamy pastel light",
+      },
+      picasso: {
+        label: "Cubist bold",
+        swatch: "#d87a3c",
+        subtitle: "Angles & warm colour",
+      },
+      warhol: {
+        label: "Pop colour",
+        swatch: "#ff2d88",
+        subtitle: "Screen-print vivid",
+      },
+      hokusai: {
+        label: "Ink & wave",
+        swatch: "#1e5aa8",
+        subtitle: "Woodblock drama",
+      },
     },
     film: {
-      kodak: { label: "70s Kodak", swatch: "#c38a52", image: "styles/summerof78.png" },
-      bw: { label: "B&W classic", swatch: "#5a5a5a", image: "styles/classic.png" },
-      polaroid: { label: "Polaroid", swatch: "#e8dcc8", image: "styles/saycheese.png" },
-      kodachrome: { label: "Kodachrome", swatch: "#d4a056", image: "styles/goldenhour.png" },
-      sepia: { label: "Studio sepia", swatch: "#8a6a4a", image: "styles/portraitno4.png" },
+      kodak: {
+        label: "70s Kodak",
+        swatch: "#c38a52",
+        image: "styles/summerof78.png",
+      },
+      bw: {
+        label: "B&W classic",
+        swatch: "#5a5a5a",
+        image: "styles/classic.png",
+      },
+      polaroid: {
+        label: "Polaroid",
+        swatch: "#e8dcc8",
+        image: "styles/saycheese.png",
+      },
+      kodachrome: {
+        label: "Kodachrome",
+        swatch: "#d4a056",
+        image: "styles/goldenhour.png",
+      },
+      sepia: {
+        label: "Studio sepia",
+        swatch: "#8a6a4a",
+        image: "styles/portraitno4.png",
+      },
     },
   },
 

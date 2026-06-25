@@ -10,7 +10,8 @@
   if (!hero) { console.warn('[hero-scrub] no .hero-scrub element found'); return; }
   hero.classList.add('is-loading');
   const loadStartedAt = performance.now();
-  const MIN_LOADER_MS = 1000;
+  const MIN_LOADER_MS = 280;
+  const MIN_FRAMES_TO_START = 10;
 
   const canvas = document.getElementById('heroScrubCanvas');
   const dissolveCanvas = document.getElementById('heroDissolveCanvas');
@@ -115,18 +116,29 @@
   // ----- Preload frames -----
   const frames = new Array(FRAME_COUNT);
   let loadedCount = 0;
+  let allFramesLoaded = false;
   function preload() {
     return new Promise((resolve) => {
+      let started = false;
+      const tryStart = (force) => {
+        if (started) return;
+        if (force || loadedCount >= MIN_FRAMES_TO_START || loadedCount === FRAME_COUNT) {
+          started = true;
+          resolve();
+        }
+      };
       for (let i = 0; i < FRAME_COUNT; i++) {
         const img = new Image();
         img.onload = img.onerror = () => {
           loadedCount++;
           frames[i] = img;
           if (loadedCount === 1) drawFrame(0);
-          if (loadedCount === FRAME_COUNT) resolve();
+          tryStart(false);
+          if (loadedCount === FRAME_COUNT) allFramesLoaded = true;
         };
         img.src = FRAME_PATH(i + 1);
       }
+      setTimeout(() => tryStart(loadedCount > 0), 150);
     });
   }
 
@@ -143,12 +155,20 @@
     });
   }
 
-  // Mobile: pull back from cover so more of each frame is visible (less crop).
+  // Mobile: fit full frame inside viewport (less crop / zoom).
   function fgScaleMultiplier() {
     const w = window.innerWidth;
-    if (w <= 400) return 0.62;
-    if (w <= 720) return 0.74;
+    if (w <= 400) return 0.78;
+    if (w <= 720) return 0.86;
     return 1;
+  }
+
+  function frameScale(cw, ch, iw, ih) {
+    const isNarrow = window.innerWidth <= 720;
+    if (isNarrow) {
+      return Math.min(cw / iw, ch / ih) * fgScaleMultiplier();
+    }
+    return Math.max(cw / iw, ch / ih) * fgScaleMultiplier();
   }
 
   function fgParallaxStrength() {
@@ -165,8 +185,7 @@
     ctx.clearRect(0, 0, cw, ch);
     const iw = img.naturalWidth || img.width;
     const ih = img.naturalHeight || img.height;
-    const coverScale = Math.max(cw / iw, ch / ih);
-    const scale = coverScale * fgScaleMultiplier();
+    const scale = frameScale(cw, ch, iw, ih);
     const dw = iw * scale;
     const dh = ih * scale;
     const dx = (cw - dw) / 2;
@@ -418,7 +437,7 @@
       hero.classList.remove('is-loading');
       hero.classList.add('is-ready');
     }, waitMs);
-    console.log('[hero-scrub] ready — 61 frames loaded');
+    console.log(`[hero-scrub] interactive — ${loadedCount}/${FRAME_COUNT} frames`);
   });
   const checkFirst = setInterval(() => {
     if (frames[0]) {

@@ -603,6 +603,28 @@
     border-color: rgba(166,77,77,.35);
     background: linear-gradient(165deg, #fffdf8 0%, #faf4ea 100%);
   }
+  .addon-card--keepsake {
+    background:
+      linear-gradient(135deg, rgba(12,6,4,.82), rgba(42,20,10,.68)),
+      url("../photos/addons/collector-cards.png") center / cover;
+    color: var(--cream);
+    border-color: rgba(255,216,138,.22);
+  }
+  .addon-card--keepsake p,
+  .addon-card--keepsake .price small {
+    color: rgba(244,234,213,.75);
+  }
+  .addon-card--keepsake h3,
+  .addon-card--keepsake .price {
+    text-shadow: 0 2px 10px rgba(0,0,0,.4);
+  }
+  .addon-pick-input:checked + .addon-card--keepsake {
+    background:
+      linear-gradient(135deg, rgba(12,6,4,.88), rgba(42,20,10,.75)),
+      url("../photos/addons/collector-cards.png") center / cover;
+    color: var(--cream);
+    border-color: var(--rust);
+  }
   .addon-card-head {
     display: flex;
     align-items: flex-start;
@@ -1243,15 +1265,15 @@
         </span>
       </label>
       <label class="addon-pick">
-        <input class="addon-pick-input" type="checkbox" name="addons" value="Keychain Making (S$330, up to 100)" data-addon-id="keychain" />
-        <span class="addon-card">
+        <input class="addon-pick-input" type="checkbox" name="addons" value="Keychains or Collector Cards (S$330, up to 100)" data-addon-id="keychain" />
+        <span class="addon-card addon-card--keepsake">
           <div class="addon-card-head">
-            <h3>Keychain Making</h3>
+            <h3>Keychains or Collector Cards</h3>
             <span class="addon-check" aria-hidden="true"></span>
           </div>
-          <p>Turn guest portraits into physical keychains for the event table.</p>
+          <p>Acrylic keychains for the party table, or personalised holographic collector cards with custom art and story stats.</p>
           <div class="addon-card-foot">
-            <div class="price">S$330 <small>up to 100 keychains</small></div>
+            <div class="price">S$330 <small>up to 100 pieces</small></div>
           </div>
         </span>
       </label>

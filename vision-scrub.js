@@ -8,9 +8,10 @@
     window.PhotoLib?.visionFramePath?.(i) ||
     `photos/vision/frames/v_${String(i).padStart(4, '0')}.webp`;
 
-  const FRAME_ZONE = 0.73;   // frames finish slightly after cards begin
+  const FRAME_ZONE = 0.88;   // scrub runs longer — buttons appear well before this
   const COPY_OUT = 0.48;
-  const COPY_IN = 0.65;      // cards start 5% earlier than before (was 0.70)
+  const OUTRO_IN = 0.48;     // layer cards fade in ~mid-scroll
+  const HEADLINE_IN = 0.54;  // title follows shortly after cards
   const EXIT_START = 0.86;
 
   const runway = document.querySelector('.vision-scrub');
@@ -28,6 +29,7 @@
   const frames = new Array(FRAME_COUNT);
   let loadedCount = 0;
   let started = false;
+  let preloadStarted = false;
 
   let targetIdx = 0;
   let currentIdx = 0;
@@ -39,18 +41,21 @@
   function headlineOpacity(p) {
     if (p <= 0.1) return 1;
     if (p < COPY_OUT) return Math.max(0, 1 - (p - 0.1) / 0.22);
-    if (p < COPY_IN) return 0;
-    if (p < 0.82) return Math.min(1, (p - COPY_IN) / 0.14);
+    if (p < HEADLINE_IN) return 0;
+    if (p < 0.78) return Math.min(1, (p - HEADLINE_IN) / 0.12);
     return 1;
   }
 
   function outroOpacity(p) {
-    if (p < COPY_IN) return 0;
-    if (p < 0.82) return Math.min(1, (p - COPY_IN) / 0.14);
+    if (p < OUTRO_IN) return 0;
+    if (p < 0.72) return Math.min(1, (p - OUTRO_IN) / 0.12);
     return 1;
   }
 
-  function preload() {
+  function beginPreload() {
+    if (preloadStarted) return;
+    preloadStarted = true;
+
     for (let i = 0; i < FRAME_COUNT; i++) {
       const img = new Image();
       img.onload = img.onerror = () => {
@@ -116,13 +121,13 @@
       const o = outroOpacity(p);
       outro.style.opacity = o;
       outro.style.transform = `translateY(${(1 - o) * 22}px)`;
-      outro.classList.toggle('is-visible', p >= COPY_IN);
+      outro.classList.toggle('is-visible', p >= OUTRO_IN);
     }
 
     if (bar) bar.style.width = `${Math.min(1, p / FRAME_ZONE) * 100}%`;
 
     if (hint) {
-      const hintO = p < 0.08 ? 0 : p < COPY_IN ? 0.9 : Math.max(0, 1 - (p - COPY_IN) / 0.1);
+      const hintO = p < 0.08 ? 0 : p < OUTRO_IN ? 0.9 : Math.max(0, 1 - (p - OUTRO_IN) / 0.1);
       hint.style.opacity = hintO;
     }
 
@@ -157,5 +162,14 @@
   });
   window.addEventListener('scroll', updateScrub, { passive: true });
 
-  preload();
+  const observer = new IntersectionObserver(
+    (entries) => {
+      if (entries.some((e) => e.isIntersecting)) {
+        observer.disconnect();
+        beginPreload();
+      }
+    },
+    { rootMargin: '100% 0px' }
+  );
+  observer.observe(runway);
 })();

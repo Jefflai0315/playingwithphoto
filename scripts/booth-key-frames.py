@@ -112,8 +112,8 @@ def main() -> None:
         raise SystemExit(f"No frames found in {FRAMES_DIR}")
 
     for i, src in enumerate(sources, 1):
-        dst = FRAMES_DIR / f"b_{src.stem.replace('src_', '')}.png"
-        key_frame(Image.open(src)).save(dst, optimize=True)
+        dst = FRAMES_DIR / f"b_{src.stem.replace('src_', '')}.webp"
+        key_frame(Image.open(src)).save(dst, "WEBP", quality=85, method=6)
         if i % 20 == 0 or i == len(sources):
             print(f"keyed {i}/{len(sources)}")
 

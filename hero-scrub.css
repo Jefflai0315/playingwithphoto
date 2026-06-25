@@ -415,10 +415,8 @@
 @media (max-width: 720px) {
   .hero-scrub { height: 200vh; }
   .hero-fg-layer {
-    top: 8%;
-    bottom: 28%;
-    left: 6%;
-    right: 6%;
+    top: 4%;
+    bottom: 20%;
     width: auto;
     height: auto;
   }

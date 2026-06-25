@@ -155,18 +155,18 @@
     });
   }
 
-  // Mobile: fit full frame inside viewport (less crop / zoom).
+  // Mobile: larger cover-fit (~30% bigger than previous contain fit).
   function fgScaleMultiplier() {
     const w = window.innerWidth;
-    if (w <= 400) return 0.78;
-    if (w <= 720) return 0.86;
+    if (w <= 400) return 0.92;
+    if (w <= 720) return 1;
     return 1;
   }
 
   function frameScale(cw, ch, iw, ih) {
     const isNarrow = window.innerWidth <= 720;
     if (isNarrow) {
-      return Math.min(cw / iw, ch / ih) * fgScaleMultiplier();
+      return Math.max(cw / iw, ch / ih) * fgScaleMultiplier();
     }
     return Math.max(cw / iw, ch / ih) * fgScaleMultiplier();
   }

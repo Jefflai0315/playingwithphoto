@@ -604,26 +604,58 @@
     background: linear-gradient(165deg, #fffdf8 0%, #faf4ea 100%);
   }
   .addon-card--keepsake {
-    background:
-      linear-gradient(135deg, rgba(12,6,4,.82), rgba(42,20,10,.68)),
-      url("../photos/addons/collector-cards.png") center / cover;
-    color: var(--cream);
-    border-color: rgba(255,216,138,.22);
+    background: var(--cream);
+    color: var(--ink);
+    border-color: rgba(42,26,12,.16);
   }
   .addon-card--keepsake p,
   .addon-card--keepsake .price small {
-    color: rgba(244,234,213,.75);
+    color: var(--ink-2);
   }
   .addon-card--keepsake h3,
   .addon-card--keepsake .price {
-    text-shadow: 0 2px 10px rgba(0,0,0,.4);
+    text-shadow: none;
   }
   .addon-pick-input:checked + .addon-card--keepsake {
-    background:
-      linear-gradient(135deg, rgba(12,6,4,.88), rgba(42,20,10,.75)),
-      url("../photos/addons/collector-cards.png") center / cover;
-    color: var(--cream);
+    background: #fffdf8;
+    color: var(--ink);
     border-color: var(--rust);
+  }
+  .addon-expand {
+    margin-top: 8px;
+    border-top: 1px dashed rgba(42,26,12,.18);
+    padding-top: 8px;
+  }
+  .addon-expand summary {
+    font-family: var(--ff-mono);
+    font-size: 9px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--rust);
+    cursor: pointer;
+    list-style: none;
+  }
+  .addon-expand summary::-webkit-details-marker { display: none; }
+  .addon-thumbs {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .addon-thumbs img {
+    width: 56px;
+    height: 56px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid rgba(42,26,12,.14);
+  }
+  .custom-theme-note {
+    font-family: var(--ff-mono);
+    font-size: 9px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin-top: 6px;
+    display: block;
   }
   .addon-card-head {
     display: flex;
@@ -1272,6 +1304,14 @@
             <span class="addon-check" aria-hidden="true"></span>
           </div>
           <p>Acrylic keychains for the party table, or personalised holographic collector cards with custom art and story stats.</p>
+          <details class="addon-expand" onclick="event.stopPropagation()">
+            <summary>See examples</summary>
+            <div class="addon-thumbs">
+              <img src="../photos/reel/jenmike-keepsake.png" alt="Gold frame portrait example" loading="lazy" width="56" height="56" />
+              <img src="../photos/addons/collector-cards.png" alt="Collector card example" loading="lazy" width="56" height="56" />
+            </div>
+          </details>
+          <span class="custom-theme-note">Custom themes welcome — tell us your idea</span>
           <div class="addon-card-foot">
             <div class="price">S$330 <small>up to 100 pieces</small></div>
           </div>
@@ -1314,7 +1354,7 @@
   <div class="wrap">
     <p class="eyebrow">Book</p>
     <h2>Tell me about <em>your event</em></h2>
-    <p style="color:var(--ink-2);">Reply within 24 hours. Serving Singapore and Johor Bahru.</p>
+    <p style="color:var(--ink-2);">Reply within 2 hours. Serving Singapore and Johor Bahru.</p>
 
     <div class="book-grid">
       <div class="contact-blocks">

@@ -370,3 +370,18 @@ document.head.appendChild(claudeStyle);
 
   io.observe(video);
 })();
+
+// ===== Keepsake burst sparkle on scroll-in =====
+(() => {
+  const block = document.getElementById('metaKeepsake');
+  if (!block || !('IntersectionObserver' in window)) return;
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (e.isIntersecting) {
+        block.classList.add('is-in');
+        io.unobserve(block);
+      }
+    });
+  }, { threshold: 0.35 });
+  io.observe(block);
+})();

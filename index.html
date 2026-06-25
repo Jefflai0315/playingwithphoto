@@ -285,6 +285,8 @@
     border-color: rgba(244,234,213,.16);
     background: var(--ink);
     padding: clamp(8px, 1.8vw, 12px) 0;
+    position: relative;
+    z-index: 1;
   }
   .story-group--film .ticker-track .sep { color: var(--highlight); }
   .story-group--trust .section-bridge { padding-top: 72px; }
@@ -435,7 +437,39 @@
     font-size: 14px;
     color: var(--ink-2);
   }
-  .occasion-foot a { color: var(--rust); }
+  .occasion-foot a { color: var(--rust); font-weight: 500; }
+  .occasion-foot.in {
+    animation: occasionFootIn .9s cubic-bezier(.2,.8,.2,1) both;
+  }
+  @keyframes occasionFootIn {
+    from { opacity: 0; transform: translateY(10px); filter: blur(4px); }
+    to { opacity: 1; transform: none; filter: none; }
+  }
+  .occasion-foot .spark {
+    display: inline-block;
+    color: var(--rust);
+    animation: sparklePop 1.4s ease-in-out infinite;
+  }
+  @keyframes sparklePop {
+    0%, 100% { opacity: .35; transform: scale(.9); }
+    50% { opacity: 1; transform: scale(1.15); }
+  }
+  .custom-theme-note {
+    font-family: var(--ff-mono);
+    font-size: 9px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--rust-2);
+    margin-top: 8px;
+    display: block;
+  }
+  .spark-chapter .section-head .custom-theme-note {
+    margin-top: 10px;
+    color: rgba(255,216,138,.8);
+  }
+  .vision-layer-card--ai .custom-theme-note {
+    color: rgba(42,26,12,.58);
+  }
 
   .hero-occasions {
     display: flex;
@@ -741,12 +775,52 @@
       bottom: calc(76px + env(safe-area-inset-bottom, 0px));
     }
   }
-  .ticket-booklet[data-audience] .ticket { transition: opacity .25s, transform .25s; }
+  .ticket-booklet[data-audience] .ticket { transition: opacity .25s, transform .25s, order .25s; }
+  .ticket-booklet.is-ranked {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    gap: 14px;
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+  }
+  .ticket-booklet.is-ranked .ticket-grid-weddings,
+  .ticket-booklet.is-ranked .ticket-grid-brands {
+    display: contents;
+  }
+  .ticket-booklet.is-ranked .ticket-brands-label {
+    display: none;
+  }
+  .ticket-booklet.is-ranked .ticket.is-pick {
+    order: -1;
+    flex: 1 1 100%;
+    width: 100%;
+    max-width: 100%;
+    opacity: 1 !important;
+    transform: rotate(0deg) translateY(-8px) scale(1.03) !important;
+    z-index: 4;
+  }
+  .ticket-booklet.is-ranked .ticket.is-dim {
+    flex: 1 1 calc((100% - 14px) / 2);
+    max-width: calc((100% - 14px) / 2);
+    min-width: 0;
+    opacity: .5 !important;
+    transform: scale(.9) rotate(var(--r, 0deg)) !important;
+    z-index: 1;
+  }
+  .ticket-booklet.is-ranked[data-audience="corporate"] .ticket.t-activation.is-pick {
+    order: -2;
+  }
+  .ticket-booklet.is-ranked[data-audience="corporate"] .ticket.t-showpiece.is-pick {
+    order: -1;
+  }
   .ticket-booklet[data-audience="wedding"] .ticket:not(.t-keepsake):not(.t-showpiece):not(.t-prelude) { opacity: .45; }
   .ticket-booklet[data-audience="corporate"] .ticket:not(.t-activation):not(.t-showpiece) { opacity: .45; }
   .ticket-booklet[data-audience="birthday"] .ticket:not(.t-keepsake):not(.t-prelude) { opacity: .45; }
   .ticket-booklet[data-audience="wedding"] .ticket.t-keepsake,
   .ticket-booklet[data-audience="corporate"] .ticket.t-activation,
+  .ticket-booklet[data-audience="corporate"] .ticket.t-showpiece,
   .ticket-booklet[data-audience="birthday"] .ticket.t-keepsake {
     opacity: 1;
     transform: scale(1.02);
@@ -1226,19 +1300,30 @@
   .gallery-chapter .section-head p { color: rgba(244,234,213,.88); }
   .gallery-chapter .eyebrow { color: var(--highlight); }
   .filmstrip-wrap {
-    overflow: hidden;
+    overflow-x: auto;
+    overflow-y: hidden;
     padding: 20px 0;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x proximity;
+    scrollbar-width: thin;
+  }
+  .filmstrip-wrap.is-auto .filmstrip {
+    animation: scrollFilm 50s linear infinite;
+  }
+  .filmstrip-wrap:not(.is-auto) .filmstrip {
+    animation: none;
+    transform: none !important;
   }
   .filmstrip {
     display: flex;
     gap: 22px;
-    animation: scrollFilm 50s linear infinite;
     padding: 0 22px;
+    width: max-content;
   }
-  .filmstrip:hover { animation-play-state: paused; }
   @keyframes scrollFilm { to { transform: translateX(-50%); } }
-
+  .filmstrip-wrap.is-auto:hover .filmstrip { animation-play-state: paused; }
   .polaroid {
+    scroll-snap-align: start;
     flex: 0 0 auto;
     width: 280px;
     background: var(--cream);
@@ -1893,7 +1978,17 @@
   .demo .status.hide { opacity: 0; pointer-events: none; }
   .demo .status h4 { font-family: var(--ff-display); font-style: italic; font-size: 32px; font-weight: 400; margin-bottom: 12px; color: var(--cream);}
   .demo .status p { color: rgba(244,234,213,.7); font-size: 14px; margin: 0 0 24px; max-width: 300px;}
-  .demo .status .btn { background: var(--highlight); color: var(--ink); border-color: var(--highlight); box-shadow: 0 4px 0 var(--rust); }
+  .demo .status .btn {
+    background: var(--highlight);
+    color: var(--ink);
+    border-color: var(--highlight);
+    box-shadow: 0 4px 0 var(--rust);
+    animation: demoCtaPulse 2.6s ease-in-out infinite;
+  }
+  @keyframes demoCtaPulse {
+    0%, 100% { box-shadow: 0 4px 0 var(--rust), 0 0 0 0 rgba(255,216,138,.35); transform: translateY(0); }
+    50% { box-shadow: 0 6px 0 var(--rust), 0 0 0 10px rgba(255,216,138,0); transform: translateY(-2px); }
+  }
 
   .demo-ui {
     display: flex;
@@ -2547,6 +2642,7 @@
   .meta-picker {
     display: flex; gap: 10px; flex-wrap: wrap;
     margin-top: 20px;
+    padding:4px;
   }
   .meta-picker button {
     display: inline-flex; align-items: center; gap: 10px;
@@ -2855,6 +2951,21 @@
   @media (max-width: 960px) {
     .meta-stage { grid-template-columns: 1fr; }
     .meta-arrow { transform: rotate(90deg); }
+    .meta-chapter .section-head { gap: 12px; margin-bottom: -4px; }
+    .meta-chapter .section-head p { display: none; }
+    .meta-chapter .section-head h2 { font-size: clamp(28px, 7vw, 40px); }
+    .meta-picker {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      gap: 8px;
+      padding-bottom: 4px;
+      justify-content: flex-start;
+    }
+    .meta-picker button { flex: 0 0 auto; font-size: 11px; padding: 8px 12px; }
+    .meta-stage { gap: 12px; transform: scale(0.88); transform-origin: top center; }
+    .meta-cta { flex-direction: column; align-items: stretch; gap: 14px; }
+    .meta-cta p { font-size: 13px !important; }
     .meta-keepsake { margin-top: 56px; gap: 14px; }
     .meta-keepsake-duo {
       flex-direction: column;
@@ -2892,7 +3003,58 @@
       min-width: 0;
       box-sizing: border-box;
     }
+    .demo {
+      aspect-ratio: 4/5;
+      max-height: min(58vh, 320px);
+      margin: 0 auto;
+    }
+    .demo .status {
+      padding: 14px 12px 16px;
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .demo .status > div {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      text-align: center;
+      width: 100%;
+      min-height: 100%;
+    }
+    .demo .status h4 { font-size: clamp(20px, 5.5vw, 26px); margin-bottom: 6px; }
+    .demo .status p { font-size: 12px; margin-bottom: 10px; max-width: 24ch; line-height: 1.35; }
+    .demo .status .btn { padding: 11px 16px; font-size: 13px; margin-top: auto; flex-shrink: 0; }
   }
+  .meta-keepsake-burst .meta-keepsake-item {
+    opacity: 0;
+    transform: translateY(24px) scale(.92);
+  }
+  .meta-keepsake-burst.is-in .meta-keepsake-item {
+    animation: keepsakeBurst .7s cubic-bezier(.2,.9,.2,1) forwards;
+  }
+  .meta-keepsake-burst.is-in .meta-keepsake-item--alt {
+    animation-delay: .15s;
+  }
+  @keyframes keepsakeBurst {
+    0% { opacity: 0; transform: translateY(24px) scale(.92); filter: blur(3px); }
+    60% { opacity: 1; filter: none; }
+    100% { opacity: 1; transform: translateY(0) scale(1); filter: none; }
+  }
+  .meta-keepsake-burst.is-in .meta-keepsake-item::after {
+    content: "✦";
+    position: absolute;
+    top: -8px;
+    right: -4px;
+    font-size: 14px;
+    color: var(--highlight);
+    opacity: 0;
+    animation: sparklePop .9s ease .35s forwards;
+    pointer-events: none;
+  }
+  .meta-keepsake-item { position: relative; }
 
   /* ================================================================
      EDITORIAL LAYER — "The ʀᴇɴᴀɪssᴀɴᴄᴇ-style Edition" chrome.
@@ -3995,6 +4157,14 @@
     letter-spacing: 0;
     color: var(--cream);
   }
+  .queue-qr-hint {
+    font-family: var(--ff-mono);
+    font-size: 9px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: rgba(244,234,213,.65);
+    opacity: .9;
+  }
   .addons-board {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -4029,19 +4199,40 @@
     text-shadow: 0 2px 12px rgba(0,0,0,.45);
   }
   .addon-card.keepsake-addon {
-    background:
-      linear-gradient(135deg, rgba(12,6,4,.78), rgba(42,20,10,.62)),
-      url("photos/addons/collector-cards.png") center / cover;
-    color: var(--cream);
-    box-shadow: 0 24px 50px rgba(42,20,10,.26);
+    background: #f4e4c3;
+    color: var(--ink);
   }
   .addon-card.keepsake-addon p,
   .addon-card.keepsake-addon .addon-note {
-    color: rgba(244,234,213,.78);
+    color: var(--ink-2);
   }
-  .addon-card.keepsake-addon h3,
-  .addon-card.keepsake-addon .addon-price {
-    text-shadow: 0 2px 12px rgba(0,0,0,.45);
+  .addon-expand {
+    margin-top: 12px;
+    border-top: 1px dashed rgba(42,26,12,.18);
+    padding-top: 10px;
+  }
+  .addon-expand summary {
+    font-family: var(--ff-mono);
+    font-size: 10px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--rust-2);
+    cursor: pointer;
+    list-style: none;
+  }
+  .addon-expand summary::-webkit-details-marker { display: none; }
+  .addon-thumbs {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  .addon-thumbs img {
+    width: 72px;
+    height: 72px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid rgba(42,26,12,.14);
+    box-shadow: 0 4px 12px rgba(42,26,12,.12);
   }
   .addon-card p {
     color: var(--ink-2);
@@ -4362,18 +4553,38 @@
   }
   @media (max-width: 900px) {
     .ticket-booklet { gap: 40px; }
-    .ticket-grid-weddings {
+    .ticket-booklet:not(.is-ranked) .ticket-grid-weddings {
       display: flex;
       flex-direction: column;
       gap: 24px;
     }
-    .ticket-grid-weddings .ticket.t-showpiece {
+    .ticket-booklet:not(.is-ranked) .ticket-grid-weddings .ticket.t-showpiece {
       width: 100%;
       grid-column: auto;
     }
-    .ticket-grid-weddings .ticket.t-keepsake { order: -2; }
-    .ticket-grid-weddings .ticket.t-showpiece { order: -1; }
-    .ticket-grid-weddings .ticket.t-prelude { order: 0; }
+    .ticket-booklet:not(.is-ranked) .ticket-grid-weddings .ticket.t-keepsake { order: -2; }
+    .ticket-booklet:not(.is-ranked) .ticket-grid-weddings .ticket.t-showpiece { order: -1; }
+    .ticket-booklet:not(.is-ranked) .ticket-grid-weddings .ticket.t-prelude { order: 0; }
+    .ticket-booklet.is-ranked {
+      gap: 12px;
+    }
+    .ticket-booklet.is-ranked .ticket.is-pick {
+      flex: 1 1 100%;
+      width: 100%;
+      max-width: 100%;
+      transform: none !important;
+    }
+    .ticket-booklet.is-ranked .ticket.is-dim {
+      flex: 1 1 calc((100% - 12px) / 2);
+      max-width: calc((100% - 12px) / 2);
+      min-width: 0;
+      transform: scale(.96) !important;
+    }
+    .ticket-booklet.is-ranked[data-audience="corporate"] .ticket.is-dim:only-of-type,
+    .ticket-booklet.is-ranked .ticket.is-dim:only-of-type {
+      flex: 1 1 100%;
+      max-width: 100%;
+    }
   }
 </style>
 </head>
@@ -4485,7 +4696,7 @@
     </div>
     <div class="kicker">Singapore · vintage booth + AI</div>
     <h1 class="hero-big">
-      The <em>Photobooth</em><br/>Edition
+      Speak your <em>vision</em>
     </h1>
     <svg class="ornament" viewBox="0 0 120 10" aria-hidden="true">
       <path d="M0 5 L45 5 M75 5 L120 5" stroke="currentColor" stroke-width="0.8" opacity=".5"/>
@@ -4493,7 +4704,8 @@
       <circle cx="60" cy="5" r=".8" fill="currentColor" opacity=".7"/>
     </svg>
     <p class="hero-pitch">
-      Film filters &amp; painter styles on every strip · from <strong>S$750</strong>.
+      Whatever style you like, we turn it <strong>live</strong> for you.
+      Vintage film, AI painter, your theme — <strong>anything is possible.</strong>
     </p>
     <div class="hero-ctas">
       <a href="#book" class="btn-edition primary btn-hero-book">Book the booth</a>
@@ -4504,7 +4716,7 @@
     <div class="hero-occasions" role="group" aria-label="I'm planning a">
       <button type="button" data-lead-audience="wedding" data-lead-event="Wedding" data-lead-package="keepsake" data-lead-scroll="#samples">Wedding</button>
       <button type="button" data-lead-audience="corporate" data-lead-event="Corporate / brand" data-lead-package="activation" data-lead-scroll="#samples">Corporate</button>
-      <button type="button" data-lead-audience="birthday" data-lead-event="Birthday" data-lead-package="keepsake" data-lead-scroll="#samples">Birthday</button>
+      <button type="button" data-lead-audience="birthday" data-lead-event="Birthday / party" data-lead-package="keepsake" data-lead-scroll="#samples">Party</button>
     </div>
     </div>
   </div>
@@ -4555,7 +4767,7 @@
         <span class="occasion-card-label">Not sure yet? <span class="occasion-card-arrow" aria-hidden="true">→</span></span>
       </button>
     </div>
-    <p class="occasion-foot reveal">Prefer to chat first? <a href="https://wa.me/6589896901?text=Hi%20Jeff%2C%20I%27d%20like%20to%20enquire%20about%20the%20photobooth." target="_blank" rel="noopener">WhatsApp Jeff</a> · or use the <a href="/snapshot/">quick booking page</a></p>
+    <p class="occasion-foot reveal">Prefer to chat first? <a href="https://wa.me/6589896901?text=Hi%20Jeff%2C%20I%27d%20like%20to%20enquire%20about%20the%20photobooth." target="_blank" rel="noopener">WhatsApp Jeff</a> · or use the <a href="/snapshot/">quick booking page</a> <span class="spark" aria-hidden="true">✦</span></p>
   </div>
 </section>
 
@@ -4606,7 +4818,8 @@
               </span>
               <span class="vision-layer-title">AI painter</span>
               <span class="vision-layer-desc">Your photo, repainted into whimsical art</span>
-              <span class="vision-layer-tags">Monet · Van Gogh · Hokusai</span>
+              <span class="vision-layer-tags">Swirl sky · Garden soft · Pop colour</span>
+              <span class="custom-theme-note">Got a theme? Tell us — we'll make it happen.</span>
               <span class="vision-layer-cta">Explore AI examples <span aria-hidden="true">→</span></span>
             </div>
           </a>
@@ -4663,7 +4876,8 @@
       </div>
       <p class="lede">
         The painter side of the lookbook above — tap a style for a real before &amp; after.
-        Five AI looks repainting your photo as Van Gogh, Monet, Picasso, Warhol, or Hokusai.
+        Five AI looks — swirl sky, garden soft, cubist bold, pop colour, ink &amp; wave.
+        <span class="custom-theme-note">Got a theme? Tell us — we'll make it happen.</span>
         <a href="#samples" style="color:inherit;">Back to samples</a> ·
         <a href="#styles" style="color:inherit;">Film looks</a>.
       </p>
@@ -4745,8 +4959,9 @@
         <h2 style="color:#fff;">Two layers. <em style="color:#ffd88a;">Endless strips.</em></h2>
       </div>
       <p style="color: rgba(255,255,255,.75);">
-        Spark showed one photo — here’s the full four-pose strip. Watch it morph from vintage film into Van&nbsp;Gogh, Monet, or Warhol.
+        Spark showed one photo — here’s the full four-pose strip. Watch it morph from vintage film into painter styles.
         That’s the booth: <b>nostalgia and wonder on one roll.</b>
+        <span class="custom-theme-note" style="color:rgba(255,216,138,.75);">Got a theme? Tell us — we'll make it happen.</span>
       </p>
     </div>
 
@@ -4811,7 +5026,7 @@
       </a>
     </div>
 
-    <div class="meta-keepsake reveal">
+    <div class="meta-keepsake reveal meta-keepsake-burst" id="metaKeepsake">
       <span class="meta-keepsake-eyebrow">…and then it becomes this</span>
       <h3 class="meta-keepsake-title">A real <em>keepsake</em> — in your hand.</h3>
       <div class="meta-keepsake-duo">
@@ -4915,14 +5130,14 @@
       Film &amp; painter styles <span class="sep">✦</span>
       Hand-built in Singapore <span class="sep">✦</span>
       70s Kodak <span class="sep">✦</span>
-      Van Gogh nights <span class="sep">✦</span>
+      Swirl sky nights <span class="sep">✦</span>
       Weddings · Parties · Brands <span class="sep">✦</span>
       Strike a pose <span class="sep">✦</span>
       Vintage meets AI <span class="sep">✦</span>
       Film &amp; painter styles <span class="sep">✦</span>
       Hand-built in Singapore <span class="sep">✦</span>
       70s Kodak <span class="sep">✦</span>
-      Van Gogh nights <span class="sep">✦</span>
+      Swirl sky nights <span class="sep">✦</span>
       Weddings · Parties · Brands <span class="sep">✦</span>
     </span>
   </div>
@@ -4980,7 +5195,7 @@
           <div class="status" id="demoStatus">
             <div>
               <h4>Try the filter live</h4>
-              <p>Turn on your camera to preview vintage film filters and shoot a GIF strip — nothing leaves your browser.</p>
+              <p>Preview film filters &amp; shoot a GIF — stays in your browser.</p>
               <button class="btn" id="startCam">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="13" r="4"/><path d="M3 7h4l2-2h6l2 2h4v12H3z"/></svg>
                 Turn on camera
@@ -5337,13 +5552,12 @@
       </figure>
 
       <article class="queue-panel">
-        <h3>Queue number screen</h3>
-        <p style="color:var(--ink-2); margin: 10px 0 0;">
-          Guests get a simple screen callout, so they know when their print or keepsake is ready.
-        </p>
+        <h3>Queue + QR pickup</h3>
+        <p style="color:var(--ink-2); margin: 8px 0 0; font-size: 14px;">On-screen number · scan to check photo status</p>
         <div class="queue-display" aria-label="Sample queue number screen">
           <span>Now serving</span>
           <strong>A07</strong>
+          <span class="queue-qr-hint">Scan QR · your strip status</span>
         </div>
       </article>
     </div>
@@ -5360,6 +5574,7 @@
       <article class="addon-card" style="--r:1deg;" data-addon-id="more-styles" role="button" tabindex="0" title="Add to enquiry form">
         <h3>More AI Styles</h3>
         <p>Go beyond the default looks with a custom AI direction for your event.</p>
+        <span class="custom-theme-note">Got a theme? Tell us — we'll make it happen.</span>
         <div class="addon-price">
           <span class="addon-price-was">+S$100</span>
           <span>Free</span>
@@ -5405,7 +5620,15 @@
 
       <article class="addon-card keepsake-addon" style="--r:-1deg;" data-addon-id="keychain" role="button" tabindex="0" title="Add to enquiry form">
         <h3>Keychains or Collector Cards</h3>
-        <p>Physical keepsakes from guest portraits — acrylic keychains for the party table, or personalised holographic collector cards with custom art, story stats, and event details.</p>
+        <p>Physical keepsakes from guest portraits — acrylic keychains or personalised collector cards with custom art and story stats.</p>
+        <details class="addon-expand" onclick="event.stopPropagation()">
+          <summary>See examples</summary>
+          <div class="addon-thumbs">
+            <img src="photos/reel/jenmike-keepsake.png" alt="Gold frame portrait example" loading="lazy" width="72" height="72" />
+            <img src="photos/addons/collector-cards.png" alt="Collector card example" loading="lazy" width="72" height="72" />
+          </div>
+        </details>
+        <span class="custom-theme-note">Custom themes welcome — tell us your idea</span>
         <div class="addon-price"><span>S$330</span><small>up to 100 pieces</small></div>
         <span class="addon-note">your choice of format</span>
         <div class="addon-scribble" aria-hidden="true">keepsake</div>
@@ -5476,7 +5699,7 @@
     <div class="pricing-audience reveal" role="tablist" aria-label="Who are you booking for?">
       <button type="button" class="active" data-audience="wedding" role="tab" aria-selected="true">Weddings</button>
       <button type="button" data-audience="corporate" role="tab" aria-selected="false">Corporate</button>
-      <button type="button" data-audience="birthday" role="tab" aria-selected="false">Birthdays</button>
+      <button type="button" data-audience="birthday" role="tab" aria-selected="false">Party</button>
     </div>
     <p class="pricing-audience-hint reveal" id="pricingAudienceHint" aria-live="polite">
       Most couples choose <strong>3 Hours</strong> (S$880).
@@ -5609,7 +5832,7 @@
         <span class="eyebrow" style="color: var(--highlight);">Let's make a memory · 013</span>
         <h2>Book the<br/>booth. <em>Today.</em></h2>
         <p class="lede">
-          Reply within 24 hours. Setup is included. Currently serving
+          Reply within 2 hours. Setup is included. Currently serving
           <b>Singapore</b> and <b>Johor Bahru</b>.
         </p>
         <div class="book-contact">
@@ -5701,7 +5924,7 @@
               <label class="book-addon-pick">
                 <input type="checkbox" name="addons" value="More AI Styles (Free for now)" data-addon-id="more-styles" />
                 <span class="book-addon-check" aria-hidden="true"></span>
-                <span class="book-addon-text"><strong>More AI Styles</strong><small><s>+S$100</s> · Free for now</small></span>
+                <span class="book-addon-text"><strong>More AI Styles</strong><small><s>+S$100</s> · Free · custom themes welcome</small></span>
               </label>
               <label class="book-addon-pick">
                 <input type="checkbox" name="addons" value="AI Animation &amp; Live Slideshow (S$100 testing)" data-addon-id="animation" />
@@ -5886,20 +6109,56 @@
 
     const hints = {
       wedding: 'Most couples choose <strong>3 Hours</strong> (S$880).',
-      corporate: 'Brand activations usually pick <strong>Custom</strong> (quote) or <strong>5 Hours</strong>.',
-      birthday: 'Milestone birthdays love <strong>3 Hours</strong> — enough time for every guest.',
+      corporate: 'Brand activations usually pick <strong>Custom</strong> (quote) or <strong>5 Hours</strong> (S$1,380).',
+      birthday: 'Parties love <strong>3 Hours</strong> — enough time for every guest.',
     };
+
+    const picks = {
+      wedding: ['.t-keepsake'],
+      corporate: ['.t-activation', '.t-showpiece'],
+      birthday: ['.t-keepsake'],
+    };
+
+    function ticketMatchesPick(ticket, aud) {
+      const sels = picks[aud];
+      if (!sels) return false;
+      return sels.some((sel) => ticket.matches(sel));
+    }
+
+    function applyAudience(aud) {
+      if (!aud) {
+        booklet.removeAttribute('data-audience');
+        booklet.classList.remove('is-ranked');
+        booklet.querySelectorAll('.ticket').forEach((t) => {
+          t.classList.remove('is-pick', 'is-dim');
+        });
+        if (hint) hint.innerHTML = 'Most couples choose <strong>3 Hours</strong> (S$880).';
+        return;
+      }
+
+      booklet.dataset.audience = aud;
+      booklet.classList.add('is-ranked');
+      if (hint) hint.innerHTML = hints[aud] || '';
+
+      booklet.querySelectorAll('.ticket').forEach((t) => {
+        const isPick = ticketMatchesPick(t, aud);
+        t.classList.toggle('is-pick', isPick);
+        t.classList.toggle('is-dim', !isPick);
+      });
+    }
 
     tabs.forEach(btn => {
       btn.addEventListener('click', () => {
         const aud = btn.dataset.audience;
+        const isActive = btn.classList.contains('active');
+
         tabs.forEach(b => {
-          const on = b === btn;
+          const on = !isActive && b === btn;
           b.classList.toggle('active', on);
           b.setAttribute('aria-selected', on ? 'true' : 'false');
         });
-        booklet.dataset.audience = aud;
-        if (hint) hint.innerHTML = hints[aud] || '';
+
+        applyAudience(isActive ? '' : aud);
       });
     });
   })();
@@ -5908,11 +6167,11 @@
 <script src="photos.config.js?v=12"></script>
 <script src="analytics.js?v=1"></script>
 <script src="bg.js?v=2"></script>
-<script src="app.js?v=15"></script>
+<script src="app.js?v=16"></script>
 <script type="module" src="demo-gif.js?v=9"></script>
-<script src="enhancements.js?v=7"></script>
+<script src="enhancements.js?v=8"></script>
 <script src="creation.js?v=11"></script>
-<script src="hero-scrub.js?v=4"></script>
+<script src="hero-scrub.js?v=6"></script>
 <script src="vision-scrub.js?v=10"></script>
 <script src="booth-scrub.js?v=22"></script>
 <script src="sample-wall.js?v=3"></script>

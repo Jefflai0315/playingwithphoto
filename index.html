@@ -87,6 +87,24 @@
 
   a { color: inherit; }
 
+  /* Fixed UI portal — reparented to end of body via JS */
+  #site-chrome {
+    position: relative;
+    z-index: 10000;
+    isolation: isolate;
+  }
+  #site-chrome > nav.topnav,
+  #site-chrome > .mobile-book-bar,
+  #site-chrome > .wa-fab {
+    pointer-events: auto;
+  }
+  #site-chrome > .nav-drawer {
+    pointer-events: none;
+  }
+  #site-chrome > .nav-drawer.is-open {
+    pointer-events: auto;
+  }
+
   /* ======= NAV ======= */
   nav.topnav {
     position: fixed; top: 0; left: 0; right: 0;
@@ -442,8 +460,8 @@
     animation: occasionFootIn .9s cubic-bezier(.2,.8,.2,1) both;
   }
   @keyframes occasionFootIn {
-    from { opacity: 0; transform: translateY(10px); filter: blur(4px); }
-    to { opacity: 1; transform: none; filter: none; }
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: none; }
   }
   .occasion-foot .spark {
     display: inline-block;
@@ -859,6 +877,40 @@
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
       border-bottom: 1px solid rgba(42,26,12,.08);
+    }
+    nav.topnav,
+    nav.topnav.scrolled,
+    .mobile-book-bar,
+    .mobile-book-bar.is-visible {
+      transition: none !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+      mix-blend-mode: normal !important;
+      background: var(--cream) !important;
+      transform: translate3d(0, 0, 0);
+    }
+    .wa-fab {
+      transition: none !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+    }
+    .mobile-book-bar:not(.is-visible) {
+      transform: translate3d(0, 110%, 0) !important;
+    }
+    .mobile-book-bar.is-visible {
+      transform: translate3d(0, 0, 0) !important;
+    }
+    body.book-bar-visible .wa-fab {
+      bottom: calc(76px + env(safe-area-inset-bottom, 0px)) !important;
+    }
+    .filmstrip,
+    .demo .cta-primary,
+    .occasion-foot .spark {
+      animation: none !important;
+    }
+    .ticket-booklet.is-ranked .ticket.is-pick,
+    .ticket-booklet.is-ranked .ticket.is-dim {
+      transform: none !important;
     }
     .logo { font-size: 18px; min-width: 0; flex: 1; }
     .logo-long { display: none; }
@@ -1300,30 +1352,19 @@
   .gallery-chapter .section-head p { color: rgba(244,234,213,.88); }
   .gallery-chapter .eyebrow { color: var(--highlight); }
   .filmstrip-wrap {
-    overflow-x: auto;
-    overflow-y: hidden;
+    overflow: hidden;
     padding: 20px 0;
-    -webkit-overflow-scrolling: touch;
-    scroll-snap-type: x proximity;
-    scrollbar-width: thin;
-  }
-  .filmstrip-wrap.is-auto .filmstrip {
-    animation: scrollFilm 50s linear infinite;
-  }
-  .filmstrip-wrap:not(.is-auto) .filmstrip {
-    animation: none;
-    transform: none !important;
   }
   .filmstrip {
     display: flex;
     gap: 22px;
+    animation: scrollFilm 50s linear infinite;
     padding: 0 22px;
     width: max-content;
   }
   @keyframes scrollFilm { to { transform: translateX(-50%); } }
-  .filmstrip-wrap.is-auto:hover .filmstrip { animation-play-state: paused; }
+  .filmstrip:hover { animation-play-state: paused; }
   .polaroid {
-    scroll-snap-align: start;
     flex: 0 0 auto;
     width: 280px;
     background: var(--cream);
@@ -2957,13 +2998,12 @@
     .meta-picker {
       flex-wrap: nowrap;
       overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
       gap: 8px;
       padding-bottom: 4px;
       justify-content: flex-start;
     }
     .meta-picker button { flex: 0 0 auto; font-size: 11px; padding: 8px 12px; }
-    .meta-stage { gap: 12px; transform: scale(0.88); transform-origin: top center; }
+    .meta-stage { gap: 12px; }
     .meta-cta { flex-direction: column; align-items: stretch; gap: 14px; }
     .meta-cta p { font-size: 13px !important; }
     .meta-keepsake { margin-top: 56px; gap: 14px; }
@@ -3039,9 +3079,8 @@
     animation-delay: .15s;
   }
   @keyframes keepsakeBurst {
-    0% { opacity: 0; transform: translateY(24px) scale(.92); filter: blur(3px); }
-    60% { opacity: 1; filter: none; }
-    100% { opacity: 1; transform: translateY(0) scale(1); filter: none; }
+    0% { opacity: 0; transform: translateY(24px) scale(.92); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
   }
   .meta-keepsake-burst.is-in .meta-keepsake-item::after {
     content: "✦";
@@ -6040,6 +6079,17 @@
 </div>
 
 <script>
+  // ============= Fixed chrome portal (Samsung compositing) =============
+  (function() {
+    const host = document.createElement('div');
+    host.id = 'site-chrome';
+    ['topnav', 'navDrawer', 'mobileBookBar', 'waFab'].forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) host.appendChild(el);
+    });
+    if (host.childElementCount) document.body.appendChild(host);
+  })();
+
   // ============= Editorial rail scroll-spy =============
   (function() {
     const rail = document.querySelector('.edition-rail');
@@ -6166,14 +6216,14 @@
 <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
 <script src="photos.config.js?v=12"></script>
 <script src="analytics.js?v=1"></script>
-<script src="bg.js?v=2"></script>
-<script src="app.js?v=16"></script>
+<script src="bg.js?v=3"></script>
+<script src="app.js?v=18"></script>
 <script type="module" src="demo-gif.js?v=9"></script>
-<script src="enhancements.js?v=8"></script>
+<script src="enhancements.js?v=9"></script>
 <script src="creation.js?v=11"></script>
-<script src="hero-scrub.js?v=6"></script>
-<script src="vision-scrub.js?v=10"></script>
-<script src="booth-scrub.js?v=22"></script>
+<script src="hero-scrub.js?v=7"></script>
+<script src="vision-scrub.js?v=11"></script>
+<script src="booth-scrub.js?v=23"></script>
 <script src="sample-wall.js?v=3"></script>
 
 </body>

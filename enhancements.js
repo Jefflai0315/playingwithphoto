@@ -352,36 +352,3 @@ document.head.appendChild(claudeStyle);
     });
   }, 3000);
 })();
-
-// ===== AI animation preview video (lazy play) =====
-(() => {
-  const video = document.getElementById('aiAnimationVideo');
-  if (!video || !('IntersectionObserver' in window)) return;
-
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach((e) => {
-      if (e.isIntersecting) {
-        video.play().catch(() => {});
-      } else {
-        video.pause();
-      }
-    });
-  }, { threshold: 0.25, rootMargin: '40px 0px' });
-
-  io.observe(video);
-})();
-
-// ===== Keepsake burst sparkle on scroll-in =====
-(() => {
-  const block = document.getElementById('metaKeepsake');
-  if (!block || !('IntersectionObserver' in window)) return;
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach((e) => {
-      if (e.isIntersecting) {
-        block.classList.add('is-in');
-        io.unobserve(block);
-      }
-    });
-  }, { threshold: 0.35 });
-  io.observe(block);
-})();

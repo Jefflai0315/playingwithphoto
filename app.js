@@ -151,72 +151,37 @@ const STYLES = [
 const filmstripEl = document.getElementById("styleFilmstrip");
 const styleChipsEl = document.querySelector(".style-chips");
 
-function renderPolaroid(photoStyle, displayStyle, i) {
-  const rot = (Math.sin(i * 1.3) * 3).toFixed(2);
-  const photoCss = window.PhotoLib?.stylePhoto(photoStyle.key);
-  const inner = photoCss
-    ? `<div style="background-image:${photoCss};background-size:cover;background-position:center;width:100%;height:100%;"></div>`
-    : fakePortraitSVG(i, false);
-  return `
-    <div class="polaroid" style="--r:${rot}deg;">
-      <span class="tag">${displayStyle.name}</span>
-      <div class="img" style="filter:${displayStyle.filter};">
-        ${inner}
-      </div>
-      <div class="caption">${photoStyle.caption}</div>
-    </div>
-  `;
-}
-
 function renderStyleFilmstrip(styleKey = "all") {
   if (!filmstripEl) return;
 
-  const wrap = filmstripEl.closest(".filmstrip-wrap");
   const isMixedMode = styleKey === "all";
   const selectedStyle = STYLES.find((s) => s.key === styleKey) || null;
-  const base = STYLES.map((photoStyle, i) => {
-    const displayStyle = isMixedMode ? photoStyle : selectedStyle || photoStyle;
-    return renderPolaroid(photoStyle, displayStyle, i);
-  });
-  const autoMode = wrap?.classList.contains("is-auto");
-  filmstripEl.innerHTML = autoMode ? base.concat(base).join("") : base.join("");
-}
-
-function initFilmstripScroll() {
-  const wrap = filmstripEl?.closest(".filmstrip-wrap");
-  if (!wrap || !filmstripEl) return;
-
-  let idleTimer;
-  const resumeAuto = () => {
-    clearTimeout(idleTimer);
-    idleTimer = setTimeout(() => {
-      if (!wrap.matches(":hover")) wrap.classList.add("is-auto");
-      renderStyleFilmstrip(
-        styleChipsEl?.querySelector("button.active")?.dataset.style || "all",
-      );
-    }, 4000);
-  };
-
-  wrap.classList.add("is-auto");
-  renderStyleFilmstrip("all");
-
-  wrap.addEventListener("pointerdown", () => {
-    wrap.classList.remove("is-auto");
-    renderStyleFilmstrip(
-      styleChipsEl?.querySelector("button.active")?.dataset.style || "all",
-    );
-    clearTimeout(idleTimer);
-  });
-  wrap.addEventListener("scroll", () => {
-    wrap.classList.remove("is-auto");
-    resumeAuto();
-  }, { passive: true });
-  wrap.addEventListener("pointerup", resumeAuto);
-  wrap.addEventListener("pointerleave", resumeAuto);
+  const all = [...STYLES, ...STYLES];
+  filmstripEl.innerHTML = all
+    .map((photoStyle, i) => {
+      const displayStyle = isMixedMode
+        ? photoStyle
+        : selectedStyle || photoStyle;
+      const rot = (Math.sin(i * 1.3) * 3).toFixed(2);
+      const photoCss = window.PhotoLib?.stylePhoto(photoStyle.key);
+      const inner = photoCss
+        ? `<div style="background-image:${photoCss};background-size:cover;background-position:center;width:100%;height:100%;"></div>`
+        : fakePortraitSVG(i, false);
+      return `
+      <div class="polaroid" style="--r:${rot}deg;">
+        <span class="tag">${displayStyle.name}</span>
+        <div class="img" style="filter:${displayStyle.filter};">
+          ${inner}
+        </div>
+        <div class="caption">${photoStyle.caption}</div>
+      </div>
+    `;
+    })
+    .join("");
 }
 
 if (filmstripEl) {
-  initFilmstripScroll();
+  renderStyleFilmstrip("all");
 }
 
 if (styleChipsEl) {
@@ -232,6 +197,115 @@ if (styleChipsEl) {
     renderStyleFilmstrip(btn.dataset.style);
   });
 }
+
+// --- AI animation preview ---
+(() => {
+  const canvas = document.getElementById("aiAnimationCanvas");
+  if (!canvas) return;
+
+  const ctx = canvas.getContext("2d");
+  const frameCount = 61;
+  const frameSrc = (i) => `frames/f_${String(i).padStart(3, "0")}.webp`;
+  const frames = [];
+  let frameIndex = 0;
+  let lastTime = 0;
+  let active = true;
+
+  function sizeCanvas() {
+    const rect = canvas.getBoundingClientRect();
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = Math.max(1, Math.round(rect.width * dpr));
+    canvas.height = Math.max(1, Math.round(rect.height * dpr));
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  function draw(img) {
+    const cw = canvas.clientWidth;
+    const ch = canvas.clientHeight;
+    ctx.clearRect(0, 0, cw, ch);
+    if (!img || !img.width) {
+      ctx.fillStyle = "#130905";
+      ctx.fillRect(0, 0, cw, ch);
+      ctx.fillStyle = "#ffd88a";
+      ctx.font = '18px "JetBrains Mono", monospace';
+      ctx.textAlign = "center";
+      ctx.fillText("loading AI motion...", cw / 2, ch / 2);
+      return;
+    }
+
+    const iw = img.naturalWidth || img.width;
+    const ih = img.naturalHeight || img.height;
+    const scale = Math.max(cw / iw, ch / ih);
+    const dw = iw * scale;
+    const dh = ih * scale;
+    const dx = (cw - dw) / 2;
+    const dy = (ch - dh) / 2;
+    ctx.drawImage(img, dx, dy, dw, dh);
+
+    const vignette = ctx.createRadialGradient(
+      cw / 2,
+      ch / 2,
+      Math.min(cw, ch) * 0.22,
+      cw / 2,
+      ch / 2,
+      Math.max(cw, ch) * 0.7,
+    );
+    vignette.addColorStop(0, "rgba(0,0,0,0)");
+    vignette.addColorStop(1, "rgba(0,0,0,.38)");
+    ctx.fillStyle = vignette;
+    ctx.fillRect(0, 0, cw, ch);
+  }
+
+  function loadFrame(i) {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => resolve(img);
+      img.onerror = () => {
+        const png = new Image();
+        png.onload = () => resolve(png);
+        png.onerror = () => resolve(null);
+        png.src = frameSrc(i).replace(".webp", ".png");
+      };
+      img.src = frameSrc(i);
+    });
+  }
+
+  async function preload() {
+    draw(null);
+    for (let i = 1; i <= frameCount; i++) {
+      const img = await loadFrame(i);
+      if (img) {
+        frames.push(img);
+        if (frames.length === 1) draw(img);
+      }
+    }
+  }
+
+  function tick(now) {
+    if (active && frames.length && now - lastTime > 70) {
+      frameIndex = (frameIndex + 1) % frames.length;
+      draw(frames[frameIndex]);
+      lastTime = now;
+    }
+    requestAnimationFrame(tick);
+  }
+
+  const visibilityObserver = new IntersectionObserver(
+    (entries) => {
+      active = entries[0]?.isIntersecting ?? true;
+    },
+    { threshold: 0.1 },
+  );
+  visibilityObserver.observe(canvas);
+
+  window.addEventListener("resize", () => {
+    sizeCanvas();
+    draw(frames[frameIndex] || null);
+  });
+  sizeCanvas();
+  preload();
+  requestAnimationFrame(tick);
+})();
 
 // ===== Tweaks =====
 const tweaksPanel = document.getElementById("tweaksPanel");

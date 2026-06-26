@@ -365,6 +365,40 @@ window.PHOTO_CONFIG = {
     },
   ],
 
+  // ─── SNAPSHOT REVIEWS (booking section marquee) ─────────────
+  snapshotReviews: [
+    {
+      quote:
+        "Three hours in and the line was still around the bar. Guests printed four strips each.",
+      cite: "Priya & Aaron · Cliveden House",
+      photo: "testimonials/priya1.png",
+    },
+    {
+      quote:
+        "Our activation needed a moment. Jeff's booth was the moment. We posted the filmstrips for weeks.",
+      cite: "Marcus L. · Aesop SG",
+      photo: "testimonials/aesop.png",
+    },
+    {
+      quote:
+        "My dad is 60 and hates being photographed. He took eleven strips. I've never seen him grin that hard.",
+      cite: "Lee Wei Ling · Tanjong Pagar",
+      photo: "testimonials/60dad1.png",
+    },
+    {
+      quote:
+        "I've hired photo-booths for six galas. This was the first one guests actually queued for. Everyone left with a strip.",
+      cite: "Sophie K. · NGS",
+      photo: "testimonials/gala.png",
+    },
+    {
+      quote:
+        "Sent a strip to my grandma in Manila. She framed it. Said it looked like photos from her own wedding, 1962.",
+      cite: "Carla M. · Makati",
+      photo: "testimonials/bday.png",
+    },
+  ],
+
   // ─── SITE / ANALYTICS ───────────────────────────────────────
   // Paste your GA4 measurement ID to enable Google Analytics (optional).
   site: {
@@ -467,5 +501,12 @@ window.PHOTO_CONFIG = {
           video: s.video ? resolve(s.video) : null,
         }))
         .filter((s) => s.src || s.gif || s.video),
+    snapshotReviews: () =>
+      (cfg.snapshotReviews || [])
+        .map((r) => ({
+          ...r,
+          photo: r.photo ? resolve(r.photo) : null,
+        }))
+        .filter((r) => r.quote),
   };
 })();

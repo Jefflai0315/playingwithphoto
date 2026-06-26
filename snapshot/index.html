@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&family=Caveat:wght@600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="snapshot-scrub.css?v=17" />
+<link rel="stylesheet" href="snapshot-scrub.css?v=20" />
 
 <style>
   :root {
@@ -1026,7 +1026,7 @@
 </div>
 
 <div class="snapshot-layout">
-  <section class="snapshot-scrub" id="snapshotHero" aria-label="AI painting demo">
+  <section class="snapshot-scrub" id="snapshotHero" aria-label="AI photobooth preview">
     <div class="snapshot-scrub-inner">
       <header class="snapshot-hero-head">
         <h1>AI vintage <em>photobooth</em></h1>
@@ -1118,28 +1118,7 @@
     <div class="snapshot-reviews" aria-label="Guest reviews">
       <div class="snapshot-reviews-viewport">
         <div class="snapshot-reviews-track" id="snapshotReviewsTrack">
-          <div class="snapshot-reviews-set">
-            <blockquote class="snapshot-quote">
-              “Three hours in and the line was still around the bar. Guests printed four strips each.”
-              <cite>— Priya &amp; Aaron · Cliveden House</cite>
-            </blockquote>
-            <blockquote class="snapshot-quote">
-              “Our activation needed a moment. Jeff's booth was the moment. We posted the filmstrips for weeks.”
-              <cite>— Marcus L. · Aesop SG</cite>
-            </blockquote>
-            <blockquote class="snapshot-quote">
-              “My dad is 60 and hates being photographed. He took eleven strips. I've never seen him grin that hard.”
-              <cite>— Lee Wei Ling · Tanjong Pagar</cite>
-            </blockquote>
-            <blockquote class="snapshot-quote">
-              “I've hired photo-booths for six galas. This was the first one guests actually queued for. Everyone left with a strip.”
-              <cite>— Sophie K. · NGS</cite>
-            </blockquote>
-            <blockquote class="snapshot-quote">
-              “Sent a strip to my grandma in Manila. She framed it. Said it looked like photos from her own wedding, 1962.”
-              <cite>— Carla M. · Makati</cite>
-            </blockquote>
-          </div>
+          <div class="snapshot-reviews-set" id="snapshotReviewsSet"></div>
         </div>
       </div>
     </div>
@@ -1272,9 +1251,33 @@
   <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.435 9.884-9.881 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
 </a>
 
-<script src="../photos.config.js?v=12"></script>
+<div class="snapshot-modal" id="snapshotFullModal" hidden>
+  <div class="snapshot-modal-backdrop" id="snapshotFullModalBackdrop"></div>
+  <div
+    class="snapshot-modal-panel"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="snapshotModalTitle"
+  >
+    <button type="button" class="snapshot-modal-close" id="snapshotFullModalClose" aria-label="Close">×</button>
+    <div class="snapshot-modal-fan" aria-hidden="true">
+      <img src="../photos/styles/summerof78.png" alt="" width="56" height="70" loading="lazy" decoding="async" style="--r:-8deg" />
+      <img src="../photos/spark/jenmike-vangogh.png" alt="" width="56" height="70" loading="lazy" decoding="async" style="--r:4deg" />
+      <img src="../photos/strips/party-kuromi.jpg" alt="" width="56" height="70" loading="lazy" decoding="async" style="--r:-3deg" />
+    </div>
+    <p class="snapshot-modal-eyebrow">Plot twist ✨</p>
+    <h2 id="snapshotModalTitle">There's a whole <em>photobooth</em> to explore</h2>
+    <p class="snapshot-modal-lead">Every AI style, live examples, packages, and guest stories — the full experience is one click away.</p>
+    <div class="snapshot-modal-actions">
+      <a class="btn" href="../">Take the full tour →</a>
+      <button type="button" class="btn ghost" id="snapshotFullModalStay">Stay &amp; book here</button>
+    </div>
+  </div>
+</div>
+
+<script src="../photos.config.js?v=13"></script>
 <script src="../analytics.js?v=1"></script>
-<script src="snapshot-scrub.js?v=10"></script>
-<script src="snapshot.js?v=13"></script>
+<script src="snapshot-scrub.js?v=12"></script>
+<script src="snapshot.js?v=14"></script>
 </body>
 </html>

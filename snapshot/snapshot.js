@@ -185,13 +185,34 @@
 })();
 
 (function () {
+  const reviews = window.PhotoLib?.snapshotReviews?.() || [];
+  const set = document.getElementById("snapshotReviewsSet");
   const track = document.getElementById("snapshotReviewsTrack");
-  const set = track?.querySelector(".snapshot-reviews-set");
-  if (!track || !set) return;
+  if (!set || reviews.length === 0) return;
 
-  const clone = set.cloneNode(true);
-  clone.setAttribute("aria-hidden", "true");
-  track.appendChild(clone);
+  const rotations = [-2, 1.5, -1, 2, -1.5];
+
+  set.innerHTML = reviews
+    .map((review, i) => {
+      const photo = review.photo
+        ? `<img class="snapshot-quote-photo" src="${review.photo}" alt="" width="44" height="55" loading="lazy" decoding="async" style="--r:${rotations[i % rotations.length]}deg" />`
+        : "";
+      return `
+        <blockquote class="snapshot-quote">
+          ${photo}
+          <div class="snapshot-quote-body">
+            <p>“${review.quote}”</p>
+            <cite>— ${review.cite}</cite>
+          </div>
+        </blockquote>`;
+    })
+    .join("");
+
+  if (track) {
+    const clone = set.cloneNode(true);
+    clone.setAttribute("aria-hidden", "true");
+    track.appendChild(clone);
+  }
 })();
 
 // Mobile nav drawer + sticky book bar

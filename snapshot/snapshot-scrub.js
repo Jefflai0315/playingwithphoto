@@ -102,8 +102,9 @@
     if (bar) bar.setAttribute("aria-valuenow", String(Math.round(p * 100)));
 
     const idx = Math.round(p * (STEPS.length - 1));
-    stepsEl?.querySelectorAll(".snapshot-step").forEach((btn, i) => {
-      const active = i === idx;
+    stepsEl?.querySelectorAll(".snapshot-step[data-step]").forEach((btn) => {
+      const step = Number(btn.dataset.step);
+      const active = step === idx;
       btn.classList.toggle("is-active", active);
       btn.setAttribute("aria-selected", active ? "true" : "false");
     });
@@ -238,8 +239,9 @@
 
   function buildSteps() {
     if (!stepsEl) return;
-    stepsEl.innerHTML = STEPS.map(
-      (step, i) => `
+    stepsEl.innerHTML =
+      STEPS.map(
+        (step, i) => `
         <button
           type="button"
           class="snapshot-step${i === 0 ? " is-active" : ""}"
@@ -247,9 +249,17 @@
           role="tab"
           aria-selected="${i === 0 ? "true" : "false"}"
         >${step.label}</button>`,
-    ).join("");
+      ).join("") +
+      `<button
+          type="button"
+          class="snapshot-step snapshot-step-more"
+          id="snapshotMoreBtn"
+          aria-haspopup="dialog"
+          aria-label="See the full photobooth experience"
+          title="See the full experience"
+        ><span class="snapshot-sparkle" aria-hidden="true">✨</span></button>`;
 
-    stepsEl.querySelectorAll(".snapshot-step").forEach((btn) => {
+    stepsEl.querySelectorAll(".snapshot-step[data-step]").forEach((btn) => {
       btn.addEventListener("click", () => {
         const step = Number(btn.dataset.step);
         const p = step / (STEPS.length - 1);
@@ -257,6 +267,47 @@
         progress = p;
         render(p);
       });
+    });
+
+    initFullSiteModal();
+  }
+
+  function initFullSiteModal() {
+    const modal = document.getElementById("snapshotFullModal");
+    const backdrop = document.getElementById("snapshotFullModalBackdrop");
+    const closeBtn = document.getElementById("snapshotFullModalClose");
+    const stayBtn = document.getElementById("snapshotFullModalStay");
+    const moreBtn = document.getElementById("snapshotMoreBtn");
+    if (!modal || !moreBtn) return;
+
+    let lastFocus = null;
+
+    function openModal() {
+      lastFocus = document.activeElement;
+      modal.hidden = false;
+      modal.classList.add("is-open");
+      document.body.classList.add("snapshot-modal-open");
+      closeBtn?.focus();
+      window.pwpTrack?.("snapshot_full_modal_open");
+    }
+
+    function closeModal() {
+      modal.classList.remove("is-open");
+      modal.hidden = true;
+      document.body.classList.remove("snapshot-modal-open");
+      lastFocus?.focus?.();
+    }
+
+    moreBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      openModal();
+    });
+
+    closeBtn?.addEventListener("click", closeModal);
+    stayBtn?.addEventListener("click", closeModal);
+    backdrop?.addEventListener("click", closeModal);
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && modal.classList.contains("is-open")) closeModal();
     });
   }
 

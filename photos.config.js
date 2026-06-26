@@ -15,7 +15,11 @@
 
 window.PHOTO_CONFIG = {
   // Root folder for all photos. Don't change unless you move the folder.
-  base: "photos",
+  base:
+    typeof location !== "undefined" &&
+    /\/snapshot(?:\/|$)/.test(location.pathname)
+      ? "../photos"
+      : "photos",
 
   // ─── HERO FLOATING STRIPS ───────────────────────────────────
   // The 2 vertical filmstrips on either side of the hero title.
@@ -332,6 +336,35 @@ window.PHOTO_CONFIG = {
     },
   ],
 
+  // ─── SNAPSHOT CHALKBOARD (strip GIFs on /snapshot/) ─────────
+  // Drop looping GIFs into /photos/strips/ and list them here.
+  // Each entry: { src: 'strips/your-strip.gif', label: 'wedding' }
+  // Each entry: { gif: 'strips/foo.gif', src: 'strips/foo.jpg', label: 'wedding' }
+  // gif = animated loop (required for motion). src = still fallback / poster.
+  snapshotStrips: [
+    {
+      gif: "strips/wedding-ghibli-vertical.gif",
+      src: "strips/wedding-ghibli-vertical.jpg",
+      label: "wedding · Ghibli",
+    },
+    {
+      gif: "strips/wedding-ghibli-grid.gif",
+      src: "strips/wedding-ghibli-grid.jpg",
+      label: "wedding · collage",
+      wide: true,
+    },
+    {
+      gif: "strips/party-kuromi.gif",
+      src: "strips/party-kuromi.jpg",
+      label: "party",
+    },
+    {
+      gif: "strips/branded-strip.gif",
+      src: "strips/branded-strip.jpg",
+      label: "Playing With Photo",
+    },
+  ],
+
   // ─── SITE / ANALYTICS ───────────────────────────────────────
   // Paste your GA4 measurement ID to enable Google Analytics (optional).
   site: {
@@ -425,5 +458,14 @@ window.PHOTO_CONFIG = {
         .filter((s) => s.src),
     looks: () => cfg.looks || {},
     site: () => cfg.site || {},
+    snapshotStrips: () =>
+      (cfg.snapshotStrips || [])
+        .map((s) => ({
+          ...s,
+          src: resolve(s.src),
+          gif: s.gif ? resolve(s.gif) : null,
+          video: s.video ? resolve(s.video) : null,
+        }))
+        .filter((s) => s.src || s.gif || s.video),
   };
 })();

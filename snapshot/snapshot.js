@@ -170,7 +170,7 @@
       setStatus("Thanks — Jeff will reply within 24 hours.");
     } catch {
       setStatus(
-        "Could not send. Please WhatsApp +65 8989 6901 or email pencilwithjoy@gmail.com.",
+        "Could not send. Please try again in a moment.",
         true,
       );
     } finally {
@@ -184,13 +184,23 @@
   updateAddonUI();
 })();
 
+(function () {
+  const track = document.getElementById("snapshotReviewsTrack");
+  const set = track?.querySelector(".snapshot-reviews-set");
+  if (!track || !set) return;
+
+  const clone = set.cloneNode(true);
+  clone.setAttribute("aria-hidden", "true");
+  track.appendChild(clone);
+})();
+
 // Mobile nav drawer + sticky book bar
 (function () {
   const toggle = document.getElementById("navToggle");
   const drawer = document.getElementById("navDrawer");
   const backdrop = document.getElementById("navDrawerBackdrop");
-  const hero = document.getElementById("snapshotHero");
   const bookBar = document.getElementById("mobileBookBar");
+  const bookSection = document.getElementById("book");
 
   if (toggle && drawer) {
     function setOpen(open) {
@@ -212,17 +222,25 @@
     });
   }
 
-  if (bookBar && hero) {
+  if (bookBar && bookSection) {
+    let bookSeen = false;
+
+    function updateBookBar() {
+      const show = !bookSeen;
+      bookBar.classList.toggle("is-visible", show);
+      bookBar.setAttribute("aria-hidden", show ? "false" : "true");
+      document.body.classList.toggle("book-bar-visible", show);
+    }
+
     const io = new IntersectionObserver(
       ([e]) => {
-        const show = !e.isIntersecting;
-        bookBar.classList.toggle("is-visible", show);
-        bookBar.setAttribute("aria-hidden", show ? "false" : "true");
-        document.body.classList.toggle("book-bar-visible", show);
+        if (e.isIntersecting) bookSeen = true;
+        updateBookBar();
       },
-      { threshold: 0 },
+      { threshold: 0.08 },
     );
-    io.observe(hero);
+    io.observe(bookSection);
+    updateBookBar();
   }
 })();
 

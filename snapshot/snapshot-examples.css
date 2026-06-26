@@ -1,0 +1,342 @@
+/* Snapshot — examples grid + corkboard testimonials */
+
+.snap-examples {
+  padding: 56px 20px;
+  background: var(--paper);
+}
+
+.snap-examples h2 {
+  margin-bottom: 8px;
+}
+
+.snap-examples-lead {
+  margin: 0 0 28px;
+  max-width: 42ch;
+  color: var(--ink-2);
+  font-size: 16px;
+}
+
+.snap-examples-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  align-items: start;
+}
+
+.snap-example {
+  margin: 0;
+}
+
+.snap-video-stage,
+.snap-gif-stage {
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+  border: 1px solid rgba(42, 26, 12, 0.14);
+  background: #1a1008;
+  box-shadow: 0 12px 32px var(--shadow);
+}
+
+.snap-video-stage video,
+.snap-gif-stage img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+}
+
+.snap-gif-stage img {
+  aspect-ratio: 3 / 4;
+}
+
+.snap-badge {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(42, 26, 12, 0.78);
+  color: var(--highlight);
+  font-family: var(--ff-mono);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.snap-badge--gif {
+  font-family: var(--ff-script);
+  font-size: 18px;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink);
+  background: var(--highlight);
+}
+
+.snap-example figcaption {
+  margin-top: 10px;
+  font-size: 14px;
+  color: var(--ink-2);
+  line-height: 1.4;
+}
+
+.snap-quotes {
+  padding: 48px 0 0;
+}
+
+.snap-quotes .wrap {
+  padding: 0 20px 20px;
+}
+
+.snap-quotes h2 {
+  margin: 0;
+}
+
+.snap-quotes-lead {
+  margin: 8px 0 0;
+  color: var(--ink-2);
+  font-size: 16px;
+  max-width: 40ch;
+}
+
+/* Cork-board testimonials (trimmed from main site) */
+.corkboard {
+  position: relative;
+  margin: 24px 0 0;
+  padding: 28px 0 36px;
+  overflow-x: auto;
+  overflow-y: visible;
+  cursor: grab;
+  scrollbar-width: none;
+  background:
+    radial-gradient(ellipse at center, rgba(0, 0, 0, 0.12), transparent 70%),
+    repeating-radial-gradient(
+      circle at 30% 40%,
+      rgba(80, 50, 30, 0.08) 0 2px,
+      transparent 2px 8px
+    ),
+    linear-gradient(180deg, #c9a47a 0%, #a87a52 100%);
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  box-shadow:
+    inset 0 16px 32px rgba(0, 0, 0, 0.16),
+    inset 0 -16px 32px rgba(0, 0, 0, 0.16);
+}
+
+.corkboard::-webkit-scrollbar {
+  display: none;
+}
+
+.corkboard.grabbing {
+  cursor: grabbing;
+}
+
+.corkboard-rail {
+  display: flex;
+  gap: 40px;
+  padding: 16px 48px 24px;
+  align-items: center;
+  min-width: max-content;
+}
+
+.strip-card {
+  position: relative;
+  flex: 0 0 auto;
+  width: clamp(148px, 14vw, 180px);
+  transform: rotate(var(--r, 0deg));
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+  filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.32));
+}
+
+.strip-card:hover {
+  transform: rotate(calc(var(--r, 0deg) * 0.3)) translateY(-6px) scale(1.02);
+  z-index: 5;
+}
+
+.strip-frames {
+  background: #f8f0dc;
+  padding: 10px 10px 22px;
+  border-radius: 2px;
+}
+
+.strip-frame {
+  aspect-ratio: 1 / 1;
+  margin-bottom: 6px;
+  border-radius: 1px;
+  position: relative;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, #d9a87a, #8a5a3a);
+}
+
+.strip-frame:last-child {
+  margin-bottom: 0;
+}
+
+.strip-card.single-photo .strip-frames {
+  background: transparent;
+  padding: 0;
+}
+
+.strip-card.single-photo .strip-frame,
+.strip-card.single-photo .tape,
+.strip-card.single-photo .pushpin {
+  display: none;
+}
+
+.strip-card.single-photo .strip-single-photo {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.strip-label {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  font-family: var(--ff-mono);
+  font-size: 8px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #fff8e0;
+  background: rgba(0, 0, 0, 0.35);
+  padding: 2px 6px;
+}
+
+.tape {
+  position: absolute;
+  width: 52px;
+  height: 16px;
+  background: rgba(250, 240, 210, 0.7);
+  border-left: 1px dashed rgba(150, 110, 70, 0.3);
+  border-right: 1px dashed rgba(150, 110, 70, 0.3);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
+  mix-blend-mode: multiply;
+}
+
+.tape-tl {
+  top: -7px;
+  left: 10px;
+  transform: rotate(-12deg);
+}
+
+.tape-tr {
+  top: -7px;
+  right: 10px;
+  transform: rotate(10deg);
+}
+
+.tape-br {
+  bottom: -7px;
+  right: 16px;
+  transform: rotate(15deg);
+}
+
+.sticky-note {
+  position: absolute;
+  bottom: -20px;
+  right: -48px;
+  width: 140px;
+  padding: 9px 11px 12px;
+  background: #f5e8c4;
+  color: #3a2818;
+  font-family: var(--ff-script);
+  font-size: 13px;
+  line-height: 1.35;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.22);
+  transform: rotate(var(--r, 0deg));
+}
+
+.sticky-note.yellow {
+  background: #fbeea3;
+}
+
+.sticky-note.pink {
+  background: #f6cfc0;
+}
+
+.sticky-note p {
+  margin: 0 0 8px;
+}
+
+.sticky-note .note-sig {
+  font-size: 11px;
+  color: #6a4828;
+  border-top: 1px dashed rgba(100, 60, 30, 0.3);
+  padding-top: 5px;
+}
+
+.sticky-note .note-sig em {
+  font-style: italic;
+  opacity: 0.75;
+}
+
+.pushpin {
+  position: absolute;
+  top: 4px;
+  left: 50%;
+  width: 12px;
+  height: 12px;
+  transform: translateX(-50%);
+  background: radial-gradient(circle at 35% 30%, #ffb080, #8b2a10 65%, #4a1008);
+  border-radius: 50%;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.35);
+  z-index: 3;
+}
+
+.pushpin.red {
+  background: radial-gradient(circle at 35% 30%, #ffd88c, #c8901c 65%, #6a4a10);
+}
+
+.board-hint {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: rgba(255, 245, 220, 0.6);
+  pointer-events: none;
+}
+
+.snapshot-book {
+  padding: 48px 20px 56px;
+}
+
+.snapshot-book .book-grid {
+  max-width: min(520px, 100%);
+  margin: 0 auto;
+}
+
+.snapshot-book .book-form .contact-blocks {
+  margin-top: 20px;
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.snapshot-book .book-form .contact-block {
+  margin-top: 0;
+}
+
+@media (max-width: 720px) {
+  .snap-examples-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .corkboard-rail {
+    padding: 14px 28px 20px;
+    gap: 28px;
+  }
+
+  .strip-card {
+    width: clamp(130px, 40vw, 165px);
+  }
+
+  .sticky-note {
+    right: -28px;
+    width: 120px;
+    font-size: 12px;
+  }
+}

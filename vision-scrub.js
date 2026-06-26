@@ -6,33 +6,37 @@
   const FRAME_COUNT = window.PhotoLib?.visionFrameCount?.() || 61;
   const FRAME_PATH = (i) =>
     window.PhotoLib?.visionFramePath?.(i) ||
-    `photos/vision/frames/v_${String(i).padStart(4, '0')}.webp`;
+    `photos/vision/frames/v_${String(i).padStart(4, "0")}.webp`;
 
-  const FRAME_ZONE = 0.73;   // frames finish slightly after cards begin
+  const FRAME_ZONE = 0.73; // frames finish slightly after cards begin
   const COPY_OUT = 0.48;
-  const COPY_IN = 0.65;      // cards start 5% earlier than before (was 0.70)
+  const COPY_IN = 0.65; // headline re-entry
+  const OUTRO_IN = 0.45; // layer cards — slightly before scrub ends
+  const OUTRO_FULL = 0.72;
   const EXIT_START = 0.86;
 
-  const runway = document.querySelector('.vision-scrub');
+  const runway = document.querySelector(".vision-scrub");
   if (!runway) return;
 
   const LOW_POWER = window.matchMedia(
-    '(max-width: 900px), (hover: none) and (pointer: coarse)'
+    "(max-width: 900px), (hover: none) and (pointer: coarse)",
   ).matches;
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
   let runwayVisible = false;
   let pageVisible = !document.hidden;
   let loopStarted = false;
 
-  const pin = document.querySelector('.vision-scrub-pin');
-  const canvas = document.getElementById('visionScrubCanvas');
-  const headline = document.getElementById('visionScrubHeadline');
-  const outro = document.getElementById('visionScrubOutro');
-  const hint = document.getElementById('visionScrubHint');
-  const bar = document.getElementById('visionScrubBar');
+  const pin = document.querySelector(".vision-scrub-pin");
+  const canvas = document.getElementById("visionScrubCanvas");
+  const headline = document.getElementById("visionScrubHeadline");
+  const outro = document.getElementById("visionScrubOutro");
+  const hint = document.getElementById("visionScrubHint");
+  const bar = document.getElementById("visionScrubBar");
   if (!canvas) return;
 
-  const ctx = canvas.getContext('2d');
+  const ctx = canvas.getContext("2d");
   const frames = new Array(FRAME_COUNT);
   let loadedCount = 0;
   let started = false;
@@ -54,8 +58,9 @@
   }
 
   function outroOpacity(p) {
-    if (p < COPY_IN) return 0;
-    if (p < 0.82) return Math.min(1, (p - COPY_IN) / 0.14);
+    if (p < OUTRO_IN) return 0;
+    if (p < OUTRO_FULL)
+      return Math.min(1, (p - OUTRO_IN) / (OUTRO_FULL - OUTRO_IN));
     return 1;
   }
 
@@ -67,7 +72,7 @@
         loadedCount++;
         if (!started) {
           started = true;
-          runway.classList.add('is-ready');
+          runway.classList.add("is-ready");
           init();
         }
       };
@@ -125,19 +130,24 @@
       const o = outroOpacity(p);
       outro.style.opacity = o;
       outro.style.transform = `translateY(${(1 - o) * 22}px)`;
-      outro.classList.toggle('is-visible', p >= COPY_IN);
+      outro.classList.toggle("is-visible", p >= OUTRO_IN);
     }
 
     if (bar) bar.style.width = `${Math.min(1, p / FRAME_ZONE) * 100}%`;
 
     if (hint) {
-      const hintO = p < 0.08 ? 0 : p < COPY_IN ? 0.9 : Math.max(0, 1 - (p - COPY_IN) / 0.1);
+      const hintO =
+        p < 0.08
+          ? 0
+          : p < OUTRO_IN
+            ? 0.9
+            : Math.max(0, 1 - (p - OUTRO_IN) / 0.1);
       hint.style.opacity = hintO;
     }
 
     const exitT = p > EXIT_START ? (p - EXIT_START) / (1 - EXIT_START) : 0;
     const exitEase = easeOutCubic(exitT);
-    runway.classList.toggle('is-exiting', exitT > 0.02);
+    runway.classList.toggle("is-exiting", exitT > 0.02);
 
     if (pin) {
       pin.style.transform = `translateY(${-exitEase * 48}px)`;
@@ -148,7 +158,14 @@
   let lastDrawIdx = -1;
   function loop() {
     requestAnimationFrame(loop);
-    if (!loopStarted || !pageVisible || !runwayVisible || LOW_POWER || prefersReducedMotion) return;
+    if (
+      !loopStarted ||
+      !pageVisible ||
+      !runwayVisible ||
+      LOW_POWER ||
+      prefersReducedMotion
+    )
+      return;
 
     updateScrub();
     const lerp = targetIdx >= FRAME_COUNT - 2 ? 0.14 : 0.2;
@@ -164,7 +181,7 @@
     updateScrub();
     if (prefersReducedMotion || LOW_POWER) {
       const drawIdx = Math.round(
-        Math.max(0, Math.min(FRAME_COUNT - 1, targetIdx))
+        Math.max(0, Math.min(FRAME_COUNT - 1, targetIdx)),
       );
       if (frames[drawIdx]) drawFrame(drawIdx);
     }
@@ -180,13 +197,13 @@
     }
   }
 
-  window.addEventListener('resize', () => {
+  window.addEventListener("resize", () => {
     sizeCanvas();
     drawFrame(Math.round(currentIdx));
   });
-  window.addEventListener('scroll', onScrubScroll, { passive: true });
+  window.addEventListener("scroll", onScrubScroll, { passive: true });
 
-  document.addEventListener('visibilitychange', () => {
+  document.addEventListener("visibilitychange", () => {
     pageVisible = !document.hidden;
   });
 
@@ -198,7 +215,7 @@
         preload();
       }
     },
-    { rootMargin: LOW_POWER ? '40% 0px' : '100% 0px' }
+    { rootMargin: LOW_POWER ? "40% 0px" : "100% 0px" },
   );
   visObs.observe(runway);
 })();

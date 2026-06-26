@@ -5,6 +5,7 @@
 
 .hero-scrub {
   position: relative;
+  z-index: 2;
   height: 250vh;            /* extra scroll drives the scrub */
   margin: 0 !important;
   padding: 0 !important;
@@ -34,29 +35,30 @@
   height: 100%;
 }
 
-/* ----- Parallax BG painterly landscape ----- */
-.hero-bg-layer { z-index: 1; pointer-events: none; }
-.hero-bg-img {
-  position: absolute;
-  inset: -8%;               /* overscan for parallax motion */
-  background-image: url('hero-bg.png');
-  background-size: cover;
-  background-position: center 30%;
-  transform: translate3d(0, 0, 0);
-  transition: transform 0.05s linear;
-  filter: saturate(0.92) contrast(0.98) brightness(0.95);
-}
-.hero-bg-webgl {
-  position: absolute;
+/* ----- Fixed hero backdrop — stays put while hero scrubs; fades under plan ----- */
+.hero-backdrop {
+  position: fixed;
   inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+}
+.hero-backdrop-media {
+  position: absolute;
+  inset: -10%;
+}
+.hero-backdrop-media img {
+  display: block;
   width: 100%;
   height: 100%;
-  display: block;
+  object-fit: cover;
+  object-position: center 42%;
+  transform: translate3d(0, 0, 0) scale(1.12);
+  transform-origin: center center;
+  will-change: transform;
+  filter: saturate(0.92) contrast(0.98) brightness(0.95);
 }
-.hero-bg-img.three-ready {
-  background-image: none;
-}
-.hero-bg-wash {
+.hero-backdrop .hero-bg-wash {
   position: absolute;
   inset: 0;
   background:
@@ -76,7 +78,7 @@
   /* Sequence frames are rendered over hero bg; lighten removes dark matte cheaply */
   mix-blend-mode: lighten;
   transform: translate3d(0, 0, 0);
-  transition: transform 0.05s linear;
+  will-change: transform;
   filter: contrast(1.05) saturate(1.02);
 }
 

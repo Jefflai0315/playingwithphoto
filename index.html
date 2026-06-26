@@ -11,7 +11,7 @@
 <link rel="preload" href="frames/f_001.webp" as="image" fetchpriority="high">
 <link rel="preload" href="hero-bg.png" as="image" fetchpriority="high">
 <link rel="stylesheet" href="creation.css?v=4">
-<link rel="stylesheet" href="hero-scrub.css">
+<link rel="stylesheet" href="hero-scrub.css?v=5">
 <link rel="stylesheet" href="vision-scrub.css?v=3">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,800;0,9..144,900;1,9..144,400;1,9..144,700&family=Caveat:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
@@ -269,7 +269,14 @@
     position: relative;
   }
   .story-group--plan {
-    background: linear-gradient(180deg, var(--cream) 0%, var(--paper) 100%);
+    background: linear-gradient(
+      180deg,
+      rgba(244, 234, 213, 0) 0%,
+      rgba(244, 234, 213, 0.42) 16vh,
+      rgba(244, 234, 213, 0.88) 38vh,
+      var(--cream) 58vh,
+      var(--paper) 100%
+    );
   }
   .story-group--experience,
   .story-group--film {
@@ -3185,7 +3192,13 @@
     pointer-events: none;
   }
   body.has-bg-canvas .story-group--plan::before {
-    background: rgba(244, 234, 213, 0.96);
+    background: linear-gradient(
+      180deg,
+      rgba(244, 234, 213, 0) 0%,
+      rgba(244, 234, 213, 0.45) 18vh,
+      rgba(244, 234, 213, 0.92) 42vh,
+      rgba(244, 234, 213, 0.96) 100%
+    );
   }
   body.has-bg-canvas .story-group--trust::before {
     background: rgba(235, 220, 183, 0.97);
@@ -4581,18 +4594,19 @@
   <a href="#book">Book the booth · from S$750</a>
 </div>
 
+<!-- HERO BACKDROP — fixed painting behind hero + plan intro (no scroll gap) -->
+<div class="hero-backdrop" id="heroBackdrop" aria-hidden="true">
+  <div class="hero-backdrop-media" id="heroBgImg">
+    <img src="hero-bg.png" alt="" width="767" height="1024" decoding="async" fetchpriority="high" />
+  </div>
+  <div class="hero-bg-wash"></div>
+</div>
+
 <!-- HERO — Painterly Landscape + Scrolling Image Sequence -->
 <section class="hero-scrub" id="hero" data-screen-label="01 Hero">
 
   <!-- STICKY STAGE: holds all layers, stays pinned while hero scrolls -->
   <div class="hero-stage">
-
-  <!-- Parallax BG — painterly landscape (behind) -->
-  <div class="hero-bg-layer" aria-hidden="true">
-    <div class="hero-bg-img" id="heroBgImg"></div>
-    <!-- Sepia/atmosphere wash -->
-    <div class="hero-bg-wash"></div>
-  </div>
 
   <!-- Image sequence foreground — canvas scrubbed by scroll -->
   <div class="hero-fg-layer" aria-hidden="true">
@@ -6031,7 +6045,7 @@
 <script type="module" src="demo-gif.js?v=9"></script>
 <script src="enhancements.js?v=10"></script>
 <script src="creation.js?v=11"></script>
-<script src="hero-scrub.js?v=10"></script>
+<script src="hero-scrub.js?v=13"></script>
 <script src="vision-scrub.js?v=12"></script>
 <script src="booth-scrub.js?v=29"></script>
 <script src="sample-wall.js?v=3"></script>

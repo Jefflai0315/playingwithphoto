@@ -22,6 +22,9 @@
   const canvas = document.getElementById('heroScrubCanvas');
   const dissolveCanvas = document.getElementById('heroDissolveCanvas');
   const bgImg = document.getElementById('heroBgImg');
+  const bgPhoto = bgImg?.querySelector('img');
+  const backdrop = document.getElementById('heroBackdrop');
+  const planGroup = document.querySelector('.story-group--plan');
   const titleCard = document.querySelector('.hero-title-card');
   const hint = document.getElementById('heroScrubHint');
   const bar = document.getElementById('heroScrubBar');
@@ -48,6 +51,17 @@
   // ----- Preload frames -----
   const frames = new Array(FRAME_COUNT);
   let loadedCount = 0;
+  let motionLoopStarted = false;
+
+  function startMotionLoop() {
+    if (motionLoopStarted) return;
+    motionLoopStarted = true;
+    sizeCanvas();
+    updateScrubTargets();
+    applyMotion();
+    if (!LOW_POWER && !prefersReducedMotion) loop();
+  }
+
   function preload() {
     return new Promise((resolve) => {
       for (let i = 0; i < FRAME_COUNT; i++) {
@@ -55,7 +69,10 @@
         img.onload = img.onerror = () => {
           loadedCount++;
           frames[i] = img;
-          if (loadedCount === 1) drawFrame(0);
+          if (loadedCount === 1) {
+            drawFrame(0);
+            startMotionLoop();
+          }
           if (loadedCount === FRAME_COUNT) resolve();
         };
         img.src = FRAME_PATH(i + 1);
@@ -262,7 +279,15 @@
   let scrubProgress = 0;
   let heroScrollInto = 0;
 
-  function updateScrub() {
+  function updateBackdropFade() {
+    if (!backdrop || !planGroup) return;
+    const planTop = planGroup.getBoundingClientRect().top;
+    const vh = window.innerHeight;
+    const t = (planTop - vh * 0.1) / (vh * 0.55);
+    backdrop.style.opacity = String(Math.max(0, Math.min(1, t)));
+  }
+
+  function updateScrubTargets() {
     const rect = hero.getBoundingClientRect();
     const vh = window.innerHeight;
     const scrollIntoHero = -rect.top;
@@ -271,7 +296,8 @@
     const p = Math.max(0, Math.min(1, scrollIntoHero / scrubRange));
     scrubProgress = p;
 
-    targetIdx = Math.round(p * (FRAME_COUNT - 1));
+    const maxLoadedIdx = Math.max(0, loadedCount - 1);
+    targetIdx = Math.min(Math.round(p * (FRAME_COUNT - 1)), maxLoadedIdx);
 
     if (titleCard) {
       const fade = p < 0.2 ? 1 : Math.max(0, 1 - (p - 0.2) / 0.35);
@@ -279,12 +305,19 @@
     }
     if (bar) bar.style.width = (p * 100) + '%';
     if (hint) hint.style.opacity = p < 0.9 ? 1 : Math.max(0, 1 - (p - 0.9) / 0.1);
+    updateBackdropFade();
+  }
 
-    if (bgImg) {
-      const bgY = scrollIntoHero * 0.25;
-      const pm = fgParallaxStrength();
-      bgImg.style.transform =
-        `translate3d(${mx * 15 * pm}px, ${-bgY + my * 10 * pm}px, 0) scale(1.05)`;
+  function applyMotion() {
+    const pm = fgParallaxStrength();
+
+    if (bgPhoto) {
+      bgPhoto.style.transform =
+        `translate3d(${Math.round(mx * 12 * pm)}px, ${Math.round(my * 8 * pm)}px, 0) scale(1.12)`;
+    }
+    if (canvas) {
+      canvas.style.transform =
+        `translate3d(${Math.round(mx * -22 * pm)}px, ${Math.round(my * -14 * pm)}px, 0)`;
     }
   }
 
@@ -317,19 +350,14 @@
 
     mx += (tmx - mx) * 0.06;
     my += (tmy - my) * 0.06;
-    updateScrub();
+    updateScrubTargets();
+    applyMotion();
 
     currentIdx += (targetIdx - currentIdx) * 0.2;
     const drawIdx = Math.round(currentIdx);
     if (frames[drawIdx] && drawIdx !== lastDrawIdx) {
       drawFrame(drawIdx);
       lastDrawIdx = drawIdx;
-    }
-
-    if (canvas) {
-      const pm = fgParallaxStrength();
-      canvas.style.transform =
-        `translate3d(${mx * -22 * pm}px, ${my * -14 * pm}px, 0)`;
     }
 
     if (!LOW_POWER && scrubProgress > 0.5 && drawIdx !== lastSampleFrame && frames[drawIdx]) {
@@ -341,8 +369,9 @@
   }
 
   function onScrubScroll() {
-    updateScrub();
+    updateScrubTargets();
     if (prefersReducedMotion || LOW_POWER) {
+      applyMotion();
       const drawIdx = Math.round(
         Math.max(0, Math.min(FRAME_COUNT - 1, targetIdx))
       );
@@ -352,10 +381,11 @@
   }
 
   function init() {
-    sizeCanvas();
-    drawFrame(0);
-    updateScrub();
-    if (!LOW_POWER && !prefersReducedMotion) loop();
+    if (!motionLoopStarted) startMotionLoop();
+    else {
+      sizeCanvas();
+      drawFrame(Math.round(currentIdx));
+    }
   }
 
   window.addEventListener('resize', () => {
@@ -383,12 +413,4 @@
     }, waitMs);
     console.log('[hero-scrub] ready — 61 frames loaded');
   });
-  const checkFirst = setInterval(() => {
-    if (frames[0]) {
-      clearInterval(checkFirst);
-      sizeCanvas();
-      drawFrame(0);
-      updateScrub();
-    }
-  }, 50);
 })();

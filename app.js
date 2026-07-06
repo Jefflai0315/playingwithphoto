@@ -240,11 +240,18 @@ if (styleChipsEl) {
 
   const ctx = canvas.getContext("2d");
   const frameCount = 61;
+  const frameStep = 3;
   const frameSrc = (i) => `frames/f_${String(i).padStart(3, "0")}.webp`;
+  const previewFrameIndexes = [];
+  for (let i = 1; i <= frameCount; i += frameStep) previewFrameIndexes.push(i);
+  if (previewFrameIndexes[previewFrameIndexes.length - 1] !== frameCount) {
+    previewFrameIndexes.push(frameCount);
+  }
   const frames = [];
   let frameIndex = 0;
   let lastTime = 0;
   let active = true;
+  let preloadStarted = false;
 
   function sizeCanvas() {
     const rect = canvas.getBoundingClientRect();
@@ -294,21 +301,20 @@ if (styleChipsEl) {
   function loadFrame(i) {
     return new Promise((resolve) => {
       const img = new Image();
+      img.decoding = "async";
+      if ("fetchPriority" in img) img.fetchPriority = "low";
       img.onload = () => resolve(img);
-      img.onerror = () => {
-        const png = new Image();
-        png.onload = () => resolve(png);
-        png.onerror = () => resolve(null);
-        png.src = frameSrc(i).replace(".webp", ".png");
-      };
+      img.onerror = () => resolve(null);
       img.src = frameSrc(i);
     });
   }
 
   async function preload() {
+    if (preloadStarted) return;
+    preloadStarted = true;
     draw(null);
-    for (let i = 1; i <= frameCount; i++) {
-      const img = await loadFrame(i);
+    for (const sourceIndex of previewFrameIndexes) {
+      const img = await loadFrame(sourceIndex);
       if (img) {
         frames.push(img);
         if (frames.length === 1) draw(img);
@@ -328,8 +334,9 @@ if (styleChipsEl) {
   const visibilityObserver = new IntersectionObserver(
     (entries) => {
       active = entries[0]?.isIntersecting ?? true;
+      if (active) preload();
     },
-    { threshold: 0.1 },
+    { rootMargin: "200px 0px", threshold: 0.1 },
   );
   visibilityObserver.observe(canvas);
 
@@ -338,7 +345,6 @@ if (styleChipsEl) {
     draw(frames[frameIndex] || null);
   });
   sizeCanvas();
-  preload();
   requestAnimationFrame(tick);
 })();
 

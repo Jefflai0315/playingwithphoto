@@ -48,11 +48,11 @@ window.PHOTO_CONFIG = {
   //   kodachrome → "Kodachrome Slide"   caption: "Golden hour"
   //   sepia      → "Studio Sepia"       caption: "Portrait No. 4"
   styles: {
-    kodak: "styles/summerof78.png", // e.g. 'styles/kodak.webp'
-    bw: "styles/classic.png", // e.g. 'styles/bw.webp'
-    polaroid: "styles/saycheese.png", // e.g. 'styles/polaroid.webp'
-    kodachrome: "styles/goldenhour.png", // e.g. 'styles/kodachrome.webp'
-    sepia: "styles/portraitno4.png", // e.g. 'styles/sepia.webp'
+    kodak: "styles/summerof78.webp", // e.g. 'styles/kodak.webp'
+    bw: "styles/classic.webp", // e.g. 'styles/bw.webp'
+    polaroid: "styles/saycheese.webp", // e.g. 'styles/polaroid.webp'
+    kodachrome: "styles/goldenhour.webp", // e.g. 'styles/kodachrome.webp'
+    sepia: "styles/portraitno4.webp", // e.g. 'styles/sepia.webp'
   },
 
   // ─── REEL STRIP ─────────────────────────────────────────────
@@ -61,10 +61,10 @@ window.PHOTO_CONFIG = {
   // Optional `videos` array (same length) — MP4 loop plays when that frame develops.
   reel: {
     files: [
-      "spark/jenmike.png",
-      "reel/jenmike-vangogh1.png",
-      "spark/jenmike-vangogh.png",
-      "reel/jenmike-keepsake.png",
+      "spark/jenmike.webp",
+      "reel/jenmike-vangogh1.webp",
+      "spark/jenmike-vangogh.webp",
+      "reel/jenmike-keepsake.webp",
     ],
     videos: [null, null, "spark/jenmike-vangogh.mp4", null],
   },
@@ -95,31 +95,31 @@ window.PHOTO_CONFIG = {
   spark: {
     byPainter: {
       vangogh: {
-        before: "spark/jenmike.png",
-        after: "spark/jenmike-vangogh.png",
+        before: "spark/jenmike.webp",
+        after: "spark/jenmike-vangogh.webp",
         afterVideo: "spark/jenmike-vangogh.mp4",
         name: "Jen & Mike",
       },
       monet: {
-        before: "spark/myra.png",
-        after: "spark/myra-monet1.png",
+        before: "spark/myra.webp",
+        after: "spark/myra-monet1.webp",
         afterVideo: "spark/myra-monet.mp4",
         name: "Myra Sweet 16",
       },
       picasso: {
-        before: "spark/co.png",
-        after: "spark/co-picasso.png",
+        before: "spark/co.webp",
+        after: "spark/co-picasso.webp",
         afterVideo: "spark/co-picasso.mp4",
         name: "Studio session",
       },
       warhol: {
-        before: "spark/olivebirthday.png",
-        after: "spark/olivebirthday-warhol.png",
+        before: "spark/olivebirthday.webp",
+        after: "spark/olivebirthday-warhol.webp",
         name: "Pop duo Birthday",
       },
       hokusai: {
-        before: "spark/jenmikeguests.png",
-        after: "spark/jenmikeguests-hokusai.png",
+        before: "spark/jenmikeguests.webp",
+        after: "spark/jenmikeguests-hokusai.webp",
         name: "Wave portrait",
       },
     },
@@ -139,35 +139,35 @@ window.PHOTO_CONFIG = {
   meta: {
     byPainter: {
       vintage: {
-        before: ["spark/jenmikeguests.png", "spark/jenmike.png"],
-        after: ["spark/jenmikeguests.png", "spark/jenmike.png"],
+        before: ["spark/jenmikeguests.webp", "spark/jenmike.webp"],
+        after: ["spark/jenmikeguests.webp", "spark/jenmike.webp"],
       },
       vangogh: {
-        before: ["spark/jenmikeguests.png", "spark/jenmike.png"],
-        after: ["meta/jenmikeguests-vangogh.png", "reel/jenmike-vangogh1.png"],
+        before: ["spark/jenmikeguests.webp", "spark/jenmike.webp"],
+        after: ["meta/jenmikeguests-vangogh.webp", "reel/jenmike-vangogh1.webp"],
       },
       monet: {
-        before: ["spark/jenmikeguests.png", "spark/jenmike.png"],
-        after: ["meta/jenmikeguests-monet.png", "meta/jenmike-monet.png"],
+        before: ["spark/jenmikeguests.webp", "spark/jenmike.webp"],
+        after: ["meta/jenmikeguests-monet.webp", "meta/jenmike-monet.webp"],
       },
       picasso: {
-        before: ["spark/jenmikeguests.png", "spark/jenmike.png"],
-        after: ["meta/jenmikeguests-picasso.png", "meta/jenmike-picasso.png"],
+        before: ["spark/jenmikeguests.webp", "spark/jenmike.webp"],
+        after: ["meta/jenmikeguests-picasso.webp", "meta/jenmike-picasso.webp"],
       },
       warhol: {
-        before: ["spark/jenmikeguests.png", "spark/jenmike.png"],
-        after: ["meta/jenmikeguests-warhol.png", "meta/jenmike-warhol.png"],
+        before: ["spark/jenmikeguests.webp", "spark/jenmike.webp"],
+        after: ["meta/jenmikeguests-warhol.webp", "meta/jenmike-warhol.webp"],
       },
       hokusai: {
-        before: ["spark/jenmikeguests.png", "spark/jenmike.png"],
-        after: ["spark/jenmikeguests-hokusai.png", "meta/jenmike-hokusai.png"],
+        before: ["spark/jenmikeguests.webp", "spark/jenmike.webp"],
+        after: ["spark/jenmikeguests-hokusai.webp", "meta/jenmike-hokusai.webp"],
       },
     },
     files: [
-      "spark/jenmikeguests.png",
-      "spark/jenmike.png",
-      "spark/jenmikeguests.png",
-      "spark/jenmike.png",
+      "spark/jenmikeguests.webp",
+      "spark/jenmike.webp",
+      "spark/jenmikeguests.webp",
+      "spark/jenmike.webp",
     ],
   },
 
@@ -187,22 +187,22 @@ window.PHOTO_CONFIG = {
   //   bday      → Carla M. · Manila
   testimonials: {
     wedding: [
-      "testimonials/priya1.png",
-      "testimonials/priya2.png",
-      "testimonials/priya3.png",
-      "testimonials/priya4.png",
+      "testimonials/priya1.webp",
+      "testimonials/priya2.webp",
+      "testimonials/priya3.webp",
+      "testimonials/priya4.webp",
     ], // e.g. ["testimonials/priya-1.jpg", "testimonials/priya-2.jpg"]
-    brand: ["testimonials/aesop.png"],
-    sixtieth: ["testimonials/60dad1.png"],
-    gala: ["testimonials/gala.png"],
-    bday: ["testimonials/bday.png"],
+    brand: ["testimonials/aesop.webp"],
+    sixtieth: ["testimonials/60dad1.webp"],
+    gala: ["testimonials/gala.webp"],
+    bday: ["testimonials/bday.webp"],
   },
 
   // ─── PUBLIC LOOKS (customer-facing style names) ─────────────
   // Used in the spark gallery, sample wall, and metamorphosis picker.
   // Keys (vangogh, kodak, …) stay internal — only labels show on site.
   looks: {
-    filmBefore: "spark/jenmike.png",
+    filmBefore: "spark/jenmike.webp",
     painterly: {
       vangogh: {
         label: "Swirl sky",
@@ -234,27 +234,27 @@ window.PHOTO_CONFIG = {
       kodak: {
         label: "70s Kodak",
         swatch: "#c38a52",
-        image: "styles/summerof78.png",
+        image: "styles/summerof78.webp",
       },
       bw: {
         label: "B&W classic",
         swatch: "#5a5a5a",
-        image: "styles/classic.png",
+        image: "styles/classic.webp",
       },
       polaroid: {
         label: "Polaroid",
         swatch: "#e8dcc8",
-        image: "styles/saycheese.png",
+        image: "styles/saycheese.webp",
       },
       kodachrome: {
         label: "Kodachrome",
         swatch: "#d4a056",
-        image: "styles/goldenhour.png",
+        image: "styles/goldenhour.webp",
       },
       sepia: {
         label: "Studio sepia",
         swatch: "#8a6a4a",
-        image: "styles/portraitno4.png",
+        image: "styles/portraitno4.webp",
       },
     },
   },
@@ -263,32 +263,32 @@ window.PHOTO_CONFIG = {
   // tags: wedding | corporate | birthday | film | painterly | print
   samples: [
     {
-      src: "spark/jenmike-vangogh.png",
+      src: "spark/jenmike-vangogh.webp",
       label: "Swirl sky",
       tags: ["wedding", "painterly"],
     },
     {
-      src: "spark/myra-monet.png",
+      src: "spark/myra-monet.webp",
       label: "Garden soft",
       tags: ["birthday", "painterly"],
     },
     {
-      src: "samples/chickfila.png",
+      src: "samples/chickfila.webp",
       label: "Chick-fil-A activation",
       tags: ["corporate", "print"],
     },
     {
-      src: "spark/olivebirthday-warhol.png",
+      src: "spark/olivebirthday-warhol.webp",
       label: "Pop colour",
       tags: ["birthday", "painterly"],
     },
     {
-      src: "spark/jenmikeguests-hokusai.png",
+      src: "spark/jenmikeguests-hokusai.webp",
       label: "Ink & wave",
       tags: ["wedding", "painterly"],
     },
     {
-      src: "meta/jenmike-monet.png",
+      src: "meta/jenmike-monet.webp",
       label: "Soft portrait",
       tags: ["wedding", "painterly"],
     },
@@ -298,29 +298,29 @@ window.PHOTO_CONFIG = {
       tags: ["corporate", "print"],
     },
     {
-      src: "styles/summerof78.png",
+      src: "styles/summerof78.webp",
       label: "70s Kodak",
       tags: ["film", "wedding"],
     },
-    { src: "styles/classic.png", label: "B&W classic", tags: ["film"] },
+    { src: "styles/classic.webp", label: "B&W classic", tags: ["film"] },
     {
-      src: "styles/saycheese.png",
+      src: "styles/saycheese.webp",
       label: "Polaroid",
       tags: ["film", "birthday"],
     },
     {
-      src: "styles/goldenhour.png",
+      src: "styles/goldenhour.webp",
       label: "Kodachrome",
       tags: ["film", "wedding"],
     },
-    { src: "styles/portraitno4.png", label: "Studio sepia", tags: ["film"] },
+    { src: "styles/portraitno4.webp", label: "Studio sepia", tags: ["film"] },
     {
-      src: "samples/yucompletemar.png",
+      src: "samples/yucompletemar.webp",
       label: "Wedding strip",
       tags: ["wedding", "print"],
     },
     {
-      src: "reel/jenmike-keepsake.png",
+      src: "reel/jenmike-keepsake.webp",
       label: "Gold frame keepsake",
       tags: ["wedding", "print"],
     },
@@ -330,7 +330,7 @@ window.PHOTO_CONFIG = {
       tags: ["corporate", "print"],
     },
     {
-      src: "testimonials/priya1.png",
+      src: "testimonials/priya1.webp",
       label: "Reception guests",
       tags: ["wedding", "print"],
     },
@@ -355,7 +355,7 @@ window.PHOTO_CONFIG = {
     },
     {
       gif: "strips/party-kuromi.gif",
-      src: "strips/party-kuromi.jpg",
+      src: "strips/party-kuromi.webp",
       label: "party",
     },
     {
@@ -371,31 +371,31 @@ window.PHOTO_CONFIG = {
       quote:
         "Three hours in and the line was still around the bar. Guests printed four strips each.",
       cite: "Priya & Aaron · Cliveden House",
-      photo: "testimonials/priya1.png",
+      photo: "testimonials/priya1.webp",
     },
     {
       quote:
         "Our activation needed a moment. Jeff's booth was the moment. We posted the filmstrips for weeks.",
       cite: "Marcus L. · Aesop SG",
-      photo: "testimonials/aesop.png",
+      photo: "testimonials/aesop.webp",
     },
     {
       quote:
         "My dad is 60 and hates being photographed. He took eleven strips. I've never seen him grin that hard.",
       cite: "Lee Wei Ling · Tanjong Pagar",
-      photo: "testimonials/60dad1.png",
+      photo: "testimonials/60dad1.webp",
     },
     {
       quote:
         "I've hired photo-booths for six galas. This was the first one guests actually queued for. Everyone left with a strip.",
       cite: "Sophie K. · NGS",
-      photo: "testimonials/gala.png",
+      photo: "testimonials/gala.webp",
     },
     {
       quote:
         "Sent a strip to my grandma in Manila. She framed it. Said it looked like photos from her own wedding, 1962.",
       cite: "Carla M. · Makati",
-      photo: "testimonials/bday.png",
+      photo: "testimonials/bday.webp",
     },
   ],
 

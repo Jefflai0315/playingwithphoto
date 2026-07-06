@@ -4,6 +4,8 @@
 
 (() => {
   const FRAME_COUNT = 61;
+  const INITIAL_EAGER_FRAMES = 8;
+  const PRELOAD_CONCURRENCY = 4;
   const FRAME_PATH = (i) => `frames/f_${String(i).padStart(3, '0')}.webp`;
 
   const hero = document.querySelector('.hero-scrub');
@@ -52,6 +54,8 @@
   const frames = new Array(FRAME_COUNT);
   let loadedCount = 0;
   let motionLoopStarted = false;
+  let readyShown = false;
+  let remainingPreloadStarted = false;
 
   function startMotionLoop() {
     if (motionLoopStarted) return;
@@ -62,22 +66,77 @@
     if (!LOW_POWER && !prefersReducedMotion) loop();
   }
 
-  function preload() {
+  function showReadyState() {
+    if (readyShown) return;
+    readyShown = true;
+    init();
+    const elapsed = performance.now() - loadStartedAt;
+    const waitMs = Math.max(0, MIN_LOADER_MS - elapsed);
+    setTimeout(() => {
+      hero.classList.remove('is-loading');
+      hero.classList.add('is-ready');
+    }, waitMs);
+  }
+
+  function handleFrameLoad(index, img) {
+    if (frames[index]) return;
+    frames[index] = img;
+    loadedCount++;
+    if (loadedCount === 1) {
+      drawFrame(index);
+      startMotionLoop();
+      showReadyState();
+    }
+    if (loadedCount === FRAME_COUNT) {
+      console.log('[hero-scrub] all frames loaded');
+    }
+  }
+
+  function loadFrame(index, highPriority = false) {
     return new Promise((resolve) => {
-      for (let i = 0; i < FRAME_COUNT; i++) {
-        const img = new Image();
-        img.onload = img.onerror = () => {
-          loadedCount++;
-          frames[i] = img;
-          if (loadedCount === 1) {
-            drawFrame(0);
-            startMotionLoop();
-          }
-          if (loadedCount === FRAME_COUNT) resolve();
-        };
-        img.src = FRAME_PATH(i + 1);
+      if (frames[index]) {
+        resolve(frames[index]);
+        return;
       }
+      const img = new Image();
+      img.decoding = 'async';
+      if (highPriority && 'fetchPriority' in img) img.fetchPriority = 'high';
+      img.onload = () => {
+        handleFrameLoad(index, img);
+        resolve(img);
+      };
+      img.onerror = () => resolve(null);
+      img.src = FRAME_PATH(index + 1);
     });
+  }
+
+  function preloadRemainingFrames(startIndex) {
+    if (remainingPreloadStarted) return;
+    remainingPreloadStarted = true;
+    const queue = [];
+    for (let i = startIndex; i < FRAME_COUNT; i++) queue.push(i);
+    let active = 0;
+
+    function pump() {
+      while (active < PRELOAD_CONCURRENCY && queue.length) {
+        const index = queue.shift();
+        active++;
+        loadFrame(index).finally(() => {
+          active--;
+          pump();
+        });
+      }
+    }
+
+    pump();
+  }
+
+  async function preload() {
+    await loadFrame(0, true);
+    const eagerLoads = [];
+    const eagerCount = Math.min(FRAME_COUNT, INITIAL_EAGER_FRAMES);
+    for (let i = 1; i < eagerCount; i++) eagerLoads.push(loadFrame(i, true));
+    Promise.allSettled(eagerLoads).then(() => preloadRemainingFrames(eagerCount));
   }
 
   // ----- Canvas sizing (HiDPI-aware) -----
@@ -404,13 +463,6 @@
   });
 
   preload().then(() => {
-    init();
-    const elapsed = performance.now() - loadStartedAt;
-    const waitMs = Math.max(0, MIN_LOADER_MS - elapsed);
-    setTimeout(() => {
-      hero.classList.remove('is-loading');
-      hero.classList.add('is-ready');
-    }, waitMs);
-    console.log('[hero-scrub] ready — 61 frames loaded');
+    console.log('[hero-scrub] first frame ready; remaining frames loading');
   });
 })();

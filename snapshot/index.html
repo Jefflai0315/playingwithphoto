@@ -1047,11 +1047,12 @@
                 id="snapshotAiMotion"
                 class="snapshot-panel-video"
                 src="../photos/addons/ai-animation.mp4"
+                poster="../photos/addons/ai-animation.poster.webp"
                 muted
                 loop
                 playsinline
                 webkit-playsinline
-                preload="auto"
+                preload="none"
                 aria-label="AI animation example"
               ></video>
             </div>
@@ -1059,15 +1060,15 @@
             <div class="snapshot-panel" data-panel="1">
               <div class="snapshot-style-board" aria-label="AI painter styles">
                 <figure class="snapshot-style-tile">
-                  <video class="snapshot-style-video" data-style="vangogh" src="../photos/spark/jenmike-vangogh.mp4" muted loop playsinline webkit-playsinline preload="auto"></video>
+                  <video class="snapshot-style-video" data-style="vangogh" src="../photos/spark/jenmike-vangogh.mp4" poster="../photos/spark/jenmike-vangogh.poster.webp" muted loop playsinline webkit-playsinline preload="none"></video>
                   <figcaption>Swirl sky</figcaption>
                 </figure>
                 <figure class="snapshot-style-tile">
-                  <video class="snapshot-style-video" data-style="monet" src="../photos/spark/myra-monet.mp4" muted loop playsinline webkit-playsinline preload="auto"></video>
+                  <video class="snapshot-style-video" data-style="monet" src="../photos/spark/myra-monet.mp4" poster="../photos/spark/myra-monet.poster.webp" muted loop playsinline webkit-playsinline preload="none"></video>
                   <figcaption>Garden soft</figcaption>
                 </figure>
                 <figure class="snapshot-style-tile">
-                  <video class="snapshot-style-video" data-style="picasso" src="../photos/spark/co-picasso.mp4" muted loop playsinline webkit-playsinline preload="auto"></video>
+                  <video class="snapshot-style-video" data-style="picasso" src="../photos/spark/co-picasso.mp4" poster="../photos/spark/co-picasso.poster.webp" muted loop playsinline webkit-playsinline preload="none"></video>
                   <figcaption>Cubist bold</figcaption>
                 </figure>
               </div>
@@ -1275,9 +1276,9 @@
   </div>
 </div>
 
-<script src="../photos.config.js?v=13"></script>
-<script src="../analytics.js?v=1"></script>
-<script src="snapshot-scrub.js?v=12"></script>
-<script src="snapshot.js?v=14"></script>
+<script src="../photos.config.js?v=14" defer></script>
+<script src="../analytics.js?v=1" defer></script>
+<script src="snapshot-scrub.js?v=12" defer></script>
+<script src="snapshot.js?v=14" defer></script>
 </body>
 </html>

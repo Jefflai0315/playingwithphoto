@@ -4,9 +4,31 @@
 
 (() => {
   const FRAME_COUNT = 61;
-  const INITIAL_EAGER_FRAMES = 8;
+  const PRELOAD_STRIDE = 4;
   const PRELOAD_CONCURRENCY = 4;
   const FRAME_PATH = (i) => `frames/f_${String(i).padStart(3, '0')}.webp`;
+
+  function sparseFrameIndexes() {
+    const out = [];
+    for (let i = 0; i < FRAME_COUNT; i += PRELOAD_STRIDE) out.push(i);
+    if (out[out.length - 1] !== FRAME_COUNT - 1) out.push(FRAME_COUNT - 1);
+    return out;
+  }
+
+  function nearestLoadedIndex(idx) {
+    if (frames[idx]) return idx;
+    let best = 0;
+    let bestDist = Infinity;
+    for (let i = 0; i < FRAME_COUNT; i++) {
+      if (!frames[i]) continue;
+      const d = Math.abs(i - idx);
+      if (d < bestDist) {
+        bestDist = d;
+        best = i;
+      }
+    }
+    return best;
+  }
 
   const hero = document.querySelector('.hero-scrub');
   if (!hero) { console.warn('[hero-scrub] no .hero-scrub element found'); return; }
@@ -110,11 +132,13 @@
     });
   }
 
-  function preloadRemainingFrames(startIndex) {
+  function preloadRemainingFrames() {
     if (remainingPreloadStarted) return;
     remainingPreloadStarted = true;
     const queue = [];
-    for (let i = startIndex; i < FRAME_COUNT; i++) queue.push(i);
+    for (let i = 0; i < FRAME_COUNT; i++) {
+      if (!frames[i]) queue.push(i);
+    }
     let active = 0;
 
     function pump() {
@@ -132,11 +156,10 @@
   }
 
   async function preload() {
-    await loadFrame(0, true);
-    const eagerLoads = [];
-    const eagerCount = Math.min(FRAME_COUNT, INITIAL_EAGER_FRAMES);
-    for (let i = 1; i < eagerCount; i++) eagerLoads.push(loadFrame(i, true));
-    Promise.allSettled(eagerLoads).then(() => preloadRemainingFrames(eagerCount));
+    const sparse = sparseFrameIndexes();
+    await loadFrame(sparse[0], true);
+    await Promise.allSettled(sparse.slice(1).map((i) => loadFrame(i, true)));
+    preloadRemainingFrames();
   }
 
   // ----- Canvas sizing (HiDPI-aware) -----
@@ -355,8 +378,8 @@
     const p = Math.max(0, Math.min(1, scrollIntoHero / scrubRange));
     scrubProgress = p;
 
-    const maxLoadedIdx = Math.max(0, loadedCount - 1);
-    targetIdx = Math.min(Math.round(p * (FRAME_COUNT - 1)), maxLoadedIdx);
+    const rawTarget = Math.round(p * (FRAME_COUNT - 1));
+    targetIdx = nearestLoadedIndex(rawTarget);
 
     if (titleCard) {
       const fade = p < 0.2 ? 1 : Math.max(0, 1 - (p - 0.2) / 0.35);

@@ -1,0 +1,11 @@
+# Source masters — not needed at runtime (site serves .webp)
+frames/*.png
+frames/_source/
+frames/masks/
+screenshots-audit/
+photos/**/*.png
+photos/**/*.jpg
+photos/**/*.jpeg
+photos/**/*.JPG
+photos/**/*.JPEG
+.tmp-media-tests/

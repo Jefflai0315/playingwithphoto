@@ -331,7 +331,7 @@
         let media = "";
 
         if (strip.video) {
-          media = `<video class="chalk-strip-video" src="${strip.video}" poster="${strip.src || ""}" muted loop playsinline webkit-playsinline preload="auto"></video>`;
+          media = `<video class="chalk-strip-video" src="${strip.video}" poster="${strip.src || ""}" muted loop playsinline webkit-playsinline preload="none"></video>`;
         } else if (strip.gif) {
           media = `<img src="${strip.gif}" data-is-gif="1" data-gif-src="${strip.gif}" data-fallback="${strip.src || ""}" alt="${strip.label || "Strip"} example" decoding="async" />`;
         } else {

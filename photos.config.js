@@ -344,12 +344,12 @@ window.PHOTO_CONFIG = {
   snapshotStrips: [
     {
       gif: "strips/wedding-ghibli-vertical.gif",
-      src: "strips/wedding-ghibli-vertical.jpg",
+      src: "strips/wedding-ghibli-vertical.webp",
       label: "wedding · Ghibli",
     },
     {
       gif: "strips/wedding-ghibli-grid.gif",
-      src: "strips/wedding-ghibli-grid.jpg",
+      src: "strips/wedding-ghibli-grid.webp",
       label: "wedding · collage",
       wide: true,
     },
@@ -360,7 +360,7 @@ window.PHOTO_CONFIG = {
     },
     {
       gif: "strips/branded-strip.gif",
-      src: "strips/branded-strip.jpg",
+      src: "strips/branded-strip.webp",
       label: "Playing With Photo",
     },
   ],

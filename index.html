@@ -5,6 +5,14 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <meta name="description" content="Vintage photobooth ritual meets AI — classic film filters and painter styles on every strip. Weddings, parties & brand events in Singapore. From S$750." />
 <title>Playing With Photo — Vintage Photobooth, AI Film & Painter Styles · Singapore</title>
+<link rel="canonical" href="https://playingwithpencil.art/" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://playingwithpencil.art/" />
+<meta property="og:title" content="Playing With Photo — Vintage Photobooth · Singapore" />
+<meta property="og:description" content="Classic film filters and painter styles on every strip. Weddings, parties & brand events from S$750." />
+<meta property="og:image" content="https://playingwithpencil.art/photos/spark/jenmike-vangogh.webp" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://playingwithpencil.art/photos/spark/jenmike-vangogh.webp" />
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,7 +21,7 @@
 <link rel="stylesheet" href="creation.css?v=4">
 <link rel="stylesheet" href="hero-scrub.css?v=5">
 <link rel="stylesheet" href="vision-scrub.css?v=3">
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,800;0,9..144,900;1,9..144,400;1,9..144,700&family=Caveat:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=Caveat:wght@600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
 
 <script>
   // Tweakable defaults, persisted on disk by the host
@@ -1563,6 +1571,40 @@
     overflow: hidden;
   }
   .book-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 60px; align-items: center;}
+  .book-social-proof {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 28px;
+    padding: 14px 18px;
+    border: 1px solid rgba(244,234,213,.14);
+    border-radius: 12px;
+    background: rgba(0,0,0,.18);
+  }
+  .book-social-proof-label {
+    font-family: var(--ff-mono);
+    font-size: 11px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: rgba(244,234,213,.55);
+  }
+  .book-social-proof-photos { display: flex; gap: 8px; }
+  .book-social-proof-photos img {
+    width: 48px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 4px;
+    border: 1px solid rgba(244,234,213,.2);
+    transform: rotate(-3deg);
+  }
+  .book-social-proof-photos img:nth-child(2) { transform: rotate(2deg); }
+  .book-social-proof-photos img:nth-child(3) { transform: rotate(-1deg); }
+  .book-social-proof-copy {
+    margin: 0;
+    font-size: 14px;
+    color: rgba(244,234,213,.72);
+  }
   .book-chapter h2 {
     font-size: clamp(56px, 7vw, 120px);
     line-height: .9;
@@ -4591,7 +4633,7 @@
 </div>
 
 <div class="mobile-book-bar" id="mobileBookBar" aria-hidden="true">
-  <a href="#book">Book the booth · from S$750</a>
+  <a href="/snapshot/">Book the booth · from S$750</a>
 </div>
 
 <!-- HERO BACKDROP — fixed painting behind hero + plan intro (no scroll gap) -->
@@ -4966,13 +5008,13 @@
       <div class="meta-keepsake-duo">
         <figure class="meta-keepsake-item meta-keepsake-item--hero">
           <div class="meta-keepsake-frame">
-            <img src="photos/reel/jenmike-keepsake.webp" alt="Van Gogh-style keepsake portrait of Jen and Mike in an ornate gold frame" loading="lazy" />
+            <img src="photos/reel/jenmike-keepsake.webp" alt="Van Gogh-style keepsake portrait of Jen and Mike in an ornate gold frame" loading="lazy" decoding="async" />
           </div>
           <figcaption class="meta-keepsake-label">Gold frame portrait</figcaption>
         </figure>
         <figure class="meta-keepsake-item meta-keepsake-item--alt">
           <div class="meta-keepsake-frame">
-            <img src="photos/addons/collector-cards.webp" alt="Personalised holographic collector cards with custom couple illustration" loading="lazy" />
+            <img src="photos/addons/collector-cards.webp" alt="Personalised holographic collector cards with custom couple illustration" loading="lazy" decoding="async" />
           </div>
           <figcaption class="meta-keepsake-label">Collector cards</figcaption>
         </figure>
@@ -5412,6 +5454,7 @@
           id="aiAnimationVideo"
           class="animation-preview-video"
           src="photos/addons/ai-animation.mp4"
+          poster="photos/addons/ai-animation.poster.webp"
           muted
           loop
           playsinline
@@ -5558,8 +5601,8 @@
         <details class="addon-expand" onclick="event.stopPropagation()">
           <summary>See examples</summary>
           <div class="addon-thumbs">
-            <img src="photos/reel/jenmike-keepsake.webp" alt="Gold frame portrait example" loading="lazy" width="72" height="72" />
-            <img src="photos/addons/collector-cards.webp" alt="Collector card example" loading="lazy" width="72" height="72" />
+            <img src="photos/reel/jenmike-keepsake.webp" alt="Gold frame portrait example" loading="lazy" decoding="async" width="72" height="72" />
+            <img src="photos/addons/collector-cards.webp" alt="Collector card example" loading="lazy" decoding="async" width="72" height="72" />
           </div>
         </details>
         <span class="custom-theme-note">Custom themes welcome — tell us your idea</span>
@@ -5577,7 +5620,7 @@
     <div class="about-grid reveal">
       <div class="about-portrait">
         <div class="img">
-          <img src="photos/about/jeff.webp" alt="Jeff portrait" />
+          <img src="photos/about/jeff.webp" alt="Jeff portrait" loading="lazy" decoding="async" />
         </div>
         <div class="label">— Jeff, 2026</div>
         <div class="stamp">Singapore · est. 2018</div>
@@ -5752,6 +5795,15 @@
 <!-- BOOKING -->
 <section class="chapter book-chapter" id="book" data-screen-label="13 Booking">
   <div class="wrap">
+    <div class="book-social-proof reveal" aria-label="Recent events">
+      <span class="book-social-proof-label">As seen at</span>
+      <div class="book-social-proof-photos">
+        <img src="photos/testimonials/priya1.webp" alt="Wedding reception strip" width="48" height="60" loading="lazy" decoding="async" />
+        <img src="photos/testimonials/aesop.webp" alt="Brand activation strip" width="48" height="60" loading="lazy" decoding="async" />
+        <img src="photos/testimonials/gala.webp" alt="Gala night strip" width="48" height="60" loading="lazy" decoding="async" />
+      </div>
+      <p class="book-social-proof-copy">Priya &amp; Aaron · Aesop SG · NGS Gala</p>
+    </div>
     <div class="book-grid">
       <div class="reveal">
         <span class="eyebrow" style="color: var(--highlight);">Let's make a memory · 013</span>
@@ -6037,18 +6089,18 @@
   })();
 
 </script>
-<script src="photos.config.js?v=12"></script>
-<script src="analytics.js?v=1"></script>
-<script src="bg.js?v=5"></script>
-<script src="load-three.js?v=1"></script>
-<script src="app.js?v=20"></script>
+<script src="photos.config.js?v=13" defer></script>
+<script src="analytics.js?v=1" defer></script>
+<script src="bg.js?v=5" defer></script>
+<script src="load-three.js?v=1" defer></script>
+<script src="app.js?v=21" defer></script>
 <script type="module" src="demo-gif.js?v=9"></script>
-<script src="enhancements.js?v=10"></script>
-<script src="creation.js?v=11"></script>
-<script src="hero-scrub.js?v=13"></script>
-<script src="vision-scrub.js?v=13"></script>
-<script src="booth-scrub.js?v=29"></script>
-<script src="sample-wall.js?v=3"></script>
+<script src="enhancements.js?v=10" defer></script>
+<script src="creation.js?v=11" defer></script>
+<script src="hero-scrub.js?v=14" defer></script>
+<script src="vision-scrub.js?v=13" defer></script>
+<script src="booth-scrub.js?v=29" defer></script>
+<script src="sample-wall.js?v=3" defer></script>
 
 </body>
 </html>

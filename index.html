@@ -68,6 +68,63 @@
 }
 </script>
 
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How much does a photo booth cost in Singapore?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Packages start at S$750 for 2 hours, S$880 for 3 hours (most booked), and S$1,380 for 6 hours. All packages include setup, an attendant, unlimited prints, digital files, GIFs, the full AI style library, props and a sticker pack."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What AI styles can guests choose from?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Every package includes the full AI style library, including Renaissance, Studio Ghibli and Monet, layered on a classic vintage film filter. Fully custom style directions are also available free on request."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How much space do you need for the setup?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "About 2.5m x 2.5m, plus a power outlet nearby."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do you travel outside Singapore, like to Malaysia?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, bookings are available across Singapore and Malaysia."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can we combine the photo booth with a live sketch artist?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, Playing With Pencil's live wedding sketch artist service can be bundled with the photo booth at a 10-15% combo discount."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do guests get their photos?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Unlimited prints on the spot, plus a digital copy and GIF delivered by QR code scan."
+      }
+    }
+  ]
+}
+</script>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="frames/f_001.webp" as="image" fetchpriority="high">
@@ -5848,6 +5905,73 @@
       </article>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="chapter faq-chapter" id="faq" data-screen-label="12 FAQ">
+  <style>
+    .faq-chapter { padding: 80px 0; }
+    .faq-head { text-align: center; max-width: 640px; margin: 0 auto 40px; }
+    .faq-head h2 { font-size: clamp(28px, 4vw, 40px); margin-top: 12px; }
+    .faq-list { max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: 2px; }
+    .faq-item { border-bottom: 1px solid var(--tan); padding: 4px 0; }
+    .faq-item summary {
+      font-family: var(--ff-display); font-size: 19px; font-weight: 500;
+      padding: 18px 4px; cursor: pointer; list-style: none;
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+      color: var(--ink);
+    }
+    .faq-item summary::-webkit-details-marker { display: none; }
+    .faq-item summary::after {
+      content: "+"; font-family: var(--ff-mono); font-size: 20px; color: var(--rust-2);
+      flex-shrink: 0; transition: transform .2s ease;
+    }
+    .faq-item[open] summary::after { transform: rotate(45deg); }
+    .faq-item p { padding: 0 4px 18px; margin: 0; color: var(--ink-2); line-height: 1.6; max-width: 60ch; }
+    .faq-cta { text-align: center; margin-top: 36px; font-family: var(--ff-body); }
+    .faq-cta a { color: var(--rust-2); font-weight: 600; text-decoration: underline; }
+  </style>
+  <div class="wrap">
+    <div class="faq-head reveal">
+      <span class="eyebrow">Questions · 12</span>
+      <h2>Before you <em>book</em>.</h2>
+    </div>
+    <div class="faq-list reveal">
+      <details class="faq-item">
+        <summary>How much does a photo booth cost in Singapore?</summary>
+        <p>Packages start at S$750 for 2 hours, S$880 for 3 hours (our most booked option), and S$1,380 for 6 hours. Every package includes setup, an attendant, unlimited prints, digital files, GIFs, our full AI style library and a sticker pack — no hidden extras. Custom activations get a separate quote.</p>
+      </details>
+      <details class="faq-item">
+        <summary>What AI styles can guests choose from?</summary>
+        <p>Every package includes our full AI style library — think Renaissance, Studio Ghibli, Monet and more — layered on top of a classic vintage film filter. Guests pick their style, we handle the rest. Want something beyond the library — a fully custom direction for your event? Tell us your theme and we'll make it happen, free.</p>
+      </details>
+      <details class="faq-item">
+        <summary>How much space do you need for the setup?</summary>
+        <p>About 2.5m × 2.5m, plus a power outlet nearby. That's usually all it takes — let us know your venue layout when you enquire and we'll confirm it fits.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Do you handle setup and teardown?</summary>
+        <p>Yes — that's included in every package. Our attendant arrives ahead of your event start time, has everything ready to go, and breaks it all down after, so it's zero extra work for you or your planner.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Do you travel outside Singapore, like to Malaysia?</summary>
+        <p>Yes, we take bookings across Singapore and Malaysia. Reach out with your event location and date and we'll confirm availability and any travel details.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Can we combine the photo booth with a live sketch artist?</summary>
+        <p>Yes — Playing With Pencil, our live wedding sketch artist service, can be bundled with the photo booth at a 10–15% combo discount when you book both together.</p>
+      </details>
+      <details class="faq-item">
+        <summary>How do guests get their photos?</summary>
+        <p>Everyone gets unlimited prints on the spot, plus a digital copy and GIF delivered by QR code scan — no app, no waiting.</p>
+      </details>
+      <details class="faq-item">
+        <summary>How do we book, and what's the deposit?</summary>
+        <p>A 50% deposit via PayNow secures your date. We'll go through package details, AI styles and any custom add-ons before your event, and the balance is due after.</p>
+      </details>
+    </div>
+    <p class="faq-cta">More questions? <a href="https://wa.me/6589896901?text=Hi%20Jeff%2C%20I%27d%20like%20to%20ask%20a%20question%20about%20the%20photobooth." target="_blank" rel="noopener">Chat with us on WhatsApp</a>.</p>
   </div>
 </section>
 

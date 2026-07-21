@@ -43,7 +43,8 @@ Note: users search "photo booth" (two words). Site copy historically used
 - [~] Add an FAQ section + FAQPage JSON-LD — full copy + schema drafted 2026-07-21 (seo/audits/2026-07-21.md §3b), blocked on Jeff filling in the space-footprint number and approving.
 - [ ] Directory/backlink pass: SingaporeBrides, Blissful Brides, Bridestory, The Wedding Vow vendor listings; wedding planner partnerships. (Mostly JEFF: these platforms need business login/verification to submit — agent can research targets and draft outreach copy, not create the listings.)
 - [x] Image SEO: content image filenames already descriptive, no change needed. og-share.jpg recompressed 434KB→259KB (quality 50, visually verified, same dimensions) 2026-07-21.
-- [~] Performance pass: Lighthouse blocked (no local install, PSI API quota exceeded 2026-07-21). Manual audit done instead (seo/audits/2026-07-21.md §1): ~43KB render-blocking CSS + external font load flagged as a real LCP risk, matches the hero-scroll-scrub suspicion. NOT restructured — too risky to do blind without visual verification in a browser. Needs either Jeff to run pagespeed.web.dev, or a future run with API quota available, before touching load order.
+- [~] Performance pass: real PageSpeed data received 2026-07-21 (mobile 64, desktop 93). Fonts + vision-scrub.css deferred non-blocking, image width/height added, all visually verified (seo/audits/2026-07-21.md Iteration 3). Deliberately left creation.css/hero-scrub.css blocking (genuinely critical to hero, risk of FOUC). NEXT: the ~837KiB image-delivery opportunity is very likely the 123-frame hero-scroll-scrub sequence loading eagerly instead of lazily — needs a dedicated, carefully-tested iteration on the scroll-animation JS itself, not a blind edit.
+- [ ] Accessibility pass (score 81 mobile / 84 desktop, not yet triaged): color contrast, missing form labels, heading order, no `<main>` landmark.
 - [ ] Consider /wedding, /corporate landing pages once single-page site ranks (only if GSC shows impressions but weak positions for those modifiers).
 - [ ] Event schema for public events/activations when applicable.
 - [ ] Monitor: IG profile link should point to playingwithphoto.com (not .vercel.app).
@@ -80,3 +81,5 @@ static list does.
 
 - 2026-07-20 — Iteration 1 (baseline, run manually in-session). See seo/audits/2026-07-20.md.
 - 2026-07-21 — Iteration 2 (manual, on-request). og-share.jpg compressed −40%; FAQ + "photo booth" copy proposals drafted; performance pass partially blocked on tooling. See seo/audits/2026-07-21.md.
+- 2026-07-21 — Iteration 2b (manual). Pricing decisions implemented: Showpiece 5h->6h at unchanged S$1,380, AI styles unlimited on all tiers. Branch seo-improvements-2.
+- 2026-07-21 — Iteration 3 (manual, real PageSpeed data). Fonts + vision-scrub.css deferred non-blocking, image width/height added, all visually verified via local preview. Branch seo-improvements-3. See seo/audits/2026-07-21.md.

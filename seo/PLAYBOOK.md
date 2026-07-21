@@ -36,7 +36,7 @@ Note: users search "photo booth" (two words). Site copy historically used
 
 ## Backlog (work top-down; re-prioritize each iteration)
 
-- [ ] JEFF: Google Search Console — verify playingwithphoto.com, submit sitemap.xml. Without GSC the loop can't see queries/rankings; this unlocks everything.
+- [x] JEFF: Google Search Console — verified playingwithphoto.com, sitemap.xml submitted 2026-07-21, status Success, 1 page discovered. Performance/query data check pending (needs a few days to populate).
 - [ ] JEFF: Google Business Profile for Playing With Photo (huge for "photo booth singapore" local pack).
 - [ ] JEFF: Vercel dashboard — set www.playingwithphoto.com + photo.playingwithpencil.art + .vercel.app to 308-redirect to playingwithphoto.com (currently they serve 200 duplicates; canonical tag mitigates but redirect is cleaner).
 - [ ] Add visible "photo booth" (two-word) phrasing to hero pitch / section copy (PROPOSAL for Jeff — brand voice decision).
@@ -48,6 +48,34 @@ Note: users search "photo booth" (two words). Site copy historically used
 - [ ] Event schema for public events/activations when applicable.
 - [ ] Monitor: IG profile link should point to playingwithphoto.com (not .vercel.app).
 
+## When the backlog empties
+
+Do not idle. On a run where every backlog item is done/blocked-on-Jeff, switch to
+maintenance mode and add new items derived from real data instead of guessing:
+
+1. Pull Google Search Console data — NOTE: the agent has no GSC login/API access.
+   GSC is verified (2026-07-21) but data only enters this loop when Jeff pastes it
+   in (Performance report screenshot/export, or copy-pasted rows like the sitemap
+   status). If no fresh GSC data has been shared since the last run, say so
+   explicitly and ask Jeff to paste the Performance tab (queries/impressions/
+   position) rather than silently skipping this step. Once pasted: identify
+   queries with impressions but rank page 2+, and pages/queries that lost position
+   week-over-week; turn the top 2 gaps into new backlog items.
+2. Re-check the 3-5 named competitors' sites for changes (new pages, pricing,
+   package structure) — note anything that shifts positioning.
+3. Re-run Lighthouse; regressions become backlog items.
+4. Check for broken links, 404s, expired seasonal content.
+5. Propose ONE new content/page/FAQ expansion idea tied to an actual query gap from
+   GSC — not a guess. If GSC isn't connected yet, skip this step and re-flag GSC
+   setup as the blocker instead of inventing work.
+6. If truly nothing new to do, say so plainly in the audit rather than manufacturing
+   busywork — log "maintenance pass, no action needed" and note when GSC data will
+   next be checked.
+
+The goal is never "more tasks," it's closing the gap between current rankings and
+target queries. Once GSC is live, that data should drive the backlog more than this
+static list does.
+
 ## Iteration log
 
-- 2026-07-20 — Iteration 1 (baseline). See seo/audits/2026-07-20.md.
+- 2026-07-20 — Iteration 1 (baseline, run manually in-session). See seo/audits/2026-07-20.md.

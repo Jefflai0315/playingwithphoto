@@ -39,11 +39,11 @@ Note: users search "photo booth" (two words). Site copy historically used
 - [x] JEFF: Google Search Console — verified playingwithphoto.com, sitemap.xml submitted 2026-07-21, status Success, 1 page discovered. Performance/query data check pending (needs a few days to populate).
 - [ ] JEFF: Google Business Profile for Playing With Photo (huge for "photo booth singapore" local pack).
 - [ ] JEFF: Vercel dashboard — set www.playingwithphoto.com + photo.playingwithpencil.art + .vercel.app to 308-redirect to playingwithphoto.com (currently they serve 200 duplicates; canonical tag mitigates but redirect is cleaner).
-- [ ] Add visible "photo booth" (two-word) phrasing to hero pitch / section copy (PROPOSAL for Jeff — brand voice decision).
-- [ ] Add an FAQ section (pricing, space needed, setup time, AI styles, Malaysia travel) + FAQPage JSON-LD. Draft copy first for Jeff's approval.
-- [ ] Directory/backlink pass: SingaporeBrides, Blissful Brides, Bridestory, The Wedding Vow vendor listings; wedding planner partnerships.
-- [ ] Image SEO: descriptive filenames for key gallery shots; check og-share.jpg weight.
-- [ ] Performance pass: Lighthouse on live site; hero scroll-scrub JS may hurt LCP/INP on mobile.
+- [~] Add visible "photo booth" (two-word) phrasing to hero pitch / section copy — PROPOSAL drafted 2026-07-21 (seo/audits/2026-07-21.md §3a), needs Jeff to pick the actual line(s) to edit.
+- [~] Add an FAQ section + FAQPage JSON-LD — full copy + schema drafted 2026-07-21 (seo/audits/2026-07-21.md §3b), blocked on Jeff filling in the space-footprint number and approving.
+- [ ] Directory/backlink pass: SingaporeBrides, Blissful Brides, Bridestory, The Wedding Vow vendor listings; wedding planner partnerships. (Mostly JEFF: these platforms need business login/verification to submit — agent can research targets and draft outreach copy, not create the listings.)
+- [x] Image SEO: content image filenames already descriptive, no change needed. og-share.jpg recompressed 434KB→259KB (quality 50, visually verified, same dimensions) 2026-07-21.
+- [~] Performance pass: Lighthouse blocked (no local install, PSI API quota exceeded 2026-07-21). Manual audit done instead (seo/audits/2026-07-21.md §1): ~43KB render-blocking CSS + external font load flagged as a real LCP risk, matches the hero-scroll-scrub suspicion. NOT restructured — too risky to do blind without visual verification in a browser. Needs either Jeff to run pagespeed.web.dev, or a future run with API quota available, before touching load order.
 - [ ] Consider /wedding, /corporate landing pages once single-page site ranks (only if GSC shows impressions but weak positions for those modifiers).
 - [ ] Event schema for public events/activations when applicable.
 - [ ] Monitor: IG profile link should point to playingwithphoto.com (not .vercel.app).
@@ -79,3 +79,4 @@ static list does.
 ## Iteration log
 
 - 2026-07-20 — Iteration 1 (baseline, run manually in-session). See seo/audits/2026-07-20.md.
+- 2026-07-21 — Iteration 2 (manual, on-request). og-share.jpg compressed −40%; FAQ + "photo booth" copy proposals drafted; performance pass partially blocked on tooling. See seo/audits/2026-07-21.md.

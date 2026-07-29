@@ -352,21 +352,3 @@ document.head.appendChild(claudeStyle);
     });
   }, 3000);
 })();
-
-// ===== AI animation preview video (lazy play) =====
-(() => {
-  const video = document.getElementById("aiAnimationVideo");
-  if (!video || !("IntersectionObserver" in window)) return;
-
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach((e) => {
-      if (e.isIntersecting) {
-        video.play().catch(() => {});
-      } else {
-        video.pause();
-      }
-    });
-  }, { threshold: 0.25, rootMargin: "40px 0px" });
-
-  io.observe(video);
-})();

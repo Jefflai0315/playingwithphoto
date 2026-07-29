@@ -225,23 +225,15 @@
       float velPhase = uScrollVel * 3.5;
       float phase = uScrollPhase;  // advances only with scroll
 
-      // Low-freq broad undulation
-      float ragLow = (fbm(vec2(uv.x*2.2 + velPhase*0.4, phase*0.9)) - 0.5) * 0.045 * velBoost;
-      // Mid-freq ragged variation
-      float ragMid = (fbm(vec2(uv.x*6.5 - velPhase*0.6, phase*1.4 + 3.1)) - 0.5) * 0.028 * velBoost;
-      // High-freq noisy jitter
-      float ragHi  = (fbm(vec2(uv.x*22.0 + velPhase, phase*2.2 + 7.7)) - 0.5) * 0.012 * velBoost;
-      // Sharp asymmetric tongues
-      float tongueN = fbm(vec2(uv.x*3.4 + phase*0.6, phase*0.4)) - 0.5;
-      float tongues = tongueN * tongueN * tongueN * 8.0 * 0.035 * velBoost;
-      // Per-x micro-jitter — only while actively scrolling
-      float microJ = (hash(vec2(floor(uv.x*180.0), floor(phase*40.0))) - 0.5) * 0.008 * min(vel*2.5, 1.0);
+      // Gentle undulation — soft organic variation, not a jagged tear.
+      float ragLow = (fbm(vec2(uv.x*2.2 + velPhase*0.4, phase*0.9)) - 0.5) * 0.02 * velBoost;
+      float ragMid = (fbm(vec2(uv.x*6.5 - velPhase*0.6, phase*1.4 + 3.1)) - 0.5) * 0.01 * velBoost;
 
-      float lineY = uBoundaryY + ragLow + ragMid + ragHi + tongues + microJ;
+      float lineY = uBoundaryY + ragLow + ragMid;
 
       // Above the line: top section. Below: bottom section.
-      // Use a narrow smoothstep so the split is crisp but not aliased.
-      float aboveMask = smoothstep(lineY - 0.003, lineY + 0.003, uv.y);
+      // Wide smoothstep — a soft gradual gradient blend rather than a hard cut.
+      float aboveMask = smoothstep(lineY - 0.16, lineY + 0.16, uv.y);
       col = mix(botCol, topCol, aboveMask);
 
       // ---- Burn band — only if this boundary is paper↔non-paper ----

@@ -24,6 +24,8 @@
   let ready = false;
   let preloadStarted = false;
   let loopRunning = false;
+  let scrubProgress = 0;
+  let smoothProgress = 0;
 
   const prefersReducedMotion = window.matchMedia(
     "(prefers-reduced-motion: reduce)",
@@ -98,10 +100,23 @@
     return Math.min(1, Math.max(0, scrollInto / totalRange));
   }
 
+  // Continuous Ken Burns-style zoom, ramping up through the tail (same
+  // treatment as the hero/vision scrubs) so the image keeps gliding with
+  // the scroll even after the assembly animation finishes.
+  function applyZoom() {
+    // Smaller cap than hero/vision — .booth-stage is a tighter two-column
+    // grid with overflow:visible, so a bigger zoom risks spilling into the
+    // adjacent labels column instead of just filling more of a full-bleed section.
+    const zoomT = Math.max(0, Math.min(1, (smoothProgress - 0.4) / 0.6));
+    const scale = 1 + zoomT * 0.06;
+    canvas.style.transform = `scale(${scale.toFixed(4)})`;
+  }
+
   function update() {
     if (!ready) return;
 
     const p = scrollProgress();
+    scrubProgress = p;
     const videoP = Math.min(1, p / ASSEMBLE_AT);
     const maxIdx = Math.max(0, loaded - 1);
     targetIdx = Math.round(videoP * (FRAME_COUNT - 1));
@@ -122,6 +137,8 @@
 
     update();
     if (!prefersReducedMotion) {
+      smoothProgress += (scrubProgress - smoothProgress) * 0.12;
+      applyZoom();
       currentIdx += (targetIdx - currentIdx) * 0.35;
       drawFrame(Math.round(currentIdx));
     }

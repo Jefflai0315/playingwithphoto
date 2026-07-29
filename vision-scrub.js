@@ -44,6 +44,8 @@
   let targetIdx = 0;
   let currentIdx = 0;
   let preloadStarted = false;
+  let scrubProgress = 0;
+  let smoothProgress = 0;
 
   function easeOutCubic(t) {
     return 1 - Math.pow(1 - t, 3);
@@ -113,6 +115,7 @@
     const scrollInto = -rect.top;
     const scrubRange = runway.offsetHeight - vh;
     const p = Math.max(0, Math.min(1, scrollInto / scrubRange));
+    scrubProgress = p;
 
     const frameT = Math.min(1, p / FRAME_ZONE);
     const eased = easeOutCubic(frameT);
@@ -155,6 +158,15 @@
     }
   }
 
+  // Continuous Ken Burns-style zoom, ramping up through the tail (same
+  // treatment as the hero scrub) so the image keeps gliding with the scroll
+  // even after individual frames stop changing.
+  function applyZoom() {
+    const zoomT = Math.max(0, Math.min(1, (smoothProgress - 0.4) / 0.6));
+    const scale = 1 + zoomT * 0.14;
+    if (canvas) canvas.style.transform = `scale(${scale.toFixed(4)})`;
+  }
+
   let lastDrawIdx = -1;
   function loop() {
     requestAnimationFrame(loop);
@@ -168,6 +180,8 @@
       return;
 
     updateScrub();
+    smoothProgress += (scrubProgress - smoothProgress) * 0.12;
+    applyZoom();
     const lerp = targetIdx >= FRAME_COUNT - 2 ? 0.14 : 0.2;
     currentIdx += (targetIdx - currentIdx) * lerp;
     const drawIdx = Math.round(currentIdx);
@@ -180,6 +194,10 @@
   function onScrubScroll() {
     updateScrub();
     if (prefersReducedMotion || LOW_POWER) {
+      if (!prefersReducedMotion) {
+        smoothProgress = scrubProgress;
+        applyZoom();
+      }
       const drawIdx = Math.round(
         Math.max(0, Math.min(FRAME_COUNT - 1, targetIdx)),
       );

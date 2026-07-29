@@ -181,11 +181,15 @@
     });
   }
 
-  // Mobile: larger cover-fit (~30% bigger than pre-zoom contain fit).
+  // Mobile viewports are much taller/narrower than the ~1.77:1 source frames,
+  // so a full cover-fit (scale ~1.8x on a 375px phone) crops down to a tiny
+  // sliver of the frame's width. Zoom out further on narrow screens so more
+  // of the scene is visible, even though it reveals more of the backdrop
+  // layer above/below (already designed to always show through).
   function fgScaleMultiplier() {
     const w = window.innerWidth;
-    if (w <= 400) return 0.92;
-    if (w <= 720) return 1;
+    if (w <= 400) return 0.82;
+    if (w <= 720) return 0.9;
     return 1;
   }
 

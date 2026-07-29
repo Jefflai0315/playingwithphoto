@@ -379,13 +379,15 @@
   let scrubProgress = 0;
   let smoothProgress = 0;
   let heroScrollInto = 0;
+  let backdropFadeT = 1; // 1 = backdrop fully showing, 0 = fully faded into next section
 
   function updateBackdropFade() {
     if (!backdrop || !planGroup) return;
     const planTop = planGroup.getBoundingClientRect().top;
     const vh = window.innerHeight;
-    const t = (planTop - vh * 0.1) / (vh * 0.55);
-    backdrop.style.opacity = String(Math.max(0, Math.min(1, t)));
+    const t = Math.max(0, Math.min(1, (planTop - vh * 0.1) / (vh * 0.55)));
+    backdropFadeT = t;
+    backdrop.style.opacity = String(t);
   }
 
   function updateScrubTargets() {
@@ -416,11 +418,16 @@
     // after individual frames stop changing — reverses smoothly on scroll-up
     // since smoothProgress itself tracks scroll direction.
     const zoomT = Math.max(0, Math.min(1, (smoothProgress - 0.4) / 0.6));
-    const scrubScale = 1 + zoomT * 0.14;
+    // Keeps growing through the hero->next-section transition itself, driven
+    // by how far the backdrop has faded — independent of the hero's own
+    // pinned scroll range, so the zoom doesn't freeze the instant it unpins.
+    const transitionZoom = 1 - backdropFadeT;
+    const scrubScale = 1 + zoomT * 0.14 + transitionZoom * 0.1;
+    const bgScale = 1.12 + zoomT * 0.05 + transitionZoom * 0.09;
 
     if (bgPhoto) {
       bgPhoto.style.transform =
-        `translate3d(${Math.round(mx * 12 * pm)}px, ${Math.round(my * 8 * pm)}px, 0) scale(1.12)`;
+        `translate3d(${Math.round(mx * 12 * pm)}px, ${Math.round(my * 8 * pm)}px, 0) scale(${bgScale.toFixed(4)})`;
     }
     if (canvas) {
       canvas.style.transform =

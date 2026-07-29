@@ -82,38 +82,25 @@
     radial-gradient(ellipse at center, transparent 42%, rgba(20,12,6,.2) 100%);
 }
 
-/* Torn paper — covers top & bottom, reveals visual in the middle */
+/* Soft paper fade — covers top & bottom, gradually reveals the visual in the middle */
 .vision-paper {
   position: absolute;
   left: -4vw;
   right: -4vw;
   z-index: 4;
   pointer-events: none;
-  filter: drop-shadow(0 6px 18px rgba(42,26,12,.12));
 }
 
 .vision-paper--top {
   top: 0;
   height: clamp(88px, 17vh, 148px);
-  background: var(--cream);
-  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 100' preserveAspectRatio='none'%3E%3Cpath d='M0,0 H1200 V42 C1160,54 1120,30 1080,44 C1040,58 1000,34 960,48 C920,62 880,38 840,52 C800,66 760,42 720,56 C680,70 640,46 600,60 C560,74 520,50 480,64 C440,78 400,54 360,68 C320,82 280,58 240,72 C200,86 160,62 120,76 C80,90 40,66 0,80 Z' fill='black'/%3E%3C/svg%3E");
-  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 100' preserveAspectRatio='none'%3E%3Cpath d='M0,0 H1200 V42 C1160,54 1120,30 1080,44 C1040,58 1000,34 960,48 C920,62 880,38 840,52 C800,66 760,42 720,56 C680,70 640,46 600,60 C560,74 520,50 480,64 C440,78 400,54 360,68 C320,82 280,58 240,72 C200,86 160,62 120,76 C80,90 40,66 0,80 Z' fill='black'/%3E%3C/svg%3E");
-  -webkit-mask-size: 100% 100%;
-  mask-size: 100% 100%;
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
+  background: linear-gradient(180deg, var(--cream) 0%, var(--cream) 35%, rgba(244,234,213,0) 100%);
 }
 
 .vision-paper--bottom {
   bottom: 0;
   height: clamp(88px, 17vh, 148px);
-  background: var(--paper);
-  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 100' preserveAspectRatio='none'%3E%3Cpath d='M0,100 H1200 V58 C1160,46 1120,70 1080,56 C1040,42 1000,66 960,52 C920,38 880,62 840,48 C800,34 760,58 720,44 C680,30 640,54 600,40 C560,26 520,50 480,36 C440,22 400,46 360,32 C320,18 280,42 240,28 C200,14 160,38 120,24 C80,10 40,34 0,20 Z' fill='black'/%3E%3C/svg%3E");
-  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 100' preserveAspectRatio='none'%3E%3Cpath d='M0,100 H1200 V58 C1160,46 1120,70 1080,56 C1040,42 1000,66 960,52 C920,38 880,62 840,48 C800,34 760,58 720,44 C680,30 640,54 600,40 C560,26 520,50 480,36 C440,22 400,46 360,32 C320,18 280,42 240,28 C200,14 160,38 120,24 C80,10 40,34 0,20 Z' fill='black'/%3E%3C/svg%3E");
-  -webkit-mask-size: 100% 100%;
-  mask-size: 100% 100%;
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
+  background: linear-gradient(0deg, var(--paper) 0%, var(--paper) 35%, rgba(235,220,183,0) 100%);
 }
 
 .vision-scrub-copy {

@@ -9,47 +9,45 @@
 // ==========================================================
 
 (function () {
+  // Order must match real DOM order — getScrollState() walks consecutive
+  // pairs to find the boundary currently on screen, so a missing or
+  // out-of-order entry throws off every transition after it.
   const STACKS = [
-    { id: 'hero',         type: 'image', images: [
+    { id: 'hero',          type: 'image', images: [
       'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=1600&q=80',
       'https://images.unsplash.com/photo-1578321272176-b7bbc0679853?w=1600&q=80',
       'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=1600&q=80',
     ]},
-    { id: 'spark',        type: 'image', images: [
+    { id: 'vision',        type: 'paper' }, // has its own full-bleed scroll canvas
+    { id: 'samples',       type: 'paper' }, // real photo gallery, no generic bg needed
+    { id: 'spark',         type: 'image', images: [
       'https://images.unsplash.com/photo-1578321272176-b7bbc0679853?w=1600&q=80',
       'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=1600&q=80',
       'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=1600&q=80',
     ]},
-    { id: 'reel',         type: 'image', images: [
+    { id: 'metamorphosis', type: 'paper' }, // has its own .meta-bg, opted out via CSS
+    { id: 'reel',          type: 'image', images: [
       'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=1600&q=80',
       'https://images.unsplash.com/photo-1569587112025-0d460e81a126?w=1600&q=80',
       'https://images.unsplash.com/photo-1502982720700-bfff97f2ecac?w=1600&q=80',
     ]},
-    { id: 'demo',         type: 'paper' },
-    { id: 'booth',        type: 'paper' },
-    { id: 'how',          type: 'image', images: [
-      'https://images.unsplash.com/photo-1528716321680-815a8cdb8cbe?w=1600&q=80',
-      'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=1600&q=80',
-      'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=1600&q=80',
-    ]},
-    { id: 'styles',       type: 'image', images: [
+    { id: 'styles',        type: 'image', images: [
       'https://images.unsplash.com/photo-1547891654-e66ed7ebb968?w=1600&q=80',
       'https://images.unsplash.com/photo-1578321272176-b7bbc0679853?w=1600&q=80',
       'https://images.unsplash.com/photo-1464207687429-7505649dae38?w=1600&q=80',
     ]},
-    { id: 'usecases',     type: 'image', images: [
-      'https://images.unsplash.com/photo-1519741497674-611481863552?w=1600&q=80',
-      'https://images.unsplash.com/photo-1469371670807-013ccf25f16a?w=1600&q=80',
-      'https://images.unsplash.com/photo-1464207687429-7505649dae38?w=1600&q=80',
-    ]},
-    { id: 'testimonials', type: 'image', images: [
+    { id: 'demo',          type: 'paper' },
+    { id: 'booth',         type: 'paper' },
+    { id: 'testimonials',  type: 'image', images: [
       'https://images.unsplash.com/photo-1502982720700-bfff97f2ecac?w=1600&q=80',
       'https://images.unsplash.com/photo-1569587112025-0d460e81a126?w=1600&q=80',
       'https://images.unsplash.com/photo-1519741497674-611481863552?w=1600&q=80',
     ]},
-    { id: 'pricing',      type: 'paper' },
-    { id: 'about',        type: 'paper' },
-    { id: 'book',         type: 'paper' },
+    { id: 'addons',        type: 'paper' },
+    { id: 'about',         type: 'paper' },
+    { id: 'pricing',       type: 'paper' },
+    { id: 'faq',           type: 'paper' },
+    { id: 'book',          type: 'paper' },
   ];
   window.__BG_STACKS__ = STACKS;
 
@@ -398,6 +396,13 @@
   // - If a boundary is within viewport: topIdx = section above, botIdx = section below.
   //   uBoundaryY = screen-space y of the boundary (1=top, 0=bottom in uv coords).
   // - If no boundary on screen: just use the active section for top, uBoundaryY = -99.
+  // .offsetTop is unreliable here — most sections sit inside position:relative
+  // .story-group wrapper divs, so it measures relative to the wrong ancestor.
+  // Page-Y from getBoundingClientRect() is always document-relative and correct.
+  function pageTop(el) {
+    return el.getBoundingClientRect().top + window.scrollY;
+  }
+
   function getScrollState() {
     const sy = window.scrollY;
     const vh = window.innerHeight;
@@ -407,7 +412,7 @@
     for (let i = 1; i < STACKS.length; i++) {
       const el = document.getElementById(STACKS[i].id);
       if (!el) continue;
-      const boundaryPageY = el.offsetTop;
+      const boundaryPageY = pageTop(el);
       const screenY = boundaryPageY - sy; // 0=top of viewport, vh=bottom
       if (screenY >= -40 && screenY <= vh + 40) {
         // uv y: 1 at top, 0 at bottom
@@ -430,13 +435,14 @@
     STACKS.forEach((s, i) => {
       const el = document.getElementById(s.id);
       if (!el) return;
-      if (el.offsetTop <= focus && el.offsetTop > bestTop) {
-        bestTop = el.offsetTop; activeIdx = i; activeEl = el;
+      const top = pageTop(el);
+      if (top <= focus && top > bestTop) {
+        bestTop = top; activeIdx = i; activeEl = el;
       }
     });
     let activeProgress = 0;
     if (activeEl) {
-      activeProgress = Math.max(0, Math.min(1, (focus - activeEl.offsetTop) / activeEl.offsetHeight));
+      activeProgress = Math.max(0, Math.min(1, (focus - pageTop(activeEl)) / activeEl.offsetHeight));
     }
 
     return { boundary, activeIdx, activeProgress };
@@ -447,7 +453,7 @@
     if (!el) return 0;
     const sy = window.scrollY, vh = window.innerHeight;
     const focus = sy + vh * 0.5;
-    return Math.max(0, Math.min(1, (focus - el.offsetTop) / el.offsetHeight));
+    return Math.max(0, Math.min(1, (focus - pageTop(el)) / el.offsetHeight));
   }
 
   function updateFromScroll() {

@@ -279,9 +279,6 @@
   }
   .logo-short { display: none; }
   .navlinks { display: flex; gap: 32px; }
-  @media (min-width: 901px) {
-    body.has-rail .navlinks { display: none; }
-  }
   .navlinks a { text-decoration: none; opacity: .7; transition: opacity .2s; }
   .navlinks a:hover { opacity: 1; }
   .nav-cta {
@@ -916,10 +913,6 @@
   }
   .site-footer-nav a { text-decoration: none; opacity: .75; }
   .site-footer-nav a:hover { opacity: 1; }
-
-  @media (min-width: 901px) and (max-width: 1100px) {
-    body.has-rail .topnav { left: 180px; width: calc(100% - 180px); }
-  }
 
   @media (max-width: 900px) {
     .nav-toggle { display: flex; }
@@ -3171,159 +3164,6 @@
   }
   .meta-keepsake-item { position: relative; }
 
-  /* ================================================================
-     EDITORIAL LAYER — "The ʀᴇɴᴀɪssᴀɴᴄᴇ-style Edition" chrome.
-     Sidebar chapter index, torn-paper dividers, illuminated drop-caps,
-     and giant Roman numerals bleeding off section edges.
-     Sits ON TOP of the existing design — does not rearrange DOM.
-     ================================================================ */
-
-  /* Fixed left sidebar — chapter index + edition title */
-  .edition-rail {
-    position: fixed;
-    left: 0; top: 0;
-    height: 100vh;
-    width: 220px;
-    z-index: 90;
-    padding: 32px 20px 28px 28px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    pointer-events: none;
-    background: transparent;
-    --rail-text: var(--ink);
-    --rail-text-muted: rgba(42,26,12,.88);
-    --rail-num: rgba(42,26,12,.62);
-    --rail-accent: var(--rust-2);
-    --rail-border: rgba(42,26,12,.22);
-    --rail-border-strong: rgba(42,26,12,.35);
-    --rail-shadow: none;
-  }
-  .edition-rail.is-dark {
-    --rail-text: var(--cream);
-    --rail-text-muted: rgba(244,234,213,.82);
-    --rail-num: rgba(244,234,213,.6);
-    --rail-accent: var(--highlight);
-    --rail-border: rgba(244,234,213,.28);
-    --rail-border-strong: rgba(244,234,213,.4);
-    --rail-shadow: 0 1px 4px rgba(0,0,0,.4);
-  }
-  .edition-rail > * { pointer-events: auto; }
-  .edition-rail .edition-mark,
-  .edition-rail .rail-chapters li,
-  .edition-rail .rail-chapters a,
-  .edition-rail .edition-footnote {
-    text-shadow: var(--rail-shadow);
-    transition: color .3s ease, text-shadow .3s ease;
-  }
-
-  .edition-mark {
-    font-family: var(--ff-display);
-    font-weight: 400;
-    font-size: 12px;
-    letter-spacing: .2em;
-    text-transform: uppercase;
-    color: var(--rail-text);
-    line-height: 1.7;
-    padding: 10px 0 12px;
-    border-top: 1px solid var(--rail-border-strong);
-    border-bottom: 1px solid var(--rail-border-strong);
-    transition: color .3s ease, border-color .3s ease;
-  }
-  .edition-mark em {
-    display: block;
-    font-style: italic;
-    font-weight: 500;
-    font-size: 16px;
-    letter-spacing: .05em;
-    margin-top: 2px;
-  }
-  .edition-mark .variant {
-    font-variant-caps: small-caps;
-    letter-spacing: .14em;
-  }
-
-  .rail-chapters {
-    list-style: none;
-    margin: 0; padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-  .rail-chapters li {
-    display: grid;
-    grid-template-columns: 30px 1fr;
-    gap: 10px;
-    align-items: baseline;
-    padding: 7px 0;
-    font-family: var(--ff-display);
-    font-size: 14px;
-    line-height: 1.35;
-    letter-spacing: .03em;
-    color: var(--rail-text-muted);
-    transition: color .25s ease, border-color .3s ease;
-    border-bottom: 1px dotted var(--rail-border);
-  }
-  .rail-chapters a {
-    color: inherit;
-    text-decoration: none;
-    font-variant-caps: small-caps;
-    letter-spacing: .1em;
-    font-weight: 500;
-  }
-  .rail-chapters .num {
-    font-family: var(--ff-display);
-    font-style: italic;
-    font-size: 12px;
-    font-variant-numeric: oldstyle-nums;
-    letter-spacing: .05em;
-    text-align: right;
-    padding-right: 4px;
-    color: var(--rail-num);
-    transition: color .3s ease;
-  }
-  .rail-chapters li:hover,
-  .rail-chapters li.is-active {
-    color: var(--rail-text);
-  }
-  .rail-chapters li.is-active .num,
-  .rail-chapters li:hover .num {
-    color: var(--rail-accent);
-    font-style: italic;
-    font-weight: 600;
-  }
-  .rail-chapters li.is-active::before,
-  .rail-chapters li:hover::before {
-    content: "";
-    position: absolute;
-    /* subtle marker handled via color only for now */
-  }
-
-  .edition-footnote {
-    margin-top: auto;
-    font-family: var(--ff-display);
-    font-style: italic;
-    font-size: 12px;
-    letter-spacing: .04em;
-    line-height: 1.5;
-    color: var(--rail-text-muted);
-    border-top: 1px solid var(--rail-border-strong);
-    padding-top: 10px;
-    transition: color .3s ease, border-color .3s ease;
-  }
-  .edition-footnote .seal {
-    display: inline-block;
-    width: 18px; height: 18px;
-    border-radius: 50%;
-    border: 1px solid var(--rail-border-strong);
-    margin-right: 6px;
-    vertical-align: middle;
-    background: radial-gradient(circle, var(--rust) 20%, transparent 70%);
-    opacity: .65;
-  }
-
-  /* Top nav stays visible alongside the chapter rail */
-
   /* ===== Three.js dissolve background ===== */
   #bg-canvas-host {
     position: fixed;
@@ -3502,51 +3342,6 @@
     text-shadow: 0 1px 1px rgba(244, 234, 213, 0.45);
   }
 
-  body.has-bg-canvas .edition-rail {
-    z-index: 90;
-  }
-
-  /* Body gets extra padding-left to make room for the rail */
-  body.has-rail { padding-left: 0; }
-  body.has-rail > section,
-  body.has-rail > .torn-edge,
-  body.has-rail > .story-group,
-  body.has-rail > .zone-edge { margin-left: 220px; }
-  body.has-rail > #hero { margin-left: 0 !important; }
-  body.has-rail .topnav { left: 220px; width: calc(100% - 220px); }
-
-  /* Edition mark (top of rail) */
-  .edition-rail .edition-mark {
-    flex: 0 0 auto;
-    font-size: 12px;
-    letter-spacing: .2em;
-    padding: 0 0 12px;
-    border-top: none;
-    border-bottom: 1px solid rgba(42,26,12,.25);
-  }
-  /* Rail chapters scrollable center */
-  .edition-rail .rail-chapters {
-    flex: 1 1 auto;
-    overflow-y: auto;
-    padding-right: 4px;
-  }
-  .edition-rail .rail-chapters::-webkit-scrollbar { width: 0; }
-
-  .edition-rail .edition-footnote {
-    flex: 0 0 auto;
-  }
-
-  @media (max-width: 1100px) {
-    .edition-rail { width: 180px; padding-left: 16px; }
-    body.has-rail > section, body.has-rail > .torn-edge, body.has-rail > .story-group, body.has-rail > .zone-edge { margin-left: 180px; }
-    body.has-rail > #hero { margin-left: 0 !important; }
-    body.has-rail .topnav { left: 180px; width: calc(100% - 180px); }
-  }
-  @media (max-width: 900px) {
-    .edition-rail { display: none; }
-    body.has-rail > section, body.has-rail > .torn-edge, body.has-rail > .story-group, body.has-rail > .zone-edge { margin-left: 0; }
-    body.has-rail .topnav { left: 0; width: 100%; }
-  }
 
   /* ======= TORN-PAPER EDGES between sections ======= */
   .torn-edge {
@@ -4705,35 +4500,10 @@
   }
 </style>
 </head>
-<body data-palette="sepia" data-grain="true" class="has-rail has-bg-canvas">
+<body data-palette="sepia" data-grain="true" class="has-bg-canvas">
 
 <!-- Three.js dissolve background -->
 <div id="bg-canvas-host" aria-hidden="true"></div>
-
-<!-- EDITORIAL RAIL — fixed left sidebar, chapter index like an illuminated manuscript -->
-<aside class="edition-rail" aria-label="Chapter index">
-  <div class="edition-mark">
-    Playing With Photo
-    <em>AI vintage <span class="variant">photobooth</span></em>
-  </div>
-  <ol class="rail-chapters">
-    <li data-target="#hero"><span class="num">ɪ</span><a href="#hero">Home</a></li>
-    <li data-target="#pricing"><span class="num">ɪɪ</span><a href="#pricing">Packages</a></li>
-    <li data-target="#samples"><span class="num">ɪɪɪ</span><a href="#samples">Samples</a></li>
-    <li data-target="#vision"><span class="num">ɪᴠ</span><a href="#vision">The vision</a></li>
-    <li data-target="#spark"><span class="num">ᴠ</span><a href="#spark">AI examples</a></li>
-    <li data-target="#styles"><span class="num">ᴠɪ</span><a href="#styles">Film looks</a></li>
-    <li data-target="#demo"><span class="num">ᴠɪɪ</span><a href="#demo">Try film live</a></li>
-    <li data-target="#testimonials"><span class="num">ᴠɪɪɪ</span><a href="#testimonials">Reviews</a></li>
-    <li data-target="#about"><span class="num">ɪx</span><a href="#about">About</a></li>
-    <li data-target="#book"><span class="num">x</span><a href="#book">Book</a></li>
-  </ol>
-  <div class="edition-footnote">
-    <span class="seal" aria-hidden="true"></span>
-    Singapore · AI vintage photobooth<br/>
-    <em>From S$750 · vintage ritual, AI inside</em>
-  </div>
-</aside>
 
 <!-- NAV -->
 <nav class="topnav" id="topnav" aria-label="Main">
@@ -6140,47 +5910,6 @@
       if (el) host.appendChild(el);
     });
     if (host.childElementCount) document.body.appendChild(host);
-  })();
-
-  // ============= Editorial rail scroll-spy =============
-  (function() {
-    const rail = document.querySelector('.edition-rail');
-    if (!rail) return;
-    const items = [...rail.querySelectorAll('.rail-chapters li')];
-    const sections = items.map(li => {
-      const sel = li.getAttribute('data-target');
-      return sel ? document.querySelector(sel) : null;
-    });
-
-    // Sections with a dark background — rail switches to light text over these
-    // so it stays readable without needing an opaque panel behind it.
-    const DARK_SECTION_IDS = new Set(['hero', 'metamorphosis', 'reel', 'styles', 'book']);
-    const allSections = [...document.querySelectorAll('section[id]')]
-      .map(el => ({ el, dark: DARK_SECTION_IDS.has(el.id) }));
-
-    function updateActive() {
-      const y = window.scrollY + window.innerHeight * 0.35;
-      let activeIdx = 0;
-      sections.forEach((sec, i) => {
-        if (!sec) return;
-        const top = sec.offsetTop;
-        if (y >= top) activeIdx = i;
-      });
-      items.forEach((li, i) => li.classList.toggle('is-active', i === activeIdx));
-
-      // offsetTop is unreliable here (many sections sit inside position:relative
-      // wrappers, so it's relative to the wrong ancestor) — use live viewport
-      // position instead, which is always document-relative and correct.
-      let dark = false;
-      const refY = window.innerHeight * 0.35;
-      allSections.forEach(({ el, dark: isDark }) => {
-        if (el.getBoundingClientRect().top <= refY) dark = isDark;
-      });
-      rail.classList.toggle('is-dark', dark);
-    }
-
-    window.addEventListener('scroll', updateActive, { passive: true });
-    updateActive();
   })();
 
   // ============= Mobile nav drawer =============

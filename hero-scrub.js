@@ -365,6 +365,7 @@
   let targetIdx = 0;
   let currentIdx = 0;
   let scrubProgress = 0;
+  let smoothProgress = 0;
   let heroScrollInto = 0;
 
   function updateBackdropFade() {
@@ -442,6 +443,9 @@
     applyMotion();
 
     currentIdx += (targetIdx - currentIdx) * 0.2;
+    // Eased separately from currentIdx so the dissolve/particle layer glides
+    // to a stop instead of snapping the instant scrolling stops.
+    smoothProgress += (scrubProgress - smoothProgress) * 0.12;
     const drawIdx = Math.round(currentIdx);
     if (frames[drawIdx] && drawIdx !== lastDrawIdx) {
       drawFrame(drawIdx);
@@ -453,7 +457,7 @@
       lastSampleFrame = drawIdx;
     }
 
-    updateAndDrawDissolve(scrubProgress, shouldSkipDissolve());
+    updateAndDrawDissolve(smoothProgress, shouldSkipDissolve());
   }
 
   function onScrubScroll() {

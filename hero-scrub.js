@@ -422,8 +422,8 @@
     // by how far the backdrop has faded — independent of the hero's own
     // pinned scroll range, so the zoom doesn't freeze the instant it unpins.
     const transitionZoom = 1 - backdropFadeT;
-    const scrubScale = 1 + zoomT * 0.14 + transitionZoom * 0.1;
-    const bgScale = 1.12 + zoomT * 0.05 + transitionZoom * 0.09;
+    const scrubScale = 1 + zoomT * 0.14 + transitionZoom * 0.26;
+    const bgScale = 1.12 + zoomT * 0.05 + transitionZoom * 0.24;
 
     if (bgPhoto) {
       bgPhoto.style.transform =

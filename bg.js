@@ -13,7 +13,7 @@
     { id: 'hero',         type: 'image', images: [
       'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=1600&q=80',
       'https://images.unsplash.com/photo-1578321272176-b7bbc0679853?w=1600&q=80',
-      'https://images.unsplash.com/photo-1549887552-cb1071d3e5ca?w=1600&q=80',
+      'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=1600&q=80',
     ]},
     { id: 'spark',        type: 'image', images: [
       'https://images.unsplash.com/photo-1578321272176-b7bbc0679853?w=1600&q=80',
@@ -35,7 +35,7 @@
     { id: 'styles',       type: 'image', images: [
       'https://images.unsplash.com/photo-1547891654-e66ed7ebb968?w=1600&q=80',
       'https://images.unsplash.com/photo-1578321272176-b7bbc0679853?w=1600&q=80',
-      'https://images.unsplash.com/photo-1579541591970-e5cf87e1b675?w=1600&q=80',
+      'https://images.unsplash.com/photo-1464207687429-7505649dae38?w=1600&q=80',
     ]},
     { id: 'usecases',     type: 'image', images: [
       'https://images.unsplash.com/photo-1519741497674-611481863552?w=1600&q=80',
@@ -45,7 +45,7 @@
     { id: 'testimonials', type: 'image', images: [
       'https://images.unsplash.com/photo-1502982720700-bfff97f2ecac?w=1600&q=80',
       'https://images.unsplash.com/photo-1569587112025-0d460e81a126?w=1600&q=80',
-      'https://images.unsplash.com/photo-1549887552-cb1071d3e5ca?w=1600&q=80',
+      'https://images.unsplash.com/photo-1519741497674-611481863552?w=1600&q=80',
     ]},
     { id: 'pricing',      type: 'paper' },
     { id: 'about',        type: 'paper' },

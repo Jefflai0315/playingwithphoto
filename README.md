@@ -67,3 +67,15 @@ Use [Formspree](https://formspree.io/) to collect all enquiries in one dashboard
 ```
 
 After that, submissions will appear in your Formspree dashboard and can also notify your email.
+
+## Photo Booth Software Waitlist (`/software/`)
+
+A separate lead-gen page for the "license the booth software" / self-serve product idea, at `playingwithphoto.com/software/`. Until an endpoint is set, submissions fall back to opening an email draft.
+
+To wire it up to Formspree (same pattern as above, use a **second, separate** Formspree form so waitlist leads don't mix with event booking enquiries):
+
+```html
+<form id="waitlistForm" data-provider="formspree" data-endpoint="https://formspree.io/f/yyyyabcd">
+```
+
+That line is in `software/index.html`.

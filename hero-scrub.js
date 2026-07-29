@@ -403,6 +403,12 @@
 
   function applyMotion() {
     const pm = fgParallaxStrength();
+    // Continuous Ken Burns-style zoom, ramping up through the dissolve tail
+    // (smoothProgress 0.4→1) so the image keeps gliding with the scroll even
+    // after individual frames stop changing — reverses smoothly on scroll-up
+    // since smoothProgress itself tracks scroll direction.
+    const zoomT = Math.max(0, Math.min(1, (smoothProgress - 0.4) / 0.6));
+    const scrubScale = 1 + zoomT * 0.14;
 
     if (bgPhoto) {
       bgPhoto.style.transform =
@@ -410,7 +416,7 @@
     }
     if (canvas) {
       canvas.style.transform =
-        `translate3d(${Math.round(mx * -22 * pm)}px, ${Math.round(my * -14 * pm)}px, 0)`;
+        `translate3d(${Math.round(mx * -22 * pm)}px, ${Math.round(my * -14 * pm)}px, 0) scale(${scrubScale.toFixed(4)})`;
     }
   }
 
@@ -444,12 +450,13 @@
     mx += (tmx - mx) * 0.06;
     my += (tmy - my) * 0.06;
     updateScrubTargets();
+    // Eased separately from currentIdx so the dissolve/particle layer (and
+    // the tail-end zoom) glide to a stop instead of snapping the instant
+    // scrolling stops.
+    smoothProgress += (scrubProgress - smoothProgress) * 0.12;
     applyMotion();
 
     currentIdx += (targetIdx - currentIdx) * 0.2;
-    // Eased separately from currentIdx so the dissolve/particle layer glides
-    // to a stop instead of snapping the instant scrolling stops.
-    smoothProgress += (scrubProgress - smoothProgress) * 0.12;
     const drawIdx = Math.round(currentIdx);
     if (frames[drawIdx] && drawIdx !== lastDrawIdx) {
       drawFrame(drawIdx);

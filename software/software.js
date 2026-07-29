@@ -31,6 +31,7 @@
         "",
         `Name: ${data.name || "-"}`,
         `Email: ${data.email || "-"}`,
+        `WhatsApp: ${data.whatsapp || "-"}`,
         `Interested as: ${data.audience || "-"}`,
         `Location: ${data.location || "-"}`,
         `Use case: ${data.useCase || "-"}`,
@@ -54,6 +55,7 @@
     const data = {
       name: form.elements.name?.value?.trim() || "",
       email: form.elements.email?.value?.trim() || "",
+      whatsapp: form.elements.whatsapp?.value?.trim() || "",
       audience: form.elements.audience?.value || "",
       location: form.elements.location?.value?.trim() || "",
       useCase: form.elements.useCase?.value?.trim() || "",

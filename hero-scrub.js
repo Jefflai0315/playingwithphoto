@@ -58,9 +58,17 @@
   // Is next section paper? If so, skip dissolve. Checks bg.js STACKS if available,
   // otherwise detects from .paper-* classes on the next section element.
   function nextSectionIsPaper() {
-    // Find the first section AFTER hero in DOM order
-    let el = hero.nextElementSibling;
-    while (el && !el.matches('section, [id]')) el = el.nextElementSibling;
+    // Find the first <section id> AFTER hero in DOCUMENT order — hero's real
+    // sibling is a wrapper <div class="story-group ..."> with #vision nested
+    // inside it, so walking nextElementSibling alone skips straight past it.
+    let el = null;
+    for (const s of document.querySelectorAll('section[id]')) {
+      if (s === hero) continue;
+      if (hero.compareDocumentPosition(s) & Node.DOCUMENT_POSITION_FOLLOWING) {
+        el = s;
+        break;
+      }
+    }
     if (!el) return false;
     // Check if we can find STACKS metadata
     if (window.__BG_STACKS__) {
@@ -188,8 +196,8 @@
   // layer above/below (already designed to always show through).
   function fgScaleMultiplier() {
     const w = window.innerWidth;
-    if (w <= 400) return 0.82;
-    if (w <= 720) return 0.9;
+    if (w <= 400) return 0.76;
+    if (w <= 720) return 0.86;
     return 1;
   }
 
@@ -474,6 +482,11 @@
   function onScrubScroll() {
     updateScrubTargets();
     if (prefersReducedMotion || LOW_POWER) {
+      // This path never runs the rAF loop, so smoothProgress (which normally
+      // eases toward scrubProgress there) would otherwise stay frozen at 0
+      // forever — snap it directly here so the tail-end zoom still tracks
+      // scroll on mobile, just without the easing glide.
+      if (!prefersReducedMotion) smoothProgress = scrubProgress;
       applyMotion();
       const drawIdx = Math.round(
         Math.max(0, Math.min(FRAME_COUNT - 1, targetIdx))

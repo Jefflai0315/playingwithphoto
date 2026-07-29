@@ -3190,18 +3190,31 @@
     flex-direction: column;
     gap: 20px;
     pointer-events: none;
-    background: rgba(244, 234, 213, 0.97);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-right: 1px solid rgba(42, 26, 12, 0.14);
-    box-shadow: 2px 0 28px rgba(20, 12, 6, 0.1);
+    background: transparent;
+    --rail-text: var(--ink);
+    --rail-text-muted: rgba(42,26,12,.88);
+    --rail-num: rgba(42,26,12,.62);
+    --rail-accent: var(--rust-2);
+    --rail-border: rgba(42,26,12,.22);
+    --rail-border-strong: rgba(42,26,12,.35);
+    --rail-shadow: none;
+  }
+  .edition-rail.is-dark {
+    --rail-text: var(--cream);
+    --rail-text-muted: rgba(244,234,213,.82);
+    --rail-num: rgba(244,234,213,.6);
+    --rail-accent: var(--highlight);
+    --rail-border: rgba(244,234,213,.28);
+    --rail-border-strong: rgba(244,234,213,.4);
+    --rail-shadow: 0 1px 4px rgba(0,0,0,.4);
   }
   .edition-rail > * { pointer-events: auto; }
   .edition-rail .edition-mark,
   .edition-rail .rail-chapters li,
   .edition-rail .rail-chapters a,
   .edition-rail .edition-footnote {
-    text-shadow: none;
+    text-shadow: var(--rail-shadow);
+    transition: color .3s ease, text-shadow .3s ease;
   }
 
   .edition-mark {
@@ -3210,11 +3223,12 @@
     font-size: 12px;
     letter-spacing: .2em;
     text-transform: uppercase;
-    color: var(--ink);
+    color: var(--rail-text);
     line-height: 1.7;
     padding: 10px 0 12px;
-    border-top: 1px solid rgba(42,26,12,.35);
-    border-bottom: 1px solid rgba(42,26,12,.35);
+    border-top: 1px solid var(--rail-border-strong);
+    border-bottom: 1px solid var(--rail-border-strong);
+    transition: color .3s ease, border-color .3s ease;
   }
   .edition-mark em {
     display: block;
@@ -3246,9 +3260,9 @@
     font-size: 14px;
     line-height: 1.35;
     letter-spacing: .03em;
-    color: rgba(42,26,12,.88);
-    transition: color .25s ease;
-    border-bottom: 1px dotted rgba(42,26,12,.22);
+    color: var(--rail-text-muted);
+    transition: color .25s ease, border-color .3s ease;
+    border-bottom: 1px dotted var(--rail-border);
   }
   .rail-chapters a {
     color: inherit;
@@ -3265,15 +3279,16 @@
     letter-spacing: .05em;
     text-align: right;
     padding-right: 4px;
-    color: rgba(42,26,12,.62);
+    color: var(--rail-num);
+    transition: color .3s ease;
   }
   .rail-chapters li:hover,
   .rail-chapters li.is-active {
-    color: var(--ink);
+    color: var(--rail-text);
   }
   .rail-chapters li.is-active .num,
   .rail-chapters li:hover .num {
-    color: var(--rust-2);
+    color: var(--rail-accent);
     font-style: italic;
     font-weight: 600;
   }
@@ -3291,15 +3306,16 @@
     font-size: 12px;
     letter-spacing: .04em;
     line-height: 1.5;
-    color: rgba(42,26,12,.72);
-    border-top: 1px solid rgba(42,26,12,.28);
+    color: var(--rail-text-muted);
+    border-top: 1px solid var(--rail-border-strong);
     padding-top: 10px;
+    transition: color .3s ease, border-color .3s ease;
   }
   .edition-footnote .seal {
     display: inline-block;
     width: 18px; height: 18px;
     border-radius: 50%;
-    border: 1px solid rgba(42,26,12,.45);
+    border: 1px solid var(--rail-border-strong);
     margin-right: 6px;
     vertical-align: middle;
     background: radial-gradient(circle, var(--rust) 20%, transparent 70%);
@@ -6136,6 +6152,12 @@
       return sel ? document.querySelector(sel) : null;
     });
 
+    // Sections with a dark background — rail switches to light text over these
+    // so it stays readable without needing an opaque panel behind it.
+    const DARK_SECTION_IDS = new Set(['hero', 'metamorphosis', 'reel', 'styles', 'book']);
+    const allSections = [...document.querySelectorAll('section[id]')]
+      .map(el => ({ el, dark: DARK_SECTION_IDS.has(el.id) }));
+
     function updateActive() {
       const y = window.scrollY + window.innerHeight * 0.35;
       let activeIdx = 0;
@@ -6145,6 +6167,16 @@
         if (y >= top) activeIdx = i;
       });
       items.forEach((li, i) => li.classList.toggle('is-active', i === activeIdx));
+
+      // offsetTop is unreliable here (many sections sit inside position:relative
+      // wrappers, so it's relative to the wrong ancestor) — use live viewport
+      // position instead, which is always document-relative and correct.
+      let dark = false;
+      const refY = window.innerHeight * 0.35;
+      allSections.forEach(({ el, dark: isDark }) => {
+        if (el.getBoundingClientRect().top <= refY) dark = isDark;
+      });
+      rail.classList.toggle('is-dark', dark);
     }
 
     window.addEventListener('scroll', updateActive, { passive: true });

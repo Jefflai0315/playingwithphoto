@@ -2119,7 +2119,7 @@
     transition: opacity .4s;
   }
   .demo .status.hide { opacity: 0; pointer-events: none; }
-  .demo .status h4 { font-family: var(--ff-display); font-style: italic; font-size: 32px; font-weight: 400; margin-bottom: 12px; color: var(--cream);}
+  .demo .status h3 { font-family: var(--ff-display); font-style: italic; font-size: 32px; font-weight: 400; margin-bottom: 12px; color: var(--cream);}
   .demo .status p { color: rgba(244,234,213,.7); font-size: 14px; margin: 0 0 24px; max-width: 300px;}
   .demo .status .btn {
     background: var(--highlight);
@@ -4763,6 +4763,7 @@
   <a href="/snapshot/">Book the booth · from S$750</a>
 </div>
 
+<main id="main-content">
 <!-- HERO BACKDROP — fixed painting behind hero + plan intro (no scroll gap) -->
 <div class="hero-backdrop" id="heroBackdrop" aria-hidden="true">
   <div class="hero-backdrop-media" id="heroBgImg">
@@ -5297,7 +5298,7 @@
         <div class="demo" id="demoBox">
           <div class="status" id="demoStatus">
             <div>
-              <h4>Try the filter live</h4>
+              <h3>Try the filter live</h3>
               <p>Preview film filters &amp; shoot a GIF — stays in your browser.</p>
               <button class="btn" id="startCam">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="13" r="4"/><path d="M3 7h4l2-2h6l2 2h4v12H3z"/></svg>
@@ -6027,24 +6028,24 @@
         <p class="book-form-hint">3 fields to get started — Jeff replies within 2 hours.</p>
         <div class="row">
           <div class="field">
-            <label>Your name <span aria-hidden="true">*</span></label>
-            <input type="text" name="name" placeholder="Your name" required autocomplete="name" />
+            <label for="bookName">Your name <span aria-hidden="true">*</span></label>
+            <input type="text" id="bookName" name="name" placeholder="Your name" required autocomplete="name" />
           </div>
         </div>
         <div class="row">
           <div class="field">
-            <label>WhatsApp <span aria-hidden="true">*</span></label>
-            <input type="tel" name="whatsapp" placeholder="+65 8123 4567" required autocomplete="tel" />
+            <label for="bookWhatsapp">WhatsApp <span aria-hidden="true">*</span></label>
+            <input type="tel" id="bookWhatsapp" name="whatsapp" placeholder="+65 8123 4567" required autocomplete="tel" />
           </div>
           <div class="field">
-            <label>Email</label>
-            <input type="email" name="email" placeholder="you@example.com" autocomplete="email" />
+            <label for="bookEmail">Email</label>
+            <input type="email" id="bookEmail" name="email" placeholder="you@example.com" autocomplete="email" />
           </div>
         </div>
         <div class="row">
           <div class="field">
-            <label>Event date <span aria-hidden="true">*</span></label>
-            <input type="date" name="eventDate" required />
+            <label for="bookEventDate">Event date <span aria-hidden="true">*</span></label>
+            <input type="date" id="bookEventDate" name="eventDate" required />
           </div>
         </div>
 
@@ -6052,7 +6053,7 @@
           <summary>More details (optional)</summary>
           <div class="row">
             <div class="field">
-              <label>Package</label>
+              <label for="bookPackage">Package</label>
               <select name="package" id="bookPackage">
                 <option value="prelude">2 Hours — S$750</option>
                 <option value="keepsake" selected>3 Hours — S$880 (most booked)</option>
@@ -6064,7 +6065,7 @@
           </div>
           <div class="row">
             <div class="field">
-              <label>Event type</label>
+              <label for="bookEventType">Event type</label>
               <select name="eventType" id="bookEventType">
                 <option>Wedding</option>
                 <option>Corporate / brand</option>
@@ -6074,8 +6075,8 @@
               </select>
             </div>
             <div class="field">
-              <label>Venue / city</label>
-              <input type="text" name="venue" placeholder="Cliveden House, Singapore" />
+              <label for="bookVenue">Venue / city</label>
+              <input type="text" id="bookVenue" name="venue" placeholder="Cliveden House, Singapore" />
             </div>
           </div>
         </details>
@@ -6145,6 +6146,7 @@
     </div>
   </div>
 </section>
+</main>
 
 <a class="wa-fab" id="waFab" href="https://wa.me/6589896901?text=Hi%20Jeff%2C%20I%27d%20like%20to%20enquire%20about%20the%20photobooth." target="_blank" rel="noopener" aria-label="Chat on WhatsApp" data-track="click_whatsapp_fab">
   <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.435 9.884-9.881 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>

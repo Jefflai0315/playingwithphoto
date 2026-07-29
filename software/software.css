@@ -197,6 +197,7 @@ h1, h2, h3 { font-family: var(--ff-display); margin: 0; }
 }
 .sw-field input[type="text"],
 .sw-field input[type="email"],
+.sw-field input[type="tel"],
 .sw-field textarea {
   font-family: var(--ff-body);
   font-size: 16px;

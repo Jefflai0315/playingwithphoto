@@ -159,7 +159,13 @@
     const sparse = sparseFrameIndexes();
     await loadFrame(sparse[0], true);
     await Promise.allSettled(sparse.slice(1).map((i) => loadFrame(i, true)));
-    preloadRemainingFrames();
+    // Defer the ~800KB background fill of remaining frames until the browser
+    // is idle, so it doesn't compete with other page-load-critical requests.
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(preloadRemainingFrames, { timeout: 2000 });
+    } else {
+      setTimeout(preloadRemainingFrames, 1500);
+    }
   }
 
   // ----- Canvas sizing (HiDPI-aware) -----

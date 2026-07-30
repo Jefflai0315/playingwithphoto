@@ -159,18 +159,21 @@
       for (int i = 0; i < 4; i++) { v += a*noise(p); p *= 2.0; a *= 0.5; }
       return v;
     }
-    vec2 coverUV(vec2 uv, vec2 texRes, vec2 viewRes) {
+    vec2 coverUV(vec2 uv, vec2 texRes, vec2 viewRes, float zoom) {
       float ta = texRes.x/texRes.y, va = viewRes.x/viewRes.y;
       vec2 sc = vec2(1.0);
       if (ta > va) sc.x = va/ta; else sc.y = ta/va;
-      return (uv-0.5)*sc+0.5;
+      return (uv-0.5)*sc/zoom+0.5;
     }
-    // Sample a 3-texture stack at a given progress
+    // Sample a 3-texture stack at a given progress. Reuses that same
+    // progress (0..1 through the active section) to drive a gentle
+    // continuous Ken Burns zoom, matching the hero/vision/booth scrubs.
     vec3 sampleStack(vec2 uv, sampler2D tA, sampler2D tB, sampler2D tC,
                      vec2 rA, vec2 rB, vec2 rC, float prog) {
-      vec3 a = texture2D(tA, coverUV(uv, rA, uViewport)).rgb;
-      vec3 b = texture2D(tB, coverUV(uv, rB, uViewport)).rgb;
-      vec3 c = texture2D(tC, coverUV(uv, rC, uViewport)).rgb;
+      float zoom = 1.0 + prog * 0.16;
+      vec3 a = texture2D(tA, coverUV(uv, rA, uViewport, zoom)).rgb;
+      vec3 b = texture2D(tB, coverUV(uv, rB, uViewport, zoom)).rgb;
+      vec3 c = texture2D(tC, coverUV(uv, rC, uViewport, zoom)).rgb;
       if (prog < 0.5) {
         float t = prog*2.0;
         float m = noise(uv*8.0 + uTime*0.05);

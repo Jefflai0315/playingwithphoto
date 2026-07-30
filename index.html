@@ -3256,6 +3256,16 @@
   body.has-bg-canvas .story-group--experience #spark::before {
     background: rgba(244, 234, 213, 0.96);
   }
+  /* Light text + strong shadow — stays legible regardless of what's behind it */
+  body.has-bg-canvas .story-group--experience #spark h1,
+  body.has-bg-canvas .story-group--experience #spark h2,
+  body.has-bg-canvas .story-group--experience #spark h3,
+  body.has-bg-canvas .story-group--experience #spark p,
+  body.has-bg-canvas .story-group--experience #spark li,
+  body.has-bg-canvas .story-group--experience #spark .eyebrow {
+    color: var(--cream);
+    text-shadow: 0 2px 6px rgba(20, 12, 6, 0.7), 0 1px 2px rgba(20, 12, 6, 0.9);
+  }
   body.has-bg-canvas .story-group--experience #metamorphosis::before {
     display: none !important;
   }
@@ -3329,9 +3339,6 @@
   body.has-bg-canvas .story-group--plan h1, body.has-bg-canvas .story-group--plan h2,
   body.has-bg-canvas .story-group--plan h3, body.has-bg-canvas .story-group--plan p,
   body.has-bg-canvas .story-group--plan li, body.has-bg-canvas .story-group--plan .eyebrow,
-  body.has-bg-canvas .story-group--experience #spark h1, body.has-bg-canvas .story-group--experience #spark h2,
-  body.has-bg-canvas .story-group--experience #spark h3, body.has-bg-canvas .story-group--experience #spark p,
-  body.has-bg-canvas .story-group--experience #spark li, body.has-bg-canvas .story-group--experience #spark .eyebrow,
   body.has-bg-canvas .story-group--film #demo h1, body.has-bg-canvas .story-group--film #demo h2,
   body.has-bg-canvas .story-group--film #demo h3, body.has-bg-canvas .story-group--film #demo p,
   body.has-bg-canvas .story-group--film #demo li, body.has-bg-canvas .story-group--film #demo .eyebrow,
@@ -5324,12 +5331,12 @@
       <article class="included-panel">
         <h3>Already in the booth</h3>
         <ul class="included-list">
-          <li>GIF motion moments for the example board</li>
-          <li>On-screen sticker pack guests can add to their photo strips</li>
-          <li>Physical photo props available at the booth</li>
-          <li>Setup, teardown, attendant, prints, and digital files</li>
-          <li>Example board so guests know what they can make</li>
+          <li>Setup, teardown &amp; an on-site attendant</li>
+          <li>Unlimited prints and all digital files</li>
+          <li>Sticker pack and photo props at the booth</li>
+          <li>A looping GIF example board, so guests know what's possible</li>
         </ul>
+        <span class="custom-theme-note">Something else in mind? Just ask — we'll often make it work, depending on availability.</span>
       </article>
 
       <figure class="motion-example-card">

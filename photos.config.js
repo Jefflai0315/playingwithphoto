@@ -278,9 +278,19 @@ window.PHOTO_CONFIG = {
       tags: ["corporate", "print"],
     },
     {
+      src: "samples/gala-night.jpeg",
+      label: "Gala night",
+      tags: ["corporate", "print"],
+    },
+    {
       src: "spark/olivebirthday-warhol.webp",
       label: "Pop colour",
       tags: ["birthday", "painterly"],
+    },
+    {
+      src: "samples/aesop-opening.jpeg",
+      label: "Grand opening",
+      tags: ["corporate", "print"],
     },
     {
       src: "spark/jenmikeguests-hokusai.webp",
@@ -291,11 +301,6 @@ window.PHOTO_CONFIG = {
       src: "meta/jenmike-monet.webp",
       label: "Soft portrait",
       tags: ["wedding", "painterly"],
-    },
-    {
-      src: "samples/gala-night.jpeg",
-      label: "Gala night",
-      tags: ["corporate", "print"],
     },
     {
       src: "styles/summerof78.webp",
@@ -323,11 +328,6 @@ window.PHOTO_CONFIG = {
       src: "reel/jenmike-keepsake.webp",
       label: "Gold frame keepsake",
       tags: ["wedding", "print"],
-    },
-    {
-      src: "samples/aesop-opening.jpeg",
-      label: "Grand opening",
-      tags: ["corporate", "print"],
     },
     {
       src: "testimonials/priya1.webp",

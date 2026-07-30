@@ -278,7 +278,7 @@ window.PHOTO_CONFIG = {
       tags: ["corporate", "print"],
     },
     {
-      src: "samples/gala-night.jpeg",
+      src: "samples/gala-night.webp",
       label: "Gala night",
       tags: ["corporate", "print"],
     },
@@ -288,7 +288,7 @@ window.PHOTO_CONFIG = {
       tags: ["birthday", "painterly"],
     },
     {
-      src: "samples/aesop-opening.jpeg",
+      src: "samples/aesop-opening.webp",
       label: "Grand opening",
       tags: ["corporate", "print"],
     },

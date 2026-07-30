@@ -3935,21 +3935,19 @@
   }
   .included-strip {
     display: grid;
-    grid-template-columns: 1fr minmax(220px, 320px) 1fr;
+    grid-template-columns: minmax(0, 1fr) minmax(220px, 320px);
     gap: 24px;
-    margin: -24px 0 48px;
+    margin: -24px 0 40px;
     align-items: center;
   }
-  .included-panel,
-  .queue-panel {
+  .included-panel {
     background: rgba(255,248,226,.78);
     border: 1px solid rgba(42,26,12,.16);
     box-shadow: 0 16px 36px rgba(62,34,12,.12);
     padding: 28px;
     position: relative;
   }
-  .included-panel::before,
-  .queue-panel::before {
+  .included-panel::before {
     content: "";
     position: absolute;
     top: -10px;
@@ -3961,11 +3959,28 @@
     transform: rotate(-4deg);
   }
   .included-panel h3,
-  .queue-panel h3,
   .addon-card h3 {
     font-size: 30px;
     font-style: italic;
     font-weight: 500;
+  }
+  .addons-board-head {
+    text-align: center;
+    max-width: 480px;
+    margin: 0 auto 28px;
+  }
+  .addons-board-head .eyebrow {
+    display: block;
+    font-family: var(--ff-mono);
+    font-size: 11px;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin-bottom: 6px;
+  }
+  .addons-board-head p {
+    color: var(--ink-2);
+    margin: 0;
   }
   .included-list {
     list-style: none;
@@ -5336,6 +5351,11 @@
           <li>Sticker pack and photo props at the booth</li>
           <li>A looping GIF example board, so guests know what's possible</li>
         </ul>
+        <div class="queue-display" aria-label="Sample queue number screen">
+          <span>Now serving</span>
+          <strong>A07</strong>
+          <span class="queue-qr-hint">On-screen queue number · scan QR for strip status</span>
+        </div>
         <span class="custom-theme-note">Something else in mind? Just ask — we'll often make it work, depending on availability.</span>
       </article>
 
@@ -5352,16 +5372,11 @@
         </div>
         <figcaption>Looping GIF preview</figcaption>
       </figure>
+    </div>
 
-      <article class="queue-panel">
-        <h3>Queue + QR pickup</h3>
-        <p style="color:var(--ink-2); margin: 8px 0 0; font-size: 14px;">On-screen number · scan to check photo status</p>
-        <div class="queue-display" aria-label="Sample queue number screen">
-          <span>Now serving</span>
-          <strong>A07</strong>
-          <span class="queue-qr-hint">Scan QR · your strip status</span>
-        </div>
-      </article>
+    <div class="addons-board-head reveal">
+      <span class="eyebrow">Then, make it yours</span>
+      <p>Optional upgrades — add any of these to your enquiry.</p>
     </div>
 
     <div class="addons-board reveal">

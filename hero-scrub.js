@@ -239,7 +239,9 @@
     uniform vec3 uEmberColor;
     uniform vec2 uCoverScale;
     uniform vec2 uCoverOffset;
+    uniform vec2 uFrameTexel;
     uniform float uTime;
+    uniform float uScrollSpeed;
     varying vec2 vUv;
 
     float hash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
@@ -263,15 +265,35 @@
       // The frame is the figure cut out on a mostly-transparent background —
       // keep the reveal edge constrained to the image, never the empty space.
       float mask = baseColor.a;
+      // Four-neighbour alpha sampling detects the actual character silhouette
+      // in the WebP, rather than guessing an edge from the full frame bounds.
+      float alphaL = texture2D(uFrame, uv - vec2(uFrameTexel.x, 0.0)).a;
+      float alphaR = texture2D(uFrame, uv + vec2(uFrameTexel.x, 0.0)).a;
+      float alphaD = texture2D(uFrame, uv - vec2(0.0, uFrameTexel.y)).a;
+      float alphaU = texture2D(uFrame, uv + vec2(0.0, uFrameTexel.y)).a;
+      float silhouetteEdge = max(
+        max(abs(mask - alphaL), abs(mask - alphaR)),
+        max(abs(mask - alphaD), abs(mask - alphaU))
+      );
 
       // Organic radial dissolve adapted from the reference reveal shader:
       // animated noise distorts a center-out threshold instead of using a
       // straight vertical wipe.
-      vec2 displacedUv = vUv
+      vec2 centeredUv = vUv - vec2(0.5);
+      float radius = length(centeredUv);
+      vec2 direction = centeredUv / max(radius, 0.0001);
+      float burstIn = smoothstep(0.0, 0.035, uBurnProgress);
+      float burstOut = 1.0 - smoothstep(0.10, 0.24, uBurnProgress);
+      float burst = burstIn * burstOut;
+      float waveNoise = fbm(vUv * 8.0 + uTime * 0.12);
+      float waveAmount = 0.014 + uScrollSpeed * 0.045 + burst * 0.035;
+      float wave = sin(radius * 34.0 - uTime * 4.0 + waveNoise * 5.0) * waveAmount;
+      vec2 waveUv = vUv + direction * wave;
+      vec2 displacedUv = waveUv
         + (vec2(
-            fbm(vUv * 5.0 + vec2(uTime * 0.08, 0.0)),
-            fbm(vUv * 5.0 + vec2(0.0, -uTime * 0.06))
-          ) - 0.5) * 0.06;
+            fbm(waveUv * 5.0 + vec2(uTime * 0.08, 0.0)),
+            fbm(waveUv * 5.0 + vec2(0.0, -uTime * 0.06))
+          ) - 0.5) * (0.06 + uScrollSpeed * 0.045 + burst * 0.035);
       float radialDist = length(displacedUv - vec2(0.5));
       float dissolveField = radialDist * 1.15 + fbm(displacedUv * 5.0 + uTime * 0.04) * 0.22;
       float threshold = uBurnProgress * 1.18;
@@ -282,12 +304,44 @@
       float ch = (1.0 - smoothstep(0.0, uCharWidth, edge)) * mask;
       float emCore = (1.0 - smoothstep(0.0, uEmberWidth, abs(edge))) * mask;
       float emHalo = (1.0 - smoothstep(0.0, uEmberWidth * 3.0, abs(edge))) * mask;
+      float burstRadius = (1.0 - burst) * 0.62;
+      float burstRing = (1.0 - smoothstep(0.0, 0.055, abs(radialDist - burstRadius))) * burst * mask;
+      float burstFlash = (1.0 - smoothstep(0.0, 0.62, radialDist)) * burst * mask;
+      float silhouette = smoothstep(0.05, 0.34, silhouetteEdge);
+      float edgeBurstNoise = noise(uv * 115.0 + vec2(uTime * 1.6, -uTime * 1.1));
+      float edgeBurst = silhouette * burst
+        * smoothstep(0.58, 0.94, edgeBurstNoise)
+        * (0.55 + uScrollSpeed * 0.9);
+      // The whole silhouette flashes first; after the burst, hand the light
+      // over to the narrower radial contact band moving from the center out.
+      float effectGate = smoothstep(0.012, 0.045, uBurnProgress);
+      float contact = 1.0 - smoothstep(0.0, 0.075, abs(edge));
+      float edgeNoise = noise(uv * 46.0 + vec2(uTime * 0.35, -uTime * 0.22));
+      float postBurst = smoothstep(0.08, 0.26, uBurnProgress);
+      float wholeEdgeProfile = 0.30 + contact * 0.70;
+      float radialEdgeProfile = contact * (0.80 + edgeNoise * 0.95);
+      float edgeProfile = mix(wholeEdgeProfile, radialEdgeProfile, postBurst);
+      float burningEdge = silhouette
+        * edgeProfile
+        * effectGate
+        * (0.62 + edgeNoise * 0.58);
+      float sparkNoise = noise(uv * 135.0 + vec2(uTime * 1.8, -uTime * 1.25));
+      float sparks = burningEdge * smoothstep(0.78, 0.96, sparkNoise)
+        * (0.35 + burst * 0.9 + postBurst * 0.8 + uScrollSpeed * 0.8);
 
       vec3 col = mix(baseColor.rgb, uCharColor, ch)
-        + uEmberColor * emCore            // sharp bright rim
+        + uEmberColor * emCore * (1.0 + burst * 1.6 + uScrollSpeed * 0.8) // sharp bright rim
         + uEmberColor * 0.12 * emHalo;    // soft bloom-like halo around it
+      col += uEmberColor * burstRing * (0.8 + uScrollSpeed * 1.4);
+      col += uEmberColor * burstFlash * (0.08 + uScrollSpeed * 0.18);
+      col += uEmberColor * edgeBurst * (1.5 + uScrollSpeed * 1.2);
+      col += uEmberColor * burningEdge * (0.72 + postBurst * 0.68);
+      col += uEmberColor * sparks * 1.8;
       // Keep the reveal edge visible after the image has been cut away.
-      float emberAlpha = max(emCore * 0.92, emHalo * 0.24);
+      float emberAlpha = max(emCore * (0.92 + burst * 0.45), emHalo * 0.24);
+      emberAlpha = max(emberAlpha, burstRing * (0.28 + uScrollSpeed * 0.42));
+      emberAlpha = max(emberAlpha, edgeBurst * (0.6 + uScrollSpeed * 0.35));
+      emberAlpha = max(emberAlpha, burningEdge * (0.62 + postBurst * 0.35) + sparks * 0.9);
       gl_FragColor = vec4(col, max(baseAlpha, emberAlpha));
     }
   `;
@@ -351,7 +405,7 @@
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
 
     const u = {};
-    ['uBurnProgress', 'uCharWidth', 'uEmberWidth', 'uCharColor', 'uEmberColor', 'uCoverScale', 'uCoverOffset', 'uTime', 'uFrame']
+    ['uBurnProgress', 'uCharWidth', 'uEmberWidth', 'uCharColor', 'uEmberColor', 'uCoverScale', 'uCoverOffset', 'uFrameTexel', 'uTime', 'uScrollSpeed', 'uFrame']
       .forEach((name) => { u[name] = gl.getUniformLocation(program, name); });
 
     let lastImage = null;
@@ -365,7 +419,7 @@
       gl.clear(gl.COLOR_BUFFER_BIT);
     }
 
-    function render(image, dp, rect, cw, ch) {
+    function render(image, dp, rect, cw, ch, speed = 0) {
       if (!image || !rect || !cw || !ch) return;
       gl.useProgram(program);
 
@@ -389,7 +443,9 @@
       gl.uniform3f(u.uEmberColor, 2.4, 2.25, 1.55);
       gl.uniform2f(u.uCoverScale, cw / rect.dw, ch / rect.dh);
       gl.uniform2f(u.uCoverOffset, rect.dx / rect.dw, rect.dy / rect.dh);
+      gl.uniform2f(u.uFrameTexel, 1 / image.width, 1 / image.height);
       gl.uniform1f(u.uTime, performance.now() * 0.001);
+      gl.uniform1f(u.uScrollSpeed, speed);
 
       gl.enable(gl.BLEND);
       gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA, gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
@@ -409,7 +465,7 @@
 
     // Start in the final scrub quarter, then continue through the post-hero
     // zoom so the image does not vanish before the transition has landed.
-    const DISSOLVE_START = 0.75;
+    const DISSOLVE_START = 0.85;
     const DISSOLVE_END = 1.0;
     const scrubReveal = Math.max(0, Math.min(1, (progress - DISSOLVE_START) / (DISSOLVE_END - DISSOLVE_START)));
     const zoomReveal = Math.max(0, Math.min(1, postHeroProgress));
@@ -431,7 +487,7 @@
     canvas.style.opacity = 0;
 
     const img = frames[lastDrawIdx] ?? frames[Math.round(currentIdx)];
-    burnGL.render(img, dp, lastFrameRect, canvas.clientWidth, canvas.clientHeight);
+    burnGL.render(img, dp, lastFrameRect, canvas.clientWidth, canvas.clientHeight, scrollSpeed);
   }
 
   // ----- Scroll-driven scrub -----
@@ -443,6 +499,9 @@
   let backdropFadeT = 1; // 1 = backdrop fully showing, 0 = fully faded into next section
   let driverProgress = null;
   let postHeroProgress = 0;
+  let scrollSpeed = 0;
+  let previousScrubProgress = 0;
+  let previousZoomProgress = 0;
 
   function updateBackdropFade() {
     if (!backdrop || !planGroup) return;
@@ -523,6 +582,12 @@
     mx += (tmx - mx) * 0.06;
     my += (tmy - my) * 0.06;
     updateScrubTargets(driverProgress);
+    const scrubDelta = Math.abs(scrubProgress - previousScrubProgress);
+    const zoomDelta = Math.abs(postHeroProgress - previousZoomProgress);
+    const speedTarget = Math.min(1, Math.max(scrubDelta, zoomDelta) * 55);
+    scrollSpeed += (speedTarget - scrollSpeed) * 0.24;
+    previousScrubProgress = scrubProgress;
+    previousZoomProgress = postHeroProgress;
     // Ease quickly, then snap inside a tiny dead zone. Without the snap,
     // asymptotic interpolation can look frozen between frames after a wheel
     // gesture ends.

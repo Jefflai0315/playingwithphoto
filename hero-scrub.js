@@ -298,7 +298,7 @@
       float dissolveField = radialDist * 1.15 + fbm(displacedUv * 5.0 + uTime * 0.04) * 0.22;
       float threshold = uBurnProgress * 1.18;
       float edge = dissolveField - threshold;
-      float visibility = smoothstep(threshold - 0.065, threshold + 0.065, dissolveField);
+      float visibility = smoothstep(threshold - 0.038, threshold + 0.038, dissolveField);
       float baseAlpha = baseColor.a * visibility;
 
       float ch = (1.0 - smoothstep(0.0, uCharWidth, edge)) * mask;
@@ -315,11 +315,11 @@
       // The whole silhouette flashes first; after the burst, hand the light
       // over to the narrower radial contact band moving from the center out.
       float effectGate = smoothstep(0.012, 0.045, uBurnProgress);
-      float contact = 1.0 - smoothstep(0.0, 0.075, abs(edge));
+      float contact = 1.0 - smoothstep(0.0, 0.045, abs(edge));
       float edgeNoise = noise(uv * 46.0 + vec2(uTime * 0.35, -uTime * 0.22));
       float postBurst = smoothstep(0.08, 0.26, uBurnProgress);
       float wholeEdgeProfile = 0.30 + contact * 0.70;
-      float radialEdgeProfile = contact * (0.80 + edgeNoise * 0.95);
+      float radialEdgeProfile = contact * (1.0 + edgeNoise * 1.15);
       float edgeProfile = mix(wholeEdgeProfile, radialEdgeProfile, postBurst);
       float burningEdge = silhouette
         * edgeProfile
@@ -437,8 +437,8 @@
       }
       gl.uniform1i(u.uFrame, 0);
       gl.uniform1f(u.uBurnProgress, dp);
-      gl.uniform1f(u.uCharWidth, 0.10);
-      gl.uniform1f(u.uEmberWidth, 0.018);
+      gl.uniform1f(u.uCharWidth, 0.07);
+      gl.uniform1f(u.uEmberWidth, 0.012);
       gl.uniform3f(u.uCharColor, 0.72, 0.58, 0.32);
       gl.uniform3f(u.uEmberColor, 2.4, 2.25, 1.55);
       gl.uniform2f(u.uCoverScale, cw / rect.dw, ch / rect.dh);
@@ -465,7 +465,7 @@
 
     // Start in the final scrub quarter, then continue through the post-hero
     // zoom so the image does not vanish before the transition has landed.
-    const DISSOLVE_START = 0.85;
+    const DISSOLVE_START = 0.70;
     const DISSOLVE_END = 1.0;
     const scrubReveal = Math.max(0, Math.min(1, (progress - DISSOLVE_START) / (DISSOLVE_END - DISSOLVE_START)));
     const zoomReveal = Math.max(0, Math.min(1, postHeroProgress));

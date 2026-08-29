@@ -232,15 +232,17 @@ const hands = document.querySelector(".hero-hands");
 const sparkEl = document.querySelector(".spark");
 const hero = document.querySelector(".hero-creation");
 
-function onHeroScroll() {
+function onHeroScroll(progressOverride = null) {
   if (!hero) return;
   const rect = hero.getBoundingClientRect();
   const vh = window.innerHeight;
   // Progress 0 (hero at top) → 1 (hero bottom touches viewport top)
-  const p = Math.max(
-    0,
-    Math.min(1, -rect.top / (hero.offsetHeight - vh * 0.6)),
-  );
+  const p = progressOverride === null
+    ? Math.max(
+        0,
+        Math.min(1, -rect.top / (hero.offsetHeight - vh * 0.6)),
+      )
+    : Math.max(0, Math.min(1, progressOverride));
 
   // Hands drift closer. At p=0 they're at their resting pose.
   // At p≈0.7 they touch. We use CSS variables to offset.
@@ -268,7 +270,17 @@ function onHeroScroll() {
 }
 if (hero) {
   hands.classList.add("idle");
-  window.addEventListener("scroll", onHeroScroll, { passive: true });
+  const heroScrollTrigger = window.__pwpScrollDriver?.register({
+    id: "creation-hero-scrub",
+    trigger: hero,
+    start: "top top",
+    end: "bottom 60%",
+    finishOnStop: true,
+    onUpdate: (progress) => onHeroScroll(progress),
+  });
+  if (!heroScrollTrigger) {
+    window.addEventListener("scroll", onHeroScroll, { passive: true });
+  }
   onHeroScroll();
 }
 

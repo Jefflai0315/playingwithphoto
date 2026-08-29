@@ -1,0 +1,42 @@
+/* ============================================================
+   SCROLL EXPERIENCE — Lenis + GSAP/ScrollTrigger progressive enhancement
+   ============================================================ */
+
+/* Lenis' recommended base styles. Native scrolling remains the fallback. */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+html.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+html.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+html.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* ScrollTrigger owns these properties when the enhancement is available. */
+html.scroll-enhanced .reveal {
+  transition: none;
+  will-change: transform, opacity;
+}
+
+html.scroll-enhanced .chapter-numeral,
+html.scroll-enhanced .section-head h2,
+html.scroll-enhanced .reel-strip {
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.scroll-enhanced .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+    will-change: auto;
+  }
+}

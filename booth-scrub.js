@@ -24,8 +24,11 @@
   let ready = false;
   let preloadStarted = false;
   let loopRunning = false;
+  let loopUsesSharedTicker = false;
+  let removeSharedTick = null;
   let scrubProgress = 0;
   let smoothProgress = 0;
+  let driverProgress = null;
 
   const prefersReducedMotion = window.matchMedia(
     "(prefers-reduced-motion: reduce)",
@@ -112,10 +115,10 @@
     canvas.style.transform = `scale(${scale.toFixed(4)})`;
   }
 
-  function update() {
+  function update(progressOverride = null) {
     if (!ready) return;
 
-    const p = scrollProgress();
+    const p = progressOverride === null ? scrollProgress() : progressOverride;
     scrubProgress = p;
     const videoP = Math.min(1, p / ASSEMBLE_AT);
     const maxIdx = Math.max(0, loaded - 1);
@@ -131,15 +134,19 @@
 
   function loop() {
     if (!loopRunning) return;
-    requestAnimationFrame(loop);
+    if (!loopUsesSharedTicker) requestAnimationFrame(loop);
 
     if (!ready || !pageVisible || !runwayVisible) return;
 
-    update();
+    update(driverProgress);
     if (!prefersReducedMotion) {
-      smoothProgress += (scrubProgress - smoothProgress) * 0.12;
+      smoothProgress += (scrubProgress - smoothProgress) * 0.22;
+      if (Math.abs(scrubProgress - smoothProgress) < 0.001) {
+        smoothProgress = scrubProgress;
+      }
       applyZoom();
-      currentIdx += (targetIdx - currentIdx) * 0.35;
+      currentIdx += (targetIdx - currentIdx) * 0.5;
+      if (Math.abs(targetIdx - currentIdx) < 0.12) currentIdx = targetIdx;
       drawFrame(Math.round(currentIdx));
     }
   }
@@ -147,12 +154,43 @@
   function startLoop() {
     if (loopRunning) return;
     loopRunning = true;
-    requestAnimationFrame(loop);
+    const addTick = window.__pwpScrollDriver?.addTick;
+    if (addTick) {
+      loopUsesSharedTicker = true;
+      removeSharedTick = addTick(loop);
+    } else {
+      loop();
+    }
   }
 
   function stopLoop() {
     loopRunning = false;
+    removeSharedTick?.();
+    removeSharedTick = null;
+    loopUsesSharedTicker = false;
   }
+
+  function renderImmediateProgress() {
+    if (!ready || !(prefersReducedMotion || LOW_POWER)) return;
+    if (!prefersReducedMotion) {
+      smoothProgress = scrubProgress;
+      applyZoom();
+    }
+    drawFrame(Math.round(targetIdx));
+  }
+
+  const scrubTrigger = window.__pwpScrollDriver?.register({
+    id: "booth-scrub",
+    trigger: runway,
+    start: "top 40%",
+    end: "bottom bottom",
+    finishOnStop: true,
+    onUpdate: (progress) => {
+      driverProgress = progress;
+      update(progress);
+      renderImmediateProgress();
+    },
+  });
 
   function init() {
     if (ready) return;

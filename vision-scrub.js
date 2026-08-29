@@ -27,6 +27,7 @@
   let runwayVisible = false;
   let pageVisible = !document.hidden;
   let loopStarted = false;
+  let loopUsesSharedTicker = false;
 
   const pin = document.querySelector(".vision-scrub-pin");
   const canvas = document.getElementById("visionScrubCanvas");
@@ -46,6 +47,7 @@
   let preloadStarted = false;
   let scrubProgress = 0;
   let smoothProgress = 0;
+  let driverProgress = null;
 
   function easeOutCubic(t) {
     return 1 - Math.pow(1 - t, 3);
@@ -109,12 +111,14 @@
     ctx.drawImage(img, dx, dy, dw, dh);
   }
 
-  function updateScrub() {
+  function updateScrub(progressOverride = null) {
     const rect = runway.getBoundingClientRect();
     const vh = window.innerHeight;
     const scrollInto = -rect.top;
     const scrubRange = runway.offsetHeight - vh;
-    const p = Math.max(0, Math.min(1, scrollInto / scrubRange));
+    const p = progressOverride === null
+      ? Math.max(0, Math.min(1, scrollInto / scrubRange))
+      : Math.max(0, Math.min(1, progressOverride));
     scrubProgress = p;
 
     const frameT = Math.min(1, p / FRAME_ZONE);
@@ -127,6 +131,7 @@
       const o = headlineOpacity(p);
       headline.style.opacity = o;
       headline.style.transform = `translateY(${(1 - o) * 14}px)`;
+      window.__ideaTitleFocus?.setProgress(o);
     }
 
     if (outro) {
@@ -169,7 +174,7 @@
 
   let lastDrawIdx = -1;
   function loop() {
-    requestAnimationFrame(loop);
+    if (!loopUsesSharedTicker) requestAnimationFrame(loop);
     if (
       !loopStarted ||
       !pageVisible ||
@@ -179,11 +184,15 @@
     )
       return;
 
-    updateScrub();
-    smoothProgress += (scrubProgress - smoothProgress) * 0.12;
+    updateScrub(driverProgress);
+    smoothProgress += (scrubProgress - smoothProgress) * 0.22;
+    if (Math.abs(scrubProgress - smoothProgress) < 0.001) {
+      smoothProgress = scrubProgress;
+    }
     applyZoom();
-    const lerp = targetIdx >= FRAME_COUNT - 2 ? 0.14 : 0.2;
+    const lerp = targetIdx >= FRAME_COUNT - 2 ? 0.3 : 0.38;
     currentIdx += (targetIdx - currentIdx) * lerp;
+    if (Math.abs(targetIdx - currentIdx) < 0.12) currentIdx = targetIdx;
     const drawIdx = Math.round(currentIdx);
     if (drawIdx !== lastDrawIdx) {
       drawFrame(drawIdx);
@@ -205,13 +214,44 @@
     }
   }
 
+  function renderImmediateProgress() {
+    if (!(prefersReducedMotion || LOW_POWER)) return;
+    if (!prefersReducedMotion) {
+      smoothProgress = scrubProgress;
+      applyZoom();
+    }
+    const drawIdx = Math.round(
+      Math.max(0, Math.min(FRAME_COUNT - 1, targetIdx)),
+    );
+    if (frames[drawIdx]) drawFrame(drawIdx);
+  }
+
+  const scrubTrigger = window.__pwpScrollDriver?.register({
+    id: "vision-scrub",
+    trigger: runway,
+    start: "top top",
+    end: "bottom bottom",
+    finishOnStop: true,
+    onUpdate: (progress) => {
+      driverProgress = progress;
+      updateScrub(progress);
+      renderImmediateProgress();
+    },
+  });
+
   function init() {
     sizeCanvas();
     drawFrame(0);
     updateScrub();
     if (!LOW_POWER && !prefersReducedMotion) {
       loopStarted = true;
-      loop();
+      const addTick = window.__pwpScrollDriver?.addTick;
+      if (addTick) {
+        loopUsesSharedTicker = true;
+        addTick(loop);
+      } else {
+        loop();
+      }
     }
   }
 
@@ -219,7 +259,9 @@
     sizeCanvas();
     drawFrame(Math.round(currentIdx));
   });
-  window.addEventListener("scroll", onScrubScroll, { passive: true });
+  if (!scrubTrigger) {
+    window.addEventListener("scroll", onScrubScroll, { passive: true });
+  }
 
   document.addEventListener("visibilitychange", () => {
     pageVisible = !document.hidden;

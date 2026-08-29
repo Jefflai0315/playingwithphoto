@@ -487,6 +487,7 @@
   const clock = new THREE.Clock();
   let animating = false;
   let rafId = 0;
+  let usesSharedTicker = false;
 
   function renderFrame() {
     uniforms.uTime.value = clock.getElapsedTime();
@@ -501,7 +502,7 @@
       animating = false;
       return;
     }
-    rafId = requestAnimationFrame(tick);
+    if (!usesSharedTicker) rafId = requestAnimationFrame(tick);
     renderFrame();
     const vel = Math.abs(uniforms.uScrollVel.value);
     if (vel < 0.002 && Math.abs(rawVel) < 0.002) {
@@ -514,8 +515,14 @@
     renderFrame();
     if (!animating) {
       animating = true;
-      rafId = requestAnimationFrame(tick);
+      if (!usesSharedTicker) rafId = requestAnimationFrame(tick);
     }
+  }
+
+  const addTick = window.__pwpScrollDriver?.addTick;
+  if (addTick) {
+    usesSharedTicker = true;
+    addTick(tick);
   }
 
   document.addEventListener('visibilitychange', () => {
@@ -529,7 +536,7 @@
   let lastScrollY = window.scrollY;
   let lastScrollT = performance.now();
   let rawVel = 0;
-  window.addEventListener('scroll', () => {
+  function handleScrollUpdate() {
     const now = performance.now();
     const dt = Math.max(1, now - lastScrollT);
     const dy = window.scrollY - lastScrollY;
@@ -539,7 +546,11 @@
     lastScrollT = now;
     updateFromScroll();
     kickRender();
-  }, { passive: true });
+  }
+  const removeDriverUpdate = window.__pwpScrollDriver?.addUpdate(handleScrollUpdate);
+  if (!removeDriverUpdate) {
+    window.addEventListener('scroll', handleScrollUpdate, { passive: true });
+  }
 
   function onResize() {
     renderer.setSize(window.innerWidth, window.innerHeight);

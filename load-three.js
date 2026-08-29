@@ -6,6 +6,7 @@
 
   function boot() {
     window.__initBgWebGL?.();
+    window.__initTextFocusWebGL?.();
   }
 
   if (window.THREE) {

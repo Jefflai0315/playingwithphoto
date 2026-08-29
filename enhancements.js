@@ -175,12 +175,14 @@ const reelCaptions = document.querySelectorAll('.reel-caption');
 const reelTitle = document.getElementById('reelTitle');
 const reelSub = document.getElementById('reelSub');
 
-function onReelScroll() {
+function onReelScroll(progressOverride = null) {
   if (!reelChapter) return;
   const rect = reelChapter.getBoundingClientRect();
   const total = reelChapter.offsetHeight - window.innerHeight;
   const scrolled = Math.max(0, Math.min(total, -rect.top));
-  const p = total > 0 ? scrolled / total : 0;
+  const p = progressOverride === null
+    ? (total > 0 ? scrolled / total : 0)
+    : progressOverride;
   reelFill.style.width = `${(p * 100).toFixed(1)}%`;
 
   [0.15, 0.38, 0.6, 0.82].forEach((t, i) => reelFrames[i].classList.toggle('dev', p >= t));
@@ -219,7 +221,17 @@ function onReelScroll() {
     reelSub.textContent = 'Four poses. Four frames. Each one unfolds as you scroll down.';
   }
 }
-window.addEventListener('scroll', onReelScroll, { passive: true });
+const reelScrollTrigger = window.__pwpScrollDriver?.register({
+  id: 'reel-scrub',
+  trigger: reelChapter,
+  start: 'top top',
+  end: 'bottom bottom',
+  finishOnStop: true,
+  onUpdate: (progress) => onReelScroll(progress),
+});
+if (!reelScrollTrigger) {
+  window.addEventListener('scroll', onReelScroll, { passive: true });
+}
 onReelScroll();
 
 // ===== METAMORPHOSIS =====

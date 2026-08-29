@@ -1,5 +1,5 @@
 /* ============================================================
-   HERO SCRUB — image-sequence scrubber + parallax + particle dissolve
+   HERO SCRUB — image-sequence scrubber + parallax + radial image reveal
    ============================================================ */
 
 (() => {
@@ -53,37 +53,12 @@
   const hint = document.getElementById('heroScrubHint');
   const bar = document.getElementById('heroScrubBar');
   const ctx = canvas.getContext('2d');
-  const dctx = dissolveCanvas ? dissolveCanvas.getContext('2d') : null;
-
-  // Is next section paper? If so, skip dissolve. Checks bg.js STACKS if available,
-  // otherwise detects from .paper-* classes on the next section element.
-  function nextSectionIsPaper() {
-    // Find the first <section id> AFTER hero in DOCUMENT order — hero's real
-    // sibling is a wrapper <div class="story-group ..."> with #vision nested
-    // inside it, so walking nextElementSibling alone skips straight past it.
-    let el = null;
-    for (const s of document.querySelectorAll('section[id]')) {
-      if (s === hero) continue;
-      if (hero.compareDocumentPosition(s) & Node.DOCUMENT_POSITION_FOLLOWING) {
-        el = s;
-        break;
-      }
-    }
-    if (!el) return false;
-    // Check if we can find STACKS metadata
-    if (window.__BG_STACKS__) {
-      const id = el.id;
-      const s = window.__BG_STACKS__.find(x => x.id === id);
-      if (s) return s.type === 'paper';
-    }
-    // Heuristic fallback
-    return el.classList.contains('paper') || el.dataset.bgType === 'paper';
-  }
 
   // ----- Preload frames -----
   const frames = new Array(FRAME_COUNT);
   let loadedCount = 0;
   let motionLoopStarted = false;
+  let motionLoopUsesSharedTicker = false;
   let readyShown = false;
   let remainingPreloadStarted = false;
 
@@ -93,7 +68,15 @@
     sizeCanvas();
     updateScrubTargets();
     applyMotion();
-    if (!LOW_POWER && !prefersReducedMotion) loop();
+    if (!LOW_POWER && !prefersReducedMotion) {
+      const addTick = window.__pwpScrollDriver?.addTick;
+      if (addTick) {
+        motionLoopUsesSharedTicker = true;
+        addTick(loop);
+      } else {
+        loop();
+      }
+    }
   }
 
   function showReadyState() {
@@ -179,14 +162,19 @@
   // ----- Canvas sizing (HiDPI-aware) -----
   function sizeCanvas() {
     const dpr = LOW_POWER ? 1 : Math.min(window.devicePixelRatio || 1, 2);
-    [canvas, dissolveCanvas].forEach(c => {
-      if (!c) return;
-      const w = c.clientWidth;
-      const h = c.clientHeight;
-      c.width = Math.round(w * dpr);
-      c.height = Math.round(h * dpr);
-      c.getContext('2d').setTransform(dpr, 0, 0, dpr, 0, 0);
-    });
+    const w = canvas.clientWidth;
+    const h = canvas.clientHeight;
+    canvas.width = Math.round(w * dpr);
+    canvas.height = Math.round(h * dpr);
+    canvas.getContext('2d').setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    if (dissolveCanvas) {
+      const dw = dissolveCanvas.clientWidth;
+      const dh = dissolveCanvas.clientHeight;
+      dissolveCanvas.width = Math.round(dw * dpr);
+      dissolveCanvas.height = Math.round(dh * dpr);
+      if (burnGL) burnGL.resize(dissolveCanvas.width, dissolveCanvas.height);
+    }
   }
 
   // Mobile viewports are much taller/narrower than the ~1.77:1 source frames,
@@ -228,149 +216,222 @@
     lastFrameRect = { dx, dy, dw, dh };
   }
 
-  // ----- Particle system for the dissolve -----
-  // Particles are sparkles emitted from "hotspots" (the figures' bodies).
-  // We sample bright-ish alpha pixels from the current frame to seed emission points.
-  const particles = [];
-  let emitterPoints = [];
-  const emitterCache = new Map();
+  // ----- Radial image reveal shader for the hero scrub's exit transition -----
+  // Raw WebGL (no Three.js) keeps this effect available even when the CDN
+  // enhancement is unavailable. The shader follows the reference's animated
+  // noise + radial opacity field, with a restrained edge highlight.
+  const BURN_VERTEX_SRC = `
+    attribute vec2 aPosition;
+    attribute vec2 aUv;
+    varying vec2 vUv;
+    void main() {
+      vUv = aUv;
+      gl_Position = vec4(aPosition, 0.0, 1.0);
+    }
+  `;
+  const BURN_FRAGMENT_SRC = `
+    precision highp float;
+    uniform sampler2D uFrame;
+    uniform float uBurnProgress;
+    uniform float uCharWidth;
+    uniform float uEmberWidth;
+    uniform vec3 uCharColor;
+    uniform vec3 uEmberColor;
+    uniform vec2 uCoverScale;
+    uniform vec2 uCoverOffset;
+    uniform float uTime;
+    varying vec2 vUv;
 
-  function sampleEmitterPoints(idx) {
-    // Use the current frame to pick N bright-ish non-transparent points.
-    // These become the spawn seeds.
-    const img = frames[idx];
-    if (!img || !lastFrameRect) return [];
-    const { dx, dy, dw, dh } = lastFrameRect;
-    if (emitterCache.has(idx)) return emitterCache.get(idx);
-    const points = [];
-    const tries = 220;
-    // Sample in the image's native space then map to canvas space
-    const tempC = document.createElement('canvas');
-    const SAMPLE_W = 120;
-    const SAMPLE_H = Math.round(SAMPLE_W * (img.naturalHeight / img.naturalWidth));
-    tempC.width = SAMPLE_W; tempC.height = SAMPLE_H;
-    const tctx = tempC.getContext('2d');
-    tctx.drawImage(img, 0, 0, SAMPLE_W, SAMPLE_H);
-    const data = tctx.getImageData(0, 0, SAMPLE_W, SAMPLE_H).data;
-    for (let i = 0; i < tries; i++) {
-      const sx = Math.floor(Math.random() * SAMPLE_W);
-      const sy = Math.floor(Math.random() * SAMPLE_H);
-      const p = (sy * SAMPLE_W + sx) * 4;
-      const a = data[p + 3];
-      if (a > 60) {
-        // Map sample→canvas
-        const cx = dx + (sx / SAMPLE_W) * dw;
-        const cy = dy + (sy / SAMPLE_H) * dh;
-        points.push({ x: cx, y: cy });
+    float hash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
+    float noise(vec2 p) {
+      vec2 i = floor(p); vec2 f = fract(p);
+      float a = hash(i), b = hash(i + vec2(1.0, 0.0)), c = hash(i + vec2(0.0, 1.0)), d = hash(i + vec2(1.0, 1.0));
+      vec2 u = f * f * (3.0 - 2.0 * f);
+      return mix(a, b, u.x) + (c - a) * u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
+    }
+    float fbm(vec2 p) {
+      float v = 0.0, a = 0.5;
+      for (int i = 0; i < 4; i++) { v += a * noise(p); p *= 2.0; a *= 0.5; }
+      return v;
+    }
+
+    void main() {
+      vec2 uv = vUv * uCoverScale - uCoverOffset;
+      if (uv.x < 0.0 || uv.x > 1.0 || uv.y < 0.0 || uv.y > 1.0) discard;
+
+      vec4 baseColor = texture2D(uFrame, uv);
+      // The frame is the figure cut out on a mostly-transparent background —
+      // keep the reveal edge constrained to the image, never the empty space.
+      float mask = baseColor.a;
+
+      // Organic radial dissolve adapted from the reference reveal shader:
+      // animated noise distorts a center-out threshold instead of using a
+      // straight vertical wipe.
+      vec2 displacedUv = vUv
+        + (vec2(
+            fbm(vUv * 5.0 + vec2(uTime * 0.08, 0.0)),
+            fbm(vUv * 5.0 + vec2(0.0, -uTime * 0.06))
+          ) - 0.5) * 0.06;
+      float radialDist = length(displacedUv - vec2(0.5));
+      float dissolveField = radialDist * 1.15 + fbm(displacedUv * 5.0 + uTime * 0.04) * 0.22;
+      float threshold = uBurnProgress * 1.18;
+      float edge = dissolveField - threshold;
+      float visibility = smoothstep(threshold - 0.065, threshold + 0.065, dissolveField);
+      float baseAlpha = baseColor.a * visibility;
+
+      float ch = (1.0 - smoothstep(0.0, uCharWidth, edge)) * mask;
+      float emCore = (1.0 - smoothstep(0.0, uEmberWidth, abs(edge))) * mask;
+      float emHalo = (1.0 - smoothstep(0.0, uEmberWidth * 3.0, abs(edge))) * mask;
+
+      vec3 col = mix(baseColor.rgb, uCharColor, ch)
+        + uEmberColor * emCore            // sharp bright rim
+        + uEmberColor * 0.12 * emHalo;    // soft bloom-like halo around it
+      // Keep the reveal edge visible after the image has been cut away.
+      float emberAlpha = max(emCore * 0.92, emHalo * 0.24);
+      gl_FragColor = vec4(col, max(baseAlpha, emberAlpha));
+    }
+  `;
+
+  function initBurnGL() {
+    if (!dissolveCanvas || LOW_POWER || prefersReducedMotion) return null;
+    let gl;
+    try {
+      gl = dissolveCanvas.getContext('webgl', { alpha: true, premultipliedAlpha: false });
+    } catch (e) {
+      console.warn('[hero-scrub] burn WebGL context creation threw:', e);
+      gl = null;
+    }
+    if (!gl) {
+      console.warn('[hero-scrub] burn effect disabled: no WebGL context available');
+      return null;
+    }
+
+    function compile(type, src) {
+      const s = gl.createShader(type);
+      gl.shaderSource(s, src);
+      gl.compileShader(s);
+      if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
+        console.warn('[hero-scrub] burn shader compile error:', gl.getShaderInfoLog(s));
+        gl.deleteShader(s);
+        return null;
       }
+      return s;
     }
-    emitterCache.set(idx, points);
-    return points;
+    const vs = compile(gl.VERTEX_SHADER, BURN_VERTEX_SRC);
+    const fs = compile(gl.FRAGMENT_SHADER, BURN_FRAGMENT_SRC);
+    if (!vs || !fs) return null;
+    const program = gl.createProgram();
+    gl.attachShader(program, vs);
+    gl.attachShader(program, fs);
+    gl.linkProgram(program);
+    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+      console.warn('[hero-scrub] burn shader link error:', gl.getProgramInfoLog(program));
+      return null;
+    }
+
+    // Full-screen quad; uv (0,0) = top-left to match canvas/dx-dy-dw-dh space.
+    const quad = new Float32Array([
+      -1,  1, 0, 0,
+       1,  1, 1, 0,
+      -1, -1, 0, 1,
+       1, -1, 1, 1,
+    ]);
+    const buf = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+    gl.bufferData(gl.ARRAY_BUFFER, quad, gl.STATIC_DRAW);
+
+    const aPosition = gl.getAttribLocation(program, 'aPosition');
+    const aUv = gl.getAttribLocation(program, 'aUv');
+
+    const texture = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+
+    const u = {};
+    ['uBurnProgress', 'uCharWidth', 'uEmberWidth', 'uCharColor', 'uEmberColor', 'uCoverScale', 'uCoverOffset', 'uTime', 'uFrame']
+      .forEach((name) => { u[name] = gl.getUniformLocation(program, name); });
+
+    let lastImage = null;
+
+    function resize(w, h) {
+      gl.viewport(0, 0, w, h);
+    }
+
+    function clear() {
+      gl.clearColor(0, 0, 0, 0);
+      gl.clear(gl.COLOR_BUFFER_BIT);
+    }
+
+    function render(image, dp, rect, cw, ch) {
+      if (!image || !rect || !cw || !ch) return;
+      gl.useProgram(program);
+
+      gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+      gl.enableVertexAttribArray(aPosition);
+      gl.vertexAttribPointer(aPosition, 2, gl.FLOAT, false, 16, 0);
+      gl.enableVertexAttribArray(aUv);
+      gl.vertexAttribPointer(aUv, 2, gl.FLOAT, false, 16, 8);
+
+      gl.activeTexture(gl.TEXTURE0);
+      gl.bindTexture(gl.TEXTURE_2D, texture);
+      if (image !== lastImage) {
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+        lastImage = image;
+      }
+      gl.uniform1i(u.uFrame, 0);
+      gl.uniform1f(u.uBurnProgress, dp);
+      gl.uniform1f(u.uCharWidth, 0.10);
+      gl.uniform1f(u.uEmberWidth, 0.018);
+      gl.uniform3f(u.uCharColor, 0.72, 0.58, 0.32);
+      gl.uniform3f(u.uEmberColor, 2.4, 2.25, 1.55);
+      gl.uniform2f(u.uCoverScale, cw / rect.dw, ch / rect.dh);
+      gl.uniform2f(u.uCoverOffset, rect.dx / rect.dw, rect.dy / rect.dh);
+      gl.uniform1f(u.uTime, performance.now() * 0.001);
+
+      gl.enable(gl.BLEND);
+      gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA, gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+      gl.clearColor(0, 0, 0, 0);
+      gl.clear(gl.COLOR_BUFFER_BIT);
+      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    }
+
+    return { render, resize, clear };
   }
 
-  function spawnParticles(intensity) {
-    if (!emitterPoints.length) return;
-    // Intensity 0..1 — controls number spawned per frame
-    const count = Math.floor(2 + intensity * 18);
-    for (let i = 0; i < count; i++) {
-      const p = emitterPoints[Math.floor(Math.random() * emitterPoints.length)];
-      const speed = 0.3 + Math.random() * 1.8;
-      const angle = -Math.PI / 2 + (Math.random() - 0.5) * Math.PI * 0.9; // mostly upward
-      const life = 800 + Math.random() * 1500;
-      // Type: 0 = dot, 1 = cross-star
-      const type = Math.random() < 0.2 ? 1 : 0;
-      particles.push({
-        x: p.x + (Math.random() - 0.5) * 8,
-        y: p.y + (Math.random() - 0.5) * 8,
-        vx: Math.cos(angle) * speed,
-        vy: Math.sin(angle) * speed,
-        life, age: 0,
-        size: type === 1 ? 4 + Math.random() * 6 : 0.8 + Math.random() * 2.2,
-        type,
-        hue: 30 + Math.random() * 30, // warm
-      });
-    }
-  }
+  const burnGL = initBurnGL();
 
   function updateAndDrawDissolve(progress, skipDissolve) {
-    if (!dctx || !dissolveCanvas) return;
+    if (!dissolveCanvas) return;
     if (LOW_POWER || prefersReducedMotion) skipDissolve = true;
-    const cw = dissolveCanvas.clientWidth;
-    const ch = dissolveCanvas.clientHeight;
 
-    // Progress of the dissolve effect itself — only active in last 25% of hero.
-    // Dissolve maps to last 25% of scroll.
-    const DISSOLVE_START = 0.55;
+    // Start in the final scrub quarter, then continue through the post-hero
+    // zoom so the image does not vanish before the transition has landed.
+    const DISSOLVE_START = 0.75;
     const DISSOLVE_END = 1.0;
-    const dp = Math.max(0, Math.min(1, (progress - DISSOLVE_START) / (DISSOLVE_END - DISSOLVE_START)));
+    const scrubReveal = Math.max(0, Math.min(1, (progress - DISSOLVE_START) / (DISSOLVE_END - DISSOLVE_START)));
+    const zoomReveal = Math.max(0, Math.min(1, postHeroProgress));
+    const rawDp = Math.min(1, scrubReveal * 0.20 + zoomReveal * 0.80);
+    const dp = Math.pow(rawDp, 1.8); // hold the image longer, then clear cleanly
 
-    if (skipDissolve || dp <= 0) {
-      // Fade out opacity
+    if (skipDissolve || dp <= 0 || !burnGL) {
       dissolveCanvas.style.opacity = 0;
-      dctx.clearRect(0, 0, cw, ch);
-      // Also clear erosion on main canvas
-      canvas.style.webkitMaskImage = '';
-      canvas.style.maskImage = '';
-      particles.length = 0;
+      if (burnGL) burnGL.clear();
+      canvas.style.opacity = 1;
       return;
     }
 
+    // The burn canvas becomes the sole visible representation of the frame
+    // once the burn starts — its own discard reveals whatever's behind, which
+    // wouldn't read correctly if the plain, un-charred frame still showed
+    // through underneath.
     dissolveCanvas.style.opacity = 1;
+    canvas.style.opacity = 0;
 
-    // Spawn new particles each frame based on intensity
-    spawnParticles(dp);
-
-    // Dissolve / erode the figures: fade the scrub canvas opacity as dissolve progresses
-    canvas.style.opacity = 1 - dp * 0.75;
-
-    // Draw particles (additive)
-    dctx.clearRect(0, 0, cw, ch);
-    dctx.globalCompositeOperation = 'lighter';
-    const now = performance.now();
-    const prev = updateAndDrawDissolve._prev || now;
-    const dt = Math.min(40, now - prev);
-    updateAndDrawDissolve._prev = now;
-
-    for (let i = particles.length - 1; i >= 0; i--) {
-      const p = particles[i];
-      p.age += dt;
-      if (p.age >= p.life) { particles.splice(i, 1); continue; }
-      // Physics
-      p.vy -= 0.012; // slight upward drift
-      p.x += p.vx;
-      p.y += p.vy;
-      // Drift horizontally with noise
-      p.vx += (Math.random() - 0.5) * 0.02;
-
-      const t = p.age / p.life;
-      const alpha = t < 0.15 ? t / 0.15 : 1 - (t - 0.15) / 0.85;
-
-      if (p.type === 1) {
-        // Cross-star sparkle
-        const s = p.size * (1 - t * 0.3);
-        const grad = dctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, s * 2);
-        grad.addColorStop(0, `rgba(255, 240, 200, ${alpha})`);
-        grad.addColorStop(0.4, `rgba(255, 200, 140, ${alpha * 0.5})`);
-        grad.addColorStop(1, 'rgba(255,180,100,0)');
-        dctx.fillStyle = grad;
-        dctx.beginPath();
-        dctx.arc(p.x, p.y, s * 2, 0, Math.PI * 2);
-        dctx.fill();
-        // Cross spikes
-        dctx.strokeStyle = `rgba(255, 250, 230, ${alpha})`;
-        dctx.lineWidth = 1;
-        dctx.beginPath();
-        dctx.moveTo(p.x - s * 2.5, p.y); dctx.lineTo(p.x + s * 2.5, p.y);
-        dctx.moveTo(p.x, p.y - s * 2.5); dctx.lineTo(p.x, p.y + s * 2.5);
-        dctx.stroke();
-      } else {
-        // Dot
-        dctx.fillStyle = `rgba(255, ${220 + Math.floor(Math.random() * 30)}, 180, ${alpha})`;
-        dctx.beginPath();
-        dctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        dctx.fill();
-      }
-    }
+    const img = frames[lastDrawIdx] ?? frames[Math.round(currentIdx)];
+    burnGL.render(img, dp, lastFrameRect, canvas.clientWidth, canvas.clientHeight);
   }
 
   // ----- Scroll-driven scrub -----
@@ -380,6 +441,8 @@
   let smoothProgress = 0;
   let heroScrollInto = 0;
   let backdropFadeT = 1; // 1 = backdrop fully showing, 0 = fully faded into next section
+  let driverProgress = null;
+  let postHeroProgress = 0;
 
   function updateBackdropFade() {
     if (!backdrop || !planGroup) return;
@@ -390,13 +453,15 @@
     backdrop.style.opacity = String(t);
   }
 
-  function updateScrubTargets() {
+  function updateScrubTargets(progressOverride = null) {
     const rect = hero.getBoundingClientRect();
     const vh = window.innerHeight;
     const scrollIntoHero = -rect.top;
     heroScrollInto = scrollIntoHero;
     const scrubRange = hero.offsetHeight - vh;
-    const p = Math.max(0, Math.min(1, scrollIntoHero / scrubRange));
+    const p = progressOverride === null
+      ? Math.max(0, Math.min(1, scrollIntoHero / scrubRange))
+      : Math.max(0, Math.min(1, progressOverride));
     scrubProgress = p;
 
     const rawTarget = Math.round(p * (FRAME_COUNT - 1));
@@ -421,7 +486,7 @@
     // Keeps growing through the hero->next-section transition itself, driven
     // by how far the backdrop has faded — independent of the hero's own
     // pinned scroll range, so the zoom doesn't freeze the instant it unpins.
-    const transitionZoom = 1 - backdropFadeT;
+    const transitionZoom = Math.max(1 - backdropFadeT, postHeroProgress);
     const scrubScale = 1 + zoomT * 0.14 + transitionZoom * 0.26;
     const bgScale = 1.12 + zoomT * 0.05 + transitionZoom * 0.24;
 
@@ -430,8 +495,12 @@
         `translate3d(${Math.round(mx * 12 * pm)}px, ${Math.round(my * 8 * pm)}px, 0) scale(${bgScale.toFixed(4)})`;
     }
     if (canvas) {
-      canvas.style.transform =
+      const foregroundTransform =
         `translate3d(${Math.round(mx * -22 * pm)}px, ${Math.round(my * -14 * pm)}px, 0) scale(${scrubScale.toFixed(4)})`;
+      canvas.style.transform = foregroundTransform;
+      // The reveal canvas replaces the sequence canvas at the dissolve
+      // handoff, so it must inherit the exact same transform to avoid a jump.
+      if (dissolveCanvas) dissolveCanvas.style.transform = foregroundTransform;
     }
   }
 
@@ -444,46 +513,34 @@
     }, { passive: true });
   }
 
-  let _cachedSkip = null;
-  function shouldSkipDissolve() {
-    if (_cachedSkip !== null) return _cachedSkip;
-    // Wait until bg.js has defined STACKS (it exposes on window.__BG_STACKS__)
-    if (window.__BG_STACKS__) {
-      _cachedSkip = nextSectionIsPaper();
-      return _cachedSkip;
-    }
-    return false; // default: do the dissolve
-  }
-
-  // Resample emitter points whenever the frame changes significantly
-  let lastSampleFrame = -1;
   let lastDrawIdx = -1;
+  let testBurnOverride = null; // set via window.__testHeroBurn for console testing
   function loop() {
-    requestAnimationFrame(loop);
-    if (!pageVisible || !heroVisible || LOW_POWER || prefersReducedMotion) return;
+    if (!motionLoopUsesSharedTicker) requestAnimationFrame(loop);
+    const heroTransitionActive = transitionTrigger?.isActive;
+    if (!pageVisible || (!heroVisible && !heroTransitionActive) || LOW_POWER || prefersReducedMotion) return;
 
     mx += (tmx - mx) * 0.06;
     my += (tmy - my) * 0.06;
-    updateScrubTargets();
-    // Eased separately from currentIdx so the dissolve/particle layer (and
-    // the tail-end zoom) glide to a stop instead of snapping the instant
-    // scrolling stops.
-    smoothProgress += (scrubProgress - smoothProgress) * 0.12;
+    updateScrubTargets(driverProgress);
+    // Ease quickly, then snap inside a tiny dead zone. Without the snap,
+    // asymptotic interpolation can look frozen between frames after a wheel
+    // gesture ends.
+    smoothProgress += (scrubProgress - smoothProgress) * 0.22;
+    if (Math.abs(scrubProgress - smoothProgress) < 0.001) {
+      smoothProgress = scrubProgress;
+    }
     applyMotion();
 
-    currentIdx += (targetIdx - currentIdx) * 0.2;
+    currentIdx += (targetIdx - currentIdx) * 0.38;
+    if (Math.abs(targetIdx - currentIdx) < 0.12) currentIdx = targetIdx;
     const drawIdx = Math.round(currentIdx);
     if (frames[drawIdx] && drawIdx !== lastDrawIdx) {
       drawFrame(drawIdx);
       lastDrawIdx = drawIdx;
     }
 
-    if (!LOW_POWER && scrubProgress > 0.5 && drawIdx !== lastSampleFrame && frames[drawIdx]) {
-      emitterPoints = sampleEmitterPoints(drawIdx);
-      lastSampleFrame = drawIdx;
-    }
-
-    updateAndDrawDissolve(smoothProgress, shouldSkipDissolve());
+    updateAndDrawDissolve(testBurnOverride ?? smoothProgress, false);
   }
 
   function onScrubScroll() {
@@ -503,6 +560,46 @@
     }
   }
 
+  function renderImmediateProgress() {
+    if (!(prefersReducedMotion || LOW_POWER)) return;
+    if (!prefersReducedMotion) smoothProgress = scrubProgress;
+    applyMotion();
+    const drawIdx = Math.round(
+      Math.max(0, Math.min(FRAME_COUNT - 1, targetIdx))
+    );
+    if (frames[drawIdx]) drawFrame(drawIdx);
+  }
+
+  const scrubTrigger = window.__pwpScrollDriver?.register({
+    id: "hero-scrub",
+    trigger: hero,
+    start: "top top",
+    end: "bottom bottom",
+    // Let the user continue naturally into the post-hero zoom once the reveal
+    // starts; snapping this trigger to an endpoint creates a visible jump.
+    finishOnStop: false,
+    onUpdate: (progress) => {
+      driverProgress = progress;
+      updateScrubTargets(progress);
+      renderImmediateProgress();
+    },
+  });
+
+  // The foreground scrub ends when the hero unpins, but the fixed backdrop
+  // should keep moving through the handoff into the next chapter. This gives
+  // the scene a soft landing instead of freezing at the scrub endpoint.
+  const transitionTrigger = window.__pwpScrollDriver?.register({
+    id: "hero-transition-zoom",
+    trigger: planGroup,
+    start: "top bottom",
+    end: "top 10%",
+    onUpdate: (progress) => {
+      postHeroProgress = progress;
+      updateBackdropFade();
+      applyMotion();
+    },
+  });
+
   function init() {
     if (!motionLoopStarted) startMotionLoop();
     else {
@@ -515,7 +612,15 @@
     sizeCanvas();
     drawFrame(Math.round(currentIdx));
   });
-  window.addEventListener('scroll', onScrubScroll, { passive: true });
+  if (!scrubTrigger) {
+    window.addEventListener('scroll', onScrubScroll, { passive: true });
+  }
+  if (!transitionTrigger) {
+    window.addEventListener('scroll', () => {
+      updateBackdropFade();
+      applyMotion();
+    }, { passive: true });
+  }
 
   if ('IntersectionObserver' in window) {
     new IntersectionObserver(([e]) => {
@@ -529,4 +634,23 @@
   preload().then(() => {
     console.log('[hero-scrub] first frame ready; remaining frames loading');
   });
+
+  // Console test hooks — run window.__testHeroBurn(0.8) to pin the burn
+  // effect at any point (0..1) without scrolling (holds until you call
+  // __testHeroBurnRelease() to hand control back to real scroll position).
+  window.__testHeroBurn = (p) => {
+    testBurnOverride = p;
+    updateAndDrawDissolve(p, false);
+  };
+  window.__testHeroBurnRelease = () => { testBurnOverride = null; };
+  window.__heroDebugFull = {
+    hasBurnGL: !!burnGL,
+    heroVisible: () => heroVisible,
+    pageVisible: () => pageVisible,
+    LOW_POWER,
+    prefersReducedMotion,
+    frames: frames,
+    canvas,
+    dissolveCanvas,
+  };
 })();

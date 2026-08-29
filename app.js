@@ -398,7 +398,16 @@ try {
   window.parent.postMessage({ type: "__edit_mode_available" }, "*");
 } catch (_) {}
 
-// --- Nav smooth scroll offset fix (since we have scroll-behavior already) — no-op
+// --- Shared smooth-scroll handoff ---
+// scroll-experience.js upgrades this helper to Lenis when available; the
+// native fallback keeps CTA navigation working if the CDN is unavailable.
+function scrollToSection(target) {
+  if (typeof window.__pwpScrollTo === "function") {
+    window.__pwpScrollTo(target);
+    return;
+  }
+  target?.scrollIntoView({ behavior: "smooth", block: "start" });
+}
 
 // --- Cork-board drag-to-scroll for testimonials ---
 (function () {
@@ -482,7 +491,7 @@ try {
 
     const target = document.querySelector(scroll);
     if (target) {
-      target.scrollIntoView({ behavior: "smooth", block: "start" });
+      scrollToSection(target);
       const sampleFilter = el.dataset.leadSampleFilter || audience;
       if (scroll === "#samples" && sampleFilter) {
         window.setTimeout(
@@ -561,11 +570,11 @@ try {
   }
 
   document.querySelectorAll("[data-package]").forEach((link) => {
-    link.addEventListener("click", () => {
+    link.addEventListener("click", (e) => {
+      e.preventDefault();
+      if (link.hash) history.replaceState(null, "", link.hash);
       setPackage(link.dataset.package);
-      document
-        .getElementById("book")
-        ?.scrollIntoView({ behavior: "smooth", block: "start" });
+      scrollToSection(document.getElementById("book"));
     });
   });
 
@@ -618,9 +627,7 @@ try {
     updateBookAddonsSummary();
     if (next && addonsDetails && !addonsDetails.open) addonsDetails.open = true;
     if (scrollToBook) {
-      document
-        .getElementById("book")
-        ?.scrollIntoView({ behavior: "smooth", block: "start" });
+      scrollToSection(document.getElementById("book"));
       form
         .querySelector(`input[data-addon-id="${id}"]`)
         ?.focus({ preventScroll: true });

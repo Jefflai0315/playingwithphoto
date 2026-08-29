@@ -82,7 +82,7 @@
   filter: contrast(1.05) saturate(1.02);
 }
 
-/* ----- Dissolve particle overlay (triggers near end of hero scrub, only for image→image transitions) ----- */
+/* ----- Radial reveal overlay (hands off from the sequence canvas at the scrub tail) ----- */
 #heroDissolveCanvas {
   position: absolute;
   inset: 0;
@@ -91,8 +91,10 @@
   pointer-events: none;
   z-index: 5;
   opacity: 0;
-  transition: opacity 0.1s linear;
-  mix-blend-mode: screen;
+  transition: none;
+  mix-blend-mode: lighten;
+  filter: contrast(1.05) saturate(1.02);
+  transform-origin: center center;
 }
 
 /* ----- Dust motes floating between bg and fg ----- */

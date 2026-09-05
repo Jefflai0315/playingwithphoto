@@ -2,6 +2,26 @@
   "framework": null,
   "buildCommand": "echo \"No build step\"",
   "outputDirectory": ".",
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "has": [{ "type": "host", "value": "www.playingwithphoto.com" }],
+      "destination": "https://playingwithphoto.com/$1",
+      "permanent": true
+    },
+    {
+      "source": "/(.*)",
+      "has": [{ "type": "host", "value": "photo.playingwithpencil.art" }],
+      "destination": "https://playingwithphoto.com/$1",
+      "permanent": true
+    },
+    {
+      "source": "/(.*)",
+      "has": [{ "type": "host", "value": "playingwithphoto.vercel.app" }],
+      "destination": "https://playingwithphoto.com/$1",
+      "permanent": true
+    }
+  ],
   "headers": [
     {
       "source": "/Landing(.*)",

@@ -36,8 +36,9 @@ Note: users search "photo booth" (two words). Site copy historically used
 
 ## Backlog (work top-down; re-prioritize each iteration)
 
-- [x] JEFF: Google Search Console — verified playingwithphoto.com, sitemap.xml submitted 2026-07-21, status Success, 1 page discovered. Performance/query data check pending (needs a few days to populate).
-- [ ] JEFF: Google Business Profile for Playing With Photo (huge for "photo booth singapore" local pack).
+- [x] JEFF: Google Search Console — verified playingwithphoto.com, sitemap.xml submitted 2026-07-21, status Success. First real Performance data pulled 2026-09-06 (245 impressions / 8 clicks / 3.3% CTR / 7.7 avg position over 3 months, 37 distinct queries) — see seo/audits/2026-09-06.md §1. No durable GSC API access exists; this was a one-off manual pull via the user's authenticated browser session, not a repeatable pipeline.
+- [ ] JEFF: Google Business Profile for Playing With Photo (huge for "photo booth singapore" local pack) — now backed by real query data: "chinatown", "tanjong pagar", "maxwell", "near me" dominate actual search volume (seo/audits/2026-09-06.md §1), and local-pack placement comes from GBP, not organic ranking.
+- [x] `/software/` page found stuck in "Discovered - currently not indexed" (real page, correctly linked + in sitemap, but Google hadn't crawled it) — Request Indexing submitted via GSC 2026-09-06, confirmed queued. Verify it flips to Indexed next iteration.
 - [ ] JEFF: Vercel dashboard — set www.playingwithphoto.com + photo.playingwithpencil.art + .vercel.app to 308-redirect to playingwithphoto.com (currently they serve 200 duplicates; canonical tag mitigates but redirect is cleaner).
 - [x] Add visible "photo booth" (two-word) phrasing to hero pitch / section copy — Jeff picked the lines, shipped in iteration 4 (2026-07-21). Live-confirmed 2026-07-29 (16 occurrences site-wide).
 - [x] Add an FAQ section + FAQPage JSON-LD — shipped in iteration 4 (2026-07-21), custom-backdrop question added same iteration. Live-confirmed 2026-07-29.
@@ -49,6 +50,7 @@ Note: users search "photo booth" (two words). Site copy historically used
 - [ ] Event schema for public events/activations when applicable.
 - [ ] Monitor: IG profile link should point to playingwithphoto.com (not .vercel.app).
 - [ ] Work towards Search Keywords "Photobooth Singapore" / "AI photobooth Singapore" / "photo booth Singapore" / "wedding photo booth Singapore" / "corporate event photo booth Singapore" / "vintage photo booth Singapore" / "photo booth Malaysia / JB wedding photo booth" (secondary market). ALl points to Playingwithpencil.com
+- [ ] JEFF: uncommitted hero-redesign WIP (`index.html`, `hero-scrub.js`, `booth-scrub.js`, `text-focus.js`, `vision-scrub.js` modified; `service-hero.css`/`service-hero.js` untracked) has been sitting uncommitted in the working directory since before 2026-08-29 and is still there 2026-09-06, carrying across every branch checkout untouched. Not an SEO item, but flagging again: real risk of loss if anyone runs a destructive git command. Commit it to its own branch regardless of ship-readiness.
 
 ## When the backlog empties
 
@@ -87,3 +89,4 @@ static list does.
 - 2026-07-21 — Iteration 4 (manual, Jeff instructions). Hero copy "photo booth", custom-backdrop FAQ, removed Email & SMS add-on. Committed straight to main. See seo/audits/2026-07-21.md.
 - 2026-07-29 — Iteration 5 (scheduled). Verified iterations 1-4 all live (no gaps found). Accessibility pass: `<main>` landmark, form label associations, heading-order fix. Branch seo-improvements-4 (also carries Jeff's own concurrent /software/ trailing-slash fix — see audit §1). See seo/audits/2026-07-29.md.
 - 2026-08-29 — Iteration 6 (scheduled). Verified iteration 5 + /software page live with no regressions despite heavy unrelated feature work on main. Noted Jeff's own commit already fixes the hero-scroll-scrub performance item. Directory/backlink research + drafted outreach copy for SingaporeBrides, Bridestory, Blissful Brides, Singapore Wedding Vendors, The Wedding Vow, Venuerific. Branch seo-improvements-5. See seo/audits/2026-08-29.md.
+- 2026-09-06 — Iteration 7 (manual, on-request). Pulled first real GSC Performance data (37 queries, 5 pages, 3 months) via the user's authenticated browser session. Found `/software/` stuck un-indexed despite being correctly set up; submitted Request Indexing. Reprioritized GBP backlog item with data backing. Re-flagged still-uncommitted hero-redesign WIP. Branch seo-improvements-7. See seo/audits/2026-09-06.md.

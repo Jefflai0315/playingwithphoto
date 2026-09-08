@@ -1,0 +1,503 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f3ee">
+  <link rel="canonical" href="https://playingwithphoto.com/catalogue/">
+  <title>AI Style Catalogue · Playing With Photo</title>
+  <style>
+@font-face {
+  font-family: "Catalogue Display"; font-style: normal; font-weight: 500; font-display: swap;
+  src: url("assets/fonts/cormorant-garamond-500.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Catalogue Display"; font-style: italic; font-weight: 500; font-display: swap;
+  src: url("assets/fonts/cormorant-garamond-500-italic.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Catalogue Sans"; font-style: normal; font-weight: 400; font-display: swap;
+  src: url("assets/fonts/dm-sans-400.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Catalogue Sans"; font-style: normal; font-weight: 600; font-display: swap;
+  src: url("assets/fonts/dm-sans-600.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Catalogue Sans"; font-style: normal; font-weight: 700; font-display: swap;
+  src: url("assets/fonts/dm-sans-700.ttf") format("truetype");
+}
+:root {
+  --paper: #f7f3ee;
+  --sheet: #fffdfa;
+  --ink: #191714;
+  --muted: #6b6258;
+  --line: #d8d0c5;
+  --gold: #9b7a52;
+  --red: #a53f31;
+  --serif: "Catalogue Display", "Cormorant Garamond", Georgia, serif;
+  --sans: "Catalogue Sans", "DM Sans", Arial, sans-serif;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; overflow-x: hidden; background: var(--paper); color: var(--ink); font-family: var(--sans); }
+a { color: inherit; }
+a:focus-visible, button:focus-visible, video:focus-visible {
+  outline: 3px solid var(--red); outline-offset: 4px;
+}
+.topbar {
+  min-height: 72px; padding: 14px clamp(20px, 4vw, 64px); display: flex; align-items: center;
+  justify-content: space-between; gap: 24px; border-bottom: 1px solid rgba(25,23,20,.18);
+  background: rgba(247,243,238,.94); position: sticky; top: 0; z-index: 20; backdrop-filter: blur(12px);
+}
+.brand { display: flex; align-items: center; gap: 14px; text-decoration: none; }
+.brand img { width: 116px; height: auto; display: block; }
+.brand span { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.topbar nav { display: flex; gap: 8px; }
+.topbar nav a {
+  min-height: 42px; display: inline-flex; align-items: center; padding: 0 16px;
+  border: 1px solid var(--line); border-radius: 999px; text-decoration: none; font-size: 13px;
+}
+.topbar nav a[aria-current="page"] { color: white; background: var(--ink); border-color: var(--ink); }
+.cover { min-height: calc(100svh - 72px); display: grid; grid-template-columns: minmax(300px, .82fr) 1.18fr; }
+.cover-copy {
+  padding: clamp(48px, 8vw, 120px) clamp(28px, 6vw, 96px); display: flex; flex-direction: column;
+  justify-content: space-between; background: var(--sheet); border-right: 1px solid var(--line);
+}
+.cover h1 {
+  margin: 0; max-width: 8ch; font-family: var(--serif); font-weight: 500;
+  font-size: clamp(66px, 9vw, 142px); line-height: .79; letter-spacing: -.04em;
+}
+.cover h1 em { display: block; color: var(--gold); font-weight: 400; }
+.cover-note { max-width: 37ch; color: var(--muted); font-size: clamp(16px, 1.4vw, 20px); line-height: 1.55; }
+.cover-note strong { display: block; color: var(--ink); margin-bottom: 8px; }
+.cover-mosaic { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1.05fr .95fr; min-height: 600px; background: #141414; }
+.cover-mosaic figure { min-width: 0; margin: 0; overflow: hidden; position: relative; }
+.cover-mosaic figure:first-child { grid-row: 1 / 3; }
+.cover-mosaic img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 900ms cubic-bezier(.16,1,.3,1); }
+.cover-mosaic figure:hover img { transform: scale(1.025); }
+.cover-mosaic figcaption {
+  position: absolute; inset: auto 14px 14px; color: white; font-size: 11px; letter-spacing: .08em;
+  text-transform: uppercase; text-shadow: 0 1px 8px #000; opacity: .9;
+}
+.contents { padding: 90px clamp(24px, 7vw, 112px); background: var(--ink); color: #f8f4ee; }
+.contents h2 { margin: 0 0 42px; font: 500 clamp(42px, 7vw, 94px)/.9 var(--serif); letter-spacing: -.03em; }
+.index-list { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid rgba(255,255,255,.28); }
+.index-list a {
+  display: grid; grid-template-columns: 34px 1fr; gap: 12px; padding: 14px 8px;
+  border-bottom: 1px solid rgba(255,255,255,.18); text-decoration: none; font-size: 14px;
+}
+.index-list a:hover { color: #dbc09e; }
+.index-list span { color: #a99e92; font-variant-numeric: tabular-nums; }
+.chapter {
+  min-height: 46vh; padding: 80px clamp(24px, 7vw, 112px); display: flex; align-items: end;
+  background: var(--gold); color: white;
+}
+.chapter h2 { margin: 0; max-width: 9ch; font: 500 clamp(60px, 11vw, 160px)/.77 var(--serif); letter-spacing: -.045em; }
+.chapter:nth-of-type(even) { background: #23333b; }
+.style-entry {
+  min-height: 84vh; display: grid; grid-template-columns: 1.32fr .68fr; background: var(--sheet);
+  border-bottom: 1px solid var(--line); scroll-margin-top: 72px;
+}
+.style-entry:nth-child(even) { grid-template-columns: .68fr 1.32fr; }
+.style-entry:nth-child(even) .entry-image { order: 2; }
+.entry-image { min-width: 0; min-height: 620px; overflow: hidden; background: #ddd5c9; }
+.entry-image img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.entry-copy { padding: clamp(38px, 6vw, 96px); display: flex; flex-direction: column; justify-content: space-between; gap: 48px; }
+.entry-number { font-size: 12px; letter-spacing: .14em; color: var(--gold); font-variant-numeric: tabular-nums; }
+.entry-copy h3 { margin: 14px 0 22px; font: 500 clamp(48px, 6vw, 92px)/.88 var(--serif); letter-spacing: -.035em; }
+.entry-copy p { max-width: 33ch; margin: 0; color: var(--muted); font-size: clamp(17px, 1.45vw, 21px); line-height: 1.55; }
+.entry-tag { align-self: start; padding-top: 12px; border-top: 1px solid var(--line); color: var(--muted); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; }
+.video-intro { min-height: 55vh; }
+.video-entry { min-height: 100vh; display: grid; grid-template-columns: minmax(0, 1fr) minmax(300px, .48fr); background: #111; color: white; border-bottom: 1px solid #333; }
+.video-frame { min-height: 70vh; display: grid; place-items: center; padding: clamp(14px, 3vw, 48px); background: #090909; }
+.video-frame video { width: 100%; max-height: 82vh; object-fit: contain; background: #000; }
+.video-entry .entry-copy { background: #181715; }
+.video-entry .entry-copy p, .video-entry .entry-tag { color: #bdb4aa; }
+.video-entry .entry-tag { border-color: #4a4641; }
+.video-entry .entry-number { color: #d4b181; }
+.footer { padding: 80px clamp(24px, 7vw, 112px); display: flex; justify-content: space-between; gap: 30px; align-items: end; background: var(--paper); }
+.footer h2 { margin: 0; font: 500 clamp(44px, 7vw, 92px)/.88 var(--serif); max-width: 9ch; }
+.footer p { max-width: 34ch; margin: 0; color: var(--muted); }
+.print-only { display: none; }
+.print-index { height: 277mm; padding: 18mm; page-break-after: always; border: 1px solid #bfb6ab; }
+.print-index h2 { margin: 0 0 12mm; font: 500 26mm/.85 var(--serif); letter-spacing: -.035em; }
+.print-index-list { display: grid; grid-template-columns: 1fr 1fr; gap: 0 10mm; }
+.print-index-list div {
+  display: grid; grid-template-columns: 10mm 1fr; gap: 3mm; padding: 3mm 0;
+  border-bottom: 1px solid var(--line); font-size: 10pt;
+}
+.print-index-list span { color: var(--gold); font-variant-numeric: tabular-nums; }
+@media (max-width: 850px) {
+  .topbar { width: 100%; position: relative; align-items: center; gap: 8px; padding: 14px 16px; }
+  .brand { min-width: 0; }
+  .brand img { width: 82px; }
+  .brand span { display: none; }
+  .topbar nav { flex: none; gap: 4px; }
+  .topbar nav a { min-height: 40px; padding: 0 10px; font-size: 12px; }
+  .cover { grid-template-columns: 1fr; }
+  .cover-copy { min-height: 46vh; padding-top: 42px; padding-bottom: 38px; border-right: 0; }
+  .cover-mosaic { min-height: 75vh; }
+  .index-list { grid-template-columns: 1fr; }
+  .chapter { min-height: 35vh; }
+  .style-entry, .style-entry:nth-child(even), .video-entry { grid-template-columns: 1fr; min-height: 0; }
+  .style-entry:nth-child(even) .entry-image { order: 0; }
+  .entry-image { min-height: 75vw; }
+  .entry-copy { min-height: 400px; }
+  .video-frame { min-height: 0; padding: 0; }
+  .video-frame video { max-height: none; }
+  .footer { align-items: start; flex-direction: column; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .cover-mosaic img { transition: none; }
+}
+@page { size: A4 portrait; margin: 10mm; }
+@media print {
+  body { background: white; }
+  .topbar, .contents, .chapter, .footer, .screen-only { display: none !important; }
+  .print-only { display: block; }
+  .print-cover {
+    height: 277mm; padding: 24mm; display: flex; flex-direction: column; justify-content: space-between;
+    border: 1px solid #bfb6ab; page-break-after: always;
+  }
+  .print-cover img { width: 42mm; }
+  .print-cover h1 { margin: 0; font: 500 29mm/.8 var(--serif); letter-spacing: -.04em; }
+  .print-cover p { max-width: 90mm; color: var(--muted); font-size: 12pt; }
+  .print-index { display: block; }
+  main.catalogue { display: grid; grid-template-columns: 1fr 1fr; gap: 8mm; }
+  .style-entry, .style-entry:nth-child(even) {
+    min-height: 0; display: block; break-inside: avoid; border: 1px solid #cec6bb; background: white;
+  }
+  .style-entry:nth-child(even) .entry-image { order: 0; }
+  .entry-image { min-height: 0; height: 91mm; }
+  .entry-copy { min-height: 53mm; padding: 7mm; display: block; }
+  .entry-copy h3 { margin: 2mm 0 3mm; font-size: 23pt; }
+  .entry-copy p { font-size: 9.5pt; line-height: 1.35; }
+  .entry-tag { display: none; }
+  .video-entry {
+    min-height: 0; display: grid; grid-template-columns: 1.2fr .8fr; break-inside: avoid;
+    page-break-after: always; height: 265mm; color: var(--ink); background: white; border: 1px solid #cec6bb;
+  }
+  .video-frame { min-height: 0; padding: 0; background: #111; }
+  .video-frame video { display: none; }
+  .video-frame::after { content: ""; display: block; width: 100%; height: 100%; background: var(--poster) center/cover no-repeat; }
+  .video-entry .entry-copy { background: white; color: var(--ink); }
+  .video-entry .entry-copy p, .video-entry .entry-tag { color: var(--muted); }
+}
+</style>
+</head>
+<body>
+<!--
+THESIS: A visual atlas lets real transformations lead; it refuses a generic feature-card gallery.
+OWN-WORLD: Warm event paper, black editorial fields, champagne accents, serif display, ruled details.
+STORY: Clients scan the range, recognise a style, and discuss the right experience for their event.
+FIRST VIEWPORT: Oversized title at left, three real transformations forming an edge-to-edge mosaic at right.
+FORM: Visual style atlas, sixth structural candidate, seed 4f804eba.
+FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
+-->
+
+<header class="topbar screen-only">
+  <a class="brand" href="/">
+    <img src="assets/playing-with-photo-logo.png" alt="Playing With Photo">
+    <span>Experience catalogue</span>
+  </a>
+  <nav aria-label="Catalogue">
+    <a href="ai-styles.html" aria-current="page">AI styles</a>
+    <a href="videos.html" >Videos</a>
+  </nav>
+</header>
+
+
+<section class="print-cover print-only">
+  <img src="assets/playing-with-photo-logo.png" alt="Playing With Photo">
+  <h1>AI Style Catalogue</h1>
+  <p>Twenty-four curated transformations for events, activations and celebrations.</p>
+</section>
+
+<section class="print-index print-only">
+  <h2>Style index</h2>
+  <div class="print-index-list"><div><span>01</span><strong>Mini Figures</strong></div><div><span>02</span><strong>Paper World</strong></div><div><span>03</span><strong>Plushies</strong></div><div><span>04</span><strong>Brick World</strong></div><div><span>05</span><strong>Dollhouse</strong></div><div><span>06</span><strong>Felt Craft</strong></div><div><span>07</span><strong>Knitted Us</strong></div><div><span>08</span><strong>Pop-Up Book</strong></div><div><span>09</span><strong>Zero Gravity</strong></div><div><span>10</span><strong>Butterflies</strong></div><div><span>11</span><strong>Inflatable Us</strong></div><div><span>12</span><strong>Arcade Characters</strong></div><div><span>13</span><strong>J-Magazine</strong></div><div><span>14</span><strong>Newspaper Comic</strong></div><div><span>15</span><strong>Goal Freeze</strong></div><div><span>16</span><strong>Pit Lane</strong></div><div><span>17</span><strong>Sports Anime</strong></div><div><span>18</span><strong>Chrome Card</strong></div><div><span>19</span><strong>Manga Still Pose</strong></div><div><span>20</span><strong>Football Anime Still</strong></div><div><span>21</span><strong>Playful Football</strong></div><div><span>22</span><strong>Digitized Hoops</strong></div><div><span>23</span><strong>Graffiti Hoops</strong></div><div><span>24</span><strong>Y2K Street Football</strong></div></div>
+</section>
+<section class="cover screen-only">
+  <div class="cover-copy">
+    <h1>AI style <em>atlas</em></h1>
+    <div class="cover-note"><strong>24 curated transformations</strong>Turn one photograph into a crafted world, a graphic edition or a stadium-sized moment.</div>
+  </div>
+  <div class="cover-mosaic"><figure><img src="assets/images/plushie_us.png" alt="Plushies AI transformation"><figcaption>Plushies</figcaption></figure><figure><img src="assets/images/knitted_doll.png" alt="Knitted Us AI transformation"><figcaption>Knitted Us</figcaption></figure><figure><img src="assets/images/newspaper_comic.png" alt="Newspaper Comic AI transformation"><figcaption>Newspaper Comic</figcaption></figure></div>
+</section>
+<section class="contents screen-only">
+  <h2>Find your world.</h2>
+  <div class="index-list"><a href="#miniature_collectible"><span>01</span>Mini Figures</a><a href="#paper_world"><span>02</span>Paper World</a><a href="#plushie_us"><span>03</span>Plushies</a><a href="#brick_world"><span>04</span>Brick World</a><a href="#dollhouse"><span>05</span>Dollhouse</a><a href="#felt_craft"><span>06</span>Felt Craft</a><a href="#knitted_doll"><span>07</span>Knitted Us</a><a href="#popup_book"><span>08</span>Pop-Up Book</a><a href="#zero_gravity"><span>09</span>Zero Gravity</a><a href="#butterfly_room"><span>10</span>Butterflies</a><a href="#inflatable_universe"><span>11</span>Inflatable Us</a><a href="#arcade_game"><span>12</span>Arcade Characters</a><a href="#japanese_magazine"><span>13</span>J-Magazine</a><a href="#newspaper_comic"><span>14</span>Newspaper Comic</a><a href="#football_goal_freeze"><span>15</span>Goal Freeze</a><a href="#racing_driver"><span>16</span>Pit Lane</a><a href="#sports_anime"><span>17</span>Sports Anime</a><a href="#chrome_sports_card"><span>18</span>Chrome Card</a><a href="#football_manga_posed"><span>19</span>Manga Still Pose</a><a href="#intense_football_anime"><span>20</span>Football Anime Still</a><a href="#playful_street_football"><span>21</span>Playful Football</a><a href="#retro_arcade_basketball"><span>22</span>Digitized Hoops</a><a href="#street_basketball_graffiti"><span>23</span>Graffiti Hoops</a><a href="#street_football_y2k"><span>24</span>Y2K Street Football</a></div>
+</section>
+<main class="catalogue"><section class="chapter screen-only"><h2>Crafted Worlds</h2></section>
+<article class="style-entry" id="miniature_collectible">
+  <div class="entry-image"><img src="assets/images/miniature_collectible.png" alt="Mini Figures AI style example" loading="lazy"></div>
+  <div class="entry-copy">
+    <div>
+      <div class="entry-number">STYLE 01</div>
+      <h3>Mini Figures</h3>
+      <p>Turn the group into detailed collectible figures photographed like a premium miniature set.</p>
+    </div>
+    <div class="entry-tag">Crafted Worlds · AI photo experience</div>
+  </div>
+</article>
+<article class="style-entry" id="paper_world">
+  <div class="entry-image"><img src="assets/images/paper_world.png" alt="Paper World AI style example" loading="lazy"></div>
+  <div class="entry-copy">
+    <div>
+      <div class="entry-number">STYLE 02</div>
+      <h3>Paper World</h3>
+      <p>A dimensional paper-cut world with layered card, folded edges and handmade shadows.</p>
+    </div>
+    <div class="entry-tag">Crafted Worlds · AI photo experience</div>
+  </div>
+</article>
+<article class="style-entry" id="plushie_us">
+  <div class="entry-image"><img src="assets/images/plushie_us.png" alt="Plushies AI style example" loading="lazy"></div>
+  <div class="entry-copy">
+    <div>
+      <div class="entry-number">STYLE 03</div>
+      <h3>Plushies</h3>
+      <p>Everyone becomes a recognisable, huggable plush character in a cosy miniature scene.</p>
+    </div>
+    <div class="entry-tag">Crafted Worlds · AI photo experience</div>
+  </div>
+</article>
+<article class="style-entry" id="brick_world">
+  <div class="entry-image"><img src="assets/images/brick_world.png" alt="Brick World AI style example" loading="lazy"></div>
+  <div class="entry-copy">
+    <div>
+      <div class="entry-number">STYLE 04</div>
+      <h3>Brick World</h3>
+      <p>Rebuild the full scene in colourful interlocking bricks and miniature toy photography.</p>
+    </div>
+    <div class="entry-tag">Crafted Worlds · AI photo experience</div>
+  </div>
+</article>
+<article class="style-entry" id="dollhouse">
+  <div class="entry-image"><img src="assets/images/dollhouse.png" alt="Dollhouse AI style example" loading="lazy"></div>
+  <div class="entry-copy">
+    <div>
+      <div class="entry-number">STYLE 05</div>
+      <h3>Dollhouse</h3>
+      <p>Shrink the whole group into an intricate dollhouse scene viewed from above.</p>
+    </div>
+    <div class="entry-tag">Crafted Worlds · AI photo experience</div>
+  </div>
+</article>
+<article class="style-entry" id="felt_craft">
+  <div class="entry-image"><img src="assets/images/felt_craft.png" alt="Felt Craft AI style example" loading="lazy"></div>
+  <div class="entry-copy">
+    <div>
+      <div class="entry-number">STYLE 06</div>
+      <h3>Felt Craft</h3>
+      <p>Recreate every person and detail in layered felt, embroidery and visible stitching.</p>
+    </div>
+    <div class="entry-tag">Crafted Worlds · AI photo experience</div>
+  </div>
+</article>
+<article class="style-entry" id="knitted_doll">
+  <div class="entry-image"><img src="assets/images/knitted_doll.png" alt="Knitted Us AI style example" loading="lazy"></div>
+  <div class="entry-copy">
+    <div>
+      <div class="entry-number">STYLE 07</div>
+      <h3>Knitted Us</h3>
+      <p>A warm woollen world where guests become hand-knitted characters.</p>
+    </div>
+    <div class="entry-tag">Crafted Worlds · AI photo experience</div>
+  </div>
+</article>
+<article class="style-entry" id="popup_book">
+  <div class="entry-image"><img src="assets/images/popup_book.png" alt="Pop-Up Book AI style example" loading="lazy"></div>
+  <div class="entry-copy">
+    <div>
+      <div class="entry-number">STYLE 08</div>
+      <h3>Pop-Up Book</h3>
+      <p>Open an elaborate pop-up book where people and scenery rise from folded pages.</p>
+    </div>
+    <div class="entry-tag">Crafted Worlds · AI photo experience</div>
+  </div>
+</article><section class="chapter screen-only"><h2>Wonder Worlds</h2></section>
+<article class="style-entry" id="zero_gravity">
+  <div class="entry-image"><img src="assets/images/zero_gravity.png" alt="Zero Gravity AI style example" loading="lazy"></div>
+  <div class="entry-copy">
+    <div>
+      <div class="entry-number">STYLE 09</div>
+      <h3>Zero Gravity</h3>
+      <p>Float together inside a cinematic space station with Earth glowing beyond the window.</p>
+    </div>
+    <div class="entry-tag">Wonder Worlds · AI photo experience</div>
+  </div>
+</article>
+<article class="style-entry" id="butterfly_room">
+  <div class="entry-image"><img src="assets/images/butterfly_room.png" alt="Butterflies AI style example" loading="lazy"></div>
+  <div class="entry-copy">
+    <div>
+      <div class="entry-number">STYLE 10</div>
+      <h3>Butterflies</h3>
+      <p>Fill the moment with hundreds of butterflies moving through warm garden light.</p>
+    </div>
+    <div class="entry-tag">Wonder Worlds · AI photo experience</div>
+  </div>
+</article><section class="chapter screen-only"><h2>Playful Worlds</h2></section>
+<article class="style-entry" id="inflatable_universe">
+  <div class="entry-image"><img src="assets/images/inflatable_universe.png" alt="Inflatable Us AI style example" loading="lazy"></div>
+  <div class="entry-copy">
+    <div>
+      <div class="entry-number">STYLE 11</div>
+      <h3>Inflatable Us</h3>
+      <p>A glossy designer-toy universe with soft, larger-than-life inflatable characters.</p>
+    </div>
+    <div class="entry-tag">Playful Worlds · AI photo experience</div>
+  </div>
+</article><section class="chapter screen-only"><h2>Digital Worlds</h2></section>
+<article class="style-entry" id="arcade_game">
+  <div class="entry-image"><img src="assets/images/arcade_game.png" alt="Arcade Characters AI style example" loading="lazy"></div>
+  <div class="entry-copy">
+    <div>
+      <div class="entry-number">STYLE 12</div>
+      <h3>Arcade Characters</h3>
+      <p>Step inside a colourful pixel-art adventure, rebuilt around every guest.</p>
+    </div>
+    <div class="entry-tag">Digital Worlds · AI photo experience</div>
+  </div>
+</article><section class="chapter screen-only"><h2>Graphic Editions</h2></section>
+<article class="style-entry" id="japanese_magazine">
+  <div class="entry-image"><img src="assets/images/japanese_magazine.png" alt="J-Magazine AI style example" loading="lazy"></div>
+  <div class="entry-copy">
+    <div>
+      <div class="entry-number">STYLE 13</div>
+      <h3>J-Magazine</h3>
+      <p>A high-energy Japanese youth-magazine treatment with bold editorial framing.</p>
+    </div>
+    <div class="entry-tag">Graphic Editions · AI photo experience</div>
+  </div>
+</article>
+<article class="style-entry" id="newspaper_comic">
+  <div class="entry-image"><img src="assets/images/newspaper_comic.png" alt="Newspaper Comic AI style example" loading="lazy"></div>
+  <div class="entry-copy">
+    <div>
+      <div class="entry-number">STYLE 14</div>
+      <h3>Newspaper Comic</h3>
+      <p>A vintage newspaper comic rendered in expressive ink, halftones and aged print.</p>
+    </div>
+    <div class="entry-tag">Graphic Editions · AI photo experience</div>
+  </div>
+</article><section class="chapter screen-only"><h2>Sports Worlds</h2></section>
+<article class="style-entry" id="football_goal_freeze">
+  <div class="entry-image"><img src="assets/images/football_goal_freeze.png" alt="Goal Freeze AI style example" loading="lazy"></div>
+  <div class="entry-copy">
+    <div>
+      <div class="entry-number">STYLE 15</div>
+      <h3>Goal Freeze</h3>
+      <p>Freeze a stadium celebration at its peak, with confetti and droplets suspended in time.</p>
+    </div>
+    <div class="entry-tag">Sports Worlds · AI photo experience</div>
+  </div>
+</article>
+<article class="style-entry" id="racing_driver">
+  <div class="entry-image"><img src="assets/images/racing_driver.png" alt="Pit Lane AI style example" loading="lazy"></div>
+  <div class="entry-copy">
+    <div>
+      <div class="entry-number">STYLE 16</div>
+      <h3>Pit Lane</h3>
+      <p>Suit up in a cinematic motorsport pit lane beside a futuristic race car.</p>
+    </div>
+    <div class="entry-tag">Sports Worlds · AI photo experience</div>
+  </div>
+</article>
+<article class="style-entry" id="sports_anime">
+  <div class="entry-image"><img src="assets/images/sports_anime.png" alt="Sports Anime AI style example" loading="lazy"></div>
+  <div class="entry-copy">
+    <div>
+      <div class="entry-number">STYLE 17</div>
+      <h3>Sports Anime</h3>
+      <p>Bring the group into a polished, high-energy sports-anime stadium scene.</p>
+    </div>
+    <div class="entry-tag">Sports Worlds · AI photo experience</div>
+  </div>
+</article>
+<article class="style-entry" id="chrome_sports_card">
+  <div class="entry-image"><img src="assets/images/chrome_sports_card.png" alt="Chrome Card AI style example" loading="lazy"></div>
+  <div class="entry-copy">
+    <div>
+      <div class="entry-number">STYLE 18</div>
+      <h3>Chrome Card</h3>
+      <p>Present every guest as an elite holographic collectible with chrome and refractor foil.</p>
+    </div>
+    <div class="entry-tag">Sports Worlds · AI photo experience</div>
+  </div>
+</article>
+<article class="style-entry" id="football_manga_posed">
+  <div class="entry-image"><img src="assets/images/football_manga_posed.png" alt="Manga Still Pose AI style example" loading="lazy"></div>
+  <div class="entry-copy">
+    <div>
+      <div class="entry-number">STYLE 19</div>
+      <h3>Manga Still Pose</h3>
+      <p>A nostalgic hand-drawn football manga with energetic ink and motion trails.</p>
+    </div>
+    <div class="entry-tag">Sports Worlds · AI photo experience</div>
+  </div>
+</article>
+<article class="style-entry" id="intense_football_anime">
+  <div class="entry-image"><img src="assets/images/intense_football_anime.png" alt="Football Anime Still AI style example" loading="lazy"></div>
+  <div class="entry-copy">
+    <div>
+      <div class="entry-number">STYLE 20</div>
+      <h3>Football Anime Still</h3>
+      <p>An intense modern football-anime still powered by sharp linework and luminous auras.</p>
+    </div>
+    <div class="entry-tag">Sports Worlds · AI photo experience</div>
+  </div>
+</article>
+<article class="style-entry" id="playful_street_football">
+  <div class="entry-image"><img src="assets/images/playful_street_football.png" alt="Playful Football AI style example" loading="lazy"></div>
+  <div class="entry-copy">
+    <div>
+      <div class="entry-number">STYLE 21</div>
+      <h3>Playful Football</h3>
+      <p>Bright street-football culture mixed with joyful paint, chalk and hand-drawn energy.</p>
+    </div>
+    <div class="entry-tag">Sports Worlds · AI photo experience</div>
+  </div>
+</article>
+<article class="style-entry" id="retro_arcade_basketball">
+  <div class="entry-image"><img src="assets/images/retro_arcade_basketball.png" alt="Digitized Hoops AI style example" loading="lazy"></div>
+  <div class="entry-copy">
+    <div>
+      <div class="entry-number">STYLE 22</div>
+      <h3>Digitized Hoops</h3>
+      <p>A larger-than-life digitised basketball game with pixel glow and arcade energy.</p>
+    </div>
+    <div class="entry-tag">Sports Worlds · AI photo experience</div>
+  </div>
+</article>
+<article class="style-entry" id="street_basketball_graffiti">
+  <div class="entry-image"><img src="assets/images/street_basketball_graffiti.png" alt="Graffiti Hoops AI style example" loading="lazy"></div>
+  <div class="entry-copy">
+    <div>
+      <div class="entry-number">STYLE 23</div>
+      <h3>Graffiti Hoops</h3>
+      <p>Street-basketball portraiture layered with gritty courts, spray paint and graphic outlines.</p>
+    </div>
+    <div class="entry-tag">Sports Worlds · AI photo experience</div>
+  </div>
+</article>
+<article class="style-entry" id="street_football_y2k">
+  <div class="entry-image"><img src="assets/images/street_football_y2k.png" alt="Y2K Street Football AI style example" loading="lazy"></div>
+  <div class="entry-copy">
+    <div>
+      <div class="entry-number">STYLE 24</div>
+      <h3>Y2K Street Football</h3>
+      <p>An early-2000s street-football campaign with cages, cut-outs and bold urban texture.</p>
+    </div>
+    <div class="entry-tag">Sports Worlds · AI photo experience</div>
+  </div>
+</article></main>
+<footer class="footer screen-only">
+  <h2>Make the event unmistakably yours.</h2>
+  <p>Every style can be selected to match the audience, event identity and pace of the guest experience.</p>
+</footer>
+</body>
+</html>

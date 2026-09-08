@@ -535,6 +535,7 @@ body[data-service-hero] .hero-title-card .hero-big em { font-variant:normal; }
  line-height:1.55;
 }
 .style-showcase-foot .btn { flex:0 0 auto; }
+.style-showcase-actions { display:flex; flex-wrap:wrap; gap:12px; }
 
 @media(max-width:900px) {
  .style-showcase-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }

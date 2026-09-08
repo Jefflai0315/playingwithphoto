@@ -300,17 +300,14 @@ async function showCaptureFeedback(posterUrl, index) {
   const remaining = 4 - taken;
   captureFeedback.innerHTML = `
     <img src="${posterUrl}" alt="" />
-    <p class="capture-feedback-title">Got it!</p>
-    <p class="capture-feedback-sub">${taken} of 4 captured${remaining > 0 ? ` · ${remaining} to go` : ""}</p>
+    <p class="capture-feedback-title">${taken} / 4</p>
   `;
   captureFeedback.classList.remove("show");
   void captureFeedback.offsetWidth;
   captureFeedback.classList.add("show");
   fillThumbSlot(index, posterUrl);
-  const n = index + 1;
-  setPoseLabel(`Pose ${n} of 4 — move a little on capture`);
   if (remaining > 0) {
-    setPoseLabel(`${remaining} more pose${remaining === 1 ? "" : "s"} to go`);
+    setPoseLabel(`${taken} / 4`);
   } else {
     setPoseLabel("Developing your GIF…");
   }
@@ -501,7 +498,7 @@ async function shoot() {
 
   for (let i = 0; i < 4; i++) {
     setActiveThumb(i);
-    setPoseLabel(`Pose ${i + 1} of 4 — move a little on capture`);
+    setPoseLabel(`Pose ${i + 1} / 4`);
     for (let n = 3; n > 0; n--) {
       if (countdown) {
         countdown.textContent = String(n);

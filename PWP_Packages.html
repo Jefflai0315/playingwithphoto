@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Playing With Photo — Package Guide</title>
+  <style>
+    @page { size: A4 landscape; margin: 11mm; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: #2e241e;
+      background: #f7f0e2;
+      font: 13px/1.4 Arial, sans-serif;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    main { padding: 8px; }
+    header {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 30px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid #cdbda5;
+    }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 {
+      margin-bottom: 4px;
+      font: 700 34px/1.05 Georgia, serif;
+    }
+    header p, footer p { margin: 0; color: #695c52; }
+    .contact { text-align: right; }
+    .contact strong { color: #8f452f; }
+    .packages {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 18px;
+    }
+    .package {
+      position: relative;
+      min-height: 190px;
+      padding: 20px;
+      border: 1px solid #d2c4b0;
+      border-radius: 14px;
+      background: #fffaf0;
+    }
+    .package.popular { border: 2px solid #9b5137; }
+    .badge {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      padding: 4px 8px;
+      border-radius: 99px;
+      color: white;
+      background: #9b5137;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .duration {
+      margin-bottom: 8px;
+      color: #74665b;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    .price {
+      margin-bottom: 13px;
+      font: 700 34px/1 Georgia, serif;
+    }
+    .fit { max-width: 31ch; color: #63574e; }
+    .included {
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 18px;
+      margin-top: 14px;
+      padding: 15px 18px;
+      border-radius: 12px;
+      color: #fff8e9;
+      background: #392d25;
+    }
+    .included h2 {
+      margin: 0;
+      font: 700 17px/1.2 Georgia, serif;
+    }
+    .included ul {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 7px 18px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .included li::before { content: "✓ "; color: #e7b990; }
+    .bottom {
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 14px;
+      margin-top: 14px;
+    }
+    .panel {
+      padding: 16px 18px;
+      border: 1px solid #d2c4b0;
+      border-radius: 12px;
+      background: #eee1cc;
+    }
+    .panel h2 {
+      margin-bottom: 9px;
+      font: 700 19px/1.2 Georgia, serif;
+    }
+    .addons {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 5px 18px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .addons strong { float: right; color: #7e3d2b; }
+    .price-note {
+      margin: 8px 0 0;
+      color: #75675c;
+      font-size: 9px;
+    }
+    .terms p { margin-bottom: 6px; }
+    footer {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 12px;
+      font-size: 10px;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <div>
+        <h1>Playing With Photo</h1>
+        <p>Vintage photo booth · AI portraits · real printed keepsakes</p>
+      </div>
+      <div class="contact">
+        <strong>playingwithphoto.com</strong><br>
+        WhatsApp +65 8989 6901
+      </div>
+    </header>
+
+    <section class="packages" aria-label="Photo booth packages">
+      <article class="package">
+        <p class="duration">2 hours</p>
+        <p class="price">S$750</p>
+        <p class="fit">For ROMs, tea ceremonies and cocktail hours.</p>
+      </article>
+      <article class="package popular">
+        <span class="badge">Most booked</span>
+        <p class="duration">3 hours</p>
+        <p class="price">S$880</p>
+        <p class="fit">The sweet spot for most weddings and parties.</p>
+      </article>
+      <article class="package">
+        <p class="duration">6 hours</p>
+        <p class="price">S$1,380</p>
+        <p class="fit">For full receptions, from cocktails to first dance.</p>
+      </article>
+    </section>
+
+    <section class="included">
+      <h2>Every package includes</h2>
+      <ul>
+        <li>Setup and teardown</li>
+        <li>On-site attendant</li>
+        <li>Unlimited prints</li>
+        <li>Every digital file</li>
+        <li>Film filters and all AI styles</li>
+        <li>Props, GIFs and sticker pack</li>
+      </ul>
+    </section>
+
+    <div class="bottom">
+      <section class="panel">
+        <h2>Optional add-ons</h2>
+        <ul class="addons">
+          <li>Guestbook station <strong>S$68</strong></li>
+          <li>Custom AI style <strong>Free</strong></li>
+          <li>AI animation + slideshow <strong>S$100</strong></li>
+          <li>Additional hour <strong>S$180</strong></li>
+          <li>Custom booth interface <strong>S$180</strong></li>
+          <li>Custom sticker pack <strong>S$180</strong></li>
+          <li>Keychains or collector cards <strong>S$330 / 100</strong></li>
+        </ul>
+        <p class="price-note">Guestbook launch price · AI animation testing price</p>
+      </section>
+      <section class="panel terms">
+        <h2>Brands and booking</h2>
+        <p>Full-day and multi-day brand activations are quoted separately.</p>
+        <p>A 50% deposit via PayNow secures your date. Balance is due after the event.</p>
+        <p>Serving Singapore and Johor Bahru.</p>
+      </section>
+    </div>
+
+    <footer>
+      <p>Prices in Singapore dollars. Custom production requirements are confirmed before booking.</p>
+      <p>Updated September 2026</p>
+    </footer>
+  </main>
+</body>
+</html>

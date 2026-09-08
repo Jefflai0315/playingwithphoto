@@ -181,7 +181,7 @@ window.PHOTO_CONFIG = {
   //
   // Keys map to the cards on the page (in display order):
   //   wedding   → Priya & Aaron
-  //   brand     → Marcus L. · Aesop SG
+  //   brand     → factual branded-event example
   //   sixtieth  → Lee Wei Ling · 60th birthday
   //   gala      → Sophie K. · NGS Gala
   //   bday      → Carla M. · Manila
@@ -192,7 +192,7 @@ window.PHOTO_CONFIG = {
       "testimonials/priya3.webp",
       "testimonials/priya4.webp",
     ], // e.g. ["testimonials/priya-1.jpg", "testimonials/priya-2.jpg"]
-    brand: ["testimonials/aesop.webp"],
+    brand: ["samples/chickfila.webp"],
     sixtieth: ["testimonials/60dad1.webp"],
     gala: ["testimonials/gala.webp"],
     bday: ["testimonials/bday.webp"],
@@ -288,11 +288,6 @@ window.PHOTO_CONFIG = {
       tags: ["birthday", "painterly"],
     },
     {
-      src: "samples/aesop-opening.webp",
-      label: "Grand opening",
-      tags: ["corporate", "print"],
-    },
-    {
       src: "spark/jenmikeguests-hokusai.webp",
       label: "Ink & wave",
       tags: ["wedding", "painterly"],
@@ -372,12 +367,6 @@ window.PHOTO_CONFIG = {
         "Three hours in and the line was still around the bar. Guests printed four strips each.",
       cite: "Priya & Aaron · Cliveden House",
       photo: "testimonials/priya1.webp",
-    },
-    {
-      quote:
-        "Our activation needed a moment. Jeff's booth was the moment. We posted the filmstrips for weeks.",
-      cite: "Marcus L. · Aesop SG",
-      photo: "testimonials/aesop.webp",
     },
     {
       quote:

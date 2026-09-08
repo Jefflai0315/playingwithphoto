@@ -285,7 +285,7 @@ if (hero) {
 }
 
 // ==========================================================
-// SPARK GALLERY — auto-rotates, flash on swap
+// SPARK GALLERY — visitor-controlled before/after
 // ==========================================================
 const sparkBeforeImg = document.getElementById("sparkBeforeImg");
 const sparkAfterImg = document.getElementById("sparkAfterImg");
@@ -298,22 +298,6 @@ const sparkArrowLabel = document.getElementById("sparkArrowLabel");
 const sparkPicker = document.querySelector(".spark-picker");
 const sparkPromptText = document.getElementById("sparkPromptText");
 
-let currentPainterIndex = 0;
-let userLocked = false;
-let autoTimer = null;
-let resumeTimer = null;
-const RESUME_AFTER_MS = 10000;
-
-function pauseAutoRotate() {
-  userLocked = true;
-  clearInterval(autoTimer);
-  clearTimeout(resumeTimer);
-  resumeTimer = setTimeout(() => {
-    userLocked = false;
-    startAutoRotate();
-  }, RESUME_AFTER_MS);
-}
-
 function buildSparkPicker() {
   if (!sparkPicker) return;
   const html = [];
@@ -325,12 +309,11 @@ function buildSparkPicker() {
   sparkPicker.innerHTML = html.join("");
 }
 
-function renderPainter(key) {
+function renderPainter(key, playMotion = false) {
   if (!PAINTER_MAP[key]) return;
   document.body.dataset.film = "";
 
   const entry = GALLERY[key];
-  currentPainterIndex = PAINTERS.indexOf(key);
 
   sparkBeforeImg.style.backgroundImage = entry.before;
   sparkBeforeName.textContent = entry.name;
@@ -371,7 +354,7 @@ function renderPainter(key) {
   sparkAfterVideo?.classList.remove("emerging", "is-active");
 
   // Optional looped video per painter (afterVideo in photos.config.js)
-  const videoUrl = entry.afterVideo || null;
+  const videoUrl = playMotion ? entry.afterVideo || null : null;
   if (sparkAfterVideo && videoUrl) {
     sparkAfterFrame?.classList.add("has-video");
     sparkAfterVideo.poster = entry.afterPoster || "";
@@ -427,30 +410,15 @@ function syncMetaPicker(key) {
       "Playing With Photo · " + painterDisplay(key);
 }
 
-function advanceGallery() {
-  if (userLocked) return;
-  fireFlash();
-  setTimeout(() => {
-    currentPainterIndex = (currentPainterIndex + 1) % PAINTERS.length;
-    renderPainter(PAINTERS[currentPainterIndex]);
-  }, 350);
-}
-
-function startAutoRotate() {
-  if (autoTimer) clearInterval(autoTimer);
-  autoTimer = setInterval(advanceGallery, 6000);
-}
-
 buildSparkPicker();
 
-// Style picker — AI painter looks only (film lives in #styles + #demo)
+// Style picker — AI painter looks only; optional film demo lives in #demo.
 if (sparkPicker) {
   sparkPicker.addEventListener("click", (e) => {
     const btn = e.target.closest("button[data-painter]");
     if (!btn) return;
-    pauseAutoRotate();
     fireFlash();
-    setTimeout(() => renderPainter(btn.dataset.painter), 350);
+    setTimeout(() => renderPainter(btn.dataset.painter, true), 350);
   });
 }
 
@@ -462,13 +430,11 @@ if (legacyMetaPicker) {
     if (!btn) return;
     const key = btn.dataset.meta;
     if (!PAINTER_MAP[key]) return;
-    pauseAutoRotate();
     fireFlash();
-    setTimeout(() => renderPainter(key), 350);
+    setTimeout(() => renderPainter(key, true), 350);
   });
 }
 
 if (sparkBeforeImg) {
   renderPainter(PAINTERS[0]);
-  startAutoRotate();
 }

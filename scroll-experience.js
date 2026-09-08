@@ -9,9 +9,6 @@
   const prefersReducedMotion = window.matchMedia(
     "(prefers-reduced-motion: reduce)",
   ).matches;
-  const coarsePointer = window.matchMedia(
-    "(hover: none) and (pointer: coarse)",
-  ).matches;
   const gsap = window.gsap;
   const ScrollTrigger = window.ScrollTrigger;
 
@@ -78,26 +75,6 @@
 
   let lenis = null;
 
-  // Lenis stays off for touch and reduced-motion users. This avoids taking
-  // over short, momentum-sensitive mobile gestures while preserving the
-  // browser's native scroll and sticky positioning.
-  if (!prefersReducedMotion && !coarsePointer && typeof window.Lenis === "function") {
-    lenis = new window.Lenis({
-      autoRaf: false,
-      anchors: true,
-      lerp: 0.18,
-      smoothWheel: true,
-      syncTouch: false,
-    });
-
-    lenis.on("scroll", ScrollTrigger.update);
-    gsap.ticker.add((time) => lenis.raf(time * 1000));
-    gsap.ticker.lagSmoothing(0);
-
-    window.__pwpLenis = lenis;
-    root.classList.add("has-smooth-scroll");
-  }
-
   // Canvas scrubbers subscribe to this same clock as Lenis and ScrollTrigger.
   // This avoids separate requestAnimationFrame loops drifting apart.
   gsap.ticker.add((time) => {
@@ -160,31 +137,6 @@
 
   const mm = gsap.matchMedia();
   mm.add("(prefers-reduced-motion: no-preference)", () => {
-    // Replace the old one-shot reveal with a reversible, scrubbed entrance.
-    // The vision copy is already controlled by vision-scrub.js and is kept
-    // out of this group to avoid two timelines writing the same opacity.
-    const revealTargets = gsap.utils.toArray(
-      ".reveal:not(#visionScrubCopy)",
-    );
-    revealTargets.forEach((element) => {
-      gsap.fromTo(
-        element,
-        { autoAlpha: 0, y: 36 },
-        {
-          autoAlpha: 1,
-          y: 0,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: element,
-            start: "top 88%",
-            end: "top 62%",
-            scrub: 0.7,
-            invalidateOnRefresh: true,
-          },
-        },
-      );
-    });
-
     // Slow editorial drift keeps the large chapter marks and headlines from
     // feeling locked to the page while leaving their layout untouched.
     gsap.utils.toArray(".chapter-numeral").forEach((element, index) => {
@@ -274,6 +226,12 @@
   // refresh, especially on a cold load.
   window.addEventListener("load", () => ScrollTrigger.refresh(), {
     once: true,
+  });
+  window.addEventListener("pageshow", () => {
+    requestAnimationFrame(() => {
+      ScrollTrigger.refresh();
+      ScrollTrigger.update();
+    });
   });
   document.fonts?.ready.then(() => ScrollTrigger.refresh());
 

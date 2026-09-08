@@ -6,7 +6,15 @@
   const FRAME_COUNT = 61;
   const PRELOAD_STRIDE = 4;
   const PRELOAD_CONCURRENCY = 4;
-  const FRAME_PATH = (i) => `frames/f_${String(i).padStart(3, '0')}.webp`;
+  const FRAME_PLAYBACK_END = 0.95;
+  const DISSOLVE_START = 0.30;
+  const DISSOLVE_END = 0.995;
+  const DISSOLVE_AT_HERO_EXIT = 0.76;
+  // Release the shortened hero before its animation timeline completes.
+  // At the handoff, the scrub is at 82% and continues visually as it exits.
+  const CORE_TIMELINE_END = 1 / 0.82;
+  const FRAME_PATH = (i) =>
+    `frames/f_${String(i).padStart(3, "0")}.webp?v=0908`;
 
   function sparseFrameIndexes() {
     const out = [];
@@ -30,41 +38,57 @@
     return best;
   }
 
-  const hero = document.querySelector('.hero-scrub');
-  if (!hero) { console.warn('[hero-scrub] no .hero-scrub element found'); return; }
-  hero.classList.add('is-loading');
+  const hero = document.querySelector(".hero-scrub");
+  if (!hero) {
+    console.warn("[hero-scrub] no .hero-scrub element found");
+    return;
+  }
+  hero.classList.add("is-loading");
   const loadStartedAt = performance.now();
   const MIN_LOADER_MS = 1000;
 
   let LOW_POWER = window.matchMedia(
-    '(max-width: 900px), (hover: none) and (pointer: coarse)'
+    "(max-width: 900px), (hover: none) and (pointer: coarse)",
   ).matches;
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (document.body.dataset.serviceHero && (LOW_POWER || prefersReducedMotion)) {
-    hero.classList.remove('is-loading');
-    hero.classList.add('is-ready');
-    const desktop = matchMedia('(min-width:901px) and (hover:hover) and (prefers-reduced-motion:no-preference)');
-    desktop.addEventListener('change', function resume(e) {
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
+  if (
+    document.body.dataset.serviceHero &&
+    (LOW_POWER || prefersReducedMotion)
+  ) {
+    hero.classList.remove("is-loading");
+    hero.classList.add("is-ready");
+    const desktop = matchMedia(
+      "(min-width:901px) and (hover:hover) and (prefers-reduced-motion:no-preference)",
+    );
+    desktop.addEventListener("change", function resume(e) {
       if (!e.matches) return;
-      desktop.removeEventListener('change',resume);
+      desktop.removeEventListener("change", resume);
       initHeroScrub();
     });
     return; // Mobile uses the accessible static product scene; no frame downloads.
   }
-  matchMedia('(max-width:900px), (hover:none) and (pointer:coarse)').addEventListener('change',e => { LOW_POWER = e.matches; });
+  matchMedia(
+    "(max-width:900px), (hover:none) and (pointer:coarse)",
+  ).addEventListener("change", (e) => {
+    LOW_POWER = e.matches;
+  });
   let heroVisible = true;
   let pageVisible = !document.hidden;
 
-  const canvas = document.getElementById('heroScrubCanvas');
-  const dissolveCanvas = document.getElementById('heroDissolveCanvas');
-  const bgImg = document.getElementById('heroBgImg');
-  const bgPhoto = bgImg?.querySelector('img');
-  const backdrop = document.getElementById('heroBackdrop');
-  const planGroup = document.querySelector('.story-group--plan');
-  const titleCard = document.querySelector('.hero-title-card');
-  const hint = document.getElementById('heroScrubHint');
-  const bar = document.getElementById('heroScrubBar');
-  const ctx = canvas.getContext('2d');
+  const canvas = document.getElementById("heroScrubCanvas");
+  const dissolveCanvas = document.getElementById("heroDissolveCanvas");
+  const bgImg = document.getElementById("heroBgImg");
+  const bgPhoto = bgImg?.querySelector("img");
+  const backdrop = document.getElementById("heroBackdrop");
+  const planGroup =
+    document.querySelector(".service-clients") ||
+    document.querySelector(".story-group--plan");
+  const titleCard = document.querySelector(".hero-title-card");
+  const hint = document.getElementById("heroScrubHint");
+  const bar = document.getElementById("heroScrubBar");
+  const ctx = canvas.getContext("2d");
 
   // ----- Preload frames -----
   const frames = new Array(FRAME_COUNT);
@@ -98,8 +122,8 @@
     const elapsed = performance.now() - loadStartedAt;
     const waitMs = Math.max(0, MIN_LOADER_MS - elapsed);
     setTimeout(() => {
-      hero.classList.remove('is-loading');
-      hero.classList.add('is-ready');
+      hero.classList.remove("is-loading");
+      hero.classList.add("is-ready");
     }, waitMs);
   }
 
@@ -113,7 +137,7 @@
       showReadyState();
     }
     if (loadedCount === FRAME_COUNT) {
-      console.log('[hero-scrub] all frames loaded');
+      console.log("[hero-scrub] all frames loaded");
     }
   }
 
@@ -124,8 +148,8 @@
         return;
       }
       const img = new Image();
-      img.decoding = 'async';
-      if (highPriority && 'fetchPriority' in img) img.fetchPriority = 'high';
+      img.decoding = "async";
+      if (highPriority && "fetchPriority" in img) img.fetchPriority = "high";
       img.onload = () => {
         handleFrameLoad(index, img);
         resolve(img);
@@ -164,7 +188,7 @@
     await Promise.allSettled(sparse.slice(1).map((i) => loadFrame(i, true)));
     // Defer the ~800KB background fill of remaining frames until the browser
     // is idle, so it doesn't compete with other page-load-critical requests.
-    if ('requestIdleCallback' in window) {
+    if ("requestIdleCallback" in window) {
       requestIdleCallback(preloadRemainingFrames, { timeout: 2000 });
     } else {
       setTimeout(preloadRemainingFrames, 1500);
@@ -178,7 +202,7 @@
     const h = canvas.clientHeight;
     canvas.width = Math.round(w * dpr);
     canvas.height = Math.round(h * dpr);
-    canvas.getContext('2d').setTransform(dpr, 0, 0, dpr, 0, 0);
+    canvas.getContext("2d").setTransform(dpr, 0, 0, dpr, 0, 0);
 
     if (dissolveCanvas) {
       const dw = dissolveCanvas.clientWidth;
@@ -202,6 +226,11 @@
   }
 
   function frameScale(cw, ch, iw, ih) {
+    // The split desktop hero uses the painting as its full-bleed background.
+    // Keep the foreground figures fully visible instead of cover-cropping them.
+    if (document.body.dataset.serviceHero && window.innerWidth > 900) {
+      return Math.min(cw / iw, ch / ih);
+    }
     return Math.max(cw / iw, ch / ih) * fgScaleMultiplier();
   }
 
@@ -362,13 +391,18 @@
     if (!dissolveCanvas || LOW_POWER || prefersReducedMotion) return null;
     let gl;
     try {
-      gl = dissolveCanvas.getContext('webgl', { alpha: true, premultipliedAlpha: false });
+      gl = dissolveCanvas.getContext("webgl", {
+        alpha: true,
+        premultipliedAlpha: false,
+      });
     } catch (e) {
-      console.warn('[hero-scrub] burn WebGL context creation threw:', e);
+      console.warn("[hero-scrub] burn WebGL context creation threw:", e);
       gl = null;
     }
     if (!gl) {
-      console.warn('[hero-scrub] burn effect disabled: no WebGL context available');
+      console.warn(
+        "[hero-scrub] burn effect disabled: no WebGL context available",
+      );
       return null;
     }
 
@@ -377,7 +411,10 @@
       gl.shaderSource(s, src);
       gl.compileShader(s);
       if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
-        console.warn('[hero-scrub] burn shader compile error:', gl.getShaderInfoLog(s));
+        console.warn(
+          "[hero-scrub] burn shader compile error:",
+          gl.getShaderInfoLog(s),
+        );
         gl.deleteShader(s);
         return null;
       }
@@ -391,23 +428,23 @@
     gl.attachShader(program, fs);
     gl.linkProgram(program);
     if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-      console.warn('[hero-scrub] burn shader link error:', gl.getProgramInfoLog(program));
+      console.warn(
+        "[hero-scrub] burn shader link error:",
+        gl.getProgramInfoLog(program),
+      );
       return null;
     }
 
     // Full-screen quad; uv (0,0) = top-left to match canvas/dx-dy-dw-dh space.
     const quad = new Float32Array([
-      -1,  1, 0, 0,
-       1,  1, 1, 0,
-      -1, -1, 0, 1,
-       1, -1, 1, 1,
+      -1, 1, 0, 0, 1, 1, 1, 0, -1, -1, 0, 1, 1, -1, 1, 1,
     ]);
     const buf = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, buf);
     gl.bufferData(gl.ARRAY_BUFFER, quad, gl.STATIC_DRAW);
 
-    const aPosition = gl.getAttribLocation(program, 'aPosition');
-    const aUv = gl.getAttribLocation(program, 'aUv');
+    const aPosition = gl.getAttribLocation(program, "aPosition");
+    const aUv = gl.getAttribLocation(program, "aUv");
 
     const texture = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, texture);
@@ -417,8 +454,21 @@
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
 
     const u = {};
-    ['uBurnProgress', 'uCharWidth', 'uEmberWidth', 'uCharColor', 'uEmberColor', 'uCoverScale', 'uCoverOffset', 'uFrameTexel', 'uTime', 'uScrollSpeed', 'uFrame']
-      .forEach((name) => { u[name] = gl.getUniformLocation(program, name); });
+    [
+      "uBurnProgress",
+      "uCharWidth",
+      "uEmberWidth",
+      "uCharColor",
+      "uEmberColor",
+      "uCoverScale",
+      "uCoverOffset",
+      "uFrameTexel",
+      "uTime",
+      "uScrollSpeed",
+      "uFrame",
+    ].forEach((name) => {
+      u[name] = gl.getUniformLocation(program, name);
+    });
 
     let lastImage = null;
 
@@ -444,7 +494,14 @@
       gl.activeTexture(gl.TEXTURE0);
       gl.bindTexture(gl.TEXTURE_2D, texture);
       if (image !== lastImage) {
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+        gl.texImage2D(
+          gl.TEXTURE_2D,
+          0,
+          gl.RGBA,
+          gl.RGBA,
+          gl.UNSIGNED_BYTE,
+          image,
+        );
         lastImage = image;
       }
       gl.uniform1i(u.uFrame, 0);
@@ -460,7 +517,12 @@
       gl.uniform1f(u.uScrollSpeed, speed);
 
       gl.enable(gl.BLEND);
-      gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA, gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+      gl.blendFuncSeparate(
+        gl.SRC_ALPHA,
+        gl.ONE_MINUS_SRC_ALPHA,
+        gl.ONE,
+        gl.ONE_MINUS_SRC_ALPHA,
+      );
       gl.clearColor(0, 0, 0, 0);
       gl.clear(gl.COLOR_BUFFER_BIT);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
@@ -475,14 +537,17 @@
     if (!dissolveCanvas) return;
     if (LOW_POWER || prefersReducedMotion) skipDissolve = true;
 
-    // Start in the final scrub quarter, then continue through the post-hero
-    // zoom so the image does not vanish before the transition has landed.
-    const DISSOLVE_START = 0.70;
-    const DISSOLVE_END = 1.0;
-    const scrubReveal = Math.max(0, Math.min(1, (progress - DISSOLVE_START) / (DISSOLVE_END - DISSOLVE_START)));
-    const zoomReveal = Math.max(0, Math.min(1, postHeroProgress));
-    const rawDp = Math.min(1, scrubReveal * 0.20 + zoomReveal * 0.80);
-    const dp = Math.pow(rawDp, 1.8); // hold the image longer, then clear cleanly
+    // Give the noisy burn edge enough physical scroll distance to be seen,
+    // while still finishing before the sticky hero releases.
+    const scrubReveal = Math.max(
+      0,
+      Math.min(
+        1,
+        (progress - DISSOLVE_START) / (DISSOLVE_END - DISSOLVE_START),
+      ),
+    );
+    const easedReveal = scrubReveal * scrubReveal * (3 - 2 * scrubReveal);
+    const dp = easedReveal * easedReveal;
 
     if (skipDissolve || dp <= 0 || !burnGL) {
       dissolveCanvas.style.opacity = 0;
@@ -499,7 +564,14 @@
     canvas.style.opacity = 0;
 
     const img = frames[lastDrawIdx] ?? frames[Math.round(currentIdx)];
-    burnGL.render(img, dp, lastFrameRect, canvas.clientWidth, canvas.clientHeight, scrollSpeed);
+    burnGL.render(
+      img,
+      dp,
+      lastFrameRect,
+      canvas.clientWidth,
+      canvas.clientHeight,
+      scrollSpeed,
+    );
   }
 
   // ----- Scroll-driven scrub -----
@@ -507,6 +579,8 @@
   let currentIdx = 0;
   let scrubProgress = 0;
   let smoothProgress = 0;
+  let dissolveProgress = 0;
+  let smoothDissolveProgress = 0;
   let heroScrollInto = 0;
   let backdropFadeT = 1; // 1 = backdrop fully showing, 0 = fully faded into next section
   let driverProgress = null;
@@ -530,44 +604,68 @@
     const scrollIntoHero = -rect.top;
     heroScrollInto = scrollIntoHero;
     const scrubRange = hero.offsetHeight - vh;
-    const p = progressOverride === null
-      ? Math.max(0, Math.min(1, scrollIntoHero / scrubRange))
-      : Math.max(0, Math.min(1, progressOverride));
+    const rawProgress =
+      progressOverride === null
+        ? Math.max(0, Math.min(1, scrollIntoHero / scrubRange))
+        : Math.max(0, Math.min(1, progressOverride));
+    const p = Math.min(1, rawProgress / CORE_TIMELINE_END);
     scrubProgress = p;
 
-    const rawTarget = Math.round(p * (FRAME_COUNT - 1));
+    const dissolveStartAt = DISSOLVE_START * CORE_TIMELINE_END;
+    if (rawProgress <= dissolveStartAt) {
+      dissolveProgress = p;
+    } else {
+      const extendedBurnProgress = Math.max(
+        0,
+        Math.min(1, (rawProgress - dissolveStartAt) / (1 - dissolveStartAt)),
+      );
+      dissolveProgress =
+        DISSOLVE_START +
+        extendedBurnProgress * (DISSOLVE_AT_HERO_EXIT - DISSOLVE_START);
+    }
+
+    const frameProgress = Math.min(1, p / FRAME_PLAYBACK_END);
+    const rawTarget = Math.round(frameProgress * (FRAME_COUNT - 1));
     targetIdx = nearestLoadedIndex(rawTarget);
 
     if (titleCard) {
-      const fade = p < 0.2 ? 1 : Math.max(0, 1 - (p - 0.2) / 0.35);
-      titleCard.style.opacity = fade;
+      titleCard.style.opacity = 1;
     }
-    if (bar) bar.style.width = (p * 100) + '%';
-    if (hint) hint.style.opacity = p < 0.9 ? 1 : Math.max(0, 1 - (p - 0.9) / 0.1);
+    if (bar) bar.style.width = rawProgress * 100 + "%";
+    if (hint)
+      hint.style.opacity =
+        rawProgress < 0.9 ? 1 : Math.max(0, 1 - (rawProgress - 0.9) / 0.1);
     updateBackdropFade();
   }
 
   function applyMotion() {
     const pm = fgParallaxStrength();
     // Continuous Ken Burns-style zoom, ramping up through the dissolve tail
-    // (smoothProgress 0.4→1) so the image keeps gliding with the scroll even
+    // (smoothProgress 0.2→1) so the image eases toward center over most of
+    // the sequence and keeps gliding with the scroll even
     // after individual frames stop changing — reverses smoothly on scroll-up
     // since smoothProgress itself tracks scroll direction.
-    const zoomT = Math.max(0, Math.min(1, (smoothProgress - 0.4) / 0.6));
+    const zoomRaw = Math.max(0, Math.min(1, (smoothProgress - 0.2) / 0.8));
+    const zoomT = zoomRaw * zoomRaw * (3 - 2 * zoomRaw);
     // Keeps growing through the hero->next-section transition itself, driven
     // by how far the backdrop has faded — independent of the hero's own
     // pinned scroll range, so the zoom doesn't freeze the instant it unpins.
     const transitionZoom = Math.max(1 - backdropFadeT, postHeroProgress);
-    const scrubScale = 1 + zoomT * 0.14 + transitionZoom * 0.26;
-    const bgScale = 1.12 + zoomT * 0.05 + transitionZoom * 0.24;
+    const transitionT =
+      transitionZoom * transitionZoom * (3 - 2 * transitionZoom);
+    const scrubScale = 1 + zoomT * 0.14 + transitionT * 0.04;
+    const bgScale = 1.12 + zoomT * 0.08 + transitionT * 0.24;
+    const zoomShiftT = Math.max(zoomT, transitionT);
+    const scrubRightShift =
+      document.body.dataset.serviceHero && window.innerWidth > 900
+        ? window.innerWidth * 0.045 * zoomShiftT
+        : 0;
 
     if (bgPhoto) {
-      bgPhoto.style.transform =
-        `translate3d(${Math.round(mx * 12 * pm)}px, ${Math.round(my * 8 * pm)}px, 0) scale(${bgScale.toFixed(4)})`;
+      bgPhoto.style.transform = `translate3d(${Math.round(mx * 12 * pm)}px, ${Math.round(my * 8 * pm)}px, 0) scale(${bgScale.toFixed(4)})`;
     }
     if (canvas) {
-      const foregroundTransform =
-        `translate3d(${Math.round(mx * -22 * pm)}px, ${Math.round(my * -14 * pm)}px, 0) scale(${scrubScale.toFixed(4)})`;
+      const foregroundTransform = `translate3d(${Math.round(scrubRightShift + mx * -22 * pm)}px, ${Math.round(my * -14 * pm)}px, 0) scale(${scrubScale.toFixed(4)})`;
       canvas.style.transform = foregroundTransform;
       // The reveal canvas replaces the sequence canvas at the dissolve
       // handoff, so it must inherit the exact same transform to avoid a jump.
@@ -575,13 +673,19 @@
     }
   }
 
-  let mx = 0, my = 0;
-  let tmx = 0, tmy = 0;
+  let mx = 0,
+    my = 0;
+  let tmx = 0,
+    tmy = 0;
   if (!LOW_POWER) {
-    window.addEventListener('mousemove', (e) => {
-      tmx = (e.clientX / window.innerWidth - 0.5) * 2;
-      tmy = (e.clientY / window.innerHeight - 0.5) * 2;
-    }, { passive: true });
+    window.addEventListener(
+      "mousemove",
+      (e) => {
+        tmx = (e.clientX / window.innerWidth - 0.5) * 2;
+        tmy = (e.clientY / window.innerHeight - 0.5) * 2;
+      },
+      { passive: true },
+    );
   }
 
   let lastDrawIdx = -1;
@@ -589,7 +693,13 @@
   function loop() {
     if (!motionLoopUsesSharedTicker) requestAnimationFrame(loop);
     const heroTransitionActive = transitionTrigger?.isActive;
-    if (!pageVisible || (!heroVisible && !heroTransitionActive) || LOW_POWER || prefersReducedMotion) return;
+    if (
+      !pageVisible ||
+      (!heroVisible && !heroTransitionActive) ||
+      LOW_POWER ||
+      prefersReducedMotion
+    )
+      return;
 
     mx += (tmx - mx) * 0.06;
     my += (tmy - my) * 0.06;
@@ -607,6 +717,11 @@
     if (Math.abs(scrubProgress - smoothProgress) < 0.001) {
       smoothProgress = scrubProgress;
     }
+    smoothDissolveProgress +=
+      (dissolveProgress - smoothDissolveProgress) * 0.18;
+    if (Math.abs(dissolveProgress - smoothDissolveProgress) < 0.001) {
+      smoothDissolveProgress = dissolveProgress;
+    }
     applyMotion();
 
     currentIdx += (targetIdx - currentIdx) * 0.38;
@@ -617,7 +732,7 @@
       lastDrawIdx = drawIdx;
     }
 
-    updateAndDrawDissolve(testBurnOverride ?? smoothProgress, false);
+    updateAndDrawDissolve(testBurnOverride ?? smoothDissolveProgress, false);
   }
 
   function onScrubScroll() {
@@ -630,7 +745,7 @@
       if (!prefersReducedMotion) smoothProgress = scrubProgress;
       applyMotion();
       const drawIdx = Math.round(
-        Math.max(0, Math.min(FRAME_COUNT - 1, targetIdx))
+        Math.max(0, Math.min(FRAME_COUNT - 1, targetIdx)),
       );
       if (frames[drawIdx]) drawFrame(drawIdx);
       return;
@@ -642,7 +757,7 @@
     if (!prefersReducedMotion) smoothProgress = scrubProgress;
     applyMotion();
     const drawIdx = Math.round(
-      Math.max(0, Math.min(FRAME_COUNT - 1, targetIdx))
+      Math.max(0, Math.min(FRAME_COUNT - 1, targetIdx)),
     );
     if (frames[drawIdx]) drawFrame(drawIdx);
   }
@@ -674,6 +789,7 @@
       postHeroProgress = progress;
       updateBackdropFade();
       applyMotion();
+      updateAndDrawDissolve(smoothDissolveProgress, false);
     },
   });
 
@@ -685,31 +801,39 @@
     }
   }
 
-  window.addEventListener('resize', () => {
+  window.addEventListener("resize", () => {
     sizeCanvas();
     drawFrame(Math.round(currentIdx));
   });
   if (!scrubTrigger) {
-    window.addEventListener('scroll', onScrubScroll, { passive: true });
+    window.addEventListener("scroll", onScrubScroll, { passive: true });
   }
   if (!transitionTrigger) {
-    window.addEventListener('scroll', () => {
-      updateBackdropFade();
-      applyMotion();
-    }, { passive: true });
+    window.addEventListener(
+      "scroll",
+      () => {
+        updateBackdropFade();
+        applyMotion();
+        updateAndDrawDissolve(smoothDissolveProgress, false);
+      },
+      { passive: true },
+    );
   }
 
-  if ('IntersectionObserver' in window) {
-    new IntersectionObserver(([e]) => {
-      heroVisible = e.isIntersecting;
-    }, { rootMargin: '80px 0px' }).observe(hero);
+  if ("IntersectionObserver" in window) {
+    new IntersectionObserver(
+      ([e]) => {
+        heroVisible = e.isIntersecting;
+      },
+      { rootMargin: "80px 0px" },
+    ).observe(hero);
   }
-  document.addEventListener('visibilitychange', () => {
+  document.addEventListener("visibilitychange", () => {
     pageVisible = !document.hidden;
   });
 
   preload().then(() => {
-    console.log('[hero-scrub] first frame ready; remaining frames loading');
+    console.log("[hero-scrub] first frame ready; remaining frames loading");
   });
 
   // Console test hooks — run window.__testHeroBurn(0.8) to pin the burn
@@ -719,7 +843,9 @@
     testBurnOverride = p;
     updateAndDrawDissolve(p, false);
   };
-  window.__testHeroBurnRelease = () => { testBurnOverride = null; };
+  window.__testHeroBurnRelease = () => {
+    testBurnOverride = null;
+  };
   window.__heroDebugFull = {
     hasBurnGL: !!burnGL,
     heroVisible: () => heroVisible,

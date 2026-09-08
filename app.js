@@ -241,11 +241,11 @@ if (styleChipsEl) {
   const ctx = canvas.getContext("2d");
   const frameCount = 61;
   const frameStep = 3;
-  const frameSrc = (i) => `frames/f_${String(i).padStart(3, "0")}.webp`;
+  const frameSrc = (i) => `frames/f_${String(i).padStart(3, "0")}.webp?v=0908`;
   const previewFrameIndexes = [];
-  for (let i = 1; i <= frameCount; i += frameStep) previewFrameIndexes.push(i);
-  if (previewFrameIndexes[previewFrameIndexes.length - 1] !== frameCount) {
-    previewFrameIndexes.push(frameCount);
+  for (let i = 0; i < frameCount; i += frameStep) previewFrameIndexes.push(i);
+  if (previewFrameIndexes[previewFrameIndexes.length - 1] !== frameCount - 1) {
+    previewFrameIndexes.push(frameCount - 1);
   }
   const frames = [];
   let frameIndex = 0;

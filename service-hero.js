@@ -1,7 +1,23 @@
 (() => {
   const hero = document.querySelector('[data-service-hero] #hero');
   if (!hero) return;
+  // Disclosures and proof reveals remain active even when the optional hero
+  // product cards are not part of the composition.
+  function openLinkedPanel(){
+    const id=decodeURIComponent(location.hash.slice(1));
+    const el=id ? document.getElementById(id) : null;
+    const panel=el?.closest('details');
+    if(panel){panel.open=true;window.ScrollTrigger?.refresh();el.scrollIntoView({block:'start'});}
+  }
+  addEventListener('hashchange',openLinkedPanel);
+  document.querySelectorAll('.service-disclosure').forEach(d=>d.addEventListener('toggle',()=>window.ScrollTrigger?.refresh()));
+  document.querySelectorAll('.service-proof figure').forEach(e=>e.classList.add('service-reveal'));
+  const observer=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('is-revealed');observer.unobserve(e.target);}}),{threshold:.12});
+  document.querySelectorAll('.service-reveal').forEach(e=>observer.observe(e));
+  openLinkedPanel();
+
   const scene = hero.querySelector('.service-scene');
+  if (!scene) return;
   const booth = document.getElementById('serviceBoothImage');
   const caption = document.getElementById('serviceCaption');
   const stageCaption = scene.querySelector('.service-stage-caption');
@@ -55,20 +71,8 @@
   simple.addEventListener('change',responsive);
   document.addEventListener('visibilitychange',schedule);
   new IntersectionObserver(([e])=>{if(e.isIntersecting){preload();schedule();}}).observe(hero);
-  // Native disclosures preserve keyboard behavior; anchor links open their content.
-  function openLinkedPanel(){
-    const id=decodeURIComponent(location.hash.slice(1));
-    const el=id ? document.getElementById(id) : null;
-    const panel=el?.closest('details');
-    if(panel){panel.open=true;window.ScrollTrigger?.refresh();el.scrollIntoView({block:'start'});}
-  }
-  addEventListener('hashchange',openLinkedPanel);
-  document.querySelectorAll('.service-disclosure').forEach(d=>d.addEventListener('toggle',()=>window.ScrollTrigger?.refresh()));
-  document.querySelectorAll('.service-proof figure').forEach(e=>e.classList.add('service-reveal'));
-  const observer=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('is-revealed');observer.unobserve(e.target);}}),{threshold:.12});
-  document.querySelectorAll('.service-reveal').forEach(e=>observer.observe(e));
   requestAnimationFrame(()=>requestAnimationFrame(()=>scene.classList.add('scene-ready')));
-  look(simple.matches ? 'ai' : 'original');responsive();openLinkedPanel();
+  look(simple.matches ? 'ai' : 'original');responsive();
 })();
 
 // The mobile demo only loads its small photo set when a phone layout is active.
@@ -113,7 +117,24 @@
  }
  function start(){if(mobile.matches&&!initialized){initialized=true;print();}}
  buttons.forEach(b=>b.addEventListener('click',()=>print(b.dataset.pocketLook)));
- root.querySelector('.pocket-replay').addEventListener('click',()=>print(root.dataset.look));
  new IntersectionObserver(([e])=>{if(e.isIntersecting)start();},{threshold:.15}).observe(root);
  mobile.addEventListener('change',start);
+})();
+
+// Play the AI examples only while they are visible.
+(() => {
+ const videos=[...document.querySelectorAll('.ai-motion video')];
+ if(!videos.length)return;
+ const reduced=matchMedia('(prefers-reduced-motion:reduce)');
+ if(reduced.matches){
+  videos.forEach(video=>{video.controls=true;});
+  return;
+ }
+ const observer=new IntersectionObserver(entries=>{
+  entries.forEach(({isIntersecting,target})=>{
+   if(isIntersecting)target.play().catch(()=>{});
+   else target.pause();
+  });
+ },{threshold:.2});
+ videos.forEach(video=>observer.observe(video));
 })();

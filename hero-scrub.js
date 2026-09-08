@@ -7,7 +7,7 @@
   const PRELOAD_STRIDE = 4;
   const PRELOAD_CONCURRENCY = 4;
   const FRAME_PLAYBACK_END = 0.95;
-  const DISSOLVE_START = 0.30;
+  const DISSOLVE_START = 0.4;
   const DISSOLVE_END = 0.995;
   const DISSOLVE_AT_HERO_EXIT = 0.76;
   // Release the shortened hero before its animation timeline completes.

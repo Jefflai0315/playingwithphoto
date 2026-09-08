@@ -3,6 +3,7 @@ frames/_source/
 frames/masks/
 screenshots-audit/
 photos/**/*.png
+!photos/client-logos/*.png
 photos/**/*.jpg
 photos/**/*.jpeg
 photos/**/*.JPG

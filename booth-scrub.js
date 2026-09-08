@@ -36,6 +36,7 @@
   const LOW_POWER = window.matchMedia(
     "(max-width: 900px), (hover: none) and (pointer: coarse)",
   ).matches;
+  if (document.body.dataset.serviceHero && (LOW_POWER || prefersReducedMotion)) return;
   let runwayVisible = false;
   let pageVisible = !document.hidden;
 

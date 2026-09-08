@@ -2,7 +2,7 @@
    HERO SCRUB — image-sequence scrubber + parallax + radial image reveal
    ============================================================ */
 
-(() => {
+(function initHeroScrub() {
   const FRAME_COUNT = 61;
   const PRELOAD_STRIDE = 4;
   const PRELOAD_CONCURRENCY = 4;
@@ -36,10 +36,22 @@
   const loadStartedAt = performance.now();
   const MIN_LOADER_MS = 1000;
 
-  const LOW_POWER = window.matchMedia(
+  let LOW_POWER = window.matchMedia(
     '(max-width: 900px), (hover: none) and (pointer: coarse)'
   ).matches;
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (document.body.dataset.serviceHero && (LOW_POWER || prefersReducedMotion)) {
+    hero.classList.remove('is-loading');
+    hero.classList.add('is-ready');
+    const desktop = matchMedia('(min-width:901px) and (hover:hover) and (prefers-reduced-motion:no-preference)');
+    desktop.addEventListener('change', function resume(e) {
+      if (!e.matches) return;
+      desktop.removeEventListener('change',resume);
+      initHeroScrub();
+    });
+    return; // Mobile uses the accessible static product scene; no frame downloads.
+  }
+  matchMedia('(max-width:900px), (hover:none) and (pointer:coarse)').addEventListener('change',e => { LOW_POWER = e.matches; });
   let heroVisible = true;
   let pageVisible = !document.hidden;
 

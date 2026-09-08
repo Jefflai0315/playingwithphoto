@@ -12,7 +12,7 @@
   // Order must match real DOM order — getScrollState() walks consecutive
   // pairs to find the boundary currently on screen, so a missing or
   // out-of-order entry throws off every transition after it.
-  const STACKS = [
+  let STACKS = [
     { id: 'hero',          type: 'image', images: [
       'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=1600&q=80',
       'https://images.unsplash.com/photo-1578321272176-b7bbc0679853?w=1600&q=80',
@@ -49,6 +49,7 @@
     { id: 'faq',           type: 'paper' },
     { id: 'book',          type: 'paper' },
   ];
+  STACKS = STACKS.filter(s => document.getElementById(s.id)).sort((a,b) => document.getElementById(a.id).compareDocumentPosition(document.getElementById(b.id)) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1);
   window.__BG_STACKS__ = STACKS;
 
   // Full-screen WebGL is the biggest GPU/thermal cost on phones — CSS section

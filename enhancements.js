@@ -307,11 +307,11 @@ function setMeta(name) {
   });
   tryClaudeRestyle(name);
 }
-metaPicker.addEventListener('click', e => {
+metaPicker?.addEventListener('click', e => {
   const btn = e.target.closest('button[data-meta]');
   if (btn) setMeta(btn.dataset.meta);
 });
-setMeta('vangogh');
+if (metaPicker) setMeta('vangogh');
 
 // Inject Claude badge styles
 const claudeStyle = document.createElement('style');

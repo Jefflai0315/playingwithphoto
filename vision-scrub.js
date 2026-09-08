@@ -24,6 +24,7 @@
   const prefersReducedMotion = window.matchMedia(
     "(prefers-reduced-motion: reduce)",
   ).matches;
+  if (document.body.dataset.serviceHero && (LOW_POWER || prefersReducedMotion)) return;
   let runwayVisible = false;
   let pageVisible = !document.hidden;
   let loopStarted = false;

@@ -250,6 +250,7 @@
   // the reveal window had almost always already closed by init time, so the
   // effect silently never played.
   function initHeroFocus() {
+    if (document.body.dataset.serviceHero) return;
     const el = document.querySelector('.hero-big');
     const instance = createFocusText(el, {
       maxBlur: 12,

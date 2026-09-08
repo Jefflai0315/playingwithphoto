@@ -140,7 +140,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" href="frames/f_001.webp" as="image" fetchpriority="high">
+<link rel="preload" href="frames/f_001.webp" as="image" fetchpriority="high" media="(min-width: 901px) and (hover: hover) and (prefers-reduced-motion: no-preference)">
 <link rel="preload" href="hero-bg.webp" as="image" fetchpriority="high">
 <link rel="stylesheet" href="creation.css?v=4">
 <link rel="stylesheet" href="hero-scrub.css?v=11">
@@ -4527,8 +4527,36 @@
     .ticket-grid-weddings .ticket.t-prelude { order: 0; }
   }
 </style>
+<style>
+  /* Keep navigation legible over every frame of the changing artwork. */
+  nav.topnav, nav.topnav.scrolled {
+    background: var(--cream);
+    mix-blend-mode: normal;
+    border-bottom: 1px solid rgba(42,26,12,.15);
+  }
+  .topnav .logo, .topnav .nav-cta, .topnav .navlinks a { white-space: nowrap; }
+  .topnav .navlinks { gap: clamp(16px, 2vw, 28px); }
+  .topnav .navlinks a { opacity: 1; }
+  .topnav a:focus-visible, .hero-ctas a:focus-visible {
+    outline: 3px solid currentColor;
+    outline-offset: 5px;
+  }
+  .hero-title-card .hero-big { font-size: clamp(38px, 5.3vw, 68px); }
+  .hero-title-card .hero-ctas { gap: 10px; }
+  .hero-title-card .hero-ctas .btn-edition { min-height: 44px; }
+  .hero-title-card .hero-ctas .primary { background: var(--cream); color: var(--ink); border-color: var(--cream); }
+  @media (min-width: 901px) and (max-width: 1100px) {
+    nav.topnav { padding-inline: 20px; font-size: 11px; letter-spacing: .08em; }
+    .topnav .logo { font-size: 20px; }
+  }
+  @media (max-width: 520px) {
+    .hero-title-card .hero-big { font-size: clamp(32px, 8.5vw, 44px); }
+  }
+</style>
+<link rel="stylesheet" href="service-hero.css?v=5">
+<noscript><style>.service-booth,.service-print,.service-reveal{opacity:1!important;transform:none!important}</style></noscript>
 </head>
-<body data-palette="sepia" data-grain="true" class="has-bg-canvas">
+<body data-service-hero="true" data-palette="sepia" data-grain="true" class="has-bg-canvas">
 
 <!-- Three.js dissolve background -->
 <div id="bg-canvas-host" aria-hidden="true"></div>
@@ -4542,12 +4570,9 @@
     </a>
   </div>
   <div class="navlinks">
-    <a href="#pricing">Packages</a>
     <a href="#samples">Samples</a>
-    <a href="#spark">AI examples</a>
-    <a href="#styles">Film looks</a>
-    <a href="#demo">Try filter &amp; GIF</a>
-    <a href="/snapshot/">Quick book</a>
+    <a href="#pricing">Packages</a>
+    <a href="#demo">Try the filters</a>
     <a href="#testimonials">Reviews</a>
     <a href="#about">About</a>
   </div>
@@ -4563,7 +4588,7 @@
     <a href="#pricing">Packages</a>
     <a href="#samples">Samples</a>
     <a href="#spark">AI examples</a>
-    <a href="#styles">Film looks</a>
+    <a href="#spark">Film looks</a>
     <a href="#demo">Try filter &amp; GIF</a>
     <a href="/snapshot/">Quick book page</a>
     <a href="#testimonials">Reviews</a>
@@ -4611,9 +4636,9 @@
         <path d="M150 1 H299 V399 H1 V1 H150" pathLength="100"></path>
       </svg>
     </div>
-    <div class="kicker">Singapore · vintage photo booth + AI</div>
+    <div class="kicker">Singapore · photo booth hire</div>
     <h1 class="hero-big">
-      Speak your <em>vision</em>
+      <span class="desktop-title">Vintage photo booth<br><em>hire in Singapore.</em></span><span class="mobile-title">Step in.<br><em>Stand out.</em></span>
     </h1>
     <svg class="ornament" viewBox="0 0 120 10" aria-hidden="true">
       <path d="M0 5 L45 5 M75 5 L120 5" stroke="currentColor" stroke-width="0.8" opacity=".5"/>
@@ -4621,11 +4646,11 @@
       <circle cx="60" cy="5" r=".8" fill="currentColor" opacity=".7"/>
     </svg>
     <p class="hero-pitch">
-      Whatever style you like, our vintage AI photo booth turns it <strong>live</strong> for you.
-      Film, painter, your theme — <strong>anything is possible.</strong>
+      <span class="desktop-pitch">Real prints. Unexpected art. A little party magic.<br>For weddings, parties and brand events — with setup and an on-site attendant included.</span><span class="mobile-pitch">A vintage photo booth. Real prints.<br>Your people, with a little unexpected art.</span>
     </p>
     <div class="hero-ctas">
-      <a href="#book" class="btn-edition primary btn-hero-book">Book the booth</a>
+      <a href="#book" class="btn-edition primary btn-hero-book">Check your date</a>
+      <a href="#pricing" class="btn-edition">Packages from S$750</a>
     </div>
     <div class="hero-occasions" role="group" aria-label="I'm planning a">
       <button type="button" data-lead-audience="wedding" data-lead-event="Wedding" data-lead-package="keepsake" data-lead-scroll="#samples">Wedding</button>
@@ -4636,80 +4661,79 @@
     </div>
   </div>
 
+  <div class="service-scene" aria-label="The booth and the keepsakes">
+    <div class="service-booth">
+      <span class="scene-label">THE BOOTH</span>
+      <img id="serviceBoothImage" src="photos/booth/frames/b_0001.webp" width="560" height="747" alt="Wooden vintage photo booth with ring light and matching print station" fetchpriority="high">
+    </div>
+    <div class="service-print">
+      <span class="scene-label">THE KEEPSAKE</span>
+      <div class="service-photo-wrap">
+        <img id="serviceOriginal" src="photos/spark/jenmike.webp" width="1200" height="800" alt="Wedding portrait before styling">
+        <img id="serviceArt" src="photos/spark/jenmike-vangogh.webp" width="1200" height="800" alt="The wedding portrait transformed into a painterly AI style" loading="lazy">
+      </div>
+      <p id="serviceCaption" aria-live="polite">A photo. A little magic. Yours to keep.</p>
+      <div class="service-switch" role="group" aria-label="Choose a photo preview">
+        <button type="button" data-service-look="original" aria-pressed="true">Original</button>
+        <button type="button" data-service-look="film" aria-pressed="false">Film</button>
+        <button type="button" data-service-look="ai" aria-pressed="false">AI art</button>
+      </div>
+    </div>
+    <p class="service-stage-caption" aria-hidden="true">Step in. Make a memory.</p>
+  </div>
+<div class="pocket-booth" aria-label="Try the photo booth experience">
+ <div class="pocket-scene">
+  <div class="pocket-halo" aria-hidden="true"></div>
+  <p class="pocket-note">The booth arrives.<br><em>The memories follow.</em></p>
+  <img class="pocket-machine" src="photos/booth/frames/b_0120.webp" alt="Our wooden photo booth and matching printer" width="560" height="747" loading="lazy">
+  <div class="pocket-output">
+   <div class="pocket-slot" aria-hidden="true"></div>
+   <div class="pocket-paper-window">
+    <div class="pocket-paper">
+     <div class="pocket-photos"></div>
+     <span class="pocket-signature">Playing With Photo</span>
+     <span class="pocket-date">A MOMENT WORTH KEEPING</span>
+    </div>
+   </div>
+  </div>
+ </div>
+ <div class="pocket-controls">
+  <p id="pocket-status" aria-live="polite">One booth. Three ways to remember.</p>
+  <div class="pocket-looks" role="group" aria-label="Choose your strip style">
+   <button type="button" data-pocket-look="original" aria-pressed="false">Original</button>
+   <button type="button" data-pocket-look="film" aria-pressed="true">Vintage film</button>
+   <button type="button" data-pocket-look="ai" aria-pressed="false">AI art</button>
+  </div>
+  <button class="pocket-replay" type="button">↻ Print it again</button>
+ </div>
+</div>
   <!-- Scroll progress — tiny indicator at bottom of hero -->
   <div class="hero-scrub-hint" id="heroScrubHint">
-    <span class="hint-label">Scroll — watch a snap become film, then art</span>
+    <span class="hint-label">Scroll to reveal your keepsake</span>
     <div class="hint-bar"><div class="hint-bar-fill" id="heroScrubBar"></div></div>
   </div>
 
   </div><!-- /.hero-stage -->
 </section>
 
+<div class="service-clients" aria-label="Trusted by companies and organisations">
+ <p>TRUSTED BY</p><div><span>Chick-fil-A</span><span>Zeno</span><span>People’s Association</span><span>Sembcorp</span><span>Semina</span><span>PAssionArts</span></div>
+</div>
+<section class="service-summary" aria-label="Photo booth hire at a glance">
+  <div><span class="scene-label">A LITTLE PRACTICAL MAGIC</span><h2>You bring the guests.<br><em>We bring the booth.</em></h2></div>
+  <ul><li>Unlimited prints &amp; digital files</li><li>Vintage film looks &amp; AI styles</li><li>Setup, teardown &amp; an on-site attendant</li></ul>
+  <div><p>Packages from <strong>S$750</strong></p><a href="#pricing">Explore packages →</a><a href="#samples">See what guests take home →</a></div>
+</section>
+<section class="service-proof" id="event-proof" aria-label="Event portfolio">
+ <div><span class="scene-label">MADE FOR A ROOM FULL OF PEOPLE</span><h2>From the party<br>to the <em>brand moment.</em></h2><p>Wedding keepsakes, branded prints and portraits with personality.</p><a href="#samples">Explore the event gallery →</a></div>
+ <figure><img src="photos/samples/chickfila.webp" alt="Branded photo print from the existing event portfolio" width="600" height="800" loading="lazy"><figcaption>BRANDED PRINTS</figcaption></figure>
+ <figure><img src="photos/samples/gala-night.webp" alt="Gala photo print from the existing event portfolio" width="600" height="800" loading="lazy"><figcaption>EVENT KEEPSAKES</figcaption></figure>
+</section>
 <!-- PLAN & DISCOVER — vision through lookbook -->
 <div class="story-group story-group--plan" aria-label="Plan and discover">
 
 <!-- THE VISION — torn paper window + scroll visual -->
-<section class="chapter vision-chapter" id="vision" data-screen-label="02 The vision">
-  <div class="vision-scrub">
-    <div class="vision-scrub-pin">
-      <div class="vision-scrub-bg" aria-hidden="true">
-        <div class="vision-fg-layer">
-          <canvas id="visionScrubCanvas" aria-hidden="true"></canvas>
-        </div>
-        <div class="vision-scrub-wash"></div>
-      </div>
 
-      <div class="vision-paper vision-paper--top" aria-hidden="true"></div>
-      <div class="vision-paper vision-paper--bottom" aria-hidden="true"></div>
-
-      <div class="vision-scrub-copy wrap reveal" id="visionScrubCopy">
-        <div class="vision-scrub-headline" id="visionScrubHeadline">
-          <span class="eyebrow">The idea</span>
-          <h2>Vintage <em>ritual.</em> AI <em>alchemy.</em></h2>
-        </div>
-
-        <div class="vision-scrub-outro" id="visionScrubOutro" aria-label="Explore next">
-          <a href="#styles" class="vision-layer-card">
-            <div class="vision-layer-preview">
-              <img src="photos/styles/summerof78.webp" alt="" width="72" height="90" loading="lazy" decoding="async">
-            </div>
-            <div class="vision-layer-body">
-              <span class="vision-layer-kicker">
-                <svg class="vision-layer-icon" viewBox="0 0 16 16" aria-hidden="true"><rect x="2" y="3" width="12" height="10" rx="1" fill="none" stroke="currentColor" stroke-width="1.2"/><rect x="4" y="5" width="8" height="6" rx=".5" fill="none" stroke="currentColor" stroke-width="1"/></svg>
-                Layer one
-              </span>
-              <span class="vision-layer-title">Vintage film looks</span>
-              <span class="vision-layer-desc">Warm Kodak colour, Polaroid grain, B&amp;W nostalgia</span>
-              <span class="vision-layer-cta">Explore film looks <span aria-hidden="true">→</span></span>
-            </div>
-          </a>
-
-          <a href="#spark" class="vision-layer-card vision-layer-card--ai">
-            <div class="vision-layer-preview">
-              <img src="photos/spark/jenmike-vangogh.webp" alt="" width="72" height="90" loading="lazy" decoding="async">
-            </div>
-            <div class="vision-layer-body">
-              <span class="vision-layer-kicker">
-                <svg class="vision-layer-icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 13l3-8 2.5 5 1.5-3 3 6" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M11 3l1 2 2 1-2 1-1 2-1-2-2-1 2-1z" fill="none" stroke="currentColor" stroke-width="1"/></svg>
-                Layer two
-              </span>
-              <span class="vision-layer-title">AI painter</span>
-              <span class="vision-layer-desc">Your photo, repainted into whimsical art</span>
-              <span class="vision-layer-tags">Swirl sky · Garden soft · Pop colour</span>
-              <span class="custom-theme-note">Got a theme? Tell us — we'll make it happen.</span>
-              <span class="vision-layer-cta">Explore AI examples <span aria-hidden="true">→</span></span>
-            </div>
-          </a>
-        </div>
-      </div>
-
-      <div class="vision-scrub-hint" id="visionScrubHint">
-        <span class="hint-label">Scroll — watch it develop</span>
-        <div class="hint-bar"><div class="hint-bar-fill" id="visionScrubBar"></div></div>
-      </div>
-    </div>
-  </div>
-</section>
 
 <!-- SAMPLE WALL — product proof (full catalogue on enquiry) -->
 <section class="chapter sample-wall" id="samples" data-screen-label="02b Samples">
@@ -4719,7 +4743,7 @@
         <span class="eyebrow">The lookbook</span>
         <h2>See what guests <em>take home.</em></h2>
       </div>
-      <p class="lede">Real strips from real events — filter by occasion or style. Then <a href="#spark" style="color:inherit;">AI before/after</a>, <a href="#metamorphosis" style="color:inherit;">watch a strip morph</a>, or <a href="#reel" style="color:inherit;">feel the ritual</a>.</p>
+      <p class="lede">Real strips from real events — filter by occasion or style. Then <a href="#spark" style="color:inherit;">AI before/after</a>, <a href="#spark" style="color:inherit;">watch a strip morph</a>, or <a href="#samples" style="color:inherit;">feel the ritual</a>.</p>
     </div>
     <div class="sample-wall-filters reveal" id="sampleWallFilters" role="tablist" aria-label="Filter samples"></div>
     <p class="sample-wall-count reveal" id="sampleWallCount" aria-live="polite"></p>
@@ -4756,7 +4780,7 @@
         Five AI looks — swirl sky, garden soft, cubist bold, pop colour, ink &amp; wave.
         <span class="custom-theme-note">Got a theme? Tell us — we'll make it happen.</span>
         <a href="#samples" style="color:inherit;">Back to samples</a> ·
-        <a href="#styles" style="color:inherit;">Film looks</a>.
+        <a href="#spark" style="color:inherit;">Film looks</a>.
       </p>
     </div>
 
@@ -4804,9 +4828,9 @@
     <div class="spark-foot reveal">
       <span class="mono">Tap a painter above — auto-rotates every 6s.</span>
       <span class="mono" style="display:block; margin-top:8px; opacity:.85;">
-        <a href="#metamorphosis" style="color:inherit;">Watch a strip morph</a>
-        · <a href="#styles" style="color:inherit;">Film looks</a>
-        · <a href="#reel" style="color:inherit;">The ritual</a>
+        <a href="#spark" style="color:inherit;">Watch a strip morph</a>
+        · <a href="#spark" style="color:inherit;">Film looks</a>
+        · <a href="#samples" style="color:inherit;">The ritual</a>
       </span>
     </div>
 
@@ -4827,166 +4851,13 @@
 <div class="zone-edge" aria-hidden="true"></div>
 
 <!-- METAMORPHOSIS — same strip, film → painter (the twist) -->
-<section class="meta-chapter" id="metamorphosis" data-screen-label="03 The twist">
-  <div class="meta-bg"></div>
-  <div class="wrap" style="position:relative; z-index:2;">
-    <p class="meta-bridge reveal" style="color: rgba(255,255,255,.75); max-width: 640px; margin: 0 auto 32px; text-align: center; font-size: 16px;">
-      <span style="color:#ffd6f0; font-family: var(--ff-mono); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; display:block; margin-bottom: 10px;">The twist</span>
-      Spark showed one photo — here’s the full four-pose strip, morphing from vintage film into painter styles.
-      That’s the booth: <b style="color:#fff;">nostalgia and wonder on one roll.</b>
-    </p>
 
-    <div class="meta-picker reveal">
-      <button data-meta="vintage" class="active">
-        <span class="dot" style="background:#c38a52"></span>70s Kodak <small>Default</small>
-      </button>
-      <button data-meta="vangogh">
-        <span class="dot" style="background:#f4b731"></span>Swirl sky
-      </button>
-      <button data-meta="monet">
-        <span class="dot" style="background:#a7c8e8"></span>Garden soft
-      </button>
-      <button data-meta="picasso">
-        <span class="dot" style="background:#d87a3c"></span>Cubist bold
-      </button>
-      <button data-meta="warhol">
-        <span class="dot" style="background:#ff2d88"></span>Pop colour
-      </button>
-      <button data-meta="hokusai">
-        <span class="dot" style="background:#1e5aa8"></span>Ink &amp; wave
-      </button>
-    </div>
-
-    <div class="meta-stage reveal">
-      <div class="meta-before">
-        <div class="meta-label">Before — 70s Kodak</div>
-        <div class="meta-card" id="metaBefore">
-          <div class="meta-photo"><div class="meta-img" data-meta-src="0"></div></div>
-          <div class="meta-photo"><div class="meta-img" data-meta-src="1"></div></div>
-          <div class="meta-photo"><div class="meta-img" data-meta-src="2"></div></div>
-          <div class="meta-photo"><div class="meta-img" data-meta-src="3"></div></div>
-          <div class="meta-strip-brand">Playing With Photo · Vintage</div>
-        </div>
-      </div>
-
-      <div class="meta-arrow">
-        <svg viewBox="0 0 60 80" style="width:60px;">
-          <path d="M10 40 L50 40 M30 20 L50 40 L30 60" stroke="#ffd88a" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        <div class="meta-arrow-label">AI rewrites it</div>
-      </div>
-
-      <div class="meta-after">
-        <div class="meta-label" id="metaAfterLabel">After — Swirl sky</div>
-        <div class="meta-card" id="metaAfter">
-          <div class="meta-photo"><div class="meta-img meta-after-img" data-meta-src="0"></div><div class="meta-shine"></div></div>
-          <div class="meta-photo"><div class="meta-img meta-after-img" data-meta-src="1"></div><div class="meta-shine"></div></div>
-          <div class="meta-photo"><div class="meta-img meta-after-img" data-meta-src="2"></div><div class="meta-shine"></div></div>
-          <div class="meta-photo"><div class="meta-img meta-after-img" data-meta-src="3"></div><div class="meta-shine"></div></div>
-          <div class="meta-strip-brand" id="metaAfterBrand">Playing With Photo · Swirl sky</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="meta-cta reveal">
-      <p style="color: rgba(255,255,255,.7); max-width: 480px; margin: 0;">
-        <b style="color:#fff;">Jeff tip:</b> couples love the vintage strip for the album — and the Van&nbsp;Gogh strip framed on the wall. Mix both across the night.
-      </p>
-      <a href="#reel" class="btn" style="background:#ffd88a; color:#1a0f2a; border-color:#ffd88a; box-shadow: 0 4px 0 #c09050;">See the booth ritual
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-      </a>
-    </div>
-
-    <div class="meta-keepsake reveal" id="metaKeepsake">
-      <span class="meta-keepsake-eyebrow">…and then it becomes this</span>
-      <h3 class="meta-keepsake-title">A real <em>keepsake</em> — in your hand.</h3>
-      <div class="meta-keepsake-duo">
-        <figure class="meta-keepsake-item meta-keepsake-item--hero">
-          <div class="meta-keepsake-frame">
-            <img src="photos/reel/jenmike-keepsake.webp" alt="Van Gogh-style keepsake portrait of Jen and Mike in an ornate gold frame" loading="lazy" decoding="async" width="1200" height="1600" />
-          </div>
-          <figcaption class="meta-keepsake-label">Gold frame portrait</figcaption>
-        </figure>
-        <figure class="meta-keepsake-item meta-keepsake-item--alt">
-          <div class="meta-keepsake-frame">
-            <img src="photos/addons/collector-cards.webp" alt="Personalised holographic collector cards with custom couple illustration" loading="lazy" decoding="async" width="1000" height="1000" />
-          </div>
-          <figcaption class="meta-keepsake-label">Collector cards</figcaption>
-        </figure>
-      </div>
-      <p class="meta-keepsake-caption">Any painterly strip can become a hand-finished mini portrait — or a personalised collector card. One for the album, one for the mantelpiece.</p>
-    </div>
-  </div>
-</section>
 
 <!-- =============================
      SCROLL-NARRATIVE: "The Reel"
      A pinned chapter where a film strip slides and 4 frames develop one by one.
      ============================= -->
-<section class="reel-chapter" id="reel" data-screen-label="02 The Reel">
-  <div class="reel-sticky">
-    <div class="reel-progress"><div class="reel-progress-fill" id="reelFill"></div></div>
-    <div class="reel-stage">
-      <div class="reel-head">
-        <span class="eyebrow" style="color:var(--highlight);">The reel · 002</span>
-        <h2 class="reel-title" id="reelTitle">Scroll to <em>develop</em> the strip</h2>
-        <p class="reel-sub" id="reelSub">Four poses, four frames — step in, shoot, develop, take home. Scroll to feel the ritual.</p>
-      </div>
 
-      <div class="reel-strip" id="reelStrip">
-        <div class="reel-holes">
-          <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-        </div>
-        <div class="reel-frames">
-          <div class="reel-frame" data-reel="0">
-            <div class="reel-frame-inner" style="background-image: var(--reel-img-0);"></div>
-            <div class="reel-devstage"></div>
-            <div class="reel-label">01 · The Pose</div>
-          </div>
-          <div class="reel-frame" data-reel="1">
-            <div class="reel-frame-inner" style="background-image: var(--reel-img-1);"></div>
-            <div class="reel-devstage"></div>
-            <div class="reel-label">02 · The Snap</div>
-          </div>
-          <div class="reel-frame" data-reel="2">
-            <div class="reel-frame-inner" style="background-image: var(--reel-img-2);"></div>
-            <div class="reel-devstage"></div>
-            <div class="reel-label">03 · The Digital Animation</div>
-          </div>
-          <div class="reel-frame" data-reel="3">
-            <div class="reel-frame-inner" style="background-image: var(--reel-img-3);"></div>
-            <div class="reel-devstage"></div>
-            <div class="reel-label">04 · Take it home</div>
-          </div>
-        </div>
-        <div class="reel-holes">
-          <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-        </div>
-      </div>
-
-      <div class="reel-captions">
-        <div class="reel-caption" data-cap="0">
-          <span class="script">Step in.</span>
-          <p>The ring light warms, the booth hums. No app, no signup — just you and the lens.</p>
-        </div>
-        <div class="reel-caption" data-cap="1">
-          <span class="script">Strike a pose.</span>
-          <p>Countdown hits zero. Shutter clicks. Flash fires. Four times, eight seconds apart.</p>
-        </div>
-        <div class="reel-caption" data-cap="2">
-          <span class="script">Let it develop.</span>
-          <p>AI develops each frame — vintage film colour <em>or</em> a painter repainting, your choice.</p>
-        </div>
-        <div class="reel-caption" data-cap="3">
-          <span class="script">Take it home.</span>
-          <p>Printed in 12 seconds. Digital copy texted. A tiny gallery you'll keep for decades.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- Scroll length drives pin timeline -->
-  <div class="reel-spacer"></div>
-</section>
 </div><!-- /.story-group--experience -->
 
 <!-- TRY FILM — vintage looks + live demo -->
@@ -5015,39 +4886,10 @@
 </div>
 
 <!-- VINTAGE FILM LOOKS — nostalgia layer -->
-<section class="chapter gallery-chapter" id="styles" data-screen-label="05 Vintage film" style="position:relative;">
-  <span class="chapter-numeral tr light" aria-hidden="true">ᴠɪɪ</span>
-  <div class="wrap">
-    <div class="section-head reveal">
-      <div>
-        <span class="eyebrow">The nostalgia layer · vintage film</span>
-        <h2 style="color:var(--cream);">Five films,<br/><em style="color:var(--highlight)!important;">one roll.</em></h2>
-      </div>
-      <p>
-        Kodak, Polaroid, B&amp;W, and more — warm colour grading on every frame, not AI repainting.
-        Scroll the strip below, then try them on your webcam in the next section.
-      </p>
-    </div>
 
-    <div class="style-chips reveal" aria-label="Choose a film look">
-      <button class="active" data-style="all" aria-pressed="true">All Looks</button>
-      <button data-style="kodak" aria-pressed="false">70s Kodak</button>
-      <button data-style="bw" aria-pressed="false">Silver Gelatin B&amp;W</button>
-      <button data-style="polaroid" aria-pressed="false">Polaroid 600</button>
-      <button data-style="kodachrome" aria-pressed="false">Kodachrome Slide</button>
-      <button data-style="sepia" aria-pressed="false">Studio Sepia</button>
-    </div>
-  </div>
-
-  <div class="filmstrip-wrap reveal" style="margin-top: 60px;">
-    <div class="filmstrip" id="styleFilmstrip">
-      <!-- Populated by JS -->
-    </div>
-  </div>
-</section>
 
 <!-- LIVE DEMO — try the film layer -->
-<section class="chapter" id="demo" data-screen-label="02 Filter & GIF demo">
+<details class="service-disclosure"><summary>Try the filters on your camera</summary><section class="chapter" id="demo" data-screen-label="02 Filter & GIF demo">
   <div class="wrap">
     <div class="section-head reveal">
       <div>
@@ -5144,355 +4986,9 @@
       </div>
     </div>
   </div>
-</section>
+</section></details>
 </div><!-- /.story-group--film -->
 
-<!-- TRUST — booth hardware & social proof -->
-<div class="story-group story-group--trust" aria-label="What you get on the day">
-<div class="section-bridge wrap reveal">
-  <span class="eyebrow">What you get on the day</span>
-  <h2 style="font-family:var(--ff-display); font-size:clamp(28px,4vw,40px); font-weight:400; margin-top:12px;">
-    The booth, the attendant, the prints.
-  </h2>
-  <p>Everything below is included with every package — hardware, setup, and a friendly operator who keeps the queue moving.</p>
-</div>
-
-<!-- THE BOOTH -->
-<section class="chapter booth-chapter" id="booth" data-screen-label="03 The Booth" style="position:relative;">
-  <span class="chapter-numeral tl" aria-hidden="true">ᴠ</span>
-  <div class="wrap">
-    <div class="section-head reveal">
-      <div>
-        <span class="eyebrow">The booth · Hardware</span>
-        <h2>Hand-built.<br/><span class="italic">Unapologetically</span> <em>analog</em>.</h2>
-      </div>
-      <p>
-        Every booth is assembled in Jeff's Singapore studio. A real hardwood tripod, a
-        vintage-cased camera head, and a thermal printer that whirs like a polaroid —
-        with AI inside that develops each strip in classic film colour or a painter's style.
-      </p>
-    </div>
-  </div>
-
-  <div class="booth-scrub">
-    <div class="booth-scrub-pin">
-      <div class="wrap">
-    <div class="booth-grid reveal">
-      <div class="booth-stage">
-        <div class="booth-canvas-wrap">
-          <canvas id="boothAssemblyCanvas" class="booth-assembly-canvas" aria-label="Photobooth assembly animation"></canvas>
-        </div>
-
-        <div class="booth-labels">
-          <div class="booth-label" style="top: 6%; right: 0%;">01<span class="line"></span><b>Ring light</b></div>
-          <div class="booth-label" style="top: 24%; right: 2%;">02<span class="line"></span><b>AI lens</b></div>
-          <div class="booth-label" style="top: 36%; right: -5%;">03<span class="line"></span><b>Live preview</b></div>
-          <div class="booth-label" style="top: 48%; right: -8%;">04<span class="line"></span><b>Hardwood tripod</b></div>
-          <div class="booth-label" style="top: 58%; right: 50%;"><b>DNP Printer</b><span class="line"></span>05</div>
-        </div>
-      </div>
-
-      <div class="booth-copy">
-        <span class="eyebrow">Specs & craft</span>
-        <h3 style="font-family:var(--ff-display); font-size: 44px; font-weight: 400; font-style: italic; margin: 14px 0 20px;">
-          Built like a camera from your grandpa's attic.
-        </h3>
-        <p style="color:var(--ink-2); max-width: 52ch; margin:0;">
-          Teak legs. Brass fittings. A shutter that clicks when you press it. The booth
-          earns its place in the room — guests gather around it because it <i>looks</i>
-          like something worth gathering around.
-        </p>
-
-        <div class="booth-feat">
-          <div class="f">
-            <h4>Hardwood tripod</h4>
-            <p>Teak, hand-finished. Each one has its own grain — no two are identical.</p>
-          </div>
-          <div class="f">
-            <h4>Filter &amp; GIF preview</h4>
-            <p>See your filtered self in real-time — the film layer of the booth. Pair it with AI painter styles on the next strip.</p>
-          </div>
-          <div class="f">
-            <h4>Thermal printer</h4>
-            <p>Prints a film strip in 12 seconds. Guests walk away with a keepsake.</p>
-          </div>
-          <div class="f">
-            <h4>Event-ready</h4>
-            <p>Folds down to a suitcase, runs from one wall socket, and includes the queue screen.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- TESTIMONIALS -->
-<div class="group-divider" aria-hidden="true"></div>
-<section class="chapter testis-chapter" id="testimonials" data-screen-label="07 Testimonials" style="position:relative;">
-  <span class="chapter-numeral tr" aria-hidden="true">ɪx</span>
-  <div class="wrap">
-    <div class="section-head reveal">
-      <div>
-        <span class="eyebrow">Kind words · 006</span>
-        <h2>The <em>queue</em><br/>never stopped.</h2>
-      </div>
-      <p>Real feedback from weddings, brand launches, and one very memorable 60th birthday.</p>
-    </div>
-
-    <!-- Cork board of pinned photo strips with handwritten notes taped on -->
-    <div class="corkboard reveal" id="testiBoard">
-      <div class="corkboard-rail">
-        <div class="strip-card" data-strip="wedding" style="--r:-4deg; --x:0;">
-          <div class="strip-frames">
-            <div class="strip-frame" style="background: linear-gradient(135deg,#d9a87a,#8a5a3a);"><span class="strip-label">wedding</span></div>
-            <div class="strip-frame" style="background: linear-gradient(135deg,#e8b98a,#b48a5a);"></div>
-            <div class="strip-frame" style="background: linear-gradient(135deg,#a87a5a,#5a3a2a);"></div>
-            <div class="strip-frame" style="background: linear-gradient(135deg,#c89a6a,#7a4a2a);"></div>
-          </div>
-          <div class="tape tape-tl"></div>
-          <div class="tape tape-br"></div>
-          <div class="sticky-note" style="--r:3deg;">
-            <p>"Three hours in and the line was <u>still</u> around the bar. Guests printed <b>four strips each.</b> It stole the show."</p>
-            <div class="note-sig">— Priya &amp; Aaron<br/><em>Cliveden House</em></div>
-          </div>
-          <div class="pushpin"></div>
-        </div>
-
-        <div class="strip-card" data-strip="brand" style="--r:3deg;">
-          <div class="strip-frames">
-            <div class="strip-frame" style="background: linear-gradient(135deg,#2a1a10,#5a3a24);"><span class="strip-label">brand</span></div>
-            <div class="strip-frame" style="background: linear-gradient(135deg,#4a2a1a,#8a5a3a);"></div>
-            <div class="strip-frame" style="background: linear-gradient(135deg,#6a4a2a,#ba8a5a);"></div>
-            <div class="strip-frame" style="background: linear-gradient(135deg,#3a2a1a,#7a4a2a);"></div>
-          </div>
-          <div class="tape tape-tr"></div>
-          <div class="sticky-note yellow" style="--r:-4deg;">
-            <p>"Our activation needed a <i>moment</i>. Jeff's booth <u>was</u> the moment. We posted the filmstrips for weeks."</p>
-            <div class="note-sig">— Marcus L.<br/><em>Head of Brand · Aesop SG</em></div>
-          </div>
-          <div class="pushpin red"></div>
-        </div>
-
-        <div class="strip-card" data-strip="sixtieth" style="--r:-2deg;">
-          <div class="strip-frames">
-            <div class="strip-frame" style="background: linear-gradient(135deg,#e8c89a,#ba8a5a);"><span class="strip-label">60th</span></div>
-            <div class="strip-frame" style="background: linear-gradient(135deg,#d6a87a,#8a5a3a);"></div>
-            <div class="strip-frame" style="background: linear-gradient(135deg,#b88a5a,#5a3a1a);"></div>
-            <div class="strip-frame" style="background: linear-gradient(135deg,#a87a4a,#7a4a2a);"></div>
-          </div>
-          <div class="tape tape-tl"></div>
-          <div class="sticky-note pink" style="--r:5deg;">
-            <p>"My dad is 60 and <u>hates</u> being photographed. He took <b>eleven strips.</b> I've never seen him grin that hard."</p>
-            <div class="note-sig">— Lee Wei Ling<br/><em>Tanjong Pagar</em></div>
-          </div>
-          <div class="pushpin"></div>
-        </div>
-
-        <div class="strip-card" data-strip="gala" style="--r:4deg;">
-          <div class="strip-frames">
-            <div class="strip-frame" style="background: linear-gradient(135deg,#3a4a6a,#1a2a4a);"><span class="strip-label">gala</span></div>
-            <div class="strip-frame" style="background: linear-gradient(135deg,#5a6a8a,#2a3a5a);"></div>
-            <div class="strip-frame" style="background: linear-gradient(135deg,#4a5a7a,#1a2a3a);"></div>
-            <div class="strip-frame" style="background: linear-gradient(135deg,#6a7a9a,#3a4a6a);"></div>
-          </div>
-          <div class="tape tape-br"></div>
-          <div class="sticky-note" style="--r:-3deg;">
-            <p>"I've hired photo-booths for <u>six</u> galas. This was the first one guests actually queued for. <b>Everyone</b> left with a strip."</p>
-            <div class="note-sig">— Sophie K.<br/><em>Events Director · NGS</em></div>
-          </div>
-          <div class="pushpin red"></div>
-        </div>
-
-        <div class="strip-card" data-strip="bday" style="--r:-3deg;">
-          <div class="strip-frames">
-            <div class="strip-frame" style="background: linear-gradient(135deg,#c89a6a,#7a4a2a);"><span class="strip-label">bday</span></div>
-            <div class="strip-frame" style="background: linear-gradient(135deg,#e8b98a,#8a5a3a);"></div>
-            <div class="strip-frame" style="background: linear-gradient(135deg,#a87a5a,#4a2a1a);"></div>
-            <div class="strip-frame" style="background: linear-gradient(135deg,#d6a87a,#6a3a1a);"></div>
-          </div>
-          <div class="tape tape-tr"></div>
-          <div class="sticky-note yellow" style="--r:2deg;">
-            <p>"Sent a strip to my grandma in Manila. She <u>framed it</u>. Said it looked like photos from her own wedding, 1962."</p>
-            <div class="note-sig">— Carla M.<br/><em>Makati · Manila</em></div>
-          </div>
-          <div class="pushpin"></div>
-        </div>
-      </div>
-      <div class="board-hint" aria-hidden="true">
-        <span>← drag the board →</span>
-      </div>
-    </div>
-  </div>
-</section>
-</div><!-- /.story-group--trust -->
-
-<!-- ADD-ONS -->
-<section class="chapter addons-chapter" id="addons" data-screen-label="10 Add-ons">
-  <span class="chapter-numeral tl" aria-hidden="true">xɪɪ</span>
-  <div class="wrap">
-    <div class="section-head reveal">
-      <div>
-        <span class="eyebrow">Add-ons · 008</span>
-        <h2>Make the booth<br/><em>yours.</em></h2>
-      </div>
-      <p>
-        A few things are already included with every booking. The rest are optional
-        upgrades for weddings, brand activations, and guests who want a little more magic.
-      </p>
-    </div>
-
-    <div class="included-strip reveal">
-      <article class="included-panel">
-        <h3>Already in the booth</h3>
-        <ul class="included-list">
-          <li>Setup, teardown &amp; an on-site attendant</li>
-          <li>Unlimited prints and all digital files</li>
-          <li>Sticker pack and photo props at the booth</li>
-          <li>A looping GIF example board, so guests know what's possible</li>
-        </ul>
-        <div class="queue-display" aria-label="Sample queue number screen">
-          <span>Now serving</span>
-          <strong>A07</strong>
-          <span class="queue-qr-hint">On-screen queue number · scan QR for strip status</span>
-        </div>
-        <span class="custom-theme-note">Something else in mind? Just ask — we'll often make it work, depending on availability.</span>
-      </article>
-
-      <figure class="motion-example-card">
-        <div class="motion-example-copy">
-          <span>Example board</span>
-          <strong>See the strip move.</strong>
-        </div>
-        <div class="motion-preview-shell">
-          <div class="motion-preview-screen">
-            <img class="motion-gif-preview" src="photos/addons/example.gif?v=1" alt="Animated GIF photo strip example" loading="lazy" width="506" height="760" />
-            <span class="motion-sticker" aria-hidden="true">GIF</span>
-          </div>
-        </div>
-        <figcaption>Looping GIF preview</figcaption>
-      </figure>
-    </div>
-
-    <div class="addons-board-head reveal">
-      <span class="eyebrow">Then, make it yours</span>
-      <p>Optional upgrades — add any of these to your enquiry.</p>
-    </div>
-
-    <div class="addons-board reveal">
-      <article class="addon-card featured guestbook-addon" style="--r:-1deg;" data-addon-id="guestbook" role="button" tabindex="0" title="Add to enquiry form">
-        <h3>Guestbook, Glitter &amp; Glue</h3>
-        <p>A hands-on station for messages, stickers, instant prints, and messy little memories.</p>
-        <div class="addon-price"><span>S$68</span><small>now only</small></div>
-        <span class="addon-note">launch price</span>
-        <div class="addon-scribble" aria-hidden="true">glue</div>
-      </article>
-
-      <article class="addon-card" style="--r:1deg;" data-addon-id="more-styles" role="button" tabindex="0" title="Add to enquiry form">
-        <h3>Custom AI Style Request</h3>
-        <p>Every package already includes our full AI style library. Want something beyond that — a fully custom direction for your event?</p>
-        <span class="custom-theme-note">Got a theme? Tell us — we'll make it happen.</span>
-        <div class="addon-price">
-          <span>Free</span>
-        </div>
-        <div class="addon-scribble" aria-hidden="true">AI</div>
-      </article>
-
-      <article class="addon-card" style="--r:-.6deg;" data-addon-id="animation" role="button" tabindex="0" title="Add to enquiry form">
-        <img src="photos/addons/ai-animation.poster.webp" alt="Example of a guest portrait turned into a short AI motion clip" loading="lazy" decoding="async" width="72" height="72" style="width:72px; height:72px; object-fit:cover; border-radius:8px; margin-bottom:10px;" />
-        <h3>AI Animation &amp; Live Slideshow</h3>
-        <p>Motion clips from guest portraits, streamed live on venue screens during the event.</p>
-        <div class="addon-price">
-          <span class="addon-price-was">S$200</span>
-          <span>S$100</span>
-          <small>testing bundle</small>
-        </div>
-        <span class="addon-note">testing price</span>
-      </article>
-
-      <article class="addon-card" style="--r:.6deg;" data-addon-id="extra-hour" role="button" tabindex="0" title="Add to enquiry form">
-        <h3>Additional Hour</h3>
-        <p>Keep the booth open longer when the queue is still moving.</p>
-        <div class="addon-price"><span>S$180</span><small>per hour</small></div>
-      </article>
-
-      <article class="addon-card" style="--r:-.8deg;" data-addon-id="custom-ui" role="button" tabindex="0" title="Add to enquiry form">
-        <h3>Custom Interface</h3>
-        <p>Photobooth screen design matched to your wedding, brand, or party theme.</p>
-        <div class="addon-price"><span>S$180</span><small>design</small></div>
-      </article>
-
-      <article class="addon-card" style="--r:.8deg;" data-addon-id="custom-stickers" role="button" tabindex="0" title="Add to enquiry form">
-        <h3>Custom Stickers</h3>
-        <p>Sticker pack for the event, with AI-generated options available.</p>
-        <div class="addon-price"><span>S$180</span><small>pack</small></div>
-      </article>
-
-      <article class="addon-card keepsake-addon" style="--r:-1deg;" data-addon-id="keychain" role="button" tabindex="0" title="Add to enquiry form">
-        <h3>Keychains or Collector Cards</h3>
-        <p>Physical keepsakes from guest portraits — acrylic keychains or personalised collector cards with custom art and story stats.</p>
-        <details class="addon-expand" onclick="event.stopPropagation()">
-          <summary>See examples</summary>
-          <div class="addon-thumbs">
-            <img src="photos/reel/jenmike-keepsake.webp" alt="Gold frame portrait example" loading="lazy" decoding="async" width="72" height="72" />
-            <img src="photos/addons/collector-cards.webp" alt="Collector card example" loading="lazy" decoding="async" width="72" height="72" />
-          </div>
-        </details>
-        <span class="custom-theme-note">Custom themes welcome — tell us your idea</span>
-        <div class="addon-price"><span>S$330</span><small>up to 100 pieces</small></div>
-        <span class="addon-note">your choice of format</span>
-        <div class="addon-scribble" aria-hidden="true">keepsake</div>
-      </article>
-    </div>
-  </div>
-</section>
-
-<!-- ABOUT JEFF -->
-<section class="chapter about-chapter" id="about" data-screen-label="11 About Jeff">
-  <div class="wrap">
-    <div class="about-grid reveal">
-      <div class="about-portrait">
-        <div class="img">
-          <img src="photos/about/jeff.webp" alt="Jeff portrait" loading="lazy" decoding="async" width="800" height="1012" />
-        </div>
-        <div class="label">— Jeff, 2026</div>
-        <div class="stamp">Singapore · est. 2018</div>
-      </div>
-
-      <div class="about-copy">
-        <span class="eyebrow">The maker · 011</span>
-        <h2>Hi, I'm <em>Jeff.</em></h2>
-        <p class="lede">
-          I've been drawing portraits of strangers at Singapore markets for eight years
-          under the name <i>Playing With Pencil</i>. This booth is what happened when I asked:
-          <i>what if nostalgia and AI could share the same strip?</i>
-        </p>
-        <p>
-          Every sketch I do is two things at once: a likeness, and a <i>memory</i>. I
-          wanted a photobooth that did both — the ritual of film your parents remember,
-          with AI that can grade it in Kodak gold <i>or</i> paint you into a masterpiece.
-          Hardwood tripod, brass fittings, a model trained on forty years of photographs.
-          Six months of tinkering later, Playing With Photo was born.
-        </p>
-        <p>
-          I still show up to every event myself. If you book the booth, you're booking
-          <i>me</i> too — complete with terrible jokes and pencil smudges on my fingers.
-        </p>
-
-        <div class="signature">
-          <svg viewBox="0 0 260 80" style="height: 62px;">
-            <path d="M 10 50 Q 25 20 45 45 Q 55 60 70 35 Q 85 15 95 45 L 100 50 Q 110 30 125 50 Q 140 70 155 35 Q 170 10 185 45 Q 200 70 220 30 Q 240 10 250 30"
-                  stroke="var(--rust-2)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-            <path d="M 90 55 L 200 58" stroke="var(--rust-2)" stroke-width="1" fill="none" opacity=".5"/>
-          </svg>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- PRICING — after proof, before book -->
 <section class="chapter" id="pricing" data-screen-label="02 Packages">
   <div class="wrap">
     <div class="section-head reveal">
@@ -5502,7 +4998,7 @@
       </div>
       <div class="pricing-meta">
         <p>All packages include setup, teardown, an on-site attendant, unlimited prints, and every digital file.</p>
-        <p class="pricing-guide">Most couples book <strong>3 Hours</strong>. Full receptions choose <strong>5 Hours</strong>.</p>
+        <p class="pricing-guide">Most couples book <strong>3 Hours</strong>. Full receptions choose <strong>6 Hours</strong>.</p>
         <a href="./PWP_Packages-2.pdf" class="btn ghost" target="_blank" rel="noopener noreferrer">View full package details (PDF)</a>
       </div>
     </div>
@@ -5624,6 +5120,277 @@
     </div>
   </div>
 </section>
+<!-- TRUST — event reviews -->
+<div class="story-group story-group--trust" aria-label="What you get on the day">
+<!-- Event proof -->
+
+
+<!-- TESTIMONIALS -->
+<div class="group-divider" aria-hidden="true"></div>
+<section class="chapter testis-chapter" id="testimonials" data-screen-label="07 Testimonials" style="position:relative;">
+  <span class="chapter-numeral tr" aria-hidden="true">ɪx</span>
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <span class="eyebrow">Kind words · 006</span>
+        <h2>The <em>queue</em><br/>never stopped.</h2>
+      </div>
+      <p>Real feedback from weddings, brand launches, and one very memorable 60th birthday.</p>
+    </div>
+
+    <!-- Cork board of pinned photo strips with handwritten notes taped on -->
+    <div class="corkboard reveal" id="testiBoard">
+      <div class="corkboard-rail">
+        <div class="strip-card" data-strip="wedding" style="--r:-4deg; --x:0;">
+          <div class="strip-frames">
+            <div class="strip-frame" style="background: linear-gradient(135deg,#d9a87a,#8a5a3a);"><span class="strip-label">wedding</span></div>
+            <div class="strip-frame" style="background: linear-gradient(135deg,#e8b98a,#b48a5a);"></div>
+            <div class="strip-frame" style="background: linear-gradient(135deg,#a87a5a,#5a3a2a);"></div>
+            <div class="strip-frame" style="background: linear-gradient(135deg,#c89a6a,#7a4a2a);"></div>
+          </div>
+          <div class="tape tape-tl"></div>
+          <div class="tape tape-br"></div>
+          <div class="sticky-note" style="--r:3deg;">
+            <p>"Three hours in and the line was <u>still</u> around the bar. Guests printed <b>four strips each.</b> It stole the show."</p>
+            <div class="note-sig">— Priya &amp; Aaron<br/><em>Cliveden House</em></div>
+          </div>
+          <div class="pushpin"></div>
+        </div>
+
+        <div class="strip-card" data-strip="brand" style="--r:3deg;">
+          <div class="strip-frames">
+            <div class="strip-frame" style="background: linear-gradient(135deg,#2a1a10,#5a3a24);"><span class="strip-label">brand</span></div>
+            <div class="strip-frame" style="background: linear-gradient(135deg,#4a2a1a,#8a5a3a);"></div>
+            <div class="strip-frame" style="background: linear-gradient(135deg,#6a4a2a,#ba8a5a);"></div>
+            <div class="strip-frame" style="background: linear-gradient(135deg,#3a2a1a,#7a4a2a);"></div>
+          </div>
+          <div class="tape tape-tr"></div>
+          <div class="sticky-note yellow" style="--r:-4deg;">
+            <p>"Our activation needed a <i>moment</i>. Jeff's booth <u>was</u> the moment. We posted the filmstrips for weeks."</p>
+            <div class="note-sig">— Marcus L.<br/><em>Head of Brand · Aesop SG</em></div>
+          </div>
+          <div class="pushpin red"></div>
+        </div>
+
+        <div class="strip-card" data-strip="sixtieth" style="--r:-2deg;">
+          <div class="strip-frames">
+            <div class="strip-frame" style="background: linear-gradient(135deg,#e8c89a,#ba8a5a);"><span class="strip-label">60th</span></div>
+            <div class="strip-frame" style="background: linear-gradient(135deg,#d6a87a,#8a5a3a);"></div>
+            <div class="strip-frame" style="background: linear-gradient(135deg,#b88a5a,#5a3a1a);"></div>
+            <div class="strip-frame" style="background: linear-gradient(135deg,#a87a4a,#7a4a2a);"></div>
+          </div>
+          <div class="tape tape-tl"></div>
+          <div class="sticky-note pink" style="--r:5deg;">
+            <p>"My dad is 60 and <u>hates</u> being photographed. He took <b>eleven strips.</b> I've never seen him grin that hard."</p>
+            <div class="note-sig">— Lee Wei Ling<br/><em>Tanjong Pagar</em></div>
+          </div>
+          <div class="pushpin"></div>
+        </div>
+
+        <div class="strip-card" data-strip="gala" style="--r:4deg;">
+          <div class="strip-frames">
+            <div class="strip-frame" style="background: linear-gradient(135deg,#3a4a6a,#1a2a4a);"><span class="strip-label">gala</span></div>
+            <div class="strip-frame" style="background: linear-gradient(135deg,#5a6a8a,#2a3a5a);"></div>
+            <div class="strip-frame" style="background: linear-gradient(135deg,#4a5a7a,#1a2a3a);"></div>
+            <div class="strip-frame" style="background: linear-gradient(135deg,#6a7a9a,#3a4a6a);"></div>
+          </div>
+          <div class="tape tape-br"></div>
+          <div class="sticky-note" style="--r:-3deg;">
+            <p>"I've hired photo-booths for <u>six</u> galas. This was the first one guests actually queued for. <b>Everyone</b> left with a strip."</p>
+            <div class="note-sig">— Sophie K.<br/><em>Events Director · NGS</em></div>
+          </div>
+          <div class="pushpin red"></div>
+        </div>
+
+        <div class="strip-card" data-strip="bday" style="--r:-3deg;">
+          <div class="strip-frames">
+            <div class="strip-frame" style="background: linear-gradient(135deg,#c89a6a,#7a4a2a);"><span class="strip-label">bday</span></div>
+            <div class="strip-frame" style="background: linear-gradient(135deg,#e8b98a,#8a5a3a);"></div>
+            <div class="strip-frame" style="background: linear-gradient(135deg,#a87a5a,#4a2a1a);"></div>
+            <div class="strip-frame" style="background: linear-gradient(135deg,#d6a87a,#6a3a1a);"></div>
+          </div>
+          <div class="tape tape-tr"></div>
+          <div class="sticky-note yellow" style="--r:2deg;">
+            <p>"Sent a strip to my grandma in Manila. She <u>framed it</u>. Said it looked like photos from her own wedding, 1962."</p>
+            <div class="note-sig">— Carla M.<br/><em>Makati · Manila</em></div>
+          </div>
+          <div class="pushpin"></div>
+        </div>
+      </div>
+      <div class="board-hint" aria-hidden="true">
+        <span>← drag the board →</span>
+      </div>
+    </div>
+  </div>
+</section>
+</div><!-- /.story-group--trust -->
+
+<!-- ADD-ONS -->
+<details class="service-disclosure"><summary>Make it yours · optional extras</summary><section class="chapter addons-chapter" id="addons" data-screen-label="10 Add-ons">
+  <span class="chapter-numeral tl" aria-hidden="true">xɪɪ</span>
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <span class="eyebrow">Add-ons · 008</span>
+        <h2>Make the booth<br/><em>yours.</em></h2>
+      </div>
+      <p>
+        A few things are already included with every booking. The rest are optional
+        upgrades for weddings, brand activations, and guests who want a little more magic.
+      </p>
+    </div>
+
+    <div class="included-strip reveal">
+      <article class="included-panel">
+        <h3>Already in the booth</h3>
+        <ul class="included-list">
+          <li>Setup, teardown &amp; an on-site attendant</li>
+          <li>Unlimited prints and all digital files</li>
+          <li>Sticker pack and photo props at the booth</li>
+          <li>A looping GIF example board, so guests know what's possible</li>
+        </ul>
+        <div class="queue-display" aria-label="Sample queue number screen">
+          <span>Now serving</span>
+          <strong>A07</strong>
+          <span class="queue-qr-hint">On-screen queue number · scan QR for strip status</span>
+        </div>
+        <span class="custom-theme-note">Something else in mind? Just ask — we'll often make it work, depending on availability.</span>
+      </article>
+
+      <figure class="motion-example-card">
+        <div class="motion-example-copy">
+          <span>Example board</span>
+          <strong>See the strip move.</strong>
+        </div>
+        <div class="motion-preview-shell">
+          <div class="motion-preview-screen">
+            <img class="motion-gif-preview" src="photos/addons/example.gif?v=1" alt="Animated GIF photo strip example" loading="lazy" width="506" height="760" />
+            <span class="motion-sticker" aria-hidden="true">GIF</span>
+          </div>
+        </div>
+        <figcaption>Looping GIF preview</figcaption>
+      </figure>
+    </div>
+
+    <div class="addons-board-head reveal">
+      <span class="eyebrow">Then, make it yours</span>
+      <p>Optional upgrades — add any of these to your enquiry.</p>
+    </div>
+
+    <div class="addons-board reveal">
+      <article class="addon-card featured guestbook-addon" style="--r:-1deg;" data-addon-id="guestbook" role="button" tabindex="0" title="Add to enquiry form">
+        <h3>Guestbook, Glitter &amp; Glue</h3>
+        <p>A hands-on station for messages, stickers, instant prints, and messy little memories.</p>
+        <div class="addon-price"><span>S$68</span><small>now only</small></div>
+        <span class="addon-note">launch price</span>
+        <div class="addon-scribble" aria-hidden="true">glue</div>
+      </article>
+
+      <article class="addon-card" style="--r:1deg;" data-addon-id="more-styles" role="button" tabindex="0" title="Add to enquiry form">
+        <h3>Custom AI Style Request</h3>
+        <p>Every package already includes our full AI style library. Want something beyond that — a fully custom direction for your event?</p>
+        <span class="custom-theme-note">Got a theme? Tell us — we'll make it happen.</span>
+        <div class="addon-price">
+          <span>Free</span>
+        </div>
+        <div class="addon-scribble" aria-hidden="true">AI</div>
+      </article>
+
+      <article class="addon-card" style="--r:-.6deg;" data-addon-id="animation" role="button" tabindex="0" title="Add to enquiry form">
+        <img src="photos/addons/ai-animation.poster.webp" alt="Example of a guest portrait turned into a short AI motion clip" loading="lazy" decoding="async" width="72" height="72" style="width:72px; height:72px; object-fit:cover; border-radius:8px; margin-bottom:10px;" />
+        <h3>AI Animation &amp; Live Slideshow</h3>
+        <p>Motion clips from guest portraits, streamed live on venue screens during the event.</p>
+        <div class="addon-price">
+          <span class="addon-price-was">S$200</span>
+          <span>S$100</span>
+          <small>testing bundle</small>
+        </div>
+        <span class="addon-note">testing price</span>
+      </article>
+
+      <article class="addon-card" style="--r:.6deg;" data-addon-id="extra-hour" role="button" tabindex="0" title="Add to enquiry form">
+        <h3>Additional Hour</h3>
+        <p>Keep the booth open longer when the queue is still moving.</p>
+        <div class="addon-price"><span>S$180</span><small>per hour</small></div>
+      </article>
+
+      <article class="addon-card" style="--r:-.8deg;" data-addon-id="custom-ui" role="button" tabindex="0" title="Add to enquiry form">
+        <h3>Custom Interface</h3>
+        <p>Photobooth screen design matched to your wedding, brand, or party theme.</p>
+        <div class="addon-price"><span>S$180</span><small>design</small></div>
+      </article>
+
+      <article class="addon-card" style="--r:.8deg;" data-addon-id="custom-stickers" role="button" tabindex="0" title="Add to enquiry form">
+        <h3>Custom Stickers</h3>
+        <p>Sticker pack for the event, with AI-generated options available.</p>
+        <div class="addon-price"><span>S$180</span><small>pack</small></div>
+      </article>
+
+      <article class="addon-card keepsake-addon" style="--r:-1deg;" data-addon-id="keychain" role="button" tabindex="0" title="Add to enquiry form">
+        <h3>Keychains or Collector Cards</h3>
+        <p>Physical keepsakes from guest portraits — acrylic keychains or personalised collector cards with custom art and story stats.</p>
+        <details class="addon-expand" onclick="event.stopPropagation()">
+          <summary>See examples</summary>
+          <div class="addon-thumbs">
+            <img src="photos/reel/jenmike-keepsake.webp" alt="Gold frame portrait example" loading="lazy" decoding="async" width="72" height="72" />
+            <img src="photos/addons/collector-cards.webp" alt="Collector card example" loading="lazy" decoding="async" width="72" height="72" />
+          </div>
+        </details>
+        <span class="custom-theme-note">Custom themes welcome — tell us your idea</span>
+        <div class="addon-price"><span>S$330</span><small>up to 100 pieces</small></div>
+        <span class="addon-note">your choice of format</span>
+        <div class="addon-scribble" aria-hidden="true">keepsake</div>
+      </article>
+    </div>
+  </div>
+</section></details>
+
+<!-- ABOUT JEFF -->
+<section class="chapter about-chapter" id="about" data-screen-label="11 About Jeff">
+  <div class="wrap">
+    <div class="about-grid reveal">
+      <div class="about-portrait">
+        <div class="img">
+          <img src="photos/about/jeff.webp" alt="Jeff portrait" loading="lazy" decoding="async" width="800" height="1012" />
+        </div>
+        <div class="label">— Jeff, 2026</div>
+        <div class="stamp">Singapore · est. 2018</div>
+      </div>
+
+      <div class="about-copy">
+        <span class="eyebrow">The maker · 011</span>
+        <h2>Hi, I'm <em>Jeff.</em></h2>
+        <p class="lede">
+          I've been drawing portraits of strangers at Singapore markets for eight years
+          under the name <i>Playing With Pencil</i>. This booth is what happened when I asked:
+          <i>what if nostalgia and AI could share the same strip?</i>
+        </p>
+        <p>
+          Every sketch I do is two things at once: a likeness, and a <i>memory</i>. I
+          wanted a photobooth that did both — the ritual of film your parents remember,
+          with AI that can grade it in Kodak gold <i>or</i> paint you into a masterpiece.
+          Hardwood tripod, brass fittings, a model trained on forty years of photographs.
+          Six months of tinkering later, Playing With Photo was born.
+        </p>
+        <p>
+          I still show up to every event myself. If you book the booth, you're booking
+          <i>me</i> too — complete with terrible jokes and pencil smudges on my fingers.
+        </p>
+
+        <div class="signature">
+          <svg viewBox="0 0 260 80" style="height: 62px;">
+            <path d="M 10 50 Q 25 20 45 45 Q 55 60 70 35 Q 85 15 95 45 L 100 50 Q 110 30 125 50 Q 140 70 155 35 Q 170 10 185 45 Q 200 70 220 30 Q 240 10 250 30"
+                  stroke="var(--rust-2)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+            <path d="M 90 55 L 200 58" stroke="var(--rust-2)" stroke-width="1" fill="none" opacity=".5"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING — after proof, before book -->
+
 
 <!-- FAQ -->
 <section class="chapter faq-chapter" id="faq" data-screen-label="12 FAQ">
@@ -5875,12 +5642,12 @@
         <a href="/snapshot/">Quick book</a>
         <a href="#samples">Samples</a>
         <a href="#spark">AI examples</a>
-        <a href="#styles">Film looks</a>
+        <a href="#spark">Film looks</a>
         <a href="#demo">Filter &amp; GIF demo</a>
         <a href="#pricing">Packages</a>
-        <a href="#booth">The booth</a>
-        <a href="#reel">The ritual</a>
-        <a href="#styles">Styles</a>
+        <a href="#hero">The booth</a>
+        <a href="#samples">The ritual</a>
+        <a href="#spark">Styles</a>
         <a href="#testimonials">Reviews</a>
         <a href="#addons">Add-ons</a>
         <a href="#about">About</a>
@@ -5980,12 +5747,14 @@
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ScrollTrigger.min.js" defer></script>
 <script src="https://unpkg.com/lenis@1.3.26/dist/lenis.min.js" defer></script>
+<script src="service-hero.js?v=5" defer></script>
 <script src="scroll-experience.js?v=7" defer></script>
-<script src="bg.js?v=11" defer></script>
+<script src="bg.js?v=12" defer></script>
 <script src="load-three.js?v=1" defer></script>
-<script src="enhancements.js?v=11" defer></script>
+<script src="enhancements.js?v=12" defer></script>
 <script src="creation.js?v=12" defer></script>
-<script src="hero-scrub.js?v=49" defer></script>
+<script src="hero-scrub.js?v=50" defer></script>
+
 <script src="vision-scrub.js?v=16" defer></script>
 <script src="text-focus.js?v=1" defer></script>
 <script src="booth-scrub.js?v=32" defer></script>

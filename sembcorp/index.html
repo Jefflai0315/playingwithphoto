@@ -383,10 +383,10 @@ a:focus-visible, button:focus-visible, [role="listbox"]:focus-visible {
   justify-content: center;
   gap: 1.25rem;
   padding: 2.5rem 1.5rem 3rem;
-  min-height: 28rem;
 }
 .prints-desk figure {
   margin: 0;
+  min-width: 0;
 }
 .prints-desk img {
   display: block;
@@ -396,13 +396,15 @@ a:focus-visible, button:focus-visible, [role="listbox"]:focus-visible {
   box-shadow: 0 1.125rem 2.5rem rgba(28, 26, 23, 0.28);
 }
 .prints-wide {
-  flex: 1 1 22rem;
-  max-width: 38rem;
+  flex: 1 1 auto;
+  width: min(38rem, calc(100% - 10.5rem));
 }
+.prints-wide img { aspect-ratio: 1024 / 682; }
 .prints-strip {
-  flex: 0 0 8.25rem;
-  width: 8.25rem;
+  flex: 0 0 8.5rem;
+  width: 8.5rem;
 }
+.prints-strip img { aspect-ratio: 341 / 1024; }
 .close {
   padding: 3rem 1rem 3.5rem;
   border-top: 1px solid var(--line);
@@ -458,12 +460,15 @@ a:focus-visible, button:focus-visible, [role="listbox"]:focus-visible {
   .prints-copy h2 { font-size: 2.75rem; }
   .prints-desk {
     flex-direction: column;
-    align-items: center;
-    min-height: 0;
+    align-items: stretch;
     padding: 1.5rem 1rem 2.25rem;
   }
-  .prints-wide { max-width: 100%; flex-basis: auto; }
-  .prints-strip { width: min(11rem, 42vw); flex-basis: auto; }
+  .prints-wide { width: 100%; }
+  .prints-strip {
+    width: min(14rem, 58vw);
+    flex-basis: auto;
+    align-self: center;
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
@@ -560,10 +565,10 @@ a:focus-visible, button:focus-visible, [role="listbox"]:focus-visible {
       </div>
       <div class="prints-desk">
         <figure class="prints-wide">
-          <img src="assets/images/print-wide.webp" width="1024" height="682" alt="Landscape print: booth photo beside a Miniature Collectible look, Sembcorp sports layout">
+          <img src="assets/images/print-wide.jpg" width="1024" height="682" alt="Landscape print: booth photo beside a Miniature Collectible look, Sembcorp sports layout">
         </figure>
         <figure class="prints-strip">
-          <img src="assets/images/print-strip.webp" width="341" height="1024" alt="Vertical strip: two booth poses and a Miniature Collectible look, Sembcorp sports layout">
+          <img src="assets/images/print-strip.jpg" width="341" height="1024" alt="Vertical strip: two booth poses and a Miniature Collectible look, Sembcorp sports layout">
         </figure>
       </div>
     </section>

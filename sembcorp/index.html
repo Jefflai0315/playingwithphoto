@@ -120,8 +120,8 @@ a:focus-visible, button:focus-visible, [role="listbox"]:focus-visible {
 }
 .mosaic-grid {
   display: grid;
-  grid-template-columns: 1.25fr 1fr;
-  grid-template-rows: 1.08fr 0.92fr;
+  grid-template-columns: 1.2fr 1.2fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
   min-height: 0;
   background: var(--pitch);
 }
@@ -138,7 +138,7 @@ a:focus-visible, button:focus-visible, [role="listbox"]:focus-visible {
   color: var(--sheet);
   text-align: left;
 }
-.mosaic-grid button:first-child { grid-row: 1 / 3; }
+.mosaic-grid button:first-child { grid-column: 1 / 3; }
 .mosaic-grid img {
   width: 100%;
   height: 100%;
@@ -150,9 +150,11 @@ a:focus-visible, button:focus-visible, [role="listbox"]:focus-visible {
 .mosaic-grid span {
   position: absolute;
   left: 0.875rem;
+  right: 0.75rem;
   bottom: 0.875rem;
   font-size: 0.6875rem;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
+  line-height: 1.25;
   text-transform: uppercase;
   text-shadow: 0 1px 8px var(--ink);
 }
@@ -377,10 +379,9 @@ a:focus-visible, button:focus-visible, [role="listbox"]:focus-visible {
   .mosaic-copy h1 { font-size: 2.75rem; }
   .mosaic-grid {
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 42svh 28svh 28svh;
+    grid-template-rows: 38svh repeat(3, 26svh);
   }
   .mosaic-grid button:first-child {
-    grid-row: auto;
     grid-column: 1 / -1;
   }
   .pitch {
@@ -405,10 +406,10 @@ a:focus-visible, button:focus-visible, [role="listbox"]:focus-visible {
 </head>
 <body>
   <!--
-    THESIS: Still mosaic first; then a theater where thumbs change the clip in place. Refuses a tall name-list that hides the picture on a phone.
+    THESIS: Seven cute stills in a mosaic first; then a theater where thumbs change the clip in place. Refuses a tall name-list that hides the picture on a phone.
     OWN-WORLD: Event-paper, ink, champagne, serif titles; midnight pitch and thumbnail reel.
     STORY: Sembcorp scans cute stills, then plays each clip from a filmstrip, then sees the booth flow.
-    FIRST VIEWPORT: Copy left, four cute stills in a spanning mosaic. Primary action: Play the clips.
+    FIRST VIEWPORT: Copy left, seven cute stills in a spanning mosaic. Primary action: Play the clips.
     FORM: Sideline substitution board, candidate 7, seed 5b8a5253 — mosaic then theater.
     FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
   -->
@@ -423,14 +424,17 @@ a:focus-visible, button:focus-visible, [role="listbox"]:focus-visible {
     <section class="mosaic" aria-label="Cute look stills">
       <div class="mosaic-copy">
         <h1>Cute <em>looks</em></h1>
-        <p>These four lead the night. Tap one to play its clip, or scroll the strip below.</p>
+        <p>These cute looks lead the night. Tap one to play its clip, or scroll the strip below.</p>
         <a href="#theater">Play the clips</a>
       </div>
       <div class="mosaic-grid">
         <button type="button" data-look="0"><img src="assets/images/plushie_us.webp" alt=""><span>Plushies</span></button>
-        <button type="button" data-look="1"><img src="assets/images/miniature_collectible.webp" alt=""><span>Mini Figures</span></button>
-        <button type="button" data-look="2"><img src="assets/images/brick_world.webp" alt=""><span>Brick World</span></button>
-        <button type="button" data-look="3"><img src="assets/images/inflatable_universe.webp" alt=""><span>Inflatable Us</span></button>
+        <button type="button" data-look="1"><img src="assets/images/miniature_collectible.webp" alt=""><span>Miniature Collectible</span></button>
+        <button type="button" data-look="2"><img src="assets/images/arcade_game.webp" alt=""><span>Inside an Arcade Game</span></button>
+        <button type="button" data-look="3"><img src="assets/images/knitted_doll.webp" alt=""><span>Knitted Doll World</span></button>
+        <button type="button" data-look="4"><img src="assets/images/paper_world.webp" alt=""><span>Paper World</span></button>
+        <button type="button" data-look="5"><img src="assets/images/brick_world.webp" alt=""><span>Brick World</span></button>
+        <button type="button" data-look="6"><img src="assets/images/inflatable_universe.webp" alt=""><span>Inflatable Us</span></button>
       </div>
     </section>
 
@@ -489,7 +493,10 @@ a:focus-visible, button:focus-visible, [role="listbox"]:focus-visible {
   <script>
     const LOOKS = [
       { id: "plushie_us", name: "Plushies", group: "Cute", copy: "Recognisable plush characters in a stadium huddle." },
-      { id: "miniature_collectible", name: "Mini Figures", group: "Cute", copy: "The group as detailed collectible figures in miniature." },
+      { id: "miniature_collectible", name: "Miniature Collectible", group: "Cute", copy: "The group as detailed collectible figures in miniature." },
+      { id: "arcade_game", name: "Inside an Arcade Game", group: "Cute", copy: "Everyone as pixel characters inside a handheld basketball game." },
+      { id: "knitted_doll", name: "Knitted Doll World", group: "Cute", copy: "Hand-knitted wool dolls in a miniature stadium huddle." },
+      { id: "paper_world", name: "Paper World", group: "Cute", copy: "A layered paper-cut diorama of the group in a packed stadium." },
       { id: "brick_world", name: "Brick World", group: "Cute", copy: "The scene rebuilt in interlocking bricks." },
       { id: "inflatable_universe", name: "Inflatable Us", group: "Cute", copy: "Glossy, larger-than-life inflatable versions of the group." },
       { id: "football_goal_freeze", name: "Goal Freeze", group: "Sports", copy: "A stadium celebration held at its peak, confetti and droplets frozen in the lights." },

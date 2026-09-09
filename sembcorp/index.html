@@ -1,0 +1,456 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#F7F3EE">
+  <title>Sembcorp dinner looks · Playing With Photo</title>
+  <style>
+@font-face {
+  font-family: "Cormorant Garamond"; font-style: normal; font-weight: 500; font-display: swap;
+  src: url("assets/fonts/cormorant-garamond-500.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Cormorant Garamond"; font-style: italic; font-weight: 500; font-display: swap;
+  src: url("assets/fonts/cormorant-garamond-500-italic.ttf") format("truetype");
+}
+@font-face {
+  font-family: "DM Sans"; font-style: normal; font-weight: 400; font-display: swap;
+  src: url("assets/fonts/dm-sans-400.ttf") format("truetype");
+}
+@font-face {
+  font-family: "DM Sans"; font-style: normal; font-weight: 600; font-display: swap;
+  src: url("assets/fonts/dm-sans-600.ttf") format("truetype");
+}
+:root {
+  --paper: #F7F3EE;
+  --sheet: #FFFFFF;
+  --ink: #1C1A17;
+  --muted: #6B6258;
+  --line: #E5DFD5;
+  --gold: #A88963;
+  --red: #B85544;
+  --pitch: #1C1A17;
+  --sunken: #EFE8DD;
+  --serif: "Cormorant Garamond", Georgia, serif;
+  --sans: "DM Sans", system-ui, sans-serif;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.5;
+}
+a { color: inherit; }
+button { font: inherit; color: inherit; }
+a:focus-visible, button:focus-visible, [role="listbox"]:focus-visible {
+  outline: 0.1875rem solid var(--red);
+  outline-offset: 0.25rem;
+}
+.topbar {
+  min-height: 4.5rem;
+  padding: 0.875rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid var(--line);
+  background: var(--paper);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+.brand { display: flex; align-items: center; gap: 0.875rem; text-decoration: none; }
+.brand img { width: 7.25rem; height: auto; display: block; }
+.topbar-event {
+  margin: 0;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-align: right;
+  max-width: 22ch;
+}
+.dock {
+  min-height: calc(100svh - 4.5rem);
+  display: grid;
+  grid-template-columns: minmax(17rem, 38vw) minmax(0, 1fr);
+}
+.board {
+  background: var(--sheet);
+  border-right: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.board-copy {
+  padding: 1.75rem 1.375rem 1rem;
+  border-bottom: 1px solid var(--line);
+}
+.board-copy h1 {
+  margin: 0 0 0.75rem;
+  max-width: 8ch;
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 3.6rem;
+  line-height: 0.88;
+  letter-spacing: -0.035em;
+}
+.board-copy h1 em { font-style: italic; color: var(--gold); font-weight: 500; }
+.board-copy p {
+  margin: 0;
+  max-width: 28ch;
+  color: var(--muted);
+}
+.squad {
+  margin: 0;
+  padding: 0.5rem 0 1.5rem;
+  list-style: none;
+  overflow: auto;
+}
+.squad-group {
+  padding: 1.125rem 1.375rem 0.375rem;
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.squad button {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 2.4em 1fr;
+  gap: 0.625rem;
+  align-items: baseline;
+  margin: 0;
+  padding: 0.7rem 1.375rem;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+.squad button .num {
+  font-variant-numeric: tabular-nums;
+  color: var(--gold);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+}
+.squad button .name {
+  font-family: var(--serif);
+  font-size: 1.375rem;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+.squad button[aria-selected="true"] {
+  background: var(--pitch);
+  color: var(--sheet);
+}
+.squad button[aria-selected="true"] .num { color: var(--gold); }
+.squad button:hover:not([aria-selected="true"]) { background: var(--paper); }
+.pitch {
+  position: relative;
+  min-height: 68vh;
+  background: var(--pitch);
+  color: var(--sheet);
+  overflow: hidden;
+}
+.pitch-stage { position: absolute; inset: 0; }
+.pitch-stage img,
+.pitch-stage video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.pitch-stage video { position: absolute; inset: 0; opacity: 0; }
+.pitch.is-playing .pitch-stage video { opacity: 1; }
+.pitch.is-playing .pitch-stage img { opacity: 0; }
+.pitch-stage img,
+.pitch-stage video { transition: opacity 480ms cubic-bezier(.16,1,.3,1); }
+.pitch-hud {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1.25rem;
+  padding: 1.75rem 1.75rem 1.5rem;
+  background: rgba(28,26,23,.72);
+  pointer-events: none;
+}
+.pitch-hud > * { pointer-events: auto; }
+.pitch-meta { max-width: 36ch; }
+.pitch-meta strong {
+  display: block;
+  font-family: var(--serif);
+  font-size: 2.5rem;
+  font-weight: 500;
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+}
+.pitch-meta span {
+  display: block;
+  margin-top: 0.625rem;
+  color: var(--sunken);
+}
+.play {
+  min-height: 3rem;
+  padding: 0 1.125rem;
+  border: 1px solid rgba(255,255,255,.45);
+  background: transparent;
+  color: var(--sheet);
+  cursor: pointer;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  white-space: nowrap;
+}
+.play:hover { background: var(--sheet); color: var(--ink); }
+.night {
+  padding: 3rem 1rem;
+  display: grid;
+  grid-template-columns: minmax(0, .7fr) minmax(0, 1fr);
+  gap: 2.5rem 4.5rem;
+  border-top: 1px solid var(--line);
+  background: var(--sheet);
+}
+.night h2 {
+  margin: 0;
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 3.6rem;
+  line-height: 0.9;
+  letter-spacing: -0.035em;
+}
+.night ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 1.125rem;
+}
+.night li {
+  padding-top: 1rem;
+  border-top: 1px solid var(--line);
+  max-width: 48ch;
+  color: var(--muted);
+}
+.night li strong { color: var(--ink); }
+.close {
+  padding: 3rem 1rem 3.5rem;
+  border-top: 1px solid var(--line);
+}
+.close p {
+  margin: 0 0 1.125rem;
+  max-width: 42ch;
+  color: var(--muted);
+}
+.close a.reply {
+  display: inline-flex;
+  align-items: center;
+  min-height: 3rem;
+  padding: 0 1.25rem;
+  background: var(--ink);
+  color: var(--sheet);
+  text-decoration: none;
+}
+@media (max-width: 56.25rem) {
+  .dock { grid-template-columns: 1fr; }
+  .board { border-right: 0; border-bottom: 1px solid var(--line); }
+  .board-copy h1 { font-size: 2.75rem; }
+  .pitch { min-height: 72svh; }
+  .squad { max-height: none; }
+  .night { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .pitch-stage img, .pitch-stage video { transition: none; }
+}
+  </style>
+</head>
+<body>
+  <!--
+    THESIS: A sideline board lets the buyer pick a squad of looks; the pitch proves each one as still, then motion. Refuses an equal-card style gallery.
+    OWN-WORLD: Event-paper, ink, champagne numbers, serif names, hairline rules; the pitch is a dark field that holds the transformation.
+    STORY: Sembcorp scans the sports dinner set, plays each clip in place, and replies with the looks they want.
+    FIRST VIEWPORT: Sticky logo bar. Left: numbered squad. Right: full-bleed Goal Freeze still with play control on the turf.
+    FORM: Sideline substitution board, candidate 7, seed 5b8a5253.
+    FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
+  -->
+  <header class="topbar">
+    <a class="brand" href="https://playingwithphoto.com/">
+      <img src="assets/playing-with-photo-logo.png" width="116" height="36" alt="Playing With Photo">
+    </a>
+    <p class="topbar-event">Sembcorp company dinner</p>
+  </header>
+
+  <main>
+    <section class="dock" aria-label="Look selector">
+      <aside class="board">
+        <div class="board-copy">
+          <h1>Pick the <em>squad</em></h1>
+          <p>Ten sports looks, then four playful ones. Still first. The clip plays on the same pitch.</p>
+        </div>
+        <div class="squad" role="listbox" aria-label="Photobooth looks" id="squad"></div>
+      </aside>
+      <figure class="pitch" id="pitch">
+        <div class="pitch-stage">
+          <img id="still" src="assets/images/football_goal_freeze.webp" alt="Goal Freeze group sample" width="1200" height="800">
+          <video id="clip" src="assets/videos/football_goal_freeze.mp4" muted loop playsinline preload="metadata"></video>
+        </div>
+        <figcaption class="pitch-hud">
+          <div class="pitch-meta">
+            <strong id="look-name">Goal Freeze</strong>
+            <span id="look-copy">A stadium celebration held at its peak, confetti and droplets frozen in the lights.</span>
+          </div>
+          <button type="button" class="play" id="play" aria-pressed="false">Play clip</button>
+        </figcaption>
+      </figure>
+    </section>
+
+    <section class="night">
+      <h2>On the night</h2>
+      <ul>
+        <li><strong>Instant print</strong> from a gold backdrop, vintage-case camera, and sports props.</li>
+        <li><strong>QR on the booth</strong> opens each guest’s page so they can save the AI photos and the clip.</li>
+        <li><strong>A floor screen</strong> plays the latest clips as they complete, so the room can watch.</li>
+        <li><strong>Photography</strong> runs for the same hours as the booth.</li>
+      </ul>
+    </section>
+
+    <section class="close">
+      <p>Reply with the looks you want on the night. We will lock that set, then design the print around it.</p>
+      <a class="reply" href="https://wa.me/6589896901">WhatsApp Jeff · +65 8989 6901</a>
+    </section>
+  </main>
+
+  <script>
+    const LOOKS = [
+      { id: "football_goal_freeze", name: "Goal Freeze", group: "Sports", copy: "A stadium celebration held at its peak, confetti and droplets frozen in the lights." },
+      { id: "racing_driver", name: "Pit Lane", group: "Sports", copy: "Cinematic motorsport kit beside a race car in the pit lane." },
+      { id: "sports_anime", name: "Sports Anime", group: "Sports", copy: "A polished, high-energy sports-anime stadium scene." },
+      { id: "chrome_sports_card", name: "Chrome Card", group: "Sports", copy: "Each guest as an elite holographic collectible." },
+      { id: "football_manga_posed", name: "Manga Still Pose", group: "Sports", copy: "Nostalgic football manga, inked with motion trails." },
+      { id: "intense_football_anime", name: "Football Anime Still", group: "Sports", copy: "Modern football-anime stills with sharp linework and luminous auras." },
+      { id: "playful_street_football", name: "Playful Football", group: "Sports", copy: "Street football with paint, chalk, and hand-drawn energy." },
+      { id: "retro_arcade_basketball", name: "Digitized Hoops", group: "Sports", copy: "A digitised basketball game with pixel glow and arcade light." },
+      { id: "street_basketball_graffiti", name: "Graffiti Hoops", group: "Sports", copy: "Street-basketball portraiture with courts and spray paint." },
+      { id: "street_football_y2k", name: "Y2K Street Football", group: "Sports", copy: "Early-2000s street-football campaign texture." },
+      { id: "miniature_collectible", name: "Mini Figures", group: "Playful", copy: "The group as detailed collectible figures in miniature." },
+      { id: "plushie_us", name: "Plushies", group: "Playful", copy: "Recognisable plush characters in a stadium huddle." },
+      { id: "brick_world", name: "Brick World", group: "Playful", copy: "The scene rebuilt in interlocking bricks." },
+      { id: "inflatable_universe", name: "Inflatable Us", group: "Playful", copy: "Glossy, larger-than-life inflatable versions of the group." }
+    ];
+
+    const squad = document.getElementById("squad");
+    const pitch = document.getElementById("pitch");
+    const still = document.getElementById("still");
+    const clip = document.getElementById("clip");
+    const play = document.getElementById("play");
+    const lookName = document.getElementById("look-name");
+    const lookCopy = document.getElementById("look-copy");
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let index = 0;
+    let playTimer = 0;
+
+    function asset(look, kind) {
+      return kind === "image"
+        ? "assets/images/" + look.id + ".webp"
+        : "assets/videos/" + look.id + ".mp4";
+    }
+
+    function renderBoard() {
+      squad.innerHTML = "";
+      let last = "";
+      LOOKS.forEach((look, i) => {
+        if (look.group !== last) {
+          const label = document.createElement("div");
+          label.className = "squad-group";
+          label.textContent = look.group === "Sports" ? "Sports looks" : "Playful bench";
+          squad.appendChild(label);
+          last = look.group;
+        }
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.setAttribute("role", "option");
+        btn.setAttribute("aria-selected", i === index ? "true" : "false");
+        btn.innerHTML = '<span class="num">' + String(i + 1).padStart(2, "0") + '</span><span class="name">' + look.name + "</span>";
+        btn.addEventListener("click", () => select(i, true));
+        squad.appendChild(btn);
+      });
+    }
+
+    function showStillThenClip(autoplay) {
+      const look = LOOKS[index];
+      pitch.classList.remove("is-playing");
+      play.setAttribute("aria-pressed", "false");
+      play.textContent = "Play clip";
+      clip.pause();
+      still.src = asset(look, "image");
+      still.alt = look.name + " group sample";
+      lookName.textContent = look.name;
+      lookCopy.textContent = look.copy;
+      if (clip.getAttribute("src") !== asset(look, "video")) {
+        clip.src = asset(look, "video");
+        clip.load();
+      }
+      window.clearTimeout(playTimer);
+      if (autoplay && !reduceMotion) {
+        playTimer = window.setTimeout(startClip, 1100);
+      }
+    }
+
+    function startClip() {
+      pitch.classList.add("is-playing");
+      play.setAttribute("aria-pressed", "true");
+      play.textContent = "Show still";
+      const run = clip.play();
+      if (run && typeof run.catch === "function") run.catch(() => {});
+    }
+
+    function stopClip() {
+      pitch.classList.remove("is-playing");
+      play.setAttribute("aria-pressed", "false");
+      play.textContent = "Play clip";
+      clip.pause();
+    }
+
+    function select(next, autoplay) {
+      index = (next + LOOKS.length) % LOOKS.length;
+      [...squad.querySelectorAll('[role="option"]')].forEach((btn, i) => {
+        btn.setAttribute("aria-selected", i === index ? "true" : "false");
+      });
+      showStillThenClip(autoplay);
+    }
+
+    play.addEventListener("click", () => {
+      window.clearTimeout(playTimer);
+      if (pitch.classList.contains("is-playing")) stopClip();
+      else startClip();
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowDown" || event.key === "ArrowRight") {
+        event.preventDefault();
+        select(index + 1, true);
+      } else if (event.key === "ArrowUp" || event.key === "ArrowLeft") {
+        event.preventDefault();
+        select(index - 1, true);
+      } else if (event.key === " ") {
+        if (event.target === play) return;
+        event.preventDefault();
+        play.click();
+      }
+    });
+
+    renderBoard();
+    select(0, true);
+  </script>
+</body>
+</html>

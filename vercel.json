@@ -20,6 +20,16 @@
       "has": [{ "type": "host", "value": "playingwithphoto.vercel.app" }],
       "destination": "https://playingwithphoto.com/$1",
       "permanent": true
+    },
+    {
+      "source": "/catalogue",
+      "destination": "/catalogue/ai-styles.html",
+      "permanent": true
+    },
+    {
+      "source": "/catalogue/",
+      "destination": "/catalogue/ai-styles.html",
+      "permanent": true
     }
   ],
   "headers": [

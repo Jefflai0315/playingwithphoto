@@ -348,6 +348,61 @@ a:focus-visible, button:focus-visible, [role="listbox"]:focus-visible {
   letter-spacing: 0;
   font-size: 16px;
 }
+.prints {
+  display: grid;
+  grid-template-columns: minmax(15rem, 0.55fr) minmax(0, 1.45fr);
+  border-top: 1px solid var(--line);
+  background: var(--sunken);
+}
+.prints-copy {
+  padding: 3rem 1.75rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1rem;
+  background: var(--sheet);
+  border-right: 1px solid var(--line);
+}
+.prints-copy h2 {
+  margin: 0;
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 3.6rem;
+  line-height: 0.9;
+  letter-spacing: -0.035em;
+}
+.prints-copy h2 em { font-style: italic; color: var(--gold); font-weight: 500; }
+.prints-copy p {
+  margin: 0;
+  max-width: 28ch;
+  color: var(--muted);
+}
+.prints-desk {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 1.25rem;
+  padding: 2.5rem 1.5rem 3rem;
+  min-height: 28rem;
+}
+.prints-desk figure {
+  margin: 0;
+}
+.prints-desk img {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: var(--sheet);
+  box-shadow: 0 1.125rem 2.5rem rgba(28, 26, 23, 0.28);
+}
+.prints-wide {
+  flex: 1 1 22rem;
+  max-width: 38rem;
+}
+.prints-strip {
+  flex: 0 0 8.25rem;
+  width: 8.25rem;
+}
 .close {
   padding: 3rem 1rem 3.5rem;
   border-top: 1px solid var(--line);
@@ -393,8 +448,22 @@ a:focus-visible, button:focus-visible, [role="listbox"]:focus-visible {
   }
   .pitch-meta strong { font-size: 1.375rem; }
   .pitch-meta span { display: none; }
-  .flow, .night { grid-template-columns: 1fr; }
+  .flow, .night, .prints { grid-template-columns: 1fr; }
   .flow-photo img { max-height: 70svh; }
+  .prints-copy {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+    padding: 1.75rem 1rem;
+  }
+  .prints-copy h2 { font-size: 2.75rem; }
+  .prints-desk {
+    flex-direction: column;
+    align-items: center;
+    min-height: 0;
+    padding: 1.5rem 1rem 2.25rem;
+  }
+  .prints-wide { max-width: 100%; flex-basis: auto; }
+  .prints-strip { width: min(11rem, 42vw); flex-basis: auto; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
@@ -408,7 +477,7 @@ a:focus-visible, button:focus-visible, [role="listbox"]:focus-visible {
   <!--
     THESIS: Seven cute stills in a mosaic first; then a theater where thumbs change the clip in place. Refuses a tall name-list that hides the picture on a phone.
     OWN-WORLD: Event-paper, ink, champagne, serif titles; midnight pitch and thumbnail reel.
-    STORY: Sembcorp scans cute stills, then plays each clip from a filmstrip, then sees the booth flow.
+    STORY: Sembcorp scans cute stills, then plays each clip from a filmstrip, then sees the booth flow and two sample prints.
     FIRST VIEWPORT: Copy left, seven cute stills in a spanning mosaic. Primary action: Play the clips.
     FORM: Sideline substitution board, candidate 7, seed 5b8a5253 — mosaic then theater.
     FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
@@ -484,8 +553,23 @@ a:focus-visible, button:focus-visible, [role="listbox"]:focus-visible {
       </ul>
     </section>
 
+    <section class="prints" aria-label="Sample photo prints">
+      <div class="prints-copy">
+        <h2>The <em>print</em></h2>
+        <p>Two sample layouts: a landscape pair of the booth photo and the cute look, and a strip with two poses plus the look.</p>
+      </div>
+      <div class="prints-desk">
+        <figure class="prints-wide">
+          <img src="assets/images/print-wide.webp" width="1024" height="682" alt="Landscape print: booth photo beside a Miniature Collectible look, Sembcorp sports layout">
+        </figure>
+        <figure class="prints-strip">
+          <img src="assets/images/print-strip.webp" width="341" height="1024" alt="Vertical strip: two booth poses and a Miniature Collectible look, Sembcorp sports layout">
+        </figure>
+      </div>
+    </section>
+
     <section class="close">
-      <p>Reply with the looks you want on the night. We will lock that set, then design the print around it.</p>
+      <p>Reply with the looks you want on the night. The print can follow this sports layout, or we lock a different one.</p>
       <a class="reply" href="https://wa.me/6589896901">WhatsApp Jeff · +65 8989 6901</a>
     </section>
   </main>

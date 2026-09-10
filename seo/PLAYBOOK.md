@@ -55,6 +55,36 @@ Note: users search "photo booth" (two words). Site copy historically used
 - [x] Uncommitted hero-redesign WIP — resolved, confirmed clean 2026-09-09 (committed to `main` sometime after 2026-09-06, visible as "Refactor service hero implementation and enhance accessibility features" and related hero-scrub commits). No longer a loss risk.
 - [x] `/catalogue/` pages (shipped 2026-09-08, outside this loop) — found and fixed 2026-09-09: canonical mismatch (ai-styles.html pointed to an empty meta-refresh stub instead of itself), missing meta description + OG/Twitter tags on both catalogue pages, sitemap pointed at the same empty stub. Fixed: self-canonical, added meta tags, proper 308 redirect in vercel.json replacing the meta-refresh, sitemap updated to point at the real content URL. Branch `seo-improvements-8`. See seo/audits/2026-09-09.md §3.
 
+## Recurring checklist (every run, regardless of backlog state)
+
+Added 2026-09-10 — Jeff wants active demand-gen work (reviews, GBP posts,
+outreach, video content), not just one-off technical fixes, folded into the
+standing loop. Check these every iteration, not only when the backlog is
+empty:
+
+1. **GBP reviews** — check for new Google reviews since last run. Draft a
+   reply for each (see tone/style in past replies, e.g.
+   `seo/gbp-posts-queue.md`), and draft a testimonial-card proposal for the
+   homepage corkboard if the review is quotable (see
+   `seo/testimonial-cards-proposal.md` for the pattern/process — always a
+   proposal, never applied without Jeff confirming attribution/photo).
+2. **GBP Posts queue** (`seo/gbp-posts-queue.md`) — check how many drafted
+   posts are still unposted; top up the queue with 2-3 fresh drafts once
+   it's down to 1-2 remaining, so Jeff always has a ready stock.
+3. **Outreach tracking** (`seo/outreach-drafts.md`) — check send/reply
+   status on every drafted email; chase up or redirect (e.g. the Blissful
+   Brides bounce → contact form) rather than re-drafting from scratch.
+4. **YouTube/video content** — check whether any new AI style/video assets
+   have shipped (e.g. new `/catalogue/` entries) that could feed a new
+   Short; note format constraints (existing catalogue clips are 4:3, ~5s —
+   need reformatting/combining to vertical, see the 2026-09-10 sample in
+   this iteration's session) rather than assuming raw footage is upload-
+   ready.
+5. **Structured data freshness** — once Jeff confirms current GBP star
+   rating + review count, add/update `aggregateRating` on the homepage's
+   `LocalBusiness` JSON-LD (real numbers only, never estimate/fabricate).
+   Blocked as of 2026-09-10 on Jeff confirming the current live count.
+
 ## When the backlog empties
 
 Do not idle. On a run where every backlog item is done/blocked-on-Jeff, switch to

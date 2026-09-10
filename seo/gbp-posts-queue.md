@@ -14,6 +14,12 @@ Teacher's Day/superhero → general "what's new".
 Mark each `[ ]` → `[x]` and add the date once posted, so the next SEO
 iteration knows what's left in the queue instead of re-drafting.
 
+**Status 2026-09-10**: Jeff confirmed "GBP posts/replies done" in-session —
+both review replies confirmed posted (checked off below). Which of the 5
+post drafts specifically went up wasn't specified; checkboxes below left
+unchecked until confirmed. NEXT iteration: ask Jeff which posts are live
+before assuming any are still queued.
+
 ## 1. Wedding-angle
 
 - [ ] Posted:
@@ -72,7 +78,7 @@ iteration knows what's left in the queue instead of re-drafting.
 ## Review replies drafted 2026-09-10 (separate from Posts — post via the
 "Reply" button under each review on the GBP dashboard)
 
-- [ ] Posted — Christine Chew (wedding review):
+- [x] Posted 2026-09-10 — Christine Chew (wedding review):
 
 > Hi Christine, thank you so much for this — it means a lot! I'm really
 > glad the photobooth added to the fun for your family and friends, and
@@ -80,7 +86,7 @@ iteration knows what's left in the queue instead of re-drafting.
 > That's exactly what I aim for with every wedding. Congratulations
 > again, and I'd love to be part of your future celebrations too!
 
-- [ ] Posted — superhero/Teacher's Day review:
+- [x] Posted 2026-09-10 — superhero/Teacher's Day review:
 
 > Thank you for the kind words! That superhero theme was such a fun one
 > to work on — seeing the teachers and staff get into the AI graphics

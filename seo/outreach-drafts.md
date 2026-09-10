@@ -30,9 +30,16 @@ once sent, and note any reply.
 > Jeff
 > Playing With Photo
 
-## Blissful Brides (free/editorial — merlin@citrusmedia.com.sg)
+## Blissful Brides (free/editorial)
 
-- [ ] Sent:
+- [x] Attempted 2026-09-10 via email to merlin@citrusmedia.com.sg — **bounced**
+      ("Address not found"). That address is stale/wrong; their real contact
+      email is Cloudflare-obfuscated on-site and couldn't be extracted via
+      fetch. **Use their contact form instead**:
+      https://www.blissfulbrides.sg/contact-us (Name, Telephone, Email,
+      Address, Message fields) — paste the message body below into the
+      Message field.
+- [ ] Sent via contact form:
 - [ ] Reply received:
 
 > Subject: Small Singapore photo booth business — considering a listing

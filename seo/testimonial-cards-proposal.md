@@ -1,94 +1,54 @@
-# Testimonial cards proposal — 2 new Google reviews
+# Testimonial cards — Patricia Chin & Christine Chew
 
-Drafted 2026-09-10. **Not applied to index.html** — this is a visible
-content/design change (new cards in the `#testimonials` corkboard), so per
-the SEO loop rule it's a proposal for Jeff to approve before it ships.
+Drafted 2026-09-10, **shipped 2026-09-14** — Jeff supplied real event
+photos for both (`patricia.png` and `Teacher's day`, both from his
+Downloads folder), so option (a) was used instead of the photo-less
+note-only variant originally drafted here.
 
-## Open questions before this can go live
+## Resolution log
 
-1. ~~**Attribution**~~ — **resolved 2026-09-14**, live-checked directly on
-   the GBP Reviews dashboard: the wedding review is from **Patricia Chin**,
-   the Teacher's Day/superhero review is from **Christine Chew**. (This was
-   backwards in the original draft below and in `gbp-posts-queue.md`'s
-   reply labels — reply *content* was fine, only the name labels were
-   swapped; both are now corrected.) There's also a third review since this
-   was drafted — see "New review" note at the bottom.
-2. **No event photos available**: all 5 existing corkboard cards use a real
-   photo from that specific event (`photos/testimonials/*.webp`). These two
-   are text-only Google reviews with no attached photo, so either:
-   - (a) you have real photos from Christine's wedding or the Teacher's Day
-     event I can drop in to match the existing `single-photo` card style, or
-   - (b) use the photo-less "note-only" card variant drafted below (new,
-     small CSS addition — reuses the same pushpin/tape/sticky-note visual
-     language, just without the polaroid strip). Reasonable for a corkboard
-     (real corkboards hold plain notes too), but it's a new visual pattern
-     worth a quick look before shipping.
-3. Should each card also carry a "★★★★★ Google review" badge, to make clear
-   these are verified Google reviews and not written testimonials? Included
-   below — remove if you'd rather keep it consistent with the plain
-   `note-sig` style of the other 5 cards.
+1. **Attribution** — resolved 2026-09-14 by live-checking the GBP Reviews
+   dashboard directly: the wedding review is from **Patricia Chin**, the
+   Teacher's Day/superhero review is from **Christine Chew**. (Was backwards
+   in the original 2026-09-10 draft and in `gbp-posts-queue.md`'s reply
+   labels — reply *content* was always posted to the correct review, only
+   the name labels in these tracking files were swapped.)
+2. **Photos** — resolved 2026-09-14. Jeff provided both source strips
+   (already the actual AI photo booth output, not raw event photos).
+   Resized to 800px width, saved as both `.png` (source) and `.webp`
+   (compressed, quality 68) in `photos/testimonials/`:
+   `patricia.webp` (146KB) and `christine.webp` (195KB) — in line with the
+   size of the other strip images in that folder (60dad.webp 117KB,
+   bday.webp 95KB).
+3. **Google review badge** — not added. Went with a lighter-weight
+   `<em>Wedding · Google review</em>` / `<em>Teacher's Day · Google
+   review</em>` line in the existing `note-sig` element instead of a new
+   `.google-badge` CSS class + markup pattern — avoids introducing a new
+   visual pattern for two cards when the existing `note-sig` slot already
+   had room for it.
 
-## Draft: option (b), photo-less "note-only" card
+## What shipped
 
-New CSS (add near the existing `.strip-card`/`.sticky-note` rules,
-~line 3696 in `index.html`):
+Two new `.strip-card.single-photo` entries added to `#testiBoard` in
+`index.html`, matching the existing 5 cards' markup pattern exactly
+(same `strip-frames`/`tape`/`sticky-note`/`pushpin` structure, `single-photo`
+CSS already hides the placeholder frame/tape/pushpin elements and shows
+just the real photo + sticky note):
 
-```css
-.strip-card.note-only {
-  width: clamp(170px, 15vw, 210px);
-}
-.strip-card.note-only .sticky-note {
-  position: static;
-  transform: rotate(var(--r, 0deg));
-  width: 100%;
-  min-height: 210px;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-.strip-card.note-only .google-badge {
-  display: block;
-  font-family: var(--sans, sans-serif);
-  font-size: 10px;
-  letter-spacing: .06em;
-  text-transform: uppercase;
-  color: #8a6a3a;
-  margin-bottom: 6px;
-}
-```
+- `data-strip="patricia"` — pink sticky note, pull-quote: "Our guests
+  wouldn't stop talking about it — the customisation and effects made it
+  feel made for our wedding, not just rented for it." — Patricia Chin.
+- `data-strip="superhero"` — yellow sticky note, pull-quote: "Teachers and
+  staff turned into their own superheroes — real AI graphics and video,
+  not just a filter. Will definitely use them again." — Christine Chew.
 
-New HTML (insert inside `.corkboard-rail`, alongside the 5 existing
-`.strip-card` divs, around line 4990 before `</div><!-- /.corkboard-rail -->`):
+Verified visually in the browser preview (local `http.server`, both mobile
+and wider viewports) — cards render correctly, images load, no console
+errors, horizontal drag/scroll on the corkboard still works.
 
-```html
-<div class="strip-card note-only" data-strip="google-wedding" style="--r:-3deg;">
-  <div class="tape tape-tl"></div>
-  <div class="sticky-note yellow">
-    <span class="google-badge">★★★★★ Google review</span>
-    <p>"Our guests wouldn't stop talking about it — the customisation and
-    effects made it feel made for our wedding, not just rented for it."</p>
-    <div class="note-sig">— Patricia Chin<br/><em>via Google</em></div>
-  </div>
-  <div class="pushpin"></div>
-</div>
+## Full original review text (for reference)
 
-<div class="strip-card note-only" data-strip="google-teachers" style="--r:2deg;">
-  <div class="tape tape-tr"></div>
-  <div class="sticky-note">
-    <span class="google-badge">★★★★★ Google review</span>
-    <p>"Teachers and staff turned into their own superheroes — real AI
-    graphics and video, not just a filter. <b>Will definitely use them
-    again.</b>"</p>
-    <div class="note-sig">— Christine Chew<br/><em>via Google</em></div>
-  </div>
-  <div class="pushpin red"></div>
-</div>
-```
-
-## Full original review text (for reference / picking a different pull-quote)
-
-**Wedding review:**
+**Patricia Chin — wedding:**
 > We had such a great experience with Jeff and the photobooth at our
 > wedding! Our family and friends had so much fun, and we received so many
 > comments from our guests about how engaging and enjoyable the photobooth
@@ -99,7 +59,7 @@ New HTML (insert inside `.corkboard-rail`, alongside the 5 existing
 > to our wedding! We would definitely engage his services again for future
 > events and would highly recommend him to our friends and family.
 
-**Teacher's Day / superhero-theme review:**
+**Christine Chew — Teacher's Day / superhero theme:**
 > Great experience with Playing with Photo Photo Booth for an event. Jeff
 > was very professional and easy to work with, providing many nice
 > customised options for our photo booth printouts. What's unique and
@@ -108,23 +68,16 @@ New HTML (insert inside `.corkboard-rail`, alongside the 5 existing
 > teachers and staff had a lot of fun doing that. Will definitely use them
 > again for other events!
 
-## New review found 2026-09-14
+## Next candidate: Jaslynn Lai (birthday party)
 
-A third review is now live on GBP: **Jaslynn Lai**, daughter's 7th
-birthday party, "kids really enjoyed it..." (full quote not yet captured —
-see `gbp-posts-queue.md`). Once the full text is available, consider a
-third note-only card for the birthday-party angle — the current 5 cards +
-these 2 proposed ones skew wedding/corporate, and a birthday-party
-testimonial would round out the "any event type" story. Not drafted yet;
-pending the full review text and Jeff's sign-off on the first two cards.
+Full review text now captured (2026-09-14):
+> We tried this for my daughter's 7th birthday and the kids really enjoyed
+> it. The AI animals were such a cute touch haha, they got so excited
+> seeing the animals appear and walk around them. A few of them kept coming
+> back to try again 😂 Really nice idea Happy to support a small local
+> business doing something creative like this ❤️
 
-## Next step
-
-Attribution is now resolved (see above) — the remaining blocker is
-photo-or-no-photo (open question 2). Once Jeff picks (a) real photos or
-(b) ship the note-only variant as drafted, apply directly to `index.html`,
-verify visually in the browser preview (both light content and the
-drag/scroll interaction on the corkboard), then ship as a normal
-technical/content commit — no separate branch needed since it's additive
-content, not a behavior change, but still worth a quick before/after
-screenshot check per the verification workflow.
+A third card for the birthday-party angle would round out the corkboard
+(currently wedding/corporate/gala-heavy). **Needs a photo strip from that
+event** — same as the first two, Jeff would need to supply the actual booth
+output image before this can be drafted the same way. Not shipped yet.

@@ -78,18 +78,43 @@ before assuming any are still queued.
 ## Review replies drafted 2026-09-10 (separate from Posts — post via the
 "Reply" button under each review on the GBP dashboard)
 
-- [x] Posted 2026-09-10 — Christine Chew (wedding review):
+**Attribution correction (2026-09-14)**: live-checked the GBP Reviews
+dashboard directly. The names below were swapped in earlier drafts — the
+reply *content* was posted to the right review in each case, only the
+name labels in this file were wrong. Corrected:
 
-> Hi Christine, thank you so much for this — it means a lot! I'm really
+- [x] Posted 2026-09-10 — **Patricia Chin** (wedding review, "such a great
+  experience with Jeff and the photobooth at our wedding..."):
+
+> Hi Patricia, thank you so much for this — it means a lot! I'm really
 > glad the photobooth added to the fun for your family and friends, and
 > that the customisation and effects felt personal to your celebration.
 > That's exactly what I aim for with every wedding. Congratulations
 > again, and I'd love to be part of your future celebrations too!
 
-- [x] Posted 2026-09-10 — superhero/Teacher's Day review:
+- [x] Posted 2026-09-10 — **Christine Chew** (Teacher's Day/superhero
+  review, "Great experience with Playing with Photo Photo Booth for an
+  event..."):
 
 > Thank you for the kind words! That superhero theme was such a fun one
 > to work on — seeing the teachers and staff get into the AI graphics
 > and videos is exactly why I love doing this. Really appreciate you
 > taking the time to share, and I'd be glad to help make your next event
 > just as memorable!
+
+## New review found 2026-09-14 — needs a reply
+
+- [ ] **Jaslynn Lai** (4 days ago as of 2026-09-14 — daughter's 7th
+  birthday party, "kids really enjoyed it..." — full text truncated
+  in-session, GBP dashboard became unresponsive to further automated
+  reads before the full quote could be captured). Draft reply below —
+  Jeff, please skim the full review on the dashboard before posting in
+  case the draft misses something specific she mentioned:
+
+> Hi Jaslynn, thank you so much for sharing this! So glad the kids had a
+> blast at your daughter's 7th birthday — birthday parties are always
+> some of our favourite events to bring the AI booth to, the excitement
+> is contagious. Hope she had a wonderful celebration, and we'd love to
+> be part of the next one too!
+
+- [ ] Reply posted:

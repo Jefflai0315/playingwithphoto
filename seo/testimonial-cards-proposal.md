@@ -6,12 +6,13 @@ the SEO loop rule it's a proposal for Jeff to approve before it ships.
 
 ## Open questions before this can go live
 
-1. **Attribution**: the two reviews you pasted aren't clearly separated by
-   name in the copy-paste. Reading the layout, "Christine Chew" appears to
-   be the byline for the **second** (Teacher's Day/superhero) review, not
-   the wedding one — the opposite of how the reply drafts were labeled
-   earlier in this session. Please confirm which reviewer wrote which
-   before a name goes into a public card.
+1. ~~**Attribution**~~ — **resolved 2026-09-14**, live-checked directly on
+   the GBP Reviews dashboard: the wedding review is from **Patricia Chin**,
+   the Teacher's Day/superhero review is from **Christine Chew**. (This was
+   backwards in the original draft below and in `gbp-posts-queue.md`'s
+   reply labels — reply *content* was fine, only the name labels were
+   swapped; both are now corrected.) There's also a third review since this
+   was drafted — see "New review" note at the bottom.
 2. **No event photos available**: all 5 existing corkboard cards use a real
    photo from that specific event (`photos/testimonials/*.webp`). These two
    are text-only Google reviews with no attached photo, so either:
@@ -67,7 +68,7 @@ New HTML (insert inside `.corkboard-rail`, alongside the 5 existing
     <span class="google-badge">★★★★★ Google review</span>
     <p>"Our guests wouldn't stop talking about it — the customisation and
     effects made it feel made for our wedding, not just rented for it."</p>
-    <div class="note-sig">— [Name TBD — wedding]<br/><em>via Google</em></div>
+    <div class="note-sig">— Patricia Chin<br/><em>via Google</em></div>
   </div>
   <div class="pushpin"></div>
 </div>
@@ -79,7 +80,7 @@ New HTML (insert inside `.corkboard-rail`, alongside the 5 existing
     <p>"Teachers and staff turned into their own superheroes — real AI
     graphics and video, not just a filter. <b>Will definitely use them
     again.</b>"</p>
-    <div class="note-sig">— [Name TBD — Teacher's Day event]<br/><em>via Google</em></div>
+    <div class="note-sig">— Christine Chew<br/><em>via Google</em></div>
   </div>
   <div class="pushpin red"></div>
 </div>
@@ -107,11 +108,23 @@ New HTML (insert inside `.corkboard-rail`, alongside the 5 existing
 > teachers and staff had a lot of fun doing that. Will definitely use them
 > again for other events!
 
+## New review found 2026-09-14
+
+A third review is now live on GBP: **Jaslynn Lai**, daughter's 7th
+birthday party, "kids really enjoyed it..." (full quote not yet captured —
+see `gbp-posts-queue.md`). Once the full text is available, consider a
+third note-only card for the birthday-party angle — the current 5 cards +
+these 2 proposed ones skew wedding/corporate, and a birthday-party
+testimonial would round out the "any event type" story. Not drafted yet;
+pending the full review text and Jeff's sign-off on the first two cards.
+
 ## Next step
 
-Once Jeff confirms attribution + photo-or-no-photo, apply directly to
-`index.html`, verify visually in the browser preview (both light content
-and the drag/scroll interaction on the corkboard), then ship as a normal
+Attribution is now resolved (see above) — the remaining blocker is
+photo-or-no-photo (open question 2). Once Jeff picks (a) real photos or
+(b) ship the note-only variant as drafted, apply directly to `index.html`,
+verify visually in the browser preview (both light content and the
+drag/scroll interaction on the corkboard), then ship as a normal
 technical/content commit — no separate branch needed since it's additive
 content, not a behavior change, but still worth a quick before/after
 screenshot check per the verification workflow.

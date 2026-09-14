@@ -32,6 +32,15 @@ before assuming any are still queued.
 
 ## 2. How it works (explainer)
 
+- [ ] **Draft loaded into the live GBP "Add post" composer 2026-09-15** —
+  text typed in, waiting on an image + your click to publish. The
+  automation can't drive the image picker (it's in a cross-origin iframe
+  business.google.com embeds inside Google Search — outside what the
+  browser tool can reach), so: open business.google.com/posts → your
+  in-progress "Update" post should still be there (or paste this text
+  fresh if it wasn't saved), attach a photo (suggested:
+  `photos/strips/wedding-ghibli-grid.jpg` — an actual booth output, shows
+  the transformation), then hit Post.
 - [ ] Posted:
 
 > How does an AI photobooth actually work? Guests take a photo strip,
@@ -55,7 +64,12 @@ before assuming any are still queued.
 
 ## 4. Teacher's Day / superhero-theme (AI-focused)
 
-- [ ] Posted:
+- [x] **Posted** — live-confirmed 2026-09-15, published ~2026-09-11 ("4
+  days ago"). Jeff edited the headline/CTA to add a limited-time offer
+  ("$100 Off Limited Offer - Book by 31 Oct 2026") but kept the body copy
+  close to the draft below, opening "Superheroes for a day! 🦸 For a
+  recent Teachers' Day celebration, our AI photobooth turned every
+  teacher and staff...". Has a video attached.
 
 > Superheroes for a day! For a recent Teachers' Day celebration, our AI
 > photobooth turned every teacher and staff member into their own
@@ -67,7 +81,11 @@ before assuming any are still queued.
 
 ## 5. General "what's new" (reviews-led)
 
-- [ ] Posted:
+- [x] **Posted** — live-confirmed 2026-09-15, published ~2026-09-11 ("4
+  days ago"), body copy matches the draft below closely ("Another
+  wedding, another set of guests who couldn't get enough of the AI
+  photobooth! Vintage film filters..."). Has Patricia's wedding photo
+  attached.
 
 > Another wedding, another set of guests who couldn't get enough of the
 > AI photobooth! Vintage film filters, painter-style portraits, and now
@@ -104,17 +122,22 @@ name labels in this file were wrong. Corrected:
 
 ## New review found 2026-09-14 — needs a reply
 
-- [ ] **Jaslynn Lai** (4 days ago as of 2026-09-14 — daughter's 7th
-  birthday party, "kids really enjoyed it..." — full text truncated
-  in-session, GBP dashboard became unresponsive to further automated
-  reads before the full quote could be captured). Draft reply below —
-  Jeff, please skim the full review on the dashboard before posting in
-  case the draft misses something specific she mentioned:
+- [ ] **Jaslynn Lai** (daughter's 7th birthday party). Full review text
+  (captured 2026-09-14):
 
-> Hi Jaslynn, thank you so much for sharing this! So glad the kids had a
-> blast at your daughter's 7th birthday — birthday parties are always
-> some of our favourite events to bring the AI booth to, the excitement
-> is contagious. Hope she had a wonderful celebration, and we'd love to
-> be part of the next one too!
+> We tried this for my daughter's 7th birthday and the kids really
+> enjoyed it. The AI animals were such a cute touch haha, they got so
+> excited seeing the animals appear and walk around them. A few of them
+> kept coming back to try again 😂 Really nice idea Happy to support a
+> small local business doing something creative like this ❤️
+
+Reply (final, Jeff-edited for a plainer tone):
+
+> Hi Jaslynn, thank you for this! Made my day reading about the kids
+> going back for more with the animals 😂 that's honestly my favourite
+> reaction to see. Glad it added something fun to your daughter's
+> birthday, and really appreciate you supporting the small business side
+> of it too. Hope she had a great one — would love to be part of the next
+> celebration!
 
 - [ ] Reply posted:

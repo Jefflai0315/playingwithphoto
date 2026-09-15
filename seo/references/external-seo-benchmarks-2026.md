@@ -1,5 +1,7 @@
 # External SEO benchmarks (2026)
 
+<!-- Last verified: 2026-09-15 -->
+
 Distilled 2026-09-15 from [AgriciDaniel/claude-seo](https://github.com/AgricIDaniel/claude-seo)
 (MIT-licensed reference data, read for research — no code from that project
 runs anywhere in this repo or this loop). Kept only what's actually relevant

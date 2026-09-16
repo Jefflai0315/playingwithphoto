@@ -120,10 +120,10 @@ name labels in this file were wrong. Corrected:
 > taking the time to share, and I'd be glad to help make your next event
 > just as memorable!
 
-## New review found 2026-09-14 — needs a reply
+## Reviews found 2026-09-17
 
-- [ ] **Jaslynn Lai** (daughter's 7th birthday party). Full review text
-  (captured 2026-09-14):
+- [x] **Jaslynn Lai** (daughter's 7th birthday party) — **reply posted**,
+  confirmed by Jeff 2026-09-17. Full review text (captured 2026-09-14):
 
 > We tried this for my daughter's 7th birthday and the kids really
 > enjoyed it. The AI animals were such a cute touch haha, they got so
@@ -139,5 +139,36 @@ Reply (final, Jeff-edited for a plainer tone):
 > birthday, and really appreciate you supporting the small business side
 > of it too. Hope she had a great one — would love to be part of the next
 > celebration!
+
+- [ ] **Ivy** — needs a reply. Full review text:
+
+> Incredible experience! The AI photo booth is so much fun, Jeff is
+> amazing, and everyone loved it. Unlimited prints + instant digitals =
+> perfect. 5 stars all the way!
+
+Draft reply:
+
+> Hi Ivy, thank you so much for this! Really made my day hearing everyone
+> had fun and that the prints + digitals combo landed well — that's
+> exactly what I'm going for. Appreciate the 5 stars!
+
+- [ ] Reply posted:
+
+- [ ] **Jessica** — needs a reply. Met Jeff in person at a community
+  event rather than through a booked booth session. Full review text:
+
+> Just happened to walk by a community event and met Jeff there. He was
+> really friendly and took the time to show me the website and explain
+> how everything works. I honestly think it's such a cool and creative
+> idea, especially the customisations like the doodle art. Still can't
+> believe he made all of that himself haha! Just wanted to leave a review
+> to show some support. Keep it up, Jeff! 😊
+
+Draft reply:
+
+> Hi Jessica, thank you for this — especially since we only just met!
+> Glad the doodle art stood out, that's one of my favourite things to
+> customise. Really appreciate you taking the time to leave a review just
+> to show support, that means a lot.
 
 - [ ] Reply posted:

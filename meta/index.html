@@ -1,0 +1,778 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#F7F3EE">
+  <title>Meta night-race looks · Playing With Photo</title>
+  <style>
+@font-face {
+  font-family: "Cormorant Garamond"; font-style: normal; font-weight: 500; font-display: swap;
+  src: url("assets/fonts/cormorant-garamond-500.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Cormorant Garamond"; font-style: italic; font-weight: 500; font-display: swap;
+  src: url("assets/fonts/cormorant-garamond-500-italic.ttf") format("truetype");
+}
+@font-face {
+  font-family: "DM Sans"; font-style: normal; font-weight: 400; font-display: swap;
+  src: url("assets/fonts/dm-sans-400.ttf") format("truetype");
+}
+@font-face {
+  font-family: "DM Sans"; font-style: normal; font-weight: 600; font-display: swap;
+  src: url("assets/fonts/dm-sans-600.ttf") format("truetype");
+}
+:root {
+  --paper: #F7F3EE;
+  --sheet: #FFFFFF;
+  --ink: #1C1A17;
+  --muted: #6B6258;
+  --faint: #A89F93;
+  --line: #E5DFD5;
+  --gold: #A88963;
+  --red: #B85544;
+  --sunken: #EFE8DD;
+  --on-dark: #fffaf3;
+  --serif: "Cormorant Garamond", Georgia, serif;
+  --sans: "DM Sans", system-ui, sans-serif;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.5;
+}
+a { color: inherit; }
+button { font: inherit; color: inherit; }
+a:focus-visible, button:focus-visible {
+  outline: 0.1875rem solid var(--red);
+  outline-offset: 0.25rem;
+}
+.site-head {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: var(--paper);
+  border-bottom: 1px solid var(--line);
+}
+.topbar {
+  min-height: 4.5rem;
+  padding: 0.875rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.brand { display: flex; align-items: center; text-decoration: none; }
+.brand img { width: 7.25rem; max-height: 2.25rem; object-fit: contain; object-position: left center; display: block; }
+.topbar-event {
+  margin: 0;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.jump {
+  display: flex;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0 1rem 0.875rem;
+  list-style: none;
+  overflow-x: auto;
+}
+.jump a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0 1rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--sheet);
+  text-decoration: none;
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.jump a[aria-current="page"] {
+  background: var(--ink);
+  color: var(--sheet);
+  border-color: var(--ink);
+}
+main section { scroll-margin-top: 8.5rem; }
+.samples {
+  height: calc(100svh - 8.5rem);
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+}
+.section-copy { padding: 1.75rem 1rem 0.75rem; }
+.section-copy h1,
+.prints-copy h2,
+.booth-copy h2 {
+  margin: 0;
+  font-family: var(--serif);
+  font-weight: 500;
+  letter-spacing: -0.035em;
+  line-height: 0.9;
+}
+.section-copy h1 { font-size: 3.6rem; max-width: 12ch; }
+.section-copy h2,
+.prints-copy h2,
+.booth-copy h2 { font-size: 2.5rem; }
+.section-copy h1 em,
+.prints-copy h2 em { font-style: italic; color: var(--gold); font-weight: 500; }
+.section-copy p,
+.prints-copy p,
+.booth-copy p {
+  margin: 0.75rem 0 0;
+  max-width: 36rem;
+  color: var(--muted);
+}
+.stage {
+  margin: 0.75rem 1rem 0;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--ink);
+  display: flex;
+  flex-direction: column;
+  touch-action: pan-y;
+}
+.stage img {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  flex: 1;
+  object-fit: contain;
+  display: block;
+}
+.stage figcaption {
+  margin: 0;
+  padding: 0.625rem 1rem 0.75rem;
+  background: var(--ink);
+  color: var(--on-dark);
+  font-family: var(--serif);
+  font-size: 1.375rem;
+  font-weight: 500;
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+}
+.thumbs {
+  display: flex;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0.75rem 1rem 1.25rem;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+}
+.thumbs button {
+  flex: 0 0 7.25rem;
+  margin: 0;
+  padding: 0;
+  border: 1px solid transparent;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  scroll-snap-align: start;
+}
+.thumbs img {
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  display: block;
+  background: var(--ink);
+}
+.thumbs .name {
+  display: block;
+  margin-top: 0.375rem;
+  font-size: 0.75rem;
+  line-height: 1.2;
+}
+.thumbs button[aria-selected="true"] { border-color: var(--gold); }
+.clips {
+  height: calc(100svh - 8.5rem);
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  background: var(--ink);
+  color: var(--on-dark);
+}
+.clips .section-copy p { color: var(--faint); }
+.clips .thumbs button { color: var(--on-dark); }
+.player {
+  margin: 0.75rem 1rem 0;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--ink);
+  display: flex;
+  flex-direction: column;
+}
+.player video {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  flex: 1;
+  object-fit: contain;
+  display: block;
+  background: var(--ink);
+}
+.player figcaption {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 0;
+  padding: 0.625rem 1rem 0.75rem;
+  background: var(--ink);
+}
+.player strong {
+  display: block;
+  font-family: var(--serif);
+  font-size: 1.375rem;
+  font-weight: 500;
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+}
+.player span {
+  display: block;
+  margin-top: 0.375rem;
+  max-width: 36rem;
+  color: var(--faint);
+}
+.play {
+  min-height: 3rem;
+  padding: 0 1.125rem;
+  border: 1px solid var(--faint);
+  background: transparent;
+  color: var(--on-dark);
+  cursor: pointer;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  white-space: nowrap;
+}
+.play:hover { background: var(--sheet); color: var(--ink); }
+.prints {
+  height: calc(100svh - 8.5rem);
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto auto;
+  gap: 0.75rem;
+  padding: 1.25rem 1rem 0.75rem;
+  background: var(--sunken);
+  border-top: 1px solid var(--line);
+  overflow: hidden;
+}
+.prints-head {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.prints-copy { padding: 0; }
+.prints-copy h2 { margin: 0; }
+.prints-copy p { margin: 0.35rem 0 0; }
+.size-tabs {
+  display: flex;
+  gap: 0.5rem;
+  flex: none;
+}
+.size-tabs button {
+  min-height: 2.75rem;
+  padding: 0 1rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--sheet);
+  cursor: pointer;
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+}
+.size-tabs button[aria-selected="true"] {
+  background: var(--ink);
+  color: var(--sheet);
+  border-color: var(--ink);
+}
+.sheet {
+  min-height: 0;
+  height: 100%;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: pan-y;
+}
+.sheet img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  background: var(--sheet);
+  border: 1px solid var(--line);
+}
+.print-name {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+.print-thumbs[hidden] { display: none; }
+.print-thumbs {
+  display: flex;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0 0 0.25rem;
+  overflow-x: auto;
+}
+.print-thumbs button {
+  flex: 0 0 auto;
+  margin: 0;
+  padding: 0.2rem;
+  border: 1px solid transparent;
+  background: var(--sheet);
+  cursor: pointer;
+}
+.print-thumbs img {
+  display: block;
+  height: 3.25rem;
+  width: auto;
+  object-fit: cover;
+}
+#print-strip-thumbs { align-items: flex-start; }
+#print-strip-thumbs button { min-width: 5.5rem; min-height: 7.5rem; }
+#print-strip-thumbs img {
+  width: 5.5rem;
+  height: 7.5rem;
+  object-fit: cover;
+  object-position: top center;
+}
+.print-thumbs button[aria-selected="true"] { border-color: var(--gold); }
+.booth {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(18rem, 0.95fr);
+  border-top: 1px solid var(--line);
+  background: var(--sheet);
+}
+.booth-photo { margin: 0; background: var(--ink); }
+.booth-photo img {
+  width: 100%;
+  height: 100%;
+  max-height: 100svh;
+  object-fit: cover;
+  object-position: center 30%;
+  display: block;
+}
+.booth-copy {
+  padding: 3rem 1.75rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.booth-copy ol {
+  margin: 1.25rem 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 1rem;
+}
+.booth-copy li {
+  padding-top: 0.875rem;
+  border-top: 1px solid var(--line);
+  max-width: 42ch;
+  color: var(--muted);
+}
+.booth-copy li strong {
+  display: block;
+  color: var(--ink);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 0.25rem;
+}
+.close {
+  padding: 3rem 1rem 3.5rem;
+  border-top: 1px solid var(--line);
+  background: var(--paper);
+}
+.close p {
+  margin: 0 0 1.125rem;
+  max-width: 42ch;
+  color: var(--muted);
+}
+.close a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 3rem;
+  padding: 0 1.25rem;
+  background: var(--ink);
+  color: var(--sheet);
+  text-decoration: none;
+}
+@media (max-width: 56.25rem) {
+  .section-copy h1 { font-size: 2.75rem; }
+  .booth { grid-template-columns: 1fr; }
+  .booth-photo img { max-height: 62svh; }
+  .booth-copy { padding: 1.75rem 1rem 2.5rem; }
+  .player span { display: none; }
+  .prints-head { flex-wrap: wrap; }
+  .size-tabs { width: 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+  </style>
+</head>
+<body>
+  <header class="site-head">
+    <div class="topbar">
+      <a class="brand" href="https://playingwithphoto.com/">
+        <img src="assets/playing-with-photo-logo.png" width="116" height="36" alt="Playing With Photo">
+      </a>
+      <p class="topbar-event">Meta night race</p>
+    </div>
+    <nav aria-label="Page sections">
+      <ul class="jump">
+        <li><a href="#samples" aria-current="page">Your samples</a></li>
+        <li><a href="#clips">The clips</a></li>
+        <li><a href="#prints">The print</a></li>
+        <li><a href="#booth">The booth</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="samples" id="samples" aria-label="Your samples">
+      <div class="section-copy">
+        <h1>Your <em>samples</em></h1>
+        <p>Eight looks made from a Meta group photo. Swipe the photo, or tap a thumbnail.</p>
+      </div>
+      <figure class="stage">
+        <img id="still" src="assets/images/night-grid.jpg" alt="Night grid sample" width="1024" height="682" draggable="false">
+        <figcaption id="still-name">Night grid</figcaption>
+      </figure>
+      <div class="thumbs" id="sample-thumbs" role="listbox" aria-label="Sample stills"></div>
+    </section>
+
+    <section class="clips" id="clips" aria-label="The clips">
+      <div class="section-copy">
+        <h2>The clips</h2>
+        <p>These looks already run on the booth. Each one plays as a short clip.</p>
+      </div>
+      <figure class="player" id="player">
+        <video id="clip" poster="assets/images/plushie_us.webp" muted loop playsinline preload="metadata"></video>
+        <figcaption>
+          <div>
+            <strong id="clip-name">Plushies</strong>
+            <span id="clip-copy">Recognisable plush characters in a short clip.</span>
+          </div>
+          <button type="button" class="play" id="play" aria-pressed="false">Play clip</button>
+        </figcaption>
+      </figure>
+      <div class="thumbs" id="clip-thumbs" role="listbox" aria-label="Clip looks"></div>
+    </section>
+
+    <section class="prints" id="prints" aria-label="The print">
+      <div class="prints-head">
+        <div class="prints-copy">
+          <h2>The <em>print</em></h2>
+          <p id="print-note">One landscape print. Tap a thumbnail to change the layout.</p>
+        </div>
+        <div class="size-tabs" role="tablist" aria-label="Print size">
+          <button type="button" role="tab" id="tab-wide" aria-selected="true" aria-controls="print-wide-thumbs">4×6</button>
+          <button type="button" role="tab" id="tab-strip" aria-selected="false" aria-controls="print-strip-thumbs">2×6</button>
+        </div>
+      </div>
+      <figure class="sheet" id="print-sheet">
+        <img id="print-view" src="assets/prints/01-gold-ai-garage.png" width="708" height="472" alt="Black and gold 4 by 6 print with the AI garage photo" draggable="false">
+      </figure>
+      <p class="print-name" id="print-view-name">Black and gold · AI garage</p>
+      <div class="print-thumbs" id="print-wide-thumbs" role="tabpanel" aria-label="4 by 6 layouts"></div>
+      <div class="print-thumbs" id="print-strip-thumbs" role="tabpanel" aria-label="2 by 6 layouts" hidden></div>
+    </section>
+
+    <section class="booth" id="booth" aria-label="The booth">
+      <figure class="booth-photo">
+        <img src="assets/images/booth-setup.webp" width="1800" height="2251" alt="Vintage-case camera, backdrop, and instant printer">
+      </figure>
+      <div class="booth-copy">
+        <h2>The booth</h2>
+        <p>Guests pose, pick a look, and leave with a print and a link.</p>
+        <ol>
+          <li><strong>Pose</strong> They stand at the camera. The ring light and screen handle the capture.</li>
+          <li><strong>Pick a look</strong> The still is made from that photo. The library looks also get a short clip.</li>
+          <li><strong>Print and QR</strong> The print comes out beside the booth. The QR opens the photos and the clip on their phone.</li>
+          <li><strong>Floor screen</strong> The latest clips play in the room as they finish.</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="close">
+      <p>Reply with the looks and the print layout to lock for the night.</p>
+      <a href="https://wa.me/6589896901">WhatsApp Jeff · +65 8989 6901</a>
+    </section>
+  </main>
+
+  <script>
+    const SAMPLES = [
+      { id: "night-grid", name: "Night grid" },
+      { id: "navy-team", name: "Navy team" },
+      { id: "paddock", name: "Paddock" },
+      { id: "pit-garage", name: "Pit garage" },
+      { id: "campaign", name: "Campaign" },
+      { id: "three-d", name: "3D still" },
+      { id: "pixel-race", name: "Pixel race" },
+      { id: "anime-race", name: "Race anime" }
+    ];
+    const CLIPS = [
+      { id: "plushie_us", name: "Plushies", copy: "Recognisable plush characters in a short clip." },
+      { id: "miniature_collectible", name: "Miniature Collectible", copy: "The group as detailed collectible figures." },
+      { id: "arcade_game", name: "Inside an Arcade Game", copy: "Pixel characters inside a handheld game." },
+      { id: "knitted_doll", name: "Knitted Doll World", copy: "Hand-knitted wool dolls in a miniature huddle." },
+      { id: "paper_world", name: "Paper World", copy: "A layered paper-cut diorama of the group." },
+      { id: "brick_world", name: "Brick World", copy: "The scene rebuilt in interlocking bricks." },
+      { id: "inflatable_universe", name: "Inflatable Us", copy: "Glossy inflatable versions of the group." }
+    ];
+    const PRINTS = {
+      wide: [
+        { src: "assets/prints/01-gold-ai-garage.png", name: "Black and gold · AI garage", alt: "Black and gold 4 by 6 print with the AI garage photo" },
+        { src: "assets/prints/02-ticket-ai-anime.png", name: "Racing ticket · AI anime", alt: "Racing ticket 4 by 6 print with the AI anime photo" },
+        { src: "assets/prints/03-professional-original.png", name: "Professional blue · Original", alt: "Professional blue 4 by 6 print with the original photo" },
+        { src: "assets/prints/04-professional-ai-crew.png", name: "Professional blue · AI crew", alt: "Professional blue 4 by 6 print with the AI racing crew" },
+        { src: "assets/prints/05-red-ai-night.png", name: "Racing red · AI night circuit", alt: "Racing red 4 by 6 print with the AI night circuit" },
+        { src: "assets/prints/06-paddock-ai-comic.png", name: "Paddock pass · AI comic", alt: "Paddock pass 4 by 6 print with the AI comic" }
+      ],
+      strip: [
+        { src: "assets/prints/07-paddock-ai-3d.png", name: "Paddock · AI 3D", alt: "Paddock 2 by 6 strip with two original photos and an AI 3D photo" },
+        { src: "assets/prints/08-ticket-ai-anime.png", name: "Ticket · AI anime", alt: "Ticket 2 by 6 strip with two original photos and an AI anime photo" },
+        { src: "assets/prints/09-blue-ai-comic.png", name: "White and blue · AI comic", alt: "White and blue 2 by 6 strip with two original photos and an AI comic" },
+        { src: "assets/prints/10-red-ai-crew.png", name: "Racing red · AI crew", alt: "Racing red 2 by 6 strip with two original photos and an AI crew photo" }
+      ]
+    };
+
+    const still = document.getElementById("still");
+    const stillName = document.getElementById("still-name");
+    const sampleThumbs = document.getElementById("sample-thumbs");
+    const clip = document.getElementById("clip");
+    const clipName = document.getElementById("clip-name");
+    const clipCopy = document.getElementById("clip-copy");
+    const clipThumbs = document.getElementById("clip-thumbs");
+    const play = document.getElementById("play");
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let sampleIndex = 0;
+    let clipIndex = 0;
+    let playToken = 0;
+
+    function thumbButton(look, selected) {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.setAttribute("role", "option");
+      btn.setAttribute("aria-selected", selected ? "true" : "false");
+      const img = document.createElement("img");
+      img.alt = "";
+      img.src = "assets/images/" + look.id + (look.copy ? ".webp" : ".jpg");
+      const name = document.createElement("span");
+      name.className = "name";
+      name.textContent = look.name;
+      btn.append(img, name);
+      return btn;
+    }
+
+    function renderSamples() {
+      sampleThumbs.replaceChildren();
+      SAMPLES.forEach((look, i) => {
+        const btn = thumbButton(look, i === sampleIndex);
+        btn.addEventListener("click", () => showSample(i));
+        sampleThumbs.append(btn);
+      });
+    }
+
+    function renderClips() {
+      clipThumbs.replaceChildren();
+      CLIPS.forEach((look, i) => {
+        const btn = thumbButton(look, i === clipIndex);
+        btn.addEventListener("click", () => showClip(i, true));
+        clipThumbs.append(btn);
+      });
+    }
+
+    function markSelected(box, index) {
+      [...box.querySelectorAll('[role="option"]')].forEach((btn, i) => {
+        const on = i === index;
+        btn.setAttribute("aria-selected", on ? "true" : "false");
+        if (on) {
+          const left = btn.offsetLeft - (box.clientWidth - btn.clientWidth) / 2;
+          box.scrollTo({ left: Math.max(0, left), behavior: reduceMotion ? "auto" : "smooth" });
+        }
+      });
+    }
+
+    function showSample(index) {
+      sampleIndex = (index + SAMPLES.length) % SAMPLES.length;
+      const look = SAMPLES[sampleIndex];
+      still.src = "assets/images/" + look.id + ".jpg";
+      still.alt = look.name + " sample";
+      stillName.textContent = look.name;
+      markSelected(sampleThumbs, sampleIndex);
+    }
+
+    function showClip(index, autoplay) {
+      clipIndex = index;
+      const look = CLIPS[clipIndex];
+      const token = ++playToken;
+      clipName.textContent = look.name;
+      clipCopy.textContent = look.copy;
+      play.setAttribute("aria-pressed", "false");
+      play.textContent = "Play clip";
+      const next = "assets/videos/" + look.id + ".mp4";
+      clip.poster = "assets/images/" + look.id + ".webp";
+      const start = () => {
+        if (token !== playToken || !autoplay || reduceMotion) return;
+        startClip();
+      };
+      if (clip.getAttribute("src") !== next) {
+        clip.addEventListener("loadeddata", start, { once: true });
+        clip.src = next;
+      } else start();
+      markSelected(clipThumbs, clipIndex);
+    }
+
+    function startClip() {
+      const token = playToken;
+      play.setAttribute("aria-pressed", "true");
+      play.textContent = "Pause";
+      const pending = clip.play();
+      if (pending && typeof pending.catch === "function") {
+        pending.catch(() => {
+          if (token !== playToken) return;
+          play.setAttribute("aria-pressed", "false");
+          play.textContent = "Play clip";
+        });
+      }
+    }
+
+    function stopClip() {
+      playToken += 1;
+      clip.pause();
+      play.setAttribute("aria-pressed", "false");
+      play.textContent = "Play clip";
+    }
+
+    play.addEventListener("click", () => {
+      if (play.getAttribute("aria-pressed") === "true") stopClip();
+      else startClip();
+    });
+
+    const printIndex = { wide: 0, strip: 0 };
+    let printSize = "wide";
+    const printNotes = {
+      wide: "One landscape print. Tap a thumbnail to change the layout.",
+      strip: "A strip with two poses, then the look. Tap a thumbnail to change the layout."
+    };
+
+    function fitPrint() {
+      const sheet = document.getElementById("print-sheet");
+      const img = document.getElementById("print-view");
+      const availW = sheet.clientWidth;
+      const availH = sheet.clientHeight;
+      const ratio = img.naturalWidth && img.naturalHeight
+        ? img.naturalWidth / img.naturalHeight
+        : (printSize === "wide" ? 708 / 472 : 236 / 709);
+      if (!availW || !availH || !ratio) return;
+      let width = availH * ratio;
+      let height = availH;
+      if (width > availW) {
+        width = availW;
+        height = width / ratio;
+      }
+      img.style.width = Math.floor(width) + "px";
+      img.style.height = Math.floor(height) + "px";
+    }
+
+    function showPrint(size, index) {
+      const list = PRINTS[size];
+      printIndex[size] = (index + list.length) % list.length;
+      const print = list[printIndex[size]];
+      if (size === printSize) {
+        const img = document.getElementById("print-view");
+        img.src = print.src;
+        img.alt = print.alt;
+        document.getElementById("print-view-name").textContent = print.name;
+        if (img.complete) fitPrint();
+        else img.addEventListener("load", fitPrint, { once: true });
+      }
+      [...document.getElementById("print-" + size + "-thumbs").querySelectorAll('[role="option"]')].forEach((btn, i) => {
+        btn.setAttribute("aria-selected", i === printIndex[size] ? "true" : "false");
+      });
+    }
+
+    function setPrintSize(size) {
+      printSize = size;
+      document.getElementById("tab-wide").setAttribute("aria-selected", size === "wide" ? "true" : "false");
+      document.getElementById("tab-strip").setAttribute("aria-selected", size === "strip" ? "true" : "false");
+      document.getElementById("print-wide-thumbs").hidden = size !== "wide";
+      document.getElementById("print-strip-thumbs").hidden = size !== "strip";
+      document.getElementById("print-note").textContent = printNotes[size];
+      showPrint(size, printIndex[size]);
+    }
+
+    function renderPrints(size) {
+      const box = document.getElementById("print-" + size + "-thumbs");
+      box.replaceChildren();
+      PRINTS[size].forEach((print, i) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.setAttribute("role", "option");
+        btn.setAttribute("aria-selected", i === printIndex[size] ? "true" : "false");
+        const img = document.createElement("img");
+        img.alt = "";
+        img.src = print.src;
+        btn.append(img);
+        btn.addEventListener("click", () => showPrint(size, i));
+        box.append(btn);
+      });
+    }
+
+    const sections = [...document.querySelectorAll("main section[id]")];
+    const links = [...document.querySelectorAll(".jump a")];
+    const watcher = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        links.forEach((link) => {
+          if (link.getAttribute("href") === "#" + entry.target.id) link.setAttribute("aria-current", "page");
+          else link.removeAttribute("aria-current");
+        });
+      });
+    }, { rootMargin: "-45% 0px -45% 0px" });
+    sections.forEach((section) => watcher.observe(section));
+
+    renderSamples();
+    renderClips();
+    renderPrints("wide");
+    renderPrints("strip");
+    setPrintSize("wide");
+    document.getElementById("tab-wide").addEventListener("click", () => setPrintSize("wide"));
+    document.getElementById("tab-strip").addEventListener("click", () => setPrintSize("strip"));
+    new ResizeObserver(fitPrint).observe(document.getElementById("print-sheet"));
+    function swipe(el, onSwipe) {
+      let startX = 0;
+      let startY = 0;
+      el.addEventListener("pointerdown", (event) => {
+        startX = event.clientX;
+        startY = event.clientY;
+      });
+      el.addEventListener("pointerup", (event) => {
+        const dx = event.clientX - startX;
+        const dy = event.clientY - startY;
+        if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy)) return;
+        onSwipe(dx < 0 ? 1 : -1);
+      });
+    }
+    swipe(document.querySelector(".samples .stage"), (step) => showSample(sampleIndex + step));
+    swipe(document.getElementById("print-sheet"), (step) => showPrint(printSize, printIndex[printSize] + step));
+    showSample(0);
+    showClip(0, !reduceMotion);
+  </script>
+</body>
+</html>

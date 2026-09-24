@@ -471,6 +471,24 @@ main section { scroll-margin-top: 8.5rem; }
   .prints-head { flex-wrap: wrap; }
   .size-tabs { width: 100%; }
 }
+@media (min-width: 56.3125rem) {
+  .samples {
+    grid-template-columns: minmax(16rem, 22rem) minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr) auto;
+  }
+  .samples .section-copy {
+    grid-column: 1;
+    grid-row: 1;
+    align-self: end;
+    padding-bottom: 1.25rem;
+  }
+  .samples .stage {
+    grid-column: 2;
+    grid-row: 1;
+    margin: 1rem 1rem 0 0;
+  }
+  .samples .thumbs { grid-column: 1 / -1; }
+}
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
 }
@@ -486,8 +504,7 @@ main section { scroll-margin-top: 8.5rem; }
     </div>
     <nav aria-label="Page sections">
       <ul class="jump">
-        <li><a href="#recommend" aria-current="page">Recommend</a></li>
-        <li><a href="#samples">Concepts</a></li>
+        <li><a href="#samples" aria-current="page">Concepts</a></li>
         <li><a href="#clips">Playful</a></li>
         <li><a href="#prints">Print</a></li>
         <li><a href="#package">Package</a></li>
@@ -496,20 +513,10 @@ main section { scroll-margin-top: 8.5rem; }
   </header>
 
   <main>
-    <section class="hero section-copy" id="recommend" aria-label="Our recommendation">
-      <p class="eyebrow">F1-inspired AI photobooth</p>
-      <h1>Meta night race</h1>
-      <p class="when">7 October 2026 · Meta Office, Marina One · About 100 guests</p>
-      <p>Guests stay recognisable. The setting becomes a race day.</p>
-      <h2>Our recommendation</h2>
-      <p>3 hours for about 100 guests. A natural group photo, then a race-day setting.</p>
-      <p class="setup">3 hours · 4×6 prints · AI and original photos</p>
-    </section>
-
     <section class="samples" id="samples" aria-label="Concepts for Meta">
       <div class="section-copy">
-        <h2>Concepts for <em>Meta</em></h2>
-        <p>From the group photo you shared. Start with Racing Garage, Night Grid, or Paddock. Concepts, not final artwork.</p>
+        <h1>Meta night race</h1>
+        <p>7 October · Marina One · 3 hours · 4×6</p>
       </div>
       <figure class="stage">
         <img id="still" src="assets/images/pit-garage.jpg" alt="Racing Garage concept" width="1024" height="682" draggable="false">

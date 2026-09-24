@@ -105,6 +105,54 @@ a:focus-visible, button:focus-visible {
   border-color: var(--ink);
 }
 main section { scroll-margin-top: 8.5rem; }
+.hero {
+  padding: 2rem 1rem 2.5rem;
+  border-bottom: 1px solid var(--line);
+}
+.hero h2 { margin-top: 2rem; }
+.package h2,
+.close h2 { margin: 0 0 0.75rem; }
+.eyebrow {
+  margin: 0 0 0.75rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.when { margin: 0.75rem 0 0; color: var(--muted); }
+.setup {
+  display: inline-block;
+  margin: 1.25rem 0 0;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--ink);
+  background: var(--ink);
+  color: var(--sheet);
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.package {
+  padding: 3rem 1rem 3.5rem;
+  border-top: 1px solid var(--line);
+  background: var(--sheet);
+}
+.package .price {
+  margin: 0.75rem 0 0;
+  font-family: var(--serif);
+  font-size: 2.5rem;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 0.9;
+}
+.package ul {
+  margin: 1.25rem 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.5rem;
+  max-width: 36rem;
+  color: var(--muted);
+}
 .samples {
   height: calc(100svh - 8.5rem);
   display: grid;
@@ -113,7 +161,9 @@ main section { scroll-margin-top: 8.5rem; }
 .section-copy { padding: 1.75rem 1rem 0.75rem; }
 .section-copy h1,
 .prints-copy h2,
-.booth-copy h2 {
+.booth-copy h2,
+.package h2,
+.close h2 {
   margin: 0;
   font-family: var(--serif);
   font-weight: 500;
@@ -123,7 +173,9 @@ main section { scroll-margin-top: 8.5rem; }
 .section-copy h1 { font-size: 3.6rem; max-width: 12ch; }
 .section-copy h2,
 .prints-copy h2,
-.booth-copy h2 { font-size: 2.5rem; }
+.booth-copy h2,
+.package h2,
+.close h2 { font-size: 2.5rem; }
 .section-copy h1 em,
 .prints-copy h2 em { font-style: italic; color: var(--gold); font-weight: 500; }
 .section-copy p,
@@ -434,31 +486,42 @@ main section { scroll-margin-top: 8.5rem; }
     </div>
     <nav aria-label="Page sections">
       <ul class="jump">
-        <li><a href="#samples" aria-current="page">Your samples</a></li>
-        <li><a href="#clips">The clips</a></li>
-        <li><a href="#prints">The print</a></li>
-        <li><a href="#booth">The booth</a></li>
+        <li><a href="#recommend" aria-current="page">Recommend</a></li>
+        <li><a href="#samples">Concepts</a></li>
+        <li><a href="#clips">Playful</a></li>
+        <li><a href="#prints">Print</a></li>
+        <li><a href="#package">Package</a></li>
       </ul>
     </nav>
   </header>
 
   <main>
-    <section class="samples" id="samples" aria-label="Your samples">
+    <section class="hero section-copy" id="recommend" aria-label="Our recommendation">
+      <p class="eyebrow">F1-inspired AI photobooth</p>
+      <h1>Meta night race</h1>
+      <p class="when">7 October 2026 · Meta Office, Marina One · About 100 guests</p>
+      <p>Guests stay recognisable. The setting becomes a race day.</p>
+      <h2>Our recommendation</h2>
+      <p>3 hours for about 100 guests. A natural group photo, then a race-day setting.</p>
+      <p class="setup">3 hours · 4×6 prints · AI and original photos</p>
+    </section>
+
+    <section class="samples" id="samples" aria-label="Concepts for Meta">
       <div class="section-copy">
-        <h1>Your <em>samples</em></h1>
-        <p>Eight looks made from a Meta group photo. Swipe the photo, or tap a thumbnail.</p>
+        <h2>Concepts for <em>Meta</em></h2>
+        <p>From the group photo you shared. Start with Racing Garage, Night Grid, or Paddock. Concepts, not final artwork.</p>
       </div>
       <figure class="stage">
-        <img id="still" src="assets/images/night-grid.jpg" alt="Night grid sample" width="1024" height="682" draggable="false">
-        <figcaption id="still-name">Night grid</figcaption>
+        <img id="still" src="assets/images/pit-garage.jpg" alt="Racing Garage concept" width="1024" height="682" draggable="false">
+        <figcaption id="still-name">Racing Garage</figcaption>
       </figure>
       <div class="thumbs" id="sample-thumbs" role="listbox" aria-label="Sample stills"></div>
     </section>
 
     <section class="clips" id="clips" aria-label="The clips">
       <div class="section-copy">
-        <h2>The clips</h2>
-        <p>These looks already run on the booth. Each one plays as a short clip.</p>
+        <h2>Or more <em>playful</em></h2>
+        <p>Extra styles, if you want them. They can also play on the event screen.</p>
       </div>
       <figure class="player" id="player">
         <video id="clip" poster="assets/images/plushie_us.webp" muted loop playsinline preload="metadata"></video>
@@ -476,12 +539,12 @@ main section { scroll-margin-top: 8.5rem; }
     <section class="prints" id="prints" aria-label="The print">
       <div class="prints-head">
         <div class="prints-copy">
-          <h2>The <em>print</em></h2>
-          <p id="print-note">One landscape print. Tap a thumbnail to change the layout.</p>
+          <h2>The <em>keepsake</em></h2>
+          <p id="print-note">A print in hand, and a QR for the digital copy. We recommend 4×6.</p>
         </div>
         <div class="size-tabs" role="tablist" aria-label="Print size">
           <button type="button" role="tab" id="tab-wide" aria-selected="true" aria-controls="print-wide-thumbs">4×6</button>
-          <button type="button" role="tab" id="tab-strip" aria-selected="false" aria-controls="print-strip-thumbs">2×6</button>
+          <button type="button" role="tab" id="tab-strip" aria-selected="false" aria-controls="print-strip-thumbs">2×6 alternative</button>
         </div>
       </div>
       <figure class="sheet" id="print-sheet">
@@ -497,29 +560,47 @@ main section { scroll-margin-top: 8.5rem; }
         <img src="assets/images/booth-setup.webp" width="1800" height="2251" alt="Vintage-case camera, backdrop, and instant printer">
       </figure>
       <div class="booth-copy">
-        <h2>The booth</h2>
-        <p>Guests pose, pick a look, and leave with a print and a link.</p>
+        <h2>How it works</h2>
+        <p>It works like a normal photobooth. The change happens after the photo.</p>
         <ol>
-          <li><strong>Pose</strong> They stand at the camera. The ring light and screen handle the capture.</li>
-          <li><strong>Pick a look</strong> The still is made from that photo. The library looks also get a short clip.</li>
-          <li><strong>Print and QR</strong> The print comes out beside the booth. The QR opens the photos and the clip on their phone.</li>
-          <li><strong>Floor screen</strong> The latest clips play in the room as they finish.</li>
+          <li><strong>01 Pose</strong> A normal group photo.</li>
+          <li><strong>02 Pick a look</strong> Race-day, original, or a filter.</li>
+          <li><strong>03 Transform</strong> The setting changes.</li>
+          <li><strong>04 Print and QR</strong> A print now, photos on their phone.</li>
+          <li><strong>05 On screen</strong> Selected photos can move on the event screen.</li>
         </ol>
       </div>
     </section>
 
+    <section class="package" id="package" aria-label="Recommended package">
+      <h2>Recommended package</h2>
+      <p>Meta night race · 3 hours · about 100 guests</p>
+      <p class="price">S$1,380</p>
+      <ul>
+        <li>3 hours on site, with setup and teardown</li>
+        <li>Unlimited sessions and instant prints</li>
+        <li>F1-inspired concepts, original photos, vintage filters</li>
+        <li>Custom print, QR download, GIFs, and props</li>
+        <li>On-site attendant, plus animation on screen</li>
+      </ul>
+      <p>Why 3 hours? So people can visit through the event, not all at once.</p>
+      <p>We’ll refine the final look with your team.</p>
+    </section>
+
     <section class="close">
-      <p>Reply with the looks and the print layout to lock for the night.</p>
+      <h2>Like the direction?</h2>
+      <p>Tell us which look you prefer. We’ll refine it with you, then hold 7 October.</p>
       <a href="https://wa.me/6589896901">WhatsApp Jeff · +65 8989 6901</a>
+      <p>Playing With Photo</p>
     </section>
   </main>
 
   <script>
     const SAMPLES = [
-      { id: "night-grid", name: "Night grid" },
-      { id: "navy-team", name: "Navy team" },
+      { id: "pit-garage", name: "Racing Garage" },
+      { id: "night-grid", name: "Night Grid" },
       { id: "paddock", name: "Paddock" },
-      { id: "pit-garage", name: "Pit garage" },
+      { id: "navy-team", name: "Navy team" },
       { id: "campaign", name: "Campaign" },
       { id: "three-d", name: "3D still" },
       { id: "pixel-race", name: "Pixel race" },
@@ -667,8 +748,8 @@ main section { scroll-margin-top: 8.5rem; }
     const printIndex = { wide: 0, strip: 0 };
     let printSize = "wide";
     const printNotes = {
-      wide: "One landscape print. Tap a thumbnail to change the layout.",
-      strip: "A strip with two poses, then the look. Tap a thumbnail to change the layout."
+      wide: "Recommended. More room for the group and the setting.",
+      strip: "A taller strip, if you prefer it."
     };
 
     function fitPrint() {

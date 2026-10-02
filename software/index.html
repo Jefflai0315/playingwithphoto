@@ -3,146 +3,493 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<meta name="description" content="Join the waitlist for Playing With Photo's AI photo booth software — license it for your event business, or set it up once for your own shop or event." />
+<title>Photo Booth Software for Operators | Playing With Photo</title>
+<meta name="description" content="Photo booth software for operators: capture, live AI style transforms, printing and QR delivery on your own booth PC. Offline-first, white-label, Windows and Mac. Book a demo." />
 <link rel="canonical" href="https://playingwithphoto.com/software/" />
-<title>Photo Booth Software Waitlist — Playing With Photo</title>
 <link rel="icon" type="image/x-icon" href="/favicon.ico" />
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+<meta name="theme-color" content="#f4ead5" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://playingwithphoto.com/software/" />
-<meta property="og:title" content="Photo Booth Software Waitlist — Playing With Photo" />
-<meta property="og:description" content="The vintage-camera + live AI style transformation software behind Playing With Photo — coming soon for other operators and self-serve use. Join the waitlist." />
+<meta property="og:title" content="Playing With Photo: photo booth software for operators" />
+<meta property="og:description" content="Live AI styles, offline-first capture and printing, event console and white-label branding. The software behind our own booths, now for yours." />
 <meta property="og:image" content="https://playingwithphoto.com/og-share.jpg" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:image" content="https://playingwithphoto.com/og-share.jpg" />
 <meta name="robots" content="index, follow" />
 
+<script>document.documentElement.classList.add("js")</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/software/software.css?v=3" />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Caveat:wght@600&family=JetBrains+Mono:wght@400;500;700&family=Titan+One&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/software/software.css?v=5" />
+<link rel="preload" as="image" href="/photos/spark/myra.webp" />
 </head>
 <body>
+<!--
+THESIS: The booth as a vintage departures board: every guest session flips across a split-flap board, snap → AI style → printed. Set inside the main playingwithphoto.com world so operators recognise the same brand.
+OWN-WORLD: Main-site sepia palette (cream #f4ead5, paper #efe3c7, rust #b25f2e, ink #2a1a0c), dark-brown boards with JetBrains Mono flap tiles, Fraunces headings with Caveat script accents, DM Sans body, mono eyebrows with a leading rule, ink pill buttons, painted hero backdrop.
+STORY: An operator sees the booth working (board + real AI prints), believes it survives real events (client logos, offline demo, operator founder), and books a demo.
+FIRST VIEWPORT: Painted backdrop with cream wash. Left: headline "Snap. Restyle. Print. Next guest.", offer paragraph, Book a demo pill + See plans. Right: dark-brown departure board with a NOW PRINTING window flapping original → AI style.
+FORM: Venue departure board, candidate 7 of 7; seed key 5fe8671b. Restyled 2026-10-02 to the main site world at the user's request.
+FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
+-->
 
-<header class="sw-top">
-  <a class="sw-logo" href="/">Playing<em> With Photo.</em></a>
-  <a class="sw-back" href="/">← Back to the site</a>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="i-camera" viewBox="0 0 24 24"><path d="M3 8.5A1.5 1.5 0 0 1 4.5 7h2.8l1.6-2.2h6.2L16.7 7h2.8A1.5 1.5 0 0 1 21 8.5v9A1.5 1.5 0 0 1 19.5 19h-15A1.5 1.5 0 0 1 3 17.5z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="12" cy="13" r="3.4" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+    <symbol id="i-printer" viewBox="0 0 24 24"><path d="M7 9V3.5h10V9M7 16.5H4.5A1.5 1.5 0 0 1 3 15v-4.5A1.5 1.5 0 0 1 4.5 9h15a1.5 1.5 0 0 1 1.5 1.5V15a1.5 1.5 0 0 1-1.5 1.5H17" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M7 13.5h10v7H7z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
+    <symbol id="i-wifi-off" viewBox="0 0 24 24"><path d="M2.5 9a14 14 0 0 1 6-3.2M21.5 9a14 14 0 0 0-8.3-3.9M5.5 12.4a9.5 9.5 0 0 1 4-2.2M18.5 12.4a9.5 9.5 0 0 0-2-1.4M8.8 15.6a4.8 4.8 0 0 1 6.4 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/><circle cx="12" cy="19" r="1.4" fill="currentColor"/><path d="M3.5 3.5l17 17" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></symbol>
+    <symbol id="i-screen" viewBox="0 0 24 24"><path d="M3 4.5h18v12H3zM9 20.5h6M12 16.5v4" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="square"/></symbol>
+    <symbol id="i-brush" viewBox="0 0 24 24"><path d="M14.5 4.5l5 5-7.8 7.8-5-5z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M6.7 12.3c-2.6.2-3.4 2.2-3.7 4.4-.2 1.4-.6 2.3-1.5 2.8 3.4 1 7.6.5 8.7-2.7" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
+    <symbol id="i-qr" viewBox="0 0 24 24"><path d="M3.5 3.5h6v6h-6zM14.5 3.5h6v6h-6zM3.5 14.5h6v6h-6z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M14 14h3v3h-3zM18 18h2.5v2.5H18zM17 14h3.5M14 18v2.5" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+    <symbol id="i-laptop" viewBox="0 0 24 24"><path d="M5 5.5h14v9.5H5zM2.5 18.5h19" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="square"/></symbol>
+    <symbol id="i-touch" viewBox="0 0 24 24"><path d="M9.5 11V5a1.5 1.5 0 0 1 3 0v5.5m0-1a1.5 1.5 0 0 1 3 0v1.5m0-.5a1.5 1.5 0 0 1 3 0V15a6 6 0 0 1-6 6h-.8a5 5 0 0 1-4-2l-3-4.2a1.4 1.4 0 0 1 2.2-1.7l1.6 1.9" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/></symbol>
+    <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3.5 12h17M12 3.5c2.4 2.4 3.5 5.2 3.5 8.5s-1.1 6.1-3.5 8.5c-2.4-2.4-3.5-5.2-3.5-8.5S9.6 5.9 12 3.5z" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="square"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M4.5 12.5l4.5 4.5 10.5-10.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="square"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="square"/></symbol>
+  </defs>
+</svg>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="top" id="top">
+  <div class="top-in">
+    <a class="brand" href="/software/" aria-label="Playing With Photo software home">
+      <img class="brand-mark" src="/pwp-logo.png?v=1" alt="" width="541" height="566" />
+      <span class="brand-name">Playing With <em>Photo</em></span>
+      <span class="brand-sub">Software</span>
+    </a>
+    <nav class="top-nav" aria-label="Sections">
+      <a href="#styles">AI styles</a>
+      <a href="#offline">Offline</a>
+      <a href="#console">Event console</a>
+      <a href="#hardware">Hardware</a>
+      <a href="#plans">Plans</a>
+    </nav>
+    <a class="nav-cta" href="#demo" data-track="click_demo_nav">Book a demo</a>
+  </div>
 </header>
 
-<main>
-  <section class="sw-section sw-hero wrap">
-    <p class="sw-eyebrow">Coming soon · Software waitlist</p>
-    <h1>The AI photo booth software<br/>behind Playing With Photo.<br/><em>Soon, yours too.</em></h1>
-    <p class="sw-sub">The same vintage-camera capture and live AI style transformation that powers our events — packaged so you can run it yourself. Join the waitlist to help decide what we build first.</p>
-    <a class="sw-cta" href="#waitlist">Join the waitlist ↓</a>
+<main id="main">
 
-    <figure class="sw-visual" aria-label="Before and after example of the AI style transformation">
-      <figure><img src="/photos/spark/jenmike.webp" alt="A candid wedding photo before AI styling" loading="lazy" width="400" height="500" /></figure>
-      <span class="sw-visual-arrow">→</span>
-      <figure><img src="/photos/spark/jenmike-vangogh.webp" alt="The same photo repainted live in a Van Gogh-inspired style" loading="lazy" width="400" height="500" /></figure>
-    </figure>
-    <p class="sw-visual-caption">One snap, repainted live — this is the engine we're productizing</p>
-  </section>
-
-  <section class="sw-section wrap">
-    <p class="sw-eyebrow">Two ways to use it</p>
-    <h2 style="font-size:26px; margin-bottom:20px;">Built for two kinds of people</h2>
-    <div class="sw-paths">
-      <div class="sw-path-card">
-        <span class="sw-path-tag">License</span>
-        <h3>Photo booth &amp; event businesses</h3>
-        <p>Run the same booth software we do — vintage capture flow, live AI style transformation, custom frame templates, and the two-layer film strip guests love. Under your own brand.</p>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg" aria-hidden="true"></div>
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <p class="eyebrow">Photo booth software · for operators</p>
+        <h1 class="hero-h1">
+          <span>Snap.</span>
+          <span>Restyle.</span>
+          <span>Print.</span>
+          <em class="hero-next">Next guest.</em>
+        </h1>
+        <p class="hero-sub">Photo booth software for operators. It runs capture, live AI styles, printing and QR delivery on your own booth PC, keeps working when the venue Wi&#8209;Fi doesn't, and puts your brand on every strip.</p>
+        <div class="hero-ctas">
+          <a class="btn btn-ink" href="#demo" data-track="click_demo_hero">Book a demo<svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+          <a class="link-arrow" href="#plans">See plans<svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        </div>
+        <ul class="hero-kit" aria-label="Supported hardware">
+          <li><svg aria-hidden="true"><use href="#i-laptop"/></svg>Windows &amp; Mac</li>
+          <li><svg aria-hidden="true"><use href="#i-camera"/></svg>Canon DSLR &amp; webcam</li>
+          <li><svg aria-hidden="true"><use href="#i-printer"/></svg>DNP dye-sub</li>
+        </ul>
       </div>
-      <div class="sw-path-card">
-        <span class="sw-path-tag">Self-serve · one-time</span>
-        <h3>Individuals &amp; small businesses</h3>
-        <p>A one-time setup for your shop, café, popup, or one-off event. No subscription, no operator needed — just the same magic, ready to go.</p>
+
+      <div class="board board-hero" id="heroBoard" aria-label="Demo departure board showing sample booth sessions">
+        <div class="board-head">
+          <span class="board-title"><svg aria-hidden="true"><use href="#i-camera"/></svg>Sessions</span>
+          <span class="board-clock" id="boardClock" aria-hidden="true">19:42</span>
+        </div>
+        <div class="board-body">
+          <div class="board-rows">
+            <div class="board-cols" aria-hidden="true">
+              <span class="c-time">Time</span><span class="c-guest">Guest</span><span class="c-style">Style</span><span class="c-out">Output</span><span class="c-status">Status</span>
+            </div>
+            <ol class="board-list" id="heroRows" aria-live="off"></ol>
+          </div>
+          <figure class="now">
+            <figcaption class="now-label"><span class="now-dot" aria-hidden="true"></span><span id="nowLabel">Now printing</span></figcaption>
+            <div class="pf pf-now" id="heroFlap" data-src="/photos/spark/myra.webp">
+              <img class="pf-fallback" src="/photos/spark/myra.webp" alt="Guests at a sweet sixteen, restyled by the booth into an impressionist painting" width="1200" height="900" />
+            </div>
+            <span class="now-style" id="nowStyle">Monet</span>
+          </figure>
+        </div>
+        <p class="board-foot">Demo board · sample sessions, real booth output</p>
       </div>
     </div>
   </section>
 
-  <section class="sw-section wrap" id="waitlist">
-    <p class="sw-eyebrow">Join the waitlist</p>
-    <h2 style="font-size:26px; margin-bottom:8px;">Tell us what you'd want</h2>
-    <p style="opacity:.8; margin-bottom:24px;">Two minutes, no commitment. We'll only reach out when there's something real to show you.</p>
+  <!-- PROOF -->
+  <section class="carriers" aria-labelledby="carriersTitle">
+    <div class="wrap carriers-in">
+      <h2 class="carriers-title" id="carriersTitle">This software has run live events for</h2>
+      <ul class="carriers-logos">
+        <li><img src="/photos/client-logos/visa.png" alt="Visa" loading="lazy" width="1024" height="576" /></li>
+        <li><img src="/photos/client-logos/scoot.png" alt="Scoot" loading="lazy" width="589" height="521" /></li>
+        <li><img src="/photos/client-logos/sembcorp.png" alt="Sembcorp" loading="lazy" width="698" height="233" /></li>
+        <li><img src="/photos/client-logos/peoples-association.png" alt="People's Association" loading="lazy" width="354" height="158" /></li>
+        <li><img src="/photos/client-logos/chick-fil-a.png" alt="Chick-fil-A" loading="lazy" width="250" height="114" /></li>
+        <li><img src="/photos/client-logos/sanmina.png" alt="Sanmina" loading="lazy" width="1024" height="598" /></li>
+        <li><img src="/photos/client-logos/zeno.png" alt="Zeno" loading="lazy" width="411" height="130" /></li>
+        <li><img src="/photos/client-logos/st-josephs-institution-junior.png" alt="St. Joseph's Institution Junior" loading="lazy" width="247" height="311" /></li>
+      </ul>
+    </div>
+  </section>
 
-    <form class="sw-form" id="waitlistForm" data-provider="formspree" data-endpoint="https://formspree.io/f/xkodydoy">
-      <div class="sw-field">
-        <label for="swName">Name</label>
-        <input type="text" id="swName" name="name" required />
+  <!-- AI STYLES -->
+  <section class="styles field-dark" id="styles" aria-labelledby="stylesTitle">
+    <div class="wrap styles-grid">
+      <div class="styles-copy">
+        <p class="eyebrow">AI style transforms</p>
+        <h2 class="h2" id="stylesTitle">One snap, repainted in <em>any style</em> the guest picks.</h2>
+        <p>Guests choose an AI style on the touchscreen. The booth sends the photo through the Playing With Photo cloud, gets the restyled image back and sends it to the printer and the guest's phone. You decide which styles each event offers.</p>
+        <p class="muted">Pick a style to see the same group restyled. Every image here came out of the booth at a real event.</p>
+        <div class="style-picker" role="group" aria-label="Choose a style">
+          <button type="button" class="style-btn is-on" aria-pressed="true" data-src="/photos/spark/jenmikeguests.webp" data-alt="Wedding guests in the original photo">Original</button>
+          <button type="button" class="style-btn" aria-pressed="false" data-src="/photos/meta/jenmikeguests-vangogh.webp" data-alt="The same wedding guests restyled with Van Gogh brushwork">Van Gogh</button>
+          <button type="button" class="style-btn" aria-pressed="false" data-src="/photos/meta/jenmikeguests-monet.webp" data-alt="The same wedding guests restyled as a Monet-like impressionist painting">Monet</button>
+          <button type="button" class="style-btn" aria-pressed="false" data-src="/photos/meta/jenmikeguests-picasso.webp" data-alt="The same wedding guests restyled in a cubist manner">Picasso</button>
+          <button type="button" class="style-btn" aria-pressed="false" data-src="/photos/meta/jenmikeguests-warhol.webp" data-alt="The same wedding guests restyled as pop-art screen print">Warhol</button>
+          <button type="button" class="style-btn" aria-pressed="false" data-src="/photos/spark/jenmikeguests-hokusai.webp" data-alt="The same wedding guests restyled as a Japanese woodblock print">Hokusai</button>
+        </div>
+        <p class="note">AI video clips of the same moment are included on Pro and Agency.</p>
       </div>
-      <div class="sw-field">
-        <label for="swEmail">Email</label>
-        <input type="email" id="swEmail" name="email" required />
+      <figure class="styles-frame">
+        <div class="pf pf-style" id="styleFlap" data-src="/photos/spark/jenmikeguests.webp">
+          <img class="pf-fallback" src="/photos/spark/jenmikeguests.webp" alt="Wedding guests in the original photo" width="1200" height="900" loading="lazy" />
+        </div>
+        <figcaption class="styles-cap"><span id="styleCap">Original</span><span>Wedding · Singapore</span></figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- OFFLINE -->
+  <section class="offline field-cream" id="offline" aria-labelledby="offlineTitle">
+    <div class="wrap offline-grid">
+      <div class="offline-copy">
+        <p class="eyebrow">Offline-first</p>
+        <h2 class="h2" id="offlineTitle">Venue Wi&#8209;Fi dropped. The queue <em>kept moving.</em></h2>
+        <p>The booth runs on your machine, not on a web page pointed at someone else's server. Capture, frames, filters and printing all work without internet. Only AI styles and QR downloads need a connection.</p>
+        <button type="button" class="btn btn-ink toggle" id="wifiToggle" aria-pressed="false">
+          <svg aria-hidden="true"><use href="#i-wifi-off"/></svg><span id="wifiToggleText">Pull the Wi&#8209;Fi</span>
+        </button>
       </div>
-      <div class="sw-field">
-        <label for="swWhatsapp">WhatsApp / mobile (optional)</label>
-        <input type="tel" id="swWhatsapp" name="whatsapp" placeholder="+65 8123 4567" autocomplete="tel" />
+      <div class="board board-status" aria-label="Booth service status board">
+        <div class="board-head">
+          <span class="board-title"><svg aria-hidden="true"><use href="#i-screen"/></svg>Booth services</span>
+          <span class="board-net" id="netState">Online</span>
+        </div>
+        <ol class="board-list" id="statusRows"></ol>
+        <p class="board-foot" id="statusFoot">All services running.</p>
       </div>
-      <div class="sw-field">
-        <label>I'm interested as</label>
-        <div class="sw-radio-group" role="radiogroup" aria-label="I'm interested as">
-          <label class="sw-radio"><input type="radio" name="audience" value="Operator / event business" required /> Operator / event business</label>
-          <label class="sw-radio"><input type="radio" name="audience" value="Individual / small business" /> Individual / small business</label>
-          <label class="sw-radio"><input type="radio" name="audience" value="Just curious" /> Just curious</label>
+    </div>
+  </section>
+
+  <!-- EVENT CONSOLE -->
+  <section class="console field-paper" id="console" aria-labelledby="consoleTitle">
+    <div class="wrap">
+      <div class="console-head">
+        <p class="eyebrow">Event console</p>
+        <h2 class="h2" id="consoleTitle">Your whole event, from <em>one console.</em></h2>
+        <p>Each event keeps its own branding, frames, styles and guest flow. On the day it takes four stops.</p>
+      </div>
+      <ol class="route">
+        <li class="stop">
+          <span class="stop-dot" aria-hidden="true">1</span>
+          <h3>Activate the event</h3>
+          <p>One tap loads that event's branding, templates and style list onto the booth.</p>
+        </li>
+        <li class="stop">
+          <span class="stop-dot" aria-hidden="true">2</span>
+          <h3>Check readiness</h3>
+          <p>Test the camera, make a test print and scan a ticket on a phone before doors open.</p>
+        </li>
+        <li class="stop">
+          <span class="stop-dot" aria-hidden="true">3</span>
+          <h3>Open booth and bigscreen</h3>
+          <p>Full-screen guest booth on the touchscreen; a live wall of creations on the floor screen.</p>
+        </li>
+        <li class="stop">
+          <span class="stop-dot" aria-hidden="true">4</span>
+          <h3>Watch the monitor</h3>
+          <p>Follow every session live. Retry an AI job or reprint a strip from the dashboard.</p>
+        </li>
+      </ol>
+      <div class="console-extras">
+        <div><svg aria-hidden="true"><use href="#i-qr"/></svg><span><strong>QR tickets.</strong> Guests scan to save their photos on their phone.</span></div>
+        <div><svg aria-hidden="true"><use href="#i-printer"/></svg><span><strong>Print confirm and reprint.</strong> Strips, sheets and 4×6 layouts matched to your printer.</span></div>
+        <div><svg aria-hidden="true"><use href="#i-touch"/></svg><span><strong>Touch-first guest flow.</strong> Big targets, short steps, retakes built in.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHITE LABEL -->
+  <section class="brand-sec field-dark" id="brand" aria-labelledby="brandTitle">
+    <div class="wrap brand-grid">
+      <div class="brand-copy">
+        <p class="eyebrow">White-label</p>
+        <h2 class="h2" id="brandTitle">Your logo on the strip. <em>Not ours.</em></h2>
+        <p>Set frames, templates, colours and guest copy per event, from a corporate launch to a sweet sixteen. On Pro and Agency, the Playing With Photo name comes off the guest screens too.</p>
+        <a class="link-arrow link-arrow-light" href="#plans">Compare plans<svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+      </div>
+      <div class="strips" aria-label="Client-branded prints from the booth">
+        <figure class="strip strip-a"><img src="/photos/samples/aesop-opening.webp" alt="Guest holding Aesop-branded photo strips at an Aesop store opening" loading="lazy" width="1000" height="1444" /><figcaption>Store opening</figcaption></figure>
+        <figure class="strip strip-b"><img src="/photos/samples/chickfila.webp" alt="Two Chick-fil-A branded photo strips, one with an AI-illustrated panel" loading="lazy" width="1000" height="1334" /><figcaption>Brand activation</figcaption></figure>
+        <figure class="strip strip-c"><img src="/photos/samples/gala-night.webp" alt="A guest holding a custom gala night print" loading="lazy" width="1000" height="1502" /><figcaption>Gala night</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- HARDWARE -->
+  <section class="hardware field-cream" id="hardware" aria-labelledby="hardwareTitle">
+    <div class="wrap">
+      <p class="eyebrow">Hardware</p>
+      <h2 class="h2" id="hardwareTitle">Runs on the kit you <em>already own.</em></h2>
+      <div class="gates" role="table" aria-label="Supported hardware">
+        <div class="gate" role="row">
+          <span class="gate-picto" role="cell" aria-hidden="true"><svg><use href="#i-laptop"/></svg></span>
+          <span class="gate-kind" role="rowheader">Computer</span>
+          <span class="gate-what" role="cell">Windows PC or Mac</span>
+        </div>
+        <div class="gate" role="row">
+          <span class="gate-picto" role="cell" aria-hidden="true"><svg><use href="#i-camera"/></svg></span>
+          <span class="gate-kind" role="rowheader">Camera</span>
+          <span class="gate-what" role="cell">Canon DSLR (digiCamControl or native bridge) or a USB webcam</span>
+        </div>
+        <div class="gate" role="row">
+          <span class="gate-picto" role="cell" aria-hidden="true"><svg><use href="#i-printer"/></svg></span>
+          <span class="gate-kind" role="rowheader">Printer</span>
+          <span class="gate-what" role="cell">DNP dye-sub, DS620 and DS-RX1HS class, through the installed print queue</span>
+        </div>
+        <div class="gate" role="row">
+          <span class="gate-picto" role="cell" aria-hidden="true"><svg><use href="#i-touch"/></svg></span>
+          <span class="gate-kind" role="rowheader">Screen</span>
+          <span class="gate-what" role="cell">Any touchscreen for the full-screen guest booth, plus an optional floor screen for the bigscreen wall</span>
+        </div>
+        <div class="gate" role="row">
+          <span class="gate-picto" role="cell" aria-hidden="true"><svg><use href="#i-globe"/></svg></span>
+          <span class="gate-kind" role="rowheader">Internet</span>
+          <span class="gate-what" role="cell">Only for AI styles, AI video and QR downloads</span>
         </div>
       </div>
-      <div class="sw-field">
-        <label for="swLocation">Country / city (optional)</label>
-        <input type="text" id="swLocation" name="location" />
-      </div>
-      <div class="sw-field">
-        <label for="swUseCase">What are you hoping to use it for?</label>
-        <textarea id="swUseCase" name="useCase" required placeholder="e.g. I run a wedding photo booth business in KL and want an AI style add-on for my rentals"></textarea>
-      </div>
-      <div class="sw-field">
-        <label>Wishlist features</label>
-        <div class="sw-chips" id="swChips" role="group" aria-label="Wishlist features">
-          <label class="sw-chip"><input type="checkbox" name="wishlist" value="AI style packs" /><span>AI style packs</span></label>
-          <label class="sw-chip"><input type="checkbox" name="wishlist" value="Custom frame & branding" /><span>Custom frame &amp; branding</span></label>
-          <label class="sw-chip"><input type="checkbox" name="wishlist" value="Multi-camera / multi-station" /><span>Multi-camera / multi-station</span></label>
-          <label class="sw-chip"><input type="checkbox" name="wishlist" value="Offline / local mode" /><span>Offline / local mode</span></label>
-          <label class="sw-chip"><input type="checkbox" name="wishlist" value="Printer integration" /><span>Printer integration</span></label>
-          <label class="sw-chip"><input type="checkbox" name="wishlist" value="Analytics dashboard" /><span>Analytics dashboard</span></label>
-          <label class="sw-chip"><input type="checkbox" name="wishlist" value="White-label (remove our branding)" /><span>White-label</span></label>
-          <label class="sw-chip"><input type="checkbox" name="wishlist" value="API / integrations" /><span>API / integrations</span></label>
-        </div>
-      </div>
-      <div class="sw-field">
-        <label for="swOther">Anything else you'd want (optional)</label>
-        <input type="text" id="swOther" name="other" />
-      </div>
-
-      <button type="submit" class="sw-cta sw-submit">Join the waitlist</button>
-      <small class="sw-status" id="swStatus" aria-live="polite"></small>
-    </form>
+      <p class="hardware-note">Running different gear? Tell us in the demo form and we'll check it before you commit.</p>
+    </div>
   </section>
 
-  <section class="sw-section wrap">
-    <p class="sw-eyebrow">FAQ</p>
-    <div class="sw-faq-item">
-      <h3>When is this launching?</h3>
-      <p>We're still building — this waitlist is how we decide what to build first. No fixed date yet.</p>
+  <!-- PLANS -->
+  <section class="plans field-paper" id="plans" aria-labelledby="plansTitle">
+    <div class="wrap">
+      <div class="plans-head">
+        <div><p class="eyebrow">Plans</p>
+        <h2 class="h2" id="plansTitle">Pick your <em>class.</em></h2></div>
+        <p>Every plan includes the full booth: capture, frames, filters, printing, QR tickets, the event console and offline mode. Plans differ in AI allowance and branding.</p>
+      </div>
+      <div class="passes">
+        <article class="pass">
+          <header class="pass-top">
+            <span class="pass-class">Starter</span>
+            <span class="pass-for">One booth adding AI</span>
+          </header>
+          <div class="pass-body">
+            <p class="pass-allow"><strong>500</strong> AI images / month</p>
+            <ul class="pass-list">
+              <li><svg aria-hidden="true"><use href="#i-check"/></svg>Full booth software</li>
+              <li><svg aria-hidden="true"><use href="#i-check"/></svg>Curated AI style packs</li>
+              <li><svg aria-hidden="true"><use href="#i-check"/></svg>Your frames and templates</li>
+            </ul>
+          </div>
+          <footer class="pass-stub">
+            <span class="pass-fare">Fare<strong>Contact us</strong></span>
+            <a class="btn btn-sm btn-ink" href="#demo" data-plan="Starter">Request pricing</a>
+          </footer>
+        </article>
+        <article class="pass pass-pro">
+          <header class="pass-top">
+            <span class="pass-class">Pro</span>
+            <span class="pass-for">Busy weekends, your brand</span>
+          </header>
+          <div class="pass-body">
+            <p class="pass-allow"><strong>1,500</strong> AI images + <strong>200</strong> AI videos / month</p>
+            <ul class="pass-list">
+              <li><svg aria-hidden="true"><use href="#i-check"/></svg>Everything in Starter</li>
+              <li><svg aria-hidden="true"><use href="#i-check"/></svg>AI video clips</li>
+              <li><svg aria-hidden="true"><use href="#i-check"/></svg>White-label guest screens</li>
+            </ul>
+          </div>
+          <footer class="pass-stub">
+            <span class="pass-fare">Fare<strong>Contact us</strong></span>
+            <a class="btn btn-sm btn-rust" href="#demo" data-plan="Pro">Request pricing</a>
+          </footer>
+        </article>
+        <article class="pass">
+          <header class="pass-top">
+            <span class="pass-class">Agency</span>
+            <span class="pass-for">Multi-booth teams</span>
+          </header>
+          <div class="pass-body">
+            <p class="pass-allow"><strong>Unlimited</strong> AI images and videos</p>
+            <ul class="pass-list">
+              <li><svg aria-hidden="true"><use href="#i-check"/></svg>Everything in Pro</li>
+              <li><svg aria-hidden="true"><use href="#i-check"/></svg>No monthly AI cap</li>
+              <li><svg aria-hidden="true"><use href="#i-check"/></svg>The plan our own booths run on</li>
+            </ul>
+          </div>
+          <footer class="pass-stub">
+            <span class="pass-fare">Fare<strong>Contact us</strong></span>
+            <a class="btn btn-sm btn-ink" href="#demo" data-plan="Agency">Request pricing</a>
+          </footer>
+        </article>
+      </div>
+      <p class="plans-note">Billing is arranged directly with us. No card needed to book a demo.</p>
     </div>
-    <div class="sw-faq-item">
-      <h3>Is this different from booking Playing With Photo for my event?</h3>
-      <p>Yes. Booking is us bringing the booth to your event. This is the software itself, for you to run on your own.</p>
+  </section>
+
+  <!-- OPERATOR -->
+  <section class="operator field-dark" aria-labelledby="operatorTitle">
+    <div class="wrap operator-grid">
+      <figure class="operator-photo"><img src="/photos/about/jeff.webp" alt="Jeff, founder of Playing With Photo" loading="lazy" width="800" height="1012" /><figcaption>Jeff · Singapore</figcaption></figure>
+      <div>
+        <p class="eyebrow">Meet the maker</p>
+        <h2 class="h2" id="operatorTitle">Built by a booth <em>operator.</em></h2>
+        <p>Jeff built Playing With Photo to run his own rental booths at weddings, birthdays and corporate events in Singapore, and they still run on it. Features land here because a real event needed them, not because a roadmap said so.</p>
+      </div>
     </div>
-    <div class="sw-faq-item">
-      <h3>Will there be a cost?</h3>
-      <p>We haven't set pricing yet. Joining the waitlist doesn't commit you to anything — we'll share pricing once it's ready.</p>
+  </section>
+
+  <!-- DEMO FORM -->
+  <section class="demo field-cream" id="demo" aria-labelledby="demoTitle">
+    <div class="wrap demo-grid">
+      <div class="demo-copy">
+        <p class="eyebrow">Book a demo</p>
+        <h2 class="h2 h2-xl" id="demoTitle">See it run <em>live.</em></h2>
+        <p>Tell us about your booths. We'll walk you through the software live, check your camera and printer, and send pricing for your plan.</p>
+        <ul class="demo-points">
+          <li><svg aria-hidden="true"><use href="#i-check"/></svg>A live walkthrough on a video call</li>
+          <li><svg aria-hidden="true"><use href="#i-check"/></svg>A hardware check for your setup</li>
+          <li><svg aria-hidden="true"><use href="#i-check"/></svg>A quote for the plan that fits</li>
+        </ul>
+      </div>
+
+      <form class="counter" id="demoForm" data-endpoint="https://formspree.io/f/xkodydoy" novalidate>
+        <div class="counter-head">
+          <span>Demo request</span>
+          <span aria-hidden="true">PWP · SW</span>
+        </div>
+        <div class="counter-body">
+          <div class="field">
+            <label for="fName">Name</label>
+            <input id="fName" name="name" type="text" autocomplete="name" required />
+          </div>
+          <div class="field">
+            <label for="fEmail">Email</label>
+            <input id="fEmail" name="email" type="email" autocomplete="email" required />
+          </div>
+          <div class="field">
+            <label for="fCompany">Company <span class="opt">optional</span></label>
+            <input id="fCompany" name="company" type="text" autocomplete="organization" />
+          </div>
+          <div class="field">
+            <label for="fCountry">Country</label>
+            <input id="fCountry" name="country" type="text" autocomplete="country-name" required />
+          </div>
+          <div class="field">
+            <label for="fWhatsapp">WhatsApp <span class="opt">optional</span></label>
+            <input id="fWhatsapp" name="whatsapp" type="tel" autocomplete="tel" placeholder="+1 555 010 0100" />
+          </div>
+          <div class="field">
+            <label for="fBooths">Booths you run</label>
+            <select id="fBooths" name="booths" required>
+              <option value="">Choose one</option>
+              <option>Planning my first</option>
+              <option>1</option>
+              <option>2–5</option>
+              <option>6 or more</option>
+            </select>
+          </div>
+          <fieldset class="field field-wide">
+            <legend>Plan you're curious about</legend>
+            <div class="seg" id="planSeg">
+              <label><input type="radio" name="plan" value="Starter" /><span>Starter</span></label>
+              <label><input type="radio" name="plan" value="Pro" /><span>Pro</span></label>
+              <label><input type="radio" name="plan" value="Agency" /><span>Agency</span></label>
+              <label><input type="radio" name="plan" value="Not sure" checked /><span>Not sure</span></label>
+            </div>
+          </fieldset>
+          <div class="field field-wide">
+            <label for="fGear">Camera and printer <span class="opt">optional</span></label>
+            <input id="fGear" name="hardware" type="text" placeholder="e.g. Canon 200D II, DNP DS-RX1HS" />
+          </div>
+          <div class="field field-wide">
+            <label for="fMsg">Anything else <span class="opt">optional</span></label>
+            <textarea id="fMsg" name="message" rows="3" placeholder="Events you run, software you use now, what you need"></textarea>
+          </div>
+          <input type="text" name="_gotcha" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true" />
+        </div>
+        <div class="counter-foot">
+          <button type="submit" class="btn btn-ink" id="demoSubmit">Request demo<svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
+          <p class="form-status" id="demoStatus" role="status" aria-live="polite"></p>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq field-paper" id="faq" aria-labelledby="faqTitle">
+    <div class="wrap faq-grid">
+      <div><p class="eyebrow">FAQ</p>
+      <h2 class="h2" id="faqTitle">Questions at <em>the gate.</em></h2></div>
+      <div class="faq-list">
+        <details>
+          <summary>Do I need internet at the event?<svg aria-hidden="true"><use href="#i-plus"/></svg></summary>
+          <p>Only for AI styles, AI video and QR downloads. Capture, frames, filters and printing run on the booth machine with no connection.</p>
+        </details>
+        <details>
+          <summary>What hardware do I need?<svg aria-hidden="true"><use href="#i-plus"/></svg></summary>
+          <p>A Windows PC or Mac, a Canon DSLR or webcam, a DNP dye-sub printer and a touchscreen. See <a href="#hardware">supported hardware</a>; if your kit differs, mention it in the demo form.</p>
+        </details>
+        <details>
+          <summary>Can I use my own branding?<svg aria-hidden="true"><use href="#i-plus"/></svg></summary>
+          <p>Yes. Frames, templates, colours and guest copy are set per event on every plan. Pro and Agency also remove the Playing With Photo name from guest screens.</p>
+        </details>
+        <details>
+          <summary>How much does it cost?<svg aria-hidden="true"><use href="#i-plus"/></svg></summary>
+          <p>Pricing depends on the plan and how many booths you run. Book a demo and we'll send a quote; billing is arranged directly with us.</p>
+        </details>
+        <details>
+          <summary>What happens if we go over our AI allowance?<svg aria-hidden="true"><use href="#i-plus"/></svg></summary>
+          <p>Each plan has a monthly AI allowance, and the booth shows your usage. Classic photos and printing are never metered. Talk to us about moving up a plan if you regularly run out.</p>
+        </details>
+        <details>
+          <summary>Is this the same as hiring Playing With Photo for my event?<svg aria-hidden="true"><use href="#i-plus"/></svg></summary>
+          <p>No. That's our rental service in Singapore, at <a href="/">playingwithphoto.com</a>. This page is for operators who want to run the software on their own booths.</p>
+        </details>
+      </div>
     </div>
   </section>
 </main>
 
-<footer class="sw-footer">
-  © 2026 Playing With Photo · <a href="/">playingwithphoto.com</a>
+<footer class="foot field-dark">
+  <div class="wrap foot-in">
+    <a class="foot-close" href="#demo">
+      <span class="foot-line">Your next event departs <em>soon.</em></span>
+      <span class="foot-cta">Book a demo<svg aria-hidden="true"><use href="#i-arrow"/></svg></span>
+    </a>
+    <div class="foot-meta">
+      <span>© 2026 Playing With Photo</span>
+      <a href="/">Book a booth for your event</a>
+      <a href="#top">Back to top</a>
+    </div>
+  </div>
 </footer>
 
 <script src="/photos.config.js?v=14" defer></script>
 <script src="/analytics.js?v=1" defer></script>
-<script src="/software/software.js?v=2" defer></script>
+<script src="/software/software.js?v=5" defer></script>
 </body>
 </html>

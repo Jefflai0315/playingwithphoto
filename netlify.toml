@@ -26,3 +26,16 @@
   for = "/*.js"
   [headers.values]
     Cache-Control = "public, max-age=86400"
+
+# Internal product/design notes: keep out of the public site
+[[redirects]]
+  from = "/PRODUCT.md"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/software/DESIGN.md"
+  to = "/404"
+  status = 404
+  force = true

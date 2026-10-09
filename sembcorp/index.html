@@ -54,7 +54,7 @@ a:focus-visible, button:focus-visible, [role="listbox"]:focus-visible {
 }
 .topbar {
   min-height: 4.5rem;
-  padding: 0.875rem 1rem;
+  padding: 0.5rem 1rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -66,10 +66,10 @@ a:focus-visible, button:focus-visible, [role="listbox"]:focus-visible {
   z-index: 30;
 }
 .brand { display: flex; align-items: center; gap: 0.875rem; text-decoration: none; }
-.brand img { width: 7.25rem; height: auto; display: block; }
+.brand img { width: 5rem; height: 3.5rem; object-fit: contain; display: block; }
 .topbar-event {
   margin: 0;
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--muted);
@@ -120,7 +120,7 @@ a:focus-visible, button:focus-visible, [role="listbox"]:focus-visible {
 }
 .mosaic-grid {
   display: grid;
-  grid-template-columns: 1.2fr 1.2fr 1fr 1fr;
+  grid-template-columns: repeat(3, 1fr);
   grid-template-rows: 1fr 1fr;
   min-height: 0;
   background: var(--pitch);
@@ -138,7 +138,6 @@ a:focus-visible, button:focus-visible, [role="listbox"]:focus-visible {
   color: var(--sheet);
   text-align: left;
 }
-.mosaic-grid button:first-child { grid-column: 1 / 3; }
 .mosaic-grid img {
   width: 100%;
   height: 100%;
@@ -147,12 +146,22 @@ a:focus-visible, button:focus-visible, [role="listbox"]:focus-visible {
   transition: transform 700ms cubic-bezier(.16,1,.3,1);
 }
 .mosaic-grid button:hover img { transform: scale(1.03); }
+.mosaic-grid button::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 45%;
+  background: linear-gradient(transparent, rgba(0, 0, 0, .76));
+  pointer-events: none;
+}
 .mosaic-grid span {
   position: absolute;
   left: 0.875rem;
   right: 0.75rem;
   bottom: 0.875rem;
-  font-size: 0.6875rem;
+  z-index: 1;
+  font-size: 0.8125rem;
+  font-weight: 600;
   letter-spacing: 0.1em;
   line-height: 1.25;
   text-transform: uppercase;
@@ -164,6 +173,7 @@ a:focus-visible, button:focus-visible, [role="listbox"]:focus-visible {
   border-top: 1px solid var(--gold);
 }
 .pitch {
+  margin: 0;
   position: relative;
   height: calc(100svh - 12.5rem);
   min-height: 18rem;
@@ -178,6 +188,7 @@ a:focus-visible, button:focus-visible, [role="listbox"]:focus-visible {
   display: block;
 }
 .pitch-stage video { position: absolute; inset: 0; opacity: 0; }
+.pitch-stage video[hidden] { display: none; }
 .pitch.is-playing .pitch-stage video { opacity: 1; }
 .pitch.is-playing .pitch-stage img { opacity: 0; }
 .pitch-stage img,
@@ -231,7 +242,7 @@ a:focus-visible, button:focus-visible, [role="listbox"]:focus-visible {
 .reel-label {
   margin: 0;
   padding: 0.75rem 1rem 0;
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--gold);
@@ -274,6 +285,24 @@ a:focus-visible, button:focus-visible, [role="listbox"]:focus-visible {
 .reel button[aria-selected="true"] {
   border-color: var(--gold);
 }
+.concepts {
+  padding: 3rem 1.75rem 3.5rem;
+  background: var(--sheet);
+  border-top: 1px solid var(--line);
+}
+.concepts h2 {
+  margin: 0;
+  font: 500 3.6rem/.9 var(--serif);
+  letter-spacing: -0.035em;
+}
+.concepts h2 em { color: var(--gold); }
+.concepts > p { max-width: 58ch; color: var(--muted); }
+.concept-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+.concept-grid figure { margin: 0; min-width: 0; }
+.concept-grid img { display: block; width: 100%; aspect-ratio: 4/3; object-fit: cover; background: var(--sunken); }
+.concept-grid figcaption { padding: .75rem 0 0; }
+.concept-grid strong { display: block; font-size: .75rem; letter-spacing: .08em; text-transform: uppercase; }
+.concept-grid span { display: block; margin-top: .25rem; color: var(--muted); font-size: .875rem; }
 .flow {
   display: grid;
   grid-template-columns: minmax(0, 1.15fr) minmax(20rem, 0.85fr);
@@ -327,7 +356,7 @@ a:focus-visible, button:focus-visible, [role="listbox"]:focus-visible {
 .night li strong {
   display: block;
   color: var(--ink);
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   margin-bottom: 0.375rem;
@@ -399,12 +428,12 @@ a:focus-visible, button:focus-visible, [role="listbox"]:focus-visible {
   flex: 1 1 auto;
   width: min(38rem, calc(100% - 10.5rem));
 }
-.prints-wide img { aspect-ratio: 1024 / 682; }
+.prints-wide img { aspect-ratio: 1536 / 1024; }
 .prints-strip {
   flex: 0 0 8.5rem;
   width: 8.5rem;
 }
-.prints-strip img { aspect-ratio: 341 / 1024; }
+.prints-strip img { aspect-ratio: 724 / 2172; }
 .close {
   padding: 3rem 1rem 3.5rem;
   border-top: 1px solid var(--line);
@@ -436,21 +465,25 @@ a:focus-visible, button:focus-visible, [role="listbox"]:focus-visible {
   .mosaic-copy h1 { font-size: 2.75rem; }
   .mosaic-grid {
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 38svh repeat(3, 26svh);
-  }
-  .mosaic-grid button:first-child {
-    grid-column: 1 / -1;
+    grid-template-rows: repeat(3, 26svh);
   }
   .pitch {
-    height: 48svh;
-    min-height: 16rem;
-    position: sticky;
-    top: 4.5rem;
-    z-index: 12;
+    height: auto;
+    min-height: 0;
+    position: static;
+    overflow: visible;
   }
-  .pitch-meta strong { font-size: 1.375rem; }
-  .pitch-meta span { display: none; }
+  .pitch-stage { position: relative; aspect-ratio: 16 / 9; }
+  .pitch-stage img { position: absolute; inset: 0; }
+  .pitch-hud { position: relative; padding: 1rem; align-items: center; }
+  .pitch-meta strong { font-size: 1.5rem; }
+  .pitch-meta span { font-size: .875rem; line-height: 1.4; }
+  .reel button { flex-basis: 7.5rem; }
+  .reel button .name { font-size: .875rem; }
   .flow, .night, .prints { grid-template-columns: 1fr; }
+  .concepts { padding: 2.25rem 1rem; }
+  .concepts h2 { font-size: 2.75rem; }
+  .concept-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .flow-photo img { max-height: 70svh; }
   .prints-copy {
     border-right: 0;
@@ -470,6 +503,14 @@ a:focus-visible, button:focus-visible, [role="listbox"]:focus-visible {
     align-self: center;
   }
 }
+@media (max-width: 40rem) {
+  .pitch-hud { flex-direction: column; align-items: stretch; }
+  .pitch-hud .play { align-self: flex-start; }
+  .concept-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+  .concept-grid img { aspect-ratio: 3 / 2; }
+  .concept-grid strong { font-size: .875rem; }
+  .concept-grid span { font-size: .9375rem; }
+}
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .mosaic-grid img,
@@ -480,55 +521,64 @@ a:focus-visible, button:focus-visible, [role="listbox"]:focus-visible {
 </head>
 <body>
   <!--
-    THESIS: Seven cute stills in a mosaic first; then a theater where thumbs change the clip in place. Refuses a tall name-list that hides the picture on a phone.
+    THESIS: Six selected looks in a mosaic first; then a theater where thumbs change the preview in place.
     OWN-WORLD: Event-paper, ink, champagne, serif titles; midnight pitch and thumbnail reel.
-    STORY: Sembcorp scans cute stills, then plays each clip from a filmstrip, then sees the booth flow and two sample prints.
-    FIRST VIEWPORT: Copy left, seven cute stills in a spanning mosaic. Primary action: Play the clips.
+    STORY: Sembcorp scans the selected looks, plays the available clips, then sees the booth flow and two sample prints.
+    FIRST VIEWPORT: Copy left, six selected stills in a mosaic. Primary action: See the looks.
     FORM: Sideline substitution board, candidate 7, seed 5b8a5253 — mosaic then theater.
     FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
   -->
   <header class="topbar">
     <a class="brand" href="https://playingwithphoto.com/">
-      <img src="assets/playing-with-photo-logo.png" width="116" height="36" alt="Playing With Photo">
+      <img src="assets/playing-with-photo-logo.png" width="80" height="56" alt="Playing With Photo">
     </a>
     <p class="topbar-event">Sembcorp company dinner</p>
   </header>
 
   <main>
-    <section class="mosaic" aria-label="Cute look stills">
+    <section class="mosaic" aria-label="Photobooth look samples">
       <div class="mosaic-copy">
-        <h1>Cute <em>looks</em></h1>
-        <p>These cute looks lead the night. Tap one to play its clip, or scroll the strip below.</p>
-        <a href="#theater">Play the clips</a>
+        <h1>The <em>looks</em></h1>
+        <p>Doodle and five sports looks for the night. Tap a sample to see it up close.</p>
+        <a href="#theater">See the looks</a>
       </div>
       <div class="mosaic-grid">
-        <button type="button" data-look="0"><img src="assets/images/plushie_us.webp" alt=""><span>Plushies</span></button>
-        <button type="button" data-look="1"><img src="assets/images/miniature_collectible.webp" alt=""><span>Miniature Collectible</span></button>
-        <button type="button" data-look="2"><img src="assets/images/arcade_game.webp" alt=""><span>Inside an Arcade Game</span></button>
-        <button type="button" data-look="3"><img src="assets/images/knitted_doll.webp" alt=""><span>Knitted Doll World</span></button>
-        <button type="button" data-look="4"><img src="assets/images/paper_world.webp" alt=""><span>Paper World</span></button>
-        <button type="button" data-look="5"><img src="assets/images/brick_world.webp" alt=""><span>Brick World</span></button>
-        <button type="button" data-look="6"><img src="assets/images/inflatable_universe.webp" alt=""><span>Inflatable Us</span></button>
+        <button type="button" data-look="0"><img src="assets/images/crayon_drawing.webp" alt=""><span>Doodle</span></button>
+        <button type="button" data-look="1"><img src="assets/images/chrome_sports_card.webp" alt=""><span>Chrome Card</span></button>
+        <button type="button" data-look="2"><img src="assets/images/football_manga_posed.webp" alt=""><span>Manga Still Pose</span></button>
+        <button type="button" data-look="3"><img src="assets/images/playful_street_football.webp" alt=""><span>Playful Football</span></button>
+        <button type="button" data-look="4"><img src="assets/images/street_basketball_graffiti.webp" alt=""><span>Graffiti Hoops</span></button>
+        <button type="button" data-look="5"><img src="assets/images/street_football_y2k.webp" alt=""><span>Y2K Street Football</span></button>
       </div>
     </section>
 
     <section class="theater" id="theater">
       <figure class="pitch" id="pitch">
         <div class="pitch-stage">
-          <img id="still" src="assets/images/plushie_us.webp" alt="Plushies group sample" width="1200" height="800">
-          <video id="clip" src="assets/videos/plushie_us.mp4" muted loop playsinline preload="metadata"></video>
+          <img id="still" src="assets/images/crayon_drawing.webp" alt="Doodle group sample" width="1200" height="800">
+          <video id="clip" muted loop playsinline preload="metadata" hidden></video>
         </div>
         <figcaption class="pitch-hud">
           <div class="pitch-meta">
-            <strong id="look-name">Plushies</strong>
-            <span id="look-copy">Recognisable plush characters in a stadium huddle.</span>
+            <strong id="look-name">Doodle</strong>
+            <span id="look-copy">The booth's Crayon Drawing style: a playful, hand-coloured portrait.</span>
           </div>
-          <button type="button" class="play" id="play" aria-pressed="false">Play clip</button>
+          <button type="button" class="play" id="play" aria-pressed="false" hidden>Play clip</button>
         </figcaption>
       </figure>
       <div class="reel-wrap">
-        <p class="reel-label">Swipe to change look</p>
+        <p class="reel-label">Swipe to change look · clips available for sports looks</p>
         <div class="reel" role="listbox" aria-label="Photobooth looks" id="reel"></div>
+      </div>
+    </section>
+
+    <section class="concepts" id="concepts" aria-label="Additional AI style ideas">
+      <h2>Three more <em>to consider</em></h2>
+      <p>All three are Gemini previews made from the sample photo you sent. The caricature and office-chair race go wild; the doodle follows your hand-drawn reference. These are options for your review, not guest-facing selections yet.</p>
+      <div class="concept-grid">
+        <figure><img src="assets/images/chaotic_caricature_angry.webp" width="1264" height="848" alt="Three friends as a wildly exaggerated, mischievous lowbrow caricature" loading="lazy"><figcaption><strong>Chaotic Caricature</strong><span>Huge features, mischievous faces, messy lowbrow ink</span></figcaption></figure>
+        <figure><img src="assets/images/office_chair_grand_prix.webp" width="1264" height="848" alt="Three friends racing on office chairs beneath a checkered flag" loading="lazy"><figcaption><strong>Office Chair Grand Prix</strong><span>A full-speed race on rolling chairs</span></figcaption></figure>
+        <figure><img src="assets/images/scribble_doodle_colored.webp" width="1264" height="848" alt="Three friends redrawn as a rough pen doodle with colorful shirts and simple smiling faces" loading="lazy"><figcaption><strong>Scribble Doodle</strong><span>Scratchy pen lines and hand-coloured shirts</span></figcaption></figure>
       </div>
     </section>
 
@@ -541,7 +591,7 @@ a:focus-visible, button:focus-visible, [role="listbox"]:focus-visible {
         <ol>
           <li><strong>Props and backdrop</strong> Guests grab a sports prop and stand on the gold sequin wall.</li>
           <li><strong>Vintage-case camera</strong> They pose at the wooden booth. The ring light and screen handle the capture.</li>
-          <li><strong>Pick a cute look</strong> The AI still is made from that photo. A short clip follows.</li>
+          <li><strong>Pick a look</strong> The AI still is made from that photo. A short clip follows for the animated looks.</li>
           <li><strong>Instant print and QR</strong> The print comes out at the side station. Guests scan to save photos and the clip on their phone.</li>
           <li><strong>Floor screen</strong> The latest clips play in the room as they complete.</li>
         </ol>
@@ -558,43 +608,33 @@ a:focus-visible, button:focus-visible, [role="listbox"]:focus-visible {
       </ul>
     </section>
 
-    <section class="prints" aria-label="Sample photo prints">
+    <section class="prints" aria-label="SSC print templates">
       <div class="prints-copy">
         <h2>The <em>print</em></h2>
-        <p>Two sample layouts: a landscape pair of the booth photo and the cute look, and a strip with two poses plus the look.</p>
+        <p>These two SSC print templates are ready for the booth: a landscape pair of the booth photo and an AI look, and a strip with two poses plus the look.</p>
       </div>
       <div class="prints-desk">
         <figure class="prints-wide">
-          <img src="assets/images/print-wide.jpg" width="1024" height="682" alt="Landscape print: booth photo beside a Miniature Collectible look, Sembcorp sports layout">
+          <img src="assets/images/print-wide-template.png" width="1536" height="1024" alt="SSC landscape print template with two photo openings">
         </figure>
         <figure class="prints-strip">
-          <img src="assets/images/print-strip.jpg" width="341" height="1024" alt="Vertical strip: two booth poses and a Miniature Collectible look, Sembcorp sports layout">
+          <img src="assets/images/print-strip-template.png" width="724" height="2172" alt="SSC vertical strip print template with three photo openings">
         </figure>
       </div>
     </section>
 
     <section class="close">
-      <p>Reply with the looks you want on the night. The print can follow this sports layout, or we lock a different one.</p>
+      <p>The selected looks and both SSC print templates are ready for the night.</p>
       <a class="reply" href="https://wa.me/6589896901">WhatsApp Jeff · +65 8989 6901</a>
     </section>
   </main>
 
   <script>
     const LOOKS = [
-      { id: "plushie_us", name: "Plushies", group: "Cute", copy: "Recognisable plush characters in a stadium huddle." },
-      { id: "miniature_collectible", name: "Miniature Collectible", group: "Cute", copy: "The group as detailed collectible figures in miniature." },
-      { id: "arcade_game", name: "Inside an Arcade Game", group: "Cute", copy: "Everyone as pixel characters inside a handheld basketball game." },
-      { id: "knitted_doll", name: "Knitted Doll World", group: "Cute", copy: "Hand-knitted wool dolls in a miniature stadium huddle." },
-      { id: "paper_world", name: "Paper World", group: "Cute", copy: "A layered paper-cut diorama of the group in a packed stadium." },
-      { id: "brick_world", name: "Brick World", group: "Cute", copy: "The scene rebuilt in interlocking bricks." },
-      { id: "inflatable_universe", name: "Inflatable Us", group: "Cute", copy: "Glossy, larger-than-life inflatable versions of the group." },
-      { id: "football_goal_freeze", name: "Goal Freeze", group: "Sports", copy: "A stadium celebration held at its peak, confetti and droplets frozen in the lights." },
-      { id: "sports_anime", name: "Sports Anime", group: "Sports", copy: "A polished, high-energy sports-anime stadium scene." },
+      { id: "crayon_drawing", name: "Doodle", copy: "The booth's Crayon Drawing style: a playful, hand-coloured portrait.", video: false },
       { id: "chrome_sports_card", name: "Chrome Card", group: "Sports", copy: "Each guest as an elite holographic collectible." },
       { id: "football_manga_posed", name: "Manga Still Pose", group: "Sports", copy: "Nostalgic football manga, inked with motion trails." },
-      { id: "intense_football_anime", name: "Football Anime Still", group: "Sports", copy: "Modern football-anime stills with sharp linework and luminous auras." },
       { id: "playful_street_football", name: "Playful Football", group: "Sports", copy: "Street football with paint, chalk, and hand-drawn energy." },
-      { id: "retro_arcade_basketball", name: "Digitized Hoops", group: "Sports", copy: "A digitised basketball game with pixel glow and arcade light." },
       { id: "street_basketball_graffiti", name: "Graffiti Hoops", group: "Sports", copy: "Street-basketball portraiture with courts and spray paint." },
       { id: "street_football_y2k", name: "Y2K Street Football", group: "Sports", copy: "Early-2000s street-football campaign texture." }
     ];
@@ -639,6 +679,7 @@ a:focus-visible, button:focus-visible, [role="listbox"]:focus-visible {
 
     function showLook(autoplay) {
       const look = LOOKS[index];
+      const hasVideo = look.video !== false;
       pitch.classList.remove("is-playing");
       play.setAttribute("aria-pressed", "false");
       play.textContent = "Play clip";
@@ -647,12 +688,17 @@ a:focus-visible, button:focus-visible, [role="listbox"]:focus-visible {
       still.alt = look.name + " group sample";
       lookName.textContent = look.name;
       lookCopy.textContent = look.copy;
-      if (clip.getAttribute("src") !== asset(look, "video")) {
+      play.hidden = !hasVideo;
+      clip.hidden = !hasVideo;
+      if (!hasVideo) {
+        clip.removeAttribute("src");
+        clip.load();
+      } else if (clip.getAttribute("src") !== asset(look, "video")) {
         clip.src = asset(look, "video");
         clip.load();
       }
       syncReel();
-      if (autoplay && !reduceMotion) startClip();
+      if (autoplay && hasVideo && !reduceMotion) startClip();
     }
 
     function startClip() {
@@ -697,7 +743,7 @@ a:focus-visible, button:focus-visible, [role="listbox"]:focus-visible {
         event.preventDefault();
         select(index - 1, true);
       } else if (event.key === " ") {
-        if (event.target === play) return;
+        if (event.target === play || play.hidden) return;
         event.preventDefault();
         play.click();
       }

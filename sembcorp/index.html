@@ -300,7 +300,7 @@ a:focus-visible, button:focus-visible, [role="listbox"]:focus-visible {
 .concepts > p { max-width: 58ch; color: var(--muted); }
 .concept-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; margin-top: 1.5rem; }
 .concept-grid figure { margin: 0; min-width: 0; }
-.concept-grid img { display: block; width: 100%; height: auto; aspect-ratio: 1264 / 848; background: var(--sunken); }
+.concept-grid video { display: block; width: 100%; height: auto; aspect-ratio: 1264 / 848; object-fit: contain; background: var(--sunken); }
 .concept-grid figcaption { padding: .75rem 0 0; }
 .concept-grid strong { display: block; font-size: .75rem; letter-spacing: .08em; text-transform: uppercase; }
 .concept-grid span { display: block; margin-top: .25rem; color: var(--muted); font-size: .875rem; }
@@ -567,18 +567,18 @@ a:focus-visible, button:focus-visible, [role="listbox"]:focus-visible {
         </figcaption>
       </figure>
       <div class="reel-wrap">
-        <p class="reel-label">Swipe to change look · clips available for sports looks</p>
+        <p class="reel-label">Swipe to change look · tap to play each clip</p>
         <div class="reel" role="listbox" aria-label="Photobooth looks" id="reel"></div>
       </div>
     </section>
 
     <section class="concepts" id="concepts" aria-label="Additional AI style ideas">
       <h2>Three more <em>to consider</em></h2>
-      <p>All three are Gemini previews made from the sample photo you sent. The caricature and office-chair race go wild; the doodle follows your hand-drawn reference. These are options for your review, not guest-facing selections yet.</p>
+      <p>These three styles start with Gemini stills made from the sample photo you sent. Tap each clip to see it move. They are options for your review, not guest-facing selections yet.</p>
       <div class="concept-grid">
-        <figure><img src="assets/images/chaotic_caricature.webp" width="1264" height="848" alt="Three friends as an exaggerated, colorful comic caricature" loading="lazy"><figcaption><strong>Chaotic Caricature</strong><span>Huge features, cheeky faces, messy lowbrow ink</span></figcaption></figure>
-        <figure><img src="assets/images/office_chair_grand_prix.webp" width="1264" height="848" alt="Three friends racing on office chairs beneath a checkered flag" loading="lazy"><figcaption><strong>Office Chair Grand Prix</strong><span>A full-speed race on rolling chairs</span></figcaption></figure>
-        <figure><img src="assets/images/scribble_doodle_colored.webp" width="1264" height="848" alt="Three friends redrawn as a rough pen doodle with colorful shirts and simple smiling faces" loading="lazy"><figcaption><strong>Scribble Doodle</strong><span>Scratchy pen lines and hand-coloured shirts</span></figcaption></figure>
+        <figure><video src="assets/videos/chaotic_caricature.mp4" poster="assets/images/chaotic_caricature.webp" width="1264" height="848" controls muted loop playsinline preload="none" aria-label="Play Chaotic Caricature animation"></video><figcaption><strong>Chaotic Caricature</strong><span>Huge features, cheeky faces, messy lowbrow ink</span></figcaption></figure>
+        <figure><video src="assets/videos/office_chair_grand_prix.mp4" poster="assets/images/office_chair_grand_prix.webp" width="1264" height="848" controls muted loop playsinline preload="none" aria-label="Play Office Chair Grand Prix animation"></video><figcaption><strong>Office Chair Grand Prix</strong><span>A full-speed race on rolling chairs</span></figcaption></figure>
+        <figure><video src="assets/videos/scribble_doodle.mp4" poster="assets/images/scribble_doodle_colored.webp" width="1264" height="848" controls muted loop playsinline preload="none" aria-label="Play Scribble Doodle animation"></video><figcaption><strong>Scribble Doodle</strong><span>Scratchy pen lines and hand-coloured shirts</span></figcaption></figure>
       </div>
     </section>
 
@@ -631,7 +631,7 @@ a:focus-visible, button:focus-visible, [role="listbox"]:focus-visible {
 
   <script>
     const LOOKS = [
-      { id: "crayon_drawing", name: "Doodle", copy: "The booth's Crayon Drawing style: a playful, hand-coloured portrait.", video: false },
+      { id: "crayon_drawing", name: "Doodle", copy: "The booth's Crayon Drawing style: a playful, hand-coloured portrait." },
       { id: "chrome_sports_card", name: "Chrome Card", group: "Sports", copy: "Each guest as an elite holographic collectible." },
       { id: "football_manga_posed", name: "Manga Still Pose", group: "Sports", copy: "Nostalgic football manga, inked with motion trails." },
       { id: "playful_street_football", name: "Playful Football", group: "Sports", copy: "Street football with paint, chalk, and hand-drawn energy." },

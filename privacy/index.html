@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="description" content="How Playing With Photo collects, uses and protects personal data from event guests, photobooth vendors using our software, and website visitors." />
+<title>Privacy Policy | Playing With Photo</title>
+<link rel="icon" type="image/x-icon" href="/favicon.ico" />
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+<link rel="canonical" href="https://playingwithphoto.com/privacy/" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://playingwithphoto.com/privacy/" />
+<meta property="og:title" content="Privacy Policy | Playing With Photo" />
+<meta property="og:description" content="How Playing With Photo handles personal data from event guests, photobooth vendors and website visitors." />
+<meta property="og:image" content="https://playingwithphoto.com/og-hero-2026.jpg" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&family=Caveat:wght@600&family=JetBrains+Mono:wght@400&family=Titan+One&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #f4ead5;
+    --cream-2: #efe3c7;
+    --paper: #ebdcb7;
+    --tan: #d9b681;
+    --rust: #b25f2e;
+    --rust-2: #8a4620;
+    --ink: #2a1a0c;
+    --ink-2: #4a2f1a;
+    --highlight: #ffd88a;
+
+    --ff-display: "Fraunces", "Cormorant Garamond", Georgia, serif;
+    --ff-body: "DM Sans", system-ui, sans-serif;
+    --ff-script: "Caveat", "Brush Script MT", cursive;
+    --ff-mono: "JetBrains Mono", ui-monospace, monospace;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: var(--ff-body);
+    font-size: 17px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; }
+  .wrap { max-width: 1280px; margin: 0 auto; padding: 0 36px; }
+
+  /* ======= TOP NAV ======= */
+  nav.topnav {
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 8px 36px;
+    font-size: 13px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    border-bottom: 1px solid rgba(42,26,12,.1);
+  }
+  .logo > a {
+    display: flex; align-items: center; gap: 9px;
+    font-family: "Titan One", "Arial Rounded MT Bold", sans-serif;
+    font-size: 17px;
+    letter-spacing: .025em;
+    text-decoration: none;
+  }
+  .logo em { font-style: inherit; }
+  .nav-logo-mark { display: block; width: 44px; height: 46px; object-fit: contain; }
+  .nav-back { text-decoration: none; opacity: .7; }
+  .nav-back:hover { opacity: 1; }
+
+  /* ======= POLICY ======= */
+  .policy { max-width: 760px; margin: 0 auto; padding: 72px 24px 96px; }
+  .eyebrow {
+    font-family: var(--ff-mono);
+    font-size: 12px;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--rust);
+  }
+  h1 {
+    font-family: var(--ff-display);
+    font-weight: 400;
+    font-size: clamp(44px, 8vw, 76px);
+    line-height: 1;
+    letter-spacing: -.02em;
+    margin: 14px 0 18px;
+  }
+  h1 em { font-style: italic; color: var(--rust); }
+  .updated {
+    font-family: var(--ff-mono);
+    font-size: 12px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    opacity: .7;
+    margin: 0 0 32px;
+  }
+  .lede { font-size: 19px; color: var(--ink-2); }
+  .toc {
+    margin: 40px 0 8px;
+    padding: 22px 26px;
+    background: var(--cream-2);
+    border: 1px solid rgba(42,26,12,.12);
+    border-radius: 6px;
+  }
+  .policy .toc h2 { margin: 0 0 10px; font-size: 13px; font-family: var(--ff-mono); font-weight: 400; letter-spacing: .16em; text-transform: uppercase; }
+  .toc ol { margin: 0; padding-left: 22px; columns: 2; column-gap: 32px; font-size: 15px; }
+  .toc li { break-inside: avoid; margin: 3px 0; }
+  .toc a { text-decoration: none; }
+  .toc a:hover { text-decoration: underline; color: var(--rust-2); }
+
+  .policy section { padding-top: 40px; }
+  .policy h2 {
+    font-family: var(--ff-display);
+    font-weight: 600;
+    font-size: clamp(26px, 4vw, 32px);
+    line-height: 1.15;
+    margin: 0 0 14px;
+    scroll-margin-top: 24px;
+  }
+  .policy h3 { font-size: 18px; margin: 26px 0 8px; }
+  .policy p, .policy li { color: var(--ink-2); }
+  .policy ul { padding-left: 22px; }
+  .policy li { margin: 6px 0; }
+  .policy a { color: var(--rust-2); text-underline-offset: 2px; }
+  .policy strong { color: var(--ink); }
+
+  .table-scroll { overflow-x: auto; margin: 16px 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 15px; }
+  th, td { text-align: left; vertical-align: top; padding: 10px 12px; border-bottom: 1px solid rgba(42,26,12,.14); }
+  th { font-family: var(--ff-mono); font-size: 11px; font-weight: 400; letter-spacing: .14em; text-transform: uppercase; color: var(--ink); background: var(--paper); }
+  td { color: var(--ink-2); }
+
+  /* Placeholders that must be filled in before this page is final. */
+  .todo {
+    background: var(--highlight);
+    color: var(--ink);
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-weight: 600;
+  }
+
+  .contact-card {
+    margin-top: 16px;
+    padding: 22px 26px;
+    background: var(--ink);
+    color: var(--cream);
+    border-radius: 6px;
+  }
+  .contact-card p { color: var(--cream); margin: 4px 0; }
+  .contact-card a { color: var(--highlight); }
+
+  /* ======= FOOTER ======= */
+  footer { background: var(--paper); padding: 56px 0 40px; }
+  footer .wrap { display: flex; justify-content: space-between; align-items: flex-end; gap: 32px; flex-wrap: wrap; }
+  footer .biglogo {
+    font-family: var(--ff-display);
+    font-style: italic;
+    font-size: clamp(48px, 9vw, 104px);
+    font-weight: 300;
+    line-height: .9;
+    letter-spacing: -.02em;
+  }
+  footer .biglogo em { font-family: var(--ff-script); font-style: normal; color: var(--rust); }
+  footer .colophon { font-family: var(--ff-mono); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; opacity: .7; line-height: 1.8; }
+  footer .colophon a { text-decoration: none; }
+  footer .colophon a:hover { text-decoration: underline; }
+
+  @media (max-width: 700px) {
+    .wrap, nav.topnav { padding-left: 16px; padding-right: 16px; }
+    .logo-long { display: none; }
+    .policy { padding: 48px 16px 72px; }
+    .toc ol { columns: 1; }
+    .lede { font-size: 17px; }
+    footer .colophon { text-align: left !important; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav" aria-label="Main">
+  <div class="logo">
+    <a href="/">
+      <img class="nav-logo-mark" src="/pwp-logo.png?v=1" alt="" width="541" height="566">
+      <span class="logo-long">Playing With <em>Photo</em></span>
+    </a>
+  </div>
+  <a class="nav-back" href="/">← Back to site</a>
+</nav>
+
+<main class="policy">
+  <div class="eyebrow">Legal · Singapore</div>
+  <h1>Privacy <em>policy</em></h1>
+  <p class="updated">Last updated: 22 October 2026</p>
+
+  <p class="lede">This policy explains what personal data Playing With Photo collects, why we collect it, who we share it with and what choices you have. We wrote it with Singapore's Personal Data Protection Act 2012 (PDPA) in mind, in plain language.</p>
+
+  <nav class="toc" aria-label="Contents">
+    <h2>Contents</h2>
+    <ol>
+      <li><a href="#who-we-are">Who we are</a></li>
+      <li><a href="#event-guests">Event guests</a></li>
+      <li><a href="#vendors">Photobooth vendors using our software</a></li>
+      <li><a href="#google-sign-in">Google sign-in</a></li>
+      <li><a href="#website">Website visitors</a></li>
+      <li><a href="#providers">Service providers and overseas transfers</a></li>
+      <li><a href="#retention">How long we keep data</a></li>
+      <li><a href="#security">How we protect data</a></li>
+      <li><a href="#children">Children</a></li>
+      <li><a href="#your-rights">Your choices and requests</a></li>
+      <li><a href="#changes">Changes to this policy</a></li>
+      <li><a href="#contact">Contact us</a></li>
+    </ol>
+  </nav>
+
+  <section id="who-we-are">
+    <h2>1. Who we are</h2>
+    <p>Playing With Photo is a photobooth business based in Singapore, run by Playing With Pencil. We run AI and vintage-style photobooths at events, and we also provide our photobooth software to other photobooth businesses ("vendors").</p>
+    <p>The organisation responsible for your personal data is <span class="todo">[TO CONFIRM: registered legal entity name]</span>, UEN <span class="todo">[TO CONFIRM: UEN]</span>, Singapore. In this policy, "we", "us" and "our" mean that organisation.</p>
+    <p>This policy covers three groups of people:</p>
+    <ul>
+      <li><strong>Event guests</strong> who use a photobooth run by us, or run by a vendor using our software.</li>
+      <li><strong>Photobooth vendors</strong> and their team members who sign in to use our booth software and web app.</li>
+      <li><strong>Visitors</strong> to playingwithphoto.com.</li>
+    </ul>
+  </section>
+
+  <section id="event-guests">
+    <h2>2. Event guests</h2>
+
+    <h3>What we collect at the booth</h3>
+    <ul>
+      <li><strong>Photos and short clips</strong> taken by the booth camera, and the prints, strips and GIFs made from them.</li>
+      <li><strong>AI-styled versions</strong> of your photo, if you or the event choose an AI style (for example a painted portrait or a short animated clip).</li>
+      <li><strong>Your email address</strong>, only if you choose to type it in to receive your photos by email.</li>
+      <li><strong>Simple choices you make on screen</strong>, such as the style, frame or theme you pick.</li>
+      <li>If a booth offers paid self-service sessions, the <strong>payment status</strong> of your session. The payment itself is handled by the payment provider shown on the QR code; we do not receive your card or wallet details.</li>
+    </ul>
+
+    <h3>How we use it</h3>
+    <ul>
+      <li>To take, style, print and deliver your photos.</li>
+      <li><strong>AI styles:</strong> to create an AI-styled version, your photo is sent from the booth to our cloud server and from there to an AI provider: <strong>WaveSpeed</strong> or <strong>Google Cloud Vertex AI (Gemini)</strong>. The provider returns the styled image or clip. We do not use your photos to train AI models.</li>
+      <li><strong>QR download links:</strong> after your session the booth shows a QR code. Scanning it opens a private, hard-to-guess link where you can view and download your photos. Anyone who has the link can open it, so please share it only with people you want to see your photos.</li>
+      <li><strong>Email delivery:</strong> if you enter your email address, we use it only to send you your photos from that event. We do not add you to a mailing list.</li>
+      <li><strong>Printing:</strong> prints are made on site and handed to you. We do not keep printed copies.</li>
+      <li>With the event host's agreement, photos may be shared with the event host (for example in an event gallery or a slideshow at the event).</li>
+    </ul>
+    <p>We will only use your photos in our own marketing (for example on this website or social media) if you or the event host have agreed to it. <span class="todo">[TO CONFIRM: how marketing consent is obtained, e.g. a sign at the booth or a clause in the host's booking terms]</span></p>
+
+    <h3>Where your photos are stored</h3>
+    <ul>
+      <li>Photos are saved on the booth computer at the event. QR download links are served from that booth computer through a secure tunnel (Cloudflare).</li>
+      <li>Photos sent for AI styling are kept temporarily on our cloud server only long enough to complete the job: by default they are deleted automatically within 24 hours.</li>
+      <li>AI providers process the photo to return the result and handle it under their own terms and data policies.</li>
+    </ul>
+
+    <h3>Booths run by other vendors</h3>
+    <p>If you used a booth run by another photobooth company that uses our software, that company is responsible for your photos and decides how they are used and kept. We process the photos only on its behalf, for example to create AI styles. Please contact that company first; if you can't reach them, contact us and we will help where we can.</p>
+
+    <h3>Asking us to delete your photos</h3>
+    <p>Email us at <a href="mailto:pencilwithjoy@gmail.com">pencilwithjoy@gmail.com</a> with the event name and date and, if you can, the QR link or a screenshot of your photo. We will delete the photos from our systems and stop using them, and confirm by email.</p>
+  </section>
+
+  <section id="vendors">
+    <h2>3. Photobooth vendors using our software</h2>
+    <p>If your business uses our booth software, we collect:</p>
+    <ul>
+      <li><strong>Account details:</strong> your name and email address when you sign in, either with Google or with an email sign-in link. Sign-in is handled by <strong>Supabase</strong>, our authentication provider.</li>
+      <li><strong>Business and team details:</strong> your business name, and the email addresses and roles (owner, manager or operator) of team members you invite.</li>
+      <li><strong>Booth usage records:</strong> your licence and booth details, and a record of each AI job (type of job, AI model used, status, time and billing month), so we can apply your plan's limits, show usage and bill correctly. We also keep an activity log of account changes, such as invitations and plan changes.</li>
+      <li><strong>Billing details:</strong> payments are processed by <strong>Stripe</strong>. Stripe collects your card details directly; we never see or store your full card number. We keep your Stripe customer and subscription references, plan and payment status.</li>
+      <li><strong>Support communications:</strong> messages you send us by email or WhatsApp, and any details you share to get help.</li>
+    </ul>
+    <p>We use this data to provide and secure your account, run the booth software and AI features, bill you, give support, and tell you about important changes to the service. Photos taken at your events are handled as described in <a href="#event-guests">section 2</a>: you decide how your guests' photos are used, and we process them on your behalf.</p>
+  </section>
+
+  <section id="google-sign-in">
+    <h2>4. Google sign-in</h2>
+    <p>If you choose "Sign in with Google", Google shares your <strong>name, email address and profile picture</strong> with us, through Supabase. We use your email address and name only to identify you, sign you in and link you to your business's account. We do not ask for access to your Gmail, Google Drive, contacts or any other Google data.</p>
+    <p>We do not sell Google user data, use it for advertising, or use it to train AI models. You can remove our access at any time from your <a href="https://myaccount.google.com/permissions" target="_blank" rel="noopener">Google Account permissions page</a>.</p>
+  </section>
+
+  <section id="website">
+    <h2>5. Website visitors</h2>
+
+    <h3>Analytics and cookies</h3>
+    <p>This website uses <strong>Google Analytics 4</strong> to understand how visitors use the site. Google Analytics sets cookies (such as <code>_ga</code>) and collects information like the pages you view, the site that referred you, your device and browser type, and your approximate location (city or country, based on your IP address). We also record clicks on certain buttons, such as "Book the booth", WhatsApp links and package choices, so we can see which parts of the site are useful. We do not use this information to identify you personally.</p>
+    <p>You can block or delete cookies in your browser settings, or install Google's <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener">Google Analytics opt-out add-on</a>. The site works without these cookies.</p>
+
+    <h3>Enquiry forms</h3>
+    <p>When you send an enquiry through our booking form, we receive the details you enter: your name, WhatsApp number, email address, event date, event type, venue, package and add-ons. Our software enquiry form asks for your name, email, company, country, WhatsApp number, number of booths and the plan you are interested in. Forms are delivered to us by <strong>Formspree</strong>. We use these details only to reply to you and to prepare a quote or demo.</p>
+
+    <h3>Camera demo</h3>
+    <p>The vintage camera demo on our home page runs entirely in your browser. Your camera feed and the photo strips you make are <strong>not uploaded</strong> to us. Your browser stores a small counter (in local storage) of how many free demo strips you have used.</p>
+
+    <h3>Other services the site loads</h3>
+    <p>Pages load fonts from Google Fonts and some scripts from the jsDelivr content network. These services receive your IP address and browser details when your browser requests the files. Links to WhatsApp, Instagram or other sites are governed by those sites' own privacy policies. Our website host, <strong>Vercel</strong>, keeps standard server logs (such as IP address and pages requested) for security and operations.</p>
+  </section>
+
+  <section id="providers">
+    <h2>6. Service providers and overseas transfers</h2>
+    <p>We use trusted service providers to run our business. They process personal data only to provide their service to us.</p>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr><th>Provider</th><th>What they do for us</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Supabase</td><td>Vendor account sign-in (Google sign-in and email links)</td></tr>
+          <tr><td>Stripe</td><td>Subscription billing and card payments</td></tr>
+          <tr><td>WaveSpeed</td><td>AI image and video styling of guest photos</td></tr>
+          <tr><td>Google Cloud (Vertex AI / Gemini)</td><td>AI image styling of guest photos</td></tr>
+          <tr><td>Google (Analytics, Fonts)</td><td>Website analytics and web fonts</td></tr>
+          <tr><td>DigitalOcean</td><td>Hosts our cloud server (api.playingwithphoto.com), which runs AI jobs, licences and vendor accounts</td></tr>
+          <tr><td>Cloudflare</td><td>Secure tunnels that serve QR download links from booth computers</td></tr>
+          <tr><td>Vercel</td><td>Hosts this website</td></tr>
+          <tr><td>Formspree</td><td>Delivers website enquiry forms to us</td></tr>
+          <tr><td><span class="todo">[TO CONFIRM: email service used to send guest photos, e.g. Gmail / Google Workspace]</span></td><td>Sends guest photos by email</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p><strong>Overseas transfers.</strong> Several of these providers store or process data outside Singapore, for example in the United States. <span class="todo">[TO CONFIRM: Supabase project region and DigitalOcean server region]</span> When we transfer personal data overseas, we take steps to make sure it receives a standard of protection comparable to the PDPA, for example by using providers bound by contractual data protection commitments.</p>
+    <p><strong>We do not sell personal data</strong>, and we do not share it with third parties for their own marketing. We may disclose personal data if required by law or to protect our rights, our customers or the public.</p>
+  </section>
+
+  <section id="retention">
+    <h2>7. How long we keep data</h2>
+    <p>We keep personal data only as long as we need it for the purposes above, or as required by law, and then delete it or make it anonymous.</p>
+    <ul>
+      <li><strong>Guest photos on booth computers and QR download links:</strong> <span class="todo">[TO CONFIRM: e.g. links work for 30 days; photos deleted from the booth computer after N days]</span></li>
+      <li><strong>Photos sent for AI styling:</strong> deleted from our cloud server automatically, by default within 24 hours.</li>
+      <li><strong>Guest email addresses:</strong> <span class="todo">[TO CONFIRM: e.g. deleted N days after the event]</span></li>
+      <li><strong>Event galleries shared with the event host:</strong> <span class="todo">[TO CONFIRM]</span></li>
+      <li><strong>Vendor accounts:</strong> for as long as the account is active, and <span class="todo">[TO CONFIRM: N months]</span> after it is closed. Billing and transaction records are kept for as long as Singapore tax and accounting law requires (generally 5 years).</li>
+      <li><strong>Enquiries and support messages:</strong> <span class="todo">[TO CONFIRM: e.g. 2 years after last contact]</span></li>
+    </ul>
+  </section>
+
+  <section id="security">
+    <h2>8. How we protect data</h2>
+    <p>We use reasonable security measures to protect personal data, including encrypted connections (HTTPS) between the booth, our servers and our providers, sign-in for vendor accounts, role-based access for team members, random unguessable download links, and automatic deletion of temporary AI uploads. Access to our systems is limited to people who need it. No system is perfectly secure, so we cannot guarantee absolute security. If a data breach is likely to cause you significant harm, we will notify you and the Personal Data Protection Commission as the PDPA requires.</p>
+  </section>
+
+  <section id="children">
+    <h2>9. Children</h2>
+    <p>Children may appear in photos taken at family events, weddings and parties. We expect a parent, guardian or the event host to supervise children at the booth and to agree on their behalf before a child uses AI styles or enters an email address. A parent or guardian can ask us to delete a child's photos at any time (see <a href="#your-rights">section 10</a>).</p>
+    <p>Our vendor software and web app are for businesses and are not meant for children.</p>
+  </section>
+
+  <section id="your-rights">
+    <h2>10. Your choices and requests</h2>
+    <p>Under the PDPA you can:</p>
+    <ul>
+      <li><strong>Access</strong> the personal data we hold about you and ask how it has been used or disclosed in the past year.</li>
+      <li><strong>Correct</strong> personal data that is wrong or incomplete.</li>
+      <li><strong>Withdraw consent</strong> to us collecting, using or disclosing your personal data, including asking us to delete your photos. We will tell you if withdrawing consent means we can no longer provide a service (for example, we can't email photos without an email address).</li>
+    </ul>
+    <p>To make a request, email <a href="mailto:pencilwithjoy@gmail.com">pencilwithjoy@gmail.com</a>. We may ask you to confirm your identity. We will reply as soon as reasonably possible, and in any case within <strong>30 days</strong>. If we need more time, we will tell you when to expect a full reply. We may charge a reasonable fee for access requests and will tell you the fee before we proceed.</p>
+    <p>If you are not satisfied with our response, you can contact Singapore's <a href="https://www.pdpc.gov.sg/" target="_blank" rel="noopener">Personal Data Protection Commission</a>.</p>
+  </section>
+
+  <section id="changes">
+    <h2>11. Changes to this policy</h2>
+    <p>We may update this policy from time to time. The "Last updated" date at the top shows when it last changed. If we make significant changes that affect vendor accounts, we will also tell account owners by email.</p>
+  </section>
+
+  <section id="contact">
+    <h2>12. Contact us</h2>
+    <p>For any question or request about your personal data, contact our Data Protection Officer:</p>
+    <div class="contact-card">
+      <p><strong>Data Protection Officer:</strong> <span class="todo">[TO CONFIRM: name or title]</span></p>
+      <p><strong>Email:</strong> <a href="mailto:pencilwithjoy@gmail.com">pencilwithjoy@gmail.com</a> <span class="todo">[TO CONFIRM: dedicated DPO email, if any]</span></p>
+      <p><strong>Organisation:</strong> <span class="todo">[TO CONFIRM: legal entity name, UEN]</span>, Singapore</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="biglogo">Playing<br/>With <em>Photo.</em></div>
+    <div class="colophon" style="text-align:right;">
+      © 2026 Playing With Photo<br/>
+      <a href="/">Home</a> · <a href="/software/">Software</a> · <a href="/privacy/">Privacy</a><br/>
+      Singapore
+    </div>
+  </div>
+</footer>
+
+<script src="/photos.config.js?v=15" defer></script>
+<script src="/analytics.js?v=1" defer></script>
+</body>
+</html>

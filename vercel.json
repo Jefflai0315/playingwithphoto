@@ -57,6 +57,16 @@
       "permanent": true
     }
   ],
+  "rewrites": [
+    {
+      "source": "/download",
+      "destination": "https://app.playingwithphoto.com/download/"
+    },
+    {
+      "source": "/download/:path*",
+      "destination": "https://app.playingwithphoto.com/download/:path*"
+    }
+  ],
   "headers": [
     {
       "source": "/Landing(.*)",

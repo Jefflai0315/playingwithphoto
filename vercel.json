@@ -63,8 +63,8 @@
       "destination": "https://app.playingwithphoto.com/download/"
     },
     {
-      "source": "/download/:path*",
-      "destination": "https://app.playingwithphoto.com/download/:path*"
+      "source": "/download/(.*)",
+      "destination": "https://app.playingwithphoto.com/download/$1"
     }
   ],
   "headers": [

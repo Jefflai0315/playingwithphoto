@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Booth Setup Videos | Playing With Photo</title>
+<meta name="description" content="Five short videos that take a Playing With Photo booth from a new Windows PC to its first event: install, camera and printer, your event, event day, and guests." />
+<link rel="canonical" href="https://playingwithphoto.com/setup/" />
+<link rel="icon" type="image/x-icon" href="/favicon.ico" />
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+<meta name="theme-color" content="#f4ead5" />
+<meta property="og:title" content="Booth setup videos · Playing With Photo" />
+<meta property="og:description" content="From a new PC to your first event in five short videos." />
+<meta property="og:image" content="https://playingwithphoto.com/og-share.jpg" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* Same sepia world as /software/: cream page, ink text, rust accents. */
+  :root {
+    --cream: #f4ead5; --cream-2: #efe3c7; --card: #fbf5e8; --rust: #b25f2e; --rust-2: #8a4620;
+    --ink: #2a1a0c; --ink-2: #4a2f1a; --line: #e2d3b3; --shadow: rgba(62, 34, 12, .22);
+    --ff-display: "Fraunces", Georgia, serif; --ff-body: "DM Sans", system-ui, sans-serif;
+    --ff-mono: "JetBrains Mono", ui-monospace, monospace;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--cream); color: var(--ink); font-family: var(--ff-body); font-size: 17px; line-height: 1.55; }
+  a { color: var(--rust-2); }
+  .wrap { width: min(1120px, 100% - 32px); margin: 0 auto; }
+  @media (min-width: 760px) { .wrap { width: min(1120px, 100% - 72px); } }
+  .top { padding: 18px 0; border-bottom: 1px solid var(--line); }
+  .top .wrap { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+  .brand { font-weight: 600; text-decoration: none; color: var(--ink); }
+  .top nav { display: flex; gap: 18px; font-size: 15px; white-space: nowrap; }
+  .eyebrow { font-family: var(--ff-mono); font-size: 12px; letter-spacing: .24em; text-transform: uppercase; color: var(--rust-2); margin: 0 0 14px; }
+  h1 { font-family: var(--ff-display); font-weight: 400; font-size: clamp(40px, 6vw, 68px); line-height: 1.02; margin: 0 0 16px; }
+  h1 em { color: var(--rust); }
+  .intro { padding: 56px 0 24px; max-width: 760px; }
+  .intro p { margin: 0 0 12px; color: var(--ink-2); font-size: 19px; }
+  .steps { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; padding: 0; list-style: none; }
+  .steps a { display: inline-block; padding: 8px 14px; border: 1px solid var(--line); border-radius: 999px; background: var(--card); text-decoration: none; color: var(--ink); font-size: 15px; }
+  .lessons { list-style: none; margin: 24px 0 0; padding: 0; display: grid; gap: 48px; }
+  .lesson { display: grid; gap: 22px; padding-top: 32px; border-top: 1px solid var(--line); scroll-margin-top: 16px; }
+  @media (min-width: 900px) { .lesson { grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); gap: 36px; align-items: start; } }
+  .player { aspect-ratio: 16 / 9; border-radius: 18px; overflow: hidden; background: var(--ink); box-shadow: 0 24px 50px -30px var(--shadow); }
+  .player video { display: block; width: 100%; height: 100%; }
+  .meta { font-family: var(--ff-mono); font-size: 12px; letter-spacing: .18em; text-transform: uppercase; color: var(--rust-2); }
+  h2 { font-family: var(--ff-display); font-weight: 400; font-size: clamp(28px, 3.4vw, 38px); line-height: 1.08; margin: 6px 0 8px; }
+  .summary { margin: 0 0 14px; }
+  .check { list-style: none; margin: 0; padding: 0; display: grid; gap: 9px; }
+  .check li { display: grid; grid-template-columns: 20px minmax(0, 1fr); gap: 10px; font-size: 16px; color: var(--ink-2); }
+  .check li::before { content: ""; width: 15px; height: 15px; margin-top: 4px; border: 1.5px solid var(--rust); border-radius: 4px; }
+  .check b { color: var(--ink); font-weight: 600; }
+  .help { margin: 64px 0 72px; padding: 28px; border: 1px dashed var(--rust); border-radius: 20px; background: var(--card); display: grid; gap: 8px; max-width: 760px; }
+  .help h2 { margin: 0; }
+  .help p { margin: 0; color: var(--ink-2); }
+  .btn { display: inline-block; justify-self: start; margin-top: 8px; padding: 13px 24px; border-radius: 999px; background: var(--ink); color: var(--cream); text-decoration: none; font-weight: 500; }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="/software/">Playing With Photo</a>
+    <nav><a href="/download/">Download</a><a href="https://app.playingwithphoto.com/">Your account</a></nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="intro">
+    <p class="eyebrow">Booth setup</p>
+    <h1>From a new PC to your <em>first event.</em></h1>
+    <p>Five short videos, about ten minutes in all. Watch them in order; each ends with what to check before you move on.</p>
+    <ul class="steps" aria-label="Videos">
+      <li><a href="#video-1">1 · Install &amp; activate</a></li>
+      <li><a href="#video-2">2 · Camera &amp; printer</a></li>
+      <li><a href="#video-3">3 · Your event</a></li>
+      <li><a href="#video-4">4 · Event day</a></li>
+      <li><a href="#video-5">5 · Guests, gallery &amp; credits</a></li>
+    </ul>
+  </section>
+
+  <ol class="lessons" id="lessons">
+    <li class="lesson" id="video-1">
+      <div class="player"><video controls preload="metadata" playsinline src="/setup/videos/01-install-activate.mp4"></video></div>
+      <div>
+        <p class="meta">Video 1 of 5 · 1:41</p>
+        <h2>Install &amp; activate</h2>
+        <p class="summary">Get the app onto your booth PC and link it to your account.</p>
+        <ul class="check">
+          <li><span>A <b>Windows 10 or 11 PC</b>, a <b>Canon camera</b> with digiCamControl, a <b>DNP printer</b> with its driver</span></li>
+          <li><span>Download from <a href="/download/"><b>playingwithphoto.com/download</b></a> and install it</span></li>
+          <li><span>If Windows warns you: <b>Keep</b>, then <b>More info</b> and <b>Run anyway</b></span></li>
+          <li><span><b>Sign in to activate</b>, check the code matches, pick your booth</span></li>
+          <li><span>The booth says it's activated, with your plan and AI credits</span></li>
+        </ul>
+      </div>
+    </li>
+    <li class="lesson" id="video-2">
+      <div class="player"><video controls preload="metadata" playsinline src="/setup/videos/02-camera-printer.mp4"></video></div>
+      <div>
+        <p class="meta">Video 2 of 5 · 2:00</p>
+        <h2>Camera &amp; printer</h2>
+        <p class="summary">Check the camera and printer in the setup wizard before your first event.</p>
+        <ul class="check">
+          <li><span>Battery charged, photo mode, <b>auto power-off off</b></span></li>
+          <li><span>Camera on USB and <b>digiCamControl</b> running</span></li>
+          <li><span>Live view looks good and a test photo is sharp</span></li>
+          <li><span>Your DNP printer is picked and a <b>test sheet</b> printed</span></li>
+          <li><span>Right size, nothing cut off, strips cut in two (<b>2-inch cut</b> on)</span></li>
+        </ul>
+      </div>
+    </li>
+    <li class="lesson" id="video-3">
+      <div class="player"><video controls preload="metadata" playsinline src="/setup/videos/03-your-event.mp4"></video></div>
+      <div>
+        <p class="meta">Video 3 of 5 · 1:37</p>
+        <h2>Your event</h2>
+        <p class="summary">Name your event, add your logo, and choose prints and AI looks.</p>
+        <ul class="check">
+          <li><span>Event name, logo and look are set</span></li>
+          <li><span>Print sizes and copies per guest chosen on <b>Home</b></span></li>
+          <li><span><b>AI looks</b> on or off, and the looks you want picked</span></li>
+          <li><span>Extras left off unless you want them (quicker queue)</span></li>
+          <li><span>On <b>Events</b>: Create event, Make active, Download all photos</span></li>
+        </ul>
+      </div>
+    </li>
+    <li class="lesson" id="video-4">
+      <div class="player"><video controls preload="metadata" playsinline src="/setup/videos/04-event-day.mp4"></video></div>
+      <div>
+        <p class="meta">Video 4 of 5 · 2:01</p>
+        <h2>Event day</h2>
+        <p class="summary">Run the booth on the day and handle the common problems.</p>
+        <ul class="check">
+          <li><span>Setup's last step shows everything green</span></li>
+          <li><span><b>Start booth</b> from Home, then do one test session yourself</span></li>
+          <li><span><b>Dashboard</b>: Print to reprint, Generate to retry an AI photo</span></li>
+          <li><span><b>Show photos on a TV</b> if you have a screen</span></li>
+          <li><span>No internet? Photos and prints still work; AI needs internet</span></li>
+        </ul>
+      </div>
+    </li>
+    <li class="lesson" id="video-5">
+      <div class="player"><video controls preload="metadata" playsinline src="/setup/videos/05-guests-gallery-credits.mp4"></video></div>
+      <div>
+        <p class="meta">Video 5 of 5 · 1:52</p>
+        <h2>Guests, gallery &amp; credits</h2>
+        <p class="summary">What guests get, guest languages, AI credits, and where to get help.</p>
+        <ul class="check">
+          <li><span>The QR opens each guest's online gallery (<b>7 days</b> on Basic and Starter)</span></li>
+          <li><span><b>Guest language</b> set, and guests can switch if you like</span></li>
+          <li><span>Credits on Home; <b>Buy credits</b> tops up on the website</span></li>
+          <li><span><b>Advanced settings</b> on Home shows every option</span></li>
+          <li><span>Help: WhatsApp +65 8989 6901 or hello@playingwithphoto.com</span></li>
+        </ul>
+      </div>
+    </li>
+  </ol>
+
+  <aside class="help">
+    <h2>Stuck? Message me.</h2>
+    <p>I'm Jeff, and I built this for my own booths. WhatsApp me at <b>+65 8989 6901</b> or email <b>hello@playingwithphoto.com</b>, and I'll help you get set up.</p>
+    <a class="btn" href="https://wa.me/6589896901">WhatsApp Jeff</a>
+  </aside>
+</main>
+
+<script>
+  // One video at a time: starting one pauses the others.
+  document.getElementById("lessons").addEventListener("play", (e) => {
+    for (const v of document.querySelectorAll("#lessons video")) if (v !== e.target) v.pause();
+  }, true);
+</script>
+</body>
+</html>

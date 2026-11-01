@@ -27,12 +27,12 @@ Local-first booth software with live AI style transformation and event-scoped op
 
 ## Capabilities and Constraints
 
-- Supported (confirmed by owner, 2026-10-02): Windows PC and Mac; Canon DSLR (digiCamControl / native bridge) and webcam; DNP dye-sub printers (DS620 / RX1HS class) via the installed print queue.
+- Supported (updated 2026-11-01): Windows 10/11 PC only for new booths (no Mac); Canon EOS through digiCamControl (tested: R50, 200D II) and webcam; DNP dye-sub via the installed print queue (tested: DS620).
 - Guest features: classic strips/sheets, filters, stickers, background replacement, AI style packs, QR delivery, AI video (Pro+).
 - Operator: branding, templates, frames, guest flow, AI styles, readiness checks, monitor, bigscreen.
-- Tiers: **Starter** (500 AI images/mo, no video), **Pro** (1,500 images + 200 videos/mo, white-label), **Agency** (unlimited). Prices are not published: "Contact us". Billing is manual (no self-serve checkout).
+- Plans (published 2026-11-01, matching the live Stripe prices): **Basic** S$19/mo (200 AI credits), **Starter** S$59 (1,500), **Pro** S$149 (5,000, 2 booths, remote dashboard and TV wall, guest emails), **Agency** S$399 (15,000, no booth limit, paid self-service studio). Yearly = two months free; extra booth S$29/mo. AI photo 1–2 credits, 5-second video about 13. White-label on request (Pro/Agency, set up by Jeff). Founding offer: Starter S$49/mo for 12 months, 14-day refund, first 5.
 - Windows installer still in progress; do not claim one-click install or auto-update.
-- **Undecided:** public prices, self-serve trial, reseller portal, iPad app, hosted media retention period.
+- **Undecided:** self-serve trial, reseller portal, iPad app, hosted media retention period.
 
 ## Brand Commitments
 

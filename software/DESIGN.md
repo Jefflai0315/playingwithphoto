@@ -97,4 +97,4 @@ Shadows are soft, warm and offset (`rgba(62,34,12,.25)`). Polaroid frames (`#fff
 - **Do** reuse the main site's tokens. Don't introduce new hues.
 - **Do** label demo data and use real booth output.
 - **Don't** put paragraph rules on `.eyebrow` (scope them with `:not(.eyebrow)`).
-- **Don't** publish prices or claims PRODUCT.md hasn't confirmed.
+- **Don't** publish prices or claims PRODUCT.md hasn't confirmed (prices confirmed 2026-11-01).

@@ -385,7 +385,8 @@ section p + p { margin-top: 14px; }
 @media (min-width: 980px) { .plans-head { grid-template-columns: 1fr 1fr; align-items: end; } .plans-head .h2 { margin-bottom: 0; } }
 .plans-head p:not(.eyebrow) { color: var(--ink-2); }
 .passes { display: grid; gap: 22px; }
-@media (min-width: 980px) { .passes { grid-template-columns: repeat(3, 1fr); gap: 22px; align-items: stretch; } }
+@media (min-width: 720px) { .passes { grid-template-columns: repeat(2, 1fr); align-items: stretch; } }
+@media (min-width: 1180px) { .passes { grid-template-columns: repeat(4, 1fr); } }
 .pass {
   --notch: 14px;
   display: grid; grid-template-rows: auto 1fr auto;
@@ -497,3 +498,11 @@ section p + p { margin-top: 14px; }
 .foot-meta { display: flex; flex-wrap: wrap; gap: 12px 28px; padding-top: 24px; font-family: var(--ff-mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: #a99478; }
 .foot-meta a { text-decoration: none; }
 .foot-meta a:hover { color: var(--cream); }
+
+/* Founding partner offer, above the plan cards */
+.founding { display: grid; gap: 10px; margin: 0 0 22px; padding: 18px 22px; border: 1px dashed var(--rust); border-radius: 20px; background: #fbf5e8; }
+.founding p { margin: 0; }
+.founding-tag { display: inline-block; margin-right: 8px; font-family: var(--ff-mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--rust-2); }
+@media (min-width: 860px) { .founding { grid-template-columns: 1fr auto; align-items: center; gap: 24px; } }
+.pass-fare small { display: block; font-size: 0.5em; font-weight: 400; }
+.pass-stub .btn { white-space: nowrap; }
